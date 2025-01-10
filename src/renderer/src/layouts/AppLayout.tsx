@@ -22,6 +22,7 @@ export const AppLayout = () => {
             <NavLink to="/itm">Incapacité Temporaire Ménagère</NavLink>
             <NavLink to="/ite">Incapacités Temporaires Économiques</NavLink>
             <NavLink to="/effa">Efforts Accrus</NavLink>
+            <NavLink to="/hosp">Hospitalisation</NavLink>
             <NavLink to="/ip">Incapacité Permanente</NavLink>
           </div>
           <div className="content">

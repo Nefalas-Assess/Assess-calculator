@@ -8,6 +8,7 @@ import ITP from './components/itp'
 import INFOG from './components/infog'
 import ITE from './components/ite'
 import Home from './components/Home'
+import HOSP from './components/hosp'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -38,6 +39,7 @@ const Main = () => {
           <Route path="itm" element={<ITM />} />
           <Route path="itp" element={<ITP />} />
           <Route path="ite" element={<ITE />} />
+          <Route path="hosp" element={<HOSP />} />
         </Route>
       </Routes>
     </HashRouter>

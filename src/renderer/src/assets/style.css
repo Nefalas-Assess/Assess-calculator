@@ -8,8 +8,8 @@
 }
 
 .layout-menu {
-  width: 200px;
-  min-width: 200px;
+  width: 210px;
+  min-width: 210px;
   border-right: 2px solid black;
   overflow-y: auto;
 
@@ -139,7 +139,7 @@ button {
 }
 
 #inv {
-  /*  display: none; */
+  display: none;
 }
 
 .home {
