@@ -134,9 +134,7 @@ const ITP = () => {
                     onChange={(e) => handleInputChange(index, 'fin', e.target.value)}
                   />
                 </td>
-                <td>
-                  <input type="number" value={row.jours} readOnly />
-                </td>
+                <td>{row?.jours}</td>
                 <td>
                   <input
                     type="number"
