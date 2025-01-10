@@ -1,5 +1,4 @@
-import React, { useContext, useState } from 'react'
-import { intervalToDuration } from 'date-fns'
+import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 
 const ITP = () => {
@@ -109,10 +108,18 @@ const ITP = () => {
 
   const contributionOptions = [0, 100, 65, 50, 35]
 
-  const { years: age_consolidation } = intervalToDuration({
-    start: data?.general_info?.date_naissance,
-    end: data?.general_info?.date_consolidation
-  })
+  const getPoint = useCallback((age) => {
+    if (age <= 15) return 3660
+    else if (age >= 85) return 495
+    else if (age === 16) return 3600
+    else if (age === 17) return 3555
+    else {
+      const mult = age - 17
+      return 3555 - mult * 45
+    }
+  }, [])
+
+  console.log(getPoint(data?.computed_info?.age_consolidation))
 
   return (
     <div id="content">
@@ -136,14 +143,8 @@ const ITP = () => {
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                <td>{age_consolidation}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pointsipp}
-                    onChange={(e) => handleInputChange(index, 'pointsipp', e.target.value)}
-                  />
-                </td>
+                <td>{data?.computed_info?.age_consolidation}</td>
+                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
                 <td>
                   <input
                     type="number"
@@ -172,14 +173,8 @@ const ITP = () => {
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                <td>{age_consolidation}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pointsimp}
-                    onChange={(e) => handleInputChange(index, 'pointsimp', e.target.value)}
-                  />
-                </td>
+                <td>{data?.computed_info?.age_consolidation}</td>
+                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
                 <td>
                   <input
                     type="number"
@@ -221,14 +216,8 @@ const ITP = () => {
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                <td>{age_consolidation}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pointsiep}
-                    onChange={(e) => handleInputChange(index, 'pointsiep', e.target.value)}
-                  />
-                </td>
+                <td>{data?.computed_info?.age_consolidation}</td>
+                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
                 <td>
                   <input
                     type="number"

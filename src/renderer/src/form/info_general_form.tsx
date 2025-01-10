@@ -1,3 +1,4 @@
+import { isValid } from 'date-fns'
 import React, { useState } from 'react'
 
 const InfoForm = ({ onSubmit, initialValues }) => {
@@ -79,8 +80,8 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_accident"
                 value={
-                  formData.date_accident
-                    ? new Date(formData.date_accident).toISOString().split('T')[0]
+                  isValid(formData.date_accident)
+                    ? new Date(formData.date_accident)?.toISOString().split('T')[0]
                     : ''
                 }
                 onChange={handleChange}
@@ -94,8 +95,8 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_naissance"
                 value={
-                  formData.date_naissance
-                    ? new Date(formData.date_naissance).toISOString().split('T')[0]
+                  isValid(formData.date_naissance)
+                    ? new Date(formData.date_naissance)?.toISOString().split('T')[0]
                     : ''
                 }
                 onChange={handleChange}
@@ -109,7 +110,7 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_consolidation"
                 value={
-                  formData.date_consolidation
+                  isValid(formData.date_consolidation)
                     ? new Date(formData.date_consolidation).toISOString().split('T')[0]
                     : ''
                 }
