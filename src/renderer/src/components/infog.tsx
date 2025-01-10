@@ -12,6 +12,8 @@ const ITP = () => {
     [setData]
   )
 
+  console.log(data)
+
   return (
     <div id="content">
       <div id="top-menu">
