@@ -75,6 +75,7 @@ export const AppLayout = () => {
             <NavLink to="/infog">Informations générales</NavLink>
             <NavLink to="/itp">Incapacité Temporaire Personnelle</NavLink>
             <NavLink to="/itm">Incapacité Temporaire Ménagère</NavLink>
+            <NavLink to="/ite">Incapacités Temporaires Économiques</NavLink>
             <NavLink to="/effa">Efforts Accrus</NavLink>
             <NavLink to="/ip">Incapacité Permanente</NavLink>
           </div>

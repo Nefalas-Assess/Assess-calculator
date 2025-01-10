@@ -103,15 +103,15 @@ const ITP = () => {
       </div>
 
       <div id="main">
-        <h1>Incapacités temporaires personnelles</h1>
+        <h1>Incapacités temporaires économiques</h1>
 
-        <table id="itpTable">
+        <table id="iteTable">
           <thead>
             <tr>
               <th>Début</th>
               <th>Fin</th>
               <th>Jours</th>
-              <th>Indemnité journalière (€)</th>
+              <th>Salaire annuel brut (€)</th>
               <th>%</th>
               <th>Total (€)</th>
               <th></th>
@@ -140,10 +140,10 @@ const ITP = () => {
                 <td>
                   <input
                     type="number"
-                    value={row.indemniteitp}
+                    value={row.salairebrut}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(index, 'indemnite', parseFloat(e.target.value))
+                      handleInputChange(index, 'salairebrut', parseFloat(e.target.value))
                     }
                   />
                 </td>

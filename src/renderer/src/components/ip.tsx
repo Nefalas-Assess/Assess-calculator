@@ -117,22 +117,6 @@ const ITP = () => {
   return (
     <div id="content">
       <div id="top-menu">
-        <button
-          onClick={() => {
-            /* saveData logic */
-          }}
-        >
-          Sauvegarder
-        </button>
-        <input
-          type="file"
-          id="loadFileInput"
-          style={{ display: 'none' }}
-          onChange={() => {
-            /* loadData logic */
-          }}
-        />
-        <button onClick={() => document.getElementById('loadFileInput').click()}>Charger</button>
         <button onClick={resetData}>Réinitialiser</button>
         <button onClick={printMain}>Imprimer</button>
       </div>

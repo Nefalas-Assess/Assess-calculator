@@ -6,6 +6,7 @@ import IP from './components/ip'
 import ITM from './components/itm'
 import ITP from './components/itp'
 import INFOG from './components/infog'
+import ITE from './components/ite'
 
 function App(): JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -21,6 +22,7 @@ function App(): JSX.Element {
             <Route path="effa" element={<EFFA />} />
             <Route path="itm" element={<ITM />} />
             <Route path="itp" element={<ITP />} />
+            <Route path="ite" element={<ITE />} />
           </Route>
         </Routes>
       </HashRouter>
