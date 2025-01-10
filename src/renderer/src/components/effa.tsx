@@ -130,9 +130,7 @@ const EFFA = () => {
                     onChange={(e) => handleInputChange(index, 'fin', e.target.value)}
                   />
                 </td>
-                <td>
-                  <input type="number" value={row.jours} readOnly />
-                </td>
+                <td>{row?.jours}</td>
                 <td>
                   <input
                     type="number"
@@ -165,14 +163,7 @@ const EFFA = () => {
                     ))}
                   </select>
                 </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.total}
-                    readOnly
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                  />
-                </td>
+                <td>{row?.total}</td>
                 <td>
                   <button onClick={addRow}>+</button>
                   <button onClick={() => removeRow(index)}>-</button>
