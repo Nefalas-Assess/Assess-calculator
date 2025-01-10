@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 const InfoForm = ({ onSubmit, initialValues }) => {
   const [formData, setFormData] = useState(
     initialValues || {
-      creation_maj_date: '',
-      reference_dossier: '',
       nom_victime: '',
       date_accident: '',
       date_naissance: '',
@@ -35,33 +33,6 @@ const InfoForm = ({ onSubmit, initialValues }) => {
       <table id="infogTable">
         <tbody>
           <tr>
-            <td>Date de création/màj</td>
-            <td>
-              <input
-                type="date"
-                name="creation_maj_date"
-                value={
-                  formData.creation_maj_date
-                    ? formData.creation_maj_date.toISOString().split('T')[0]
-                    : ''
-                }
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Référence du dossier</td>
-            <td>
-              <input
-                type="text"
-                name="reference_dossier"
-                size="30"
-                value={formData.reference_dossier}
-                onChange={handleChange}
-              />
-            </td>
-          </tr>
-          <tr>
             <td>Nom de la victime</td>
             <td>
               <input
@@ -80,7 +51,7 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_accident"
                 value={
-                  isValid(formData.date_accident)
+                  isValid(new Date(formData.date_accident))
                     ? new Date(formData.date_accident)?.toISOString().split('T')[0]
                     : ''
                 }
@@ -95,7 +66,7 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_naissance"
                 value={
-                  isValid(formData.date_naissance)
+                  isValid(new Date(formData.date_naissance))
                     ? new Date(formData.date_naissance)?.toISOString().split('T')[0]
                     : ''
                 }
@@ -110,7 +81,7 @@ const InfoForm = ({ onSubmit, initialValues }) => {
                 type="date"
                 name="date_consolidation"
                 value={
-                  isValid(formData.date_consolidation)
+                  isValid(new Date(formData.date_consolidation))
                     ? new Date(formData.date_consolidation).toISOString().split('T')[0]
                     : ''
                 }

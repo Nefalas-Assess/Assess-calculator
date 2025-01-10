@@ -1,7 +1,8 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+const fs = require('fs').promises
 
 function createWindow(): void {
   // Create the browser window.
@@ -33,6 +34,23 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  ipcMain.handle('dialog:showSaveDialog', async (_, options) => {
+    return dialog.showSaveDialog(mainWindow, options)
+  })
+
+  ipcMain.handle('dialog:showOpenDialog', async (_, options) => {
+    return dialog.showOpenDialog(mainWindow, options)
+  })
+
+  ipcMain.handle('file:write', async (_, filePath, content) => {
+    await fs.writeFile(filePath, content, 'utf8')
+    return { success: true }
+  })
+
+  ipcMain.handle('file:read', async (_, filePath) => {
+    return fs.readFile(filePath, 'utf8')
+  })
 }
 
 // This method will be called when Electron has finished

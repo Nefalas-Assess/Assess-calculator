@@ -6,10 +6,8 @@ const ITP = () => {
     debut: '', // Date de début par défaut
     fin: '', // Date de fin par défaut
     jours: '', // Nombre de jours calculé automatiquement
-    indemniteitp: 32, // Indemnité journalière par défaut
-    indemniteitm: 30,
-    pourcentage: '', // Pourcentage d'application
-    total: '' // Total calculé automatiquement
+    indemnitehosp: 7,
+    pourcentage: '' // Pourcentage d'application
   })
 
   // Fonction appelée lorsqu'une touche est pressée dans un champ d'entrée
@@ -27,7 +25,7 @@ const ITP = () => {
 
   // Fonction pour calculer le nombre de jours et le total pour une ligne donnée
   const calculateRow = (row) => {
-    const { debut, fin, indemniteitp, pourcentage } = row
+    const { debut, fin, indemnitehosp, pourcentage } = row
     let jours = ''
     let total = ''
 
@@ -42,7 +40,7 @@ const ITP = () => {
         jours = Math.max(0, timeDiff / (1000 * 3600 * 24)) // Conversion en jours
 
         // Calcul du total basé sur les jours, indemnité et pourcentage
-        total = (jours * indemniteitp * (pourcentage / 100)).toFixed(2)
+        total = (jours * indemnitehosp * (pourcentage / 100)).toFixed(2)
       }
     }
     return { jours, total }
@@ -103,9 +101,9 @@ const ITP = () => {
       </div>
 
       <div id="main">
-        <h1>Incapacités temporaires personnelles</h1>
+        <h1>Hospitalisation</h1>
 
-        <table id="itpTable">
+        <table id="hospTable">
           <thead>
             <tr>
               <th>Début</th>
@@ -134,16 +132,14 @@ const ITP = () => {
                     onChange={(e) => handleInputChange(index, 'fin', e.target.value)}
                   />
                 </td>
-                <td>
-                  <input type="number" value={row.jours} readOnly />
-                </td>
+                <td>{row?.jours}</td>
                 <td>
                   <input
                     type="number"
-                    value={row.indemniteitp}
+                    value={row.indemnitehosp}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(index, 'indemnite', parseFloat(e.target.value))
+                      handleInputChange(index, 'indemnitehosp', parseFloat(e.target.value))
                     }
                   />
                 </td>

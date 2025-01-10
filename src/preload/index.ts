@@ -1,8 +1,21 @@
-import { contextBridge } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 // Custom APIs for renderer
-const api = {}
+// Custom APIs for renderer
+const api = {
+  // Fonction pour montrer une boîte de dialogue "Ouvrir"
+  showOpenDialog: (options) => ipcRenderer.invoke('dialog:showOpenDialog', options),
+
+  // Fonction pour montrer une boîte de dialogue "Sauvegarder"
+  showSaveDialog: (options) => ipcRenderer.invoke('dialog:showSaveDialog', options),
+
+  // Fonction pour écrire un fichier
+  writeFile: (filePath, content) => ipcRenderer.invoke('file:write', filePath, content),
+
+  // Fonction pour lire un fichier
+  readFile: (filePath) => ipcRenderer.invoke('file:read', filePath)
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
