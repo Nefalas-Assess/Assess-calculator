@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import { AppContext } from '@renderer/providers/AppProvider'
+import React, { useContext, useState } from 'react'
 
 const ITM = () => {
+  const { data } = useContext(AppContext)
   // Fonction pour créer une nouvelle ligne avec des valeurs par défaut
   const createRow = () => ({
     debut: '', // Date de début par défaut
@@ -27,13 +29,13 @@ const ITM = () => {
 
   // Fonction pour calculer le nombre de jours et le total pour une ligne donnée
   const calculateRow = (row) => {
-    const { debut, fin, enfants, pourcentage, contribution } = row
+    const { debut, fin, pourcentage, contribution } = row
     let jours = ''
     let indemniteitm = 30 // Valeur de base pour indemniteitm
     let total = ''
 
     // Calcul de l'indemnité journalière en fonction du nombre d'enfants
-    indemniteitm += (enfants || 0) * 10
+    indemniteitm += (data?.computed_info?.enfant_charge || 0) * 10
 
     if (debut && fin) {
       const debutDate = new Date(debut)
@@ -141,15 +143,7 @@ const ITM = () => {
                 />
               </td>
               <td>{row?.jours}</td>
-              <td>
-                <input
-                  type="number"
-                  value={row.enfants}
-                  onChange={(e) =>
-                    handleInputChange(index, 'enfants', parseInt(e.target.value) || 0)
-                  }
-                />
-              </td>
+              <td>{data?.computed_info?.enfant_charge || 0}</td>
               <td>
                 <input type="number" value={row.indemniteitm} step="0.01" readOnly />
               </td>

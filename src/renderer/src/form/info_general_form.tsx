@@ -1,35 +1,41 @@
 import { isValid } from 'date-fns'
 import React, { useState } from 'react'
+import { useForm, useFieldArray } from 'react-hook-form'
 
-const InfoForm = ({ onSubmit, initialValues }) => {
-  const [formData, setFormData] = useState(
-    initialValues || {
+export const InfoForm = ({ onSubmit, initialValues }) => {
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    defaultValues: initialValues || {
       nom_victime: '',
       date_accident: '',
       date_naissance: '',
       date_consolidation: '',
-      statut: 'marié', // Default value
-      profession: 'employe' // Default value
+      statut: 'marié', // Valeur par défaut
+      profession: 'employe', // Valeur par défaut
+      children: [] // Liste vide d'enfants par défaut
     }
-  )
+  })
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'children' // Champs dynamiques pour les enfants
+  })
 
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === 'date' ? new Date(value) : value // Convert 'date' input to JS Date
-    }))
+  const addChild = () => {
+    append({ firstName: '', lastName: '', birthDate: '' }) // Nouveau champ enfant
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onSubmit(formData)
-    // Replace with your desired logic (e.g., API call)
+  const submitForm = (data) => {
+    onSubmit(data)
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(submitForm)}>
+      <h3>General</h3>
       <table id="infogTable">
         <tbody>
           <tr>
@@ -37,62 +43,33 @@ const InfoForm = ({ onSubmit, initialValues }) => {
             <td>
               <input
                 type="text"
-                name="nom_victime"
-                size="30"
-                value={formData.nom_victime}
-                onChange={handleChange}
+                {...register('nom_victime', { required: 'Ce champ est requis' })}
               />
+              {errors.nom_victime && <span>{errors.nom_victime.message}</span>}
             </td>
           </tr>
           <tr>
             <td>Date de l'accident</td>
             <td>
-              <input
-                type="date"
-                name="date_accident"
-                value={
-                  isValid(new Date(formData.date_accident))
-                    ? new Date(formData.date_accident)?.toISOString().split('T')[0]
-                    : ''
-                }
-                onChange={handleChange}
-              />
+              <input type="date" {...register('date_accident')} />
             </td>
           </tr>
           <tr>
             <td>Date de naissance</td>
             <td>
-              <input
-                type="date"
-                name="date_naissance"
-                value={
-                  isValid(new Date(formData.date_naissance))
-                    ? new Date(formData.date_naissance)?.toISOString().split('T')[0]
-                    : ''
-                }
-                onChange={handleChange}
-              />
+              <input type="date" {...register('date_naissance')} />
             </td>
           </tr>
           <tr>
             <td>Date de consolidation</td>
             <td>
-              <input
-                type="date"
-                name="date_consolidation"
-                value={
-                  isValid(new Date(formData.date_consolidation))
-                    ? new Date(formData.date_consolidation).toISOString().split('T')[0]
-                    : ''
-                }
-                onChange={handleChange}
-              />
+              <input type="date" {...register('date_consolidation')} />
             </td>
           </tr>
           <tr>
             <td>Statut</td>
             <td>
-              <select name="statut" value={formData.statut} onChange={handleChange}>
+              <select {...register('statut')}>
                 <option value="marié">Marié</option>
                 <option value="célibataire">Célibataire</option>
               </select>
@@ -101,7 +78,7 @@ const InfoForm = ({ onSubmit, initialValues }) => {
           <tr>
             <td>Profession</td>
             <td>
-              <select name="profession" value={formData.profession} onChange={handleChange}>
+              <select {...register('profession')}>
                 <option value="employe">Employé</option>
                 <option value="ouvrier">Ouvrier</option>
                 <option value="sans_emploi">Sans emploi</option>
@@ -114,7 +91,61 @@ const InfoForm = ({ onSubmit, initialValues }) => {
           </tr>
         </tbody>
       </table>
-      <button type="submit">Save</button>
+
+      <h3>Enfants</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Date de naissance</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {fields.map((child, index) => (
+            <tr key={child.id}>
+              <td>
+                <input
+                  type="text"
+                  {...register(`children.${index}.firstName`, { required: 'Prénom requis' })}
+                />
+                {errors.children?.[index]?.firstName && (
+                  <span>{errors.children[index].firstName.message}</span>
+                )}
+              </td>
+              <td>
+                <input
+                  type="text"
+                  {...register(`children.${index}.lastName`, { required: 'Nom requis' })}
+                />
+                {errors.children?.[index]?.lastName && (
+                  <span>{errors.children[index].lastName.message}</span>
+                )}
+              </td>
+              <td>
+                <input
+                  type="date"
+                  {...register(`children.${index}.birthDate`, { required: 'Date requise' })}
+                />
+                {errors.children?.[index]?.birthDate && (
+                  <span>{errors.children[index].birthDate.message}</span>
+                )}
+              </td>
+              <td>
+                <button type="button" onClick={() => remove(index)}>
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button type="button" onClick={addChild}>
+        Ajouter un enfant
+      </button>
+
+      <button type="submit">Enregistrer</button>
     </form>
   )
 }

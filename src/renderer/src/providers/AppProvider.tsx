@@ -1,3 +1,4 @@
+import { getChildrenUnder25 } from '@renderer/helpers/general'
 import { intervalToDuration } from 'date-fns'
 import React, { createContext, useCallback, useState } from 'react'
 
@@ -22,13 +23,16 @@ const AppProvider = ({ children }) => {
   }, [setFilePath, setData, handleSave])
 
   const computeData = useCallback((res) => {
+    res.computed_info = {}
     if (res?.general_info) {
       const { years: age_consolidation } = intervalToDuration({
         start: res?.general_info?.date_naissance,
         end: res?.general_info?.date_consolidation
       })
-      res.computed_info = {
-        age_consolidation
+      res.computed_info.age_consolidation = age_consolidation
+      const children = res?.general_info?.children
+      if (children) {
+        res.computed_info.enfant_charge = getChildrenUnder25(children)
       }
     }
     return res
