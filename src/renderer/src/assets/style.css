@@ -81,7 +81,7 @@ button:focus-visible {
   left: 0; /* Fixe le top-menu à gauche de l'écran */
   width: 100%; /* Prendre toute la largeur de l'écran */
   z-index: 10; /* Placer le top-menu au-dessus des autres éléments */
-  justify-content: left; /* Centre les éléments horizontalement */
+  justify-content: right; /* Centre les éléments horizontalement */
 }
 
 #top-menu button,

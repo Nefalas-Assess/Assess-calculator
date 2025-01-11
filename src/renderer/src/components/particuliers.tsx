@@ -15,15 +15,6 @@ const ITP = () => {
     total: '' // Total calculé automatiquement
   })
 
-  // Fonction appelée lorsqu'une touche est pressée dans un champ d'entrée
-  // Si la touche "Tab" est pressée sur la dernière ligne, une nouvelle ligne est ajoutée
-  const handleKeyDown = (index, e) => {
-    if (e.key === 'Tab' && index === rows.length - 1) {
-      e.preventDefault() // Empêche le comportement par défaut de "Tab"
-      addRow() // Ajoute une nouvelle ligne
-    }
-  }
-
   // État contenant la liste des lignes dans le tableau
   // Initialement, il y a une seule ligne créée avec la fonction `createRow`
   const [rows, setRows] = useState([createRow()])
@@ -121,6 +112,11 @@ const ITP = () => {
 
   console.log(getPoint(data?.computed_info?.age_consolidation))
 
+  const removeRow = (index) => {
+    const updatedRows = rows.filter((_, i) => i !== index)
+    setRows(updatedRows)
+  }
+
   return (
     <div id="content">
       <div id="top-menu">
@@ -131,12 +127,176 @@ const ITP = () => {
       <div id="main">
 
         <h1>Quantum Doloris</h1>
+        <table id="ipTable">
+          <thead>
+            <tr>
+              <th>Âge consolidation</th>
+              <th>Coefficient</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>{data?.computed_info?.age_consolidation}</td>
+                <td>
+                <select
+                    defaultValue=""
+                    onChange={(e) => handleInputChange(index, 'coefficient', e.target.value)}
+                >
+                    <option value="" disabled>
+                    Sélectionnez
+                    </option>
+                    <option>1/7</option>
+                    <option>2/7</option>
+                    <option>3/7</option>
+                    <option>4/7</option>
+                    <option>5/7</option>
+                    <option>6/7</option>
+                    <option>7/7</option>
+                </select>
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <h1>Préjudice Esthétique</h1>
+        <table id="ipTable">
+          <thead>
+            <tr>
+              <th>Âge consolidation</th>
+              <th>Coefficient</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>{data?.computed_info?.age_consolidation}</td>
+                <td>
+                <select
+                    defaultValue=""
+                    onChange={(e) => handleInputChange(index, 'coefficient', e.target.value)}
+                >
+                    <option value="" disabled>
+                    Sélectionnez
+                    </option>
+                    <option>1/7</option>
+                    <option>2/7</option>
+                    <option>3/7</option>
+                    <option>4/7</option>
+                    <option>5/7</option>
+                    <option>6/7</option>
+                    <option>7/7</option>
+                </select>
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <h1>Préjudice Sexuel</h1>
+        <table id="ipTable">
+          <thead>
+            <tr>
+              <th>Indemnité/Frais</th>
+              <th>Numéro de facture</th>
+              <th>Payé</th>
+              <th>Total (€)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    size="30"
+                    />
+                </td>
+                <td>
+                <input
+                    type="text"
+                    size="30"
+                    />
+                </td>
+                <td>                
+                  <select
+                    defaultValue=""
+                    onChange={(e) => handleInputChange(index, 'paye', e.target.value)}
+                >
+                    <option value="" disabled>
+                    Sélectionnez
+                    </option>
+                    <option>Oui</option>
+                    <option>Non</option>
+                </select></td>
+                <td>
+                  <input
+                    type="number"
+                    />
+                </td>
+                <td>
+                <button onClick={addRow}>+</button>
+                <button onClick={() => removeRow(index)}>-</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
         <h1>Préjudice d'Agrément</h1>
+        <table id="ipTable">
+          <thead>
+            <tr>
+              <th>Indemnité/Frais</th>
+              <th>Numéro de facture</th>
+              <th>Payé</th>
+              <th>Total (€)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="text"
+                    size="30"
+                    />
+                </td>
+                <td>
+                <input
+                    type="text"
+                    size="30"
+                    />
+                </td>
+                <td>                
+                  <select
+                    defaultValue=""
+                    onChange={(e) => handleInputChange(index, 'paye', e.target.value)}
+                >
+                    <option value="" disabled>
+                    Sélectionnez
+                    </option>
+                    <option>Oui</option>
+                    <option>Non</option>
+                </select></td>
+                <td>
+                  <input
+                    type="number"
+                    />
+                </td>
+                <td>
+                <button onClick={addRow}>+</button>
+                <button onClick={() => removeRow(index)}>-</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
       </div>
     </div>
