@@ -23,7 +23,10 @@ const AppProvider = ({ children }) => {
   }, [setFilePath, setData, handleSave])
 
   const computeData = useCallback((res) => {
-    res.computed_info = {}
+    if (!res.computed_info) {
+      res.computed_info = {}
+    }
+
     if (res?.general_info) {
       const { years: age_consolidation } = intervalToDuration({
         start: res?.general_info?.date_naissance,
@@ -40,9 +43,7 @@ const AppProvider = ({ children }) => {
 
   const storeData = useCallback(
     (res) => {
-      const result = computeData(res)
-
-      setData((prev) => ({ ...prev, ...result }))
+      setData((prev) => computeData({ ...prev, ...res }))
     },
     [computeData]
   )

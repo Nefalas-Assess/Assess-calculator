@@ -1,18 +1,38 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
+import data_pp from '@renderer/data/data_pp'
+import { findClosestIndex } from '@renderer/helpers/general'
+import PrejudiceParticuliersForm from '@renderer/form/prejudice_particulier_form'
 
 const ITP = () => {
-  const { data } = useContext(AppContext)
+  const { data, setData } = useContext(AppContext)
+
+  const saveData = useCallback(
+    (values) => {
+      setData({ prejudice_particulier: values })
+    },
+    [setData]
+  )
+
+  return (
+    <div id="content">
+      <div id="main">
+        <PrejudiceParticuliersForm
+          onSubmit={saveData}
+          initialValues={data?.prejudice_particulier}
+        />
+      </div>
+    </div>
+  )
 
   // Fonction pour créer une nouvelle ligne avec des valeurs par défaut
   const createRow = () => ({
     debut: '', // Date de début par défaut
     fin: '', // Date de fin par défaut
     jours: '', // Nombre de jours calculé automatiquement
-    indemniteitp: 32, // Indemnité journalière par défaut
-    indemniteitm: 30,
     pourcentage: '', // Pourcentage d'application
-    total: '' // Total calculé automatiquement
+    total: '',
+    coefficient: '' // Total calculé automatiquement
   })
 
   // État contenant la liste des lignes dans le tableau
@@ -97,27 +117,21 @@ const ITP = () => {
     window.location.reload() // Recharge la page pour restaurer l'état React
   }
 
-  const contributionOptions = [0, 100, 65, 50, 35]
-
-  const getPoint = useCallback((age) => {
-    if (age <= 15) return 3660
-    else if (age >= 85) return 495
-    else if (age === 16) return 3600
-    else if (age === 17) return 3555
-    else {
-      const mult = age - 17
-      return 3555 - mult * 45
-    }
-  }, [])
-
-  console.log(getPoint(data?.computed_info?.age_consolidation))
+  const getTotalWithCoef = useCallback(
+    (item) => {
+      const coef = item?.coefficient && parseInt(item?.coefficient) - 1
+      const age = data?.computed_info?.age_consolidation
+      const keys = Object.keys(data_pp)
+      const ageKey = findClosestIndex(keys, age)
+      return Object.values(data_pp)[ageKey][coef]
+    },
+    [data]
+  )
 
   const removeRow = (index) => {
     const updatedRows = rows.filter((_, i) => i !== index)
     setRows(updatedRows)
   }
-
-  
 
   return (
     <div id="content">
@@ -127,7 +141,6 @@ const ITP = () => {
       </div>
 
       <div id="main">
-
         <h1>Quantum Doloris</h1>
         <table id="ipTable">
           <thead>
@@ -142,12 +155,12 @@ const ITP = () => {
               <tr key={index}>
                 <td>{data?.computed_info?.age_consolidation}</td>
                 <td>
-                <select
+                  <select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'coefficient', e.target.value)}
-                >
+                  >
                     <option value="" disabled>
-                    Sélectionnez
+                      Sélectionnez
                     </option>
                     <option>1/7</option>
                     <option>2/7</option>
@@ -156,9 +169,9 @@ const ITP = () => {
                     <option>5/7</option>
                     <option>6/7</option>
                     <option>7/7</option>
-                </select>
+                  </select>
                 </td>
-                <td></td>
+                <td>{getTotalWithCoef(row)}</td>
               </tr>
             ))}
           </tbody>
@@ -178,12 +191,12 @@ const ITP = () => {
               <tr key={index}>
                 <td>{data?.computed_info?.age_consolidation}</td>
                 <td>
-                <select
+                  <select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'coefficient', e.target.value)}
-                >
+                  >
                     <option value="" disabled>
-                    Sélectionnez
+                      Sélectionnez
                     </option>
                     <option>1/7</option>
                     <option>2/7</option>
@@ -192,14 +205,14 @@ const ITP = () => {
                     <option>5/7</option>
                     <option>6/7</option>
                     <option>7/7</option>
-                </select>
+                  </select>
                 </td>
-                <td></td>
+                <td>{getTotalWithCoef(row)}</td>
               </tr>
             ))}
           </tbody>
         </table>
-
+        {/* 
         <h1>Préjudice Sexuel</h1>
         <table id="ipTable">
           <thead>
@@ -215,34 +228,30 @@ const ITP = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <input
-                    type="text"
-                    />
+                  <input type="text" />
                 </td>
                 <td>
-                <input
-                    type="text"
-                    />
+                  <input type="text" />
                 </td>
-                <td>                
+                <td>
                   <select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'paye', e.target.value)}
-                >
+                  >
                     <option value="" disabled>
-                    Sélectionnez
+                      Sélectionnez
                     </option>
                     <option>Oui</option>
                     <option>Non</option>
-                </select></td>
-                <td>
-                  <input
-                    type="number"
-                    />
+                  </select>
                 </td>
                 <td>
-                <button onClick={addRow}>+</button>
-                <button onClick={() => removeRow(index)}>-</button></td>
+                  <input type="number" />
+                </td>
+                <td>
+                  <button onClick={addRow}>+</button>
+                  <button onClick={() => removeRow(index)}>-</button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -263,43 +272,38 @@ const ITP = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <input
-                    type="text"
-                    />
+                  <input type="text" />
                 </td>
                 <td>
-                <input
-                    type="text"
-                    />
+                  <input type="text" />
                 </td>
-                <td>                
+                <td>
                   <select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'paye', e.target.value)}
-                >
+                  >
                     <option value="" disabled>
-                    Sélectionnez
+                      Sélectionnez
                     </option>
                     <option>Oui</option>
                     <option>Non</option>
-                </select></td>
-                <td>
-                  <input
-                    type="number"
-                    />
+                  </select>
                 </td>
                 <td>
-                <button onClick={addRow}>+</button>
-                <button onClick={() => removeRow(index)}>-</button></td>
+                  <input type="number" />
+                </td>
+                <td>
+                  <button onClick={addRow}>+</button>
+                  <button onClick={() => removeRow(index)}>-</button>
+                </td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
 
-        <div className="total-box">
+        {/* <div className="total-box">
           <strong>Total : </strong> {getTotalSum()} €
-        </div>
-
+        </div> */}
       </div>
     </div>
   )

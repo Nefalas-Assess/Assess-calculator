@@ -16,3 +16,18 @@ export const getChildrenUnder25 = (children) => {
     return false
   }).length // Retourner le nombre d'enfants filtrés
 }
+
+export const findClosestIndex = (keys, value) => {
+  // Convertir les clés en nombres
+  const numericKeys = keys.map(Number)
+
+  for (let i = 0; i < numericKeys.length; i++) {
+    // Si la valeur est inférieure ou égale à la clé actuelle
+    if (value <= numericKeys[i]) {
+      return i
+    }
+  }
+
+  // Si la valeur est supérieure à toutes les clés, retourne le dernier index
+  return numericKeys.length - 1
+}
