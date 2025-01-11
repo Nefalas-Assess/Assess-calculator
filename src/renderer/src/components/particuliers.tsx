@@ -117,6 +117,8 @@ const ITP = () => {
     setRows(updatedRows)
   }
 
+  
+
   return (
     <div id="content">
       <div id="top-menu">
@@ -215,13 +217,11 @@ const ITP = () => {
                 <td>
                   <input
                     type="text"
-                    size="30"
                     />
                 </td>
                 <td>
                 <input
                     type="text"
-                    size="30"
                     />
                 </td>
                 <td>                
@@ -265,13 +265,11 @@ const ITP = () => {
                 <td>
                   <input
                     type="text"
-                    size="30"
                     />
                 </td>
                 <td>
                 <input
                     type="text"
-                    size="30"
                     />
                 </td>
                 <td>                
@@ -297,6 +295,10 @@ const ITP = () => {
             ))}
           </tbody>
         </table>
+
+        <div className="total-box">
+          <strong>Total : </strong> {getTotalSum()} €
+        </div>
 
       </div>
     </div>

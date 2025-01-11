@@ -12,6 +12,7 @@ import HOSP from './components/hosp'
 import PRETIUM from './components/pretium'
 import ADT from './components/adt'
 import PART from './components/particuliers'
+import FRAIS from './components/frais'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -46,6 +47,7 @@ const Main = () => {
           <Route path="pretium" element={<PRETIUM />} />
           <Route path="adt" element={<ADT />} />
           <Route path="particuliers" element={<PART />} />
+          <Route path="frais" element={<FRAIS />} />
         </Route>
       </Routes>
     </HashRouter>
