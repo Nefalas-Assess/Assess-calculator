@@ -9,7 +9,7 @@ export const AppLayout = () => {
     <div className="app">
       <div className="app-layout">
         <div className="app-header">
-          <div className="left">Ju Calculator</div>
+          <div className="left">Assess</div>
           <div className="right">
             <button onClick={save}>Sauvegarder</button>
             <button onClick={back}>Home</button>
@@ -18,12 +18,15 @@ export const AppLayout = () => {
         <div className="core">
           <div className="layout-menu">
             <NavLink to="/infog">Informations générales</NavLink>
-            <NavLink to="/itp">Incapacité Temporaire Personnelle</NavLink>
-            <NavLink to="/itm">Incapacité Temporaire Ménagère</NavLink>
+            <NavLink to="/itp">Incapacités Temporaires Personnelles</NavLink>
+            <NavLink to="/itm">Incapacités Temporaires Ménagères</NavLink>
             <NavLink to="/ite">Incapacités Temporaires Économiques</NavLink>
             <NavLink to="/effa">Efforts Accrus</NavLink>
             <NavLink to="/hosp">Hospitalisation</NavLink>
-            <NavLink to="/ip">Incapacité Permanente</NavLink>
+            <NavLink to="/pretium">Pretium Doloris</NavLink>
+            <NavLink to="/adt">Aide de tiers</NavLink>
+            <NavLink to="/ip">Incapacités Permanentes Forfaitaires</NavLink>
+            <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
           </div>
           <div className="content">
             <Outlet />

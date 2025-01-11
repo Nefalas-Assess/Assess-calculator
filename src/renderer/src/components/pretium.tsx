@@ -39,7 +39,7 @@ const EFFA = () => {
         // Calcul du nombre de jours entre les deux dates
         jours = Math.max(0, (finDate - debutDate) / (1000 * 60 * 60 * 24))
         // Calcul du total basé sur les jours, indemnité et pourcentage
-        total = (jours * indemnite * (pourcentage / 100) * (coefficient / 5)).toFixed(2)
+        total = (jours * coefficient).toFixed(2)
       }
     }
     return { jours, total }
@@ -100,7 +100,7 @@ const EFFA = () => {
       </div>
 
       <div id="main">
-        <h1>Efforts accrus</h1>
+        <h1>Pretium Doloris Temporaire</h1>
 
         <table id="effaTable">
           <thead>
@@ -108,8 +108,6 @@ const EFFA = () => {
               <th>Début</th>
               <th>Fin</th>
               <th>Jours</th>
-              <th>Indemnité journalière (€)</th>
-              <th>%</th>
               <th>Coefficient</th>
               <th>Total (€)</th>
             </tr>
@@ -133,36 +131,21 @@ const EFFA = () => {
                 </td>
                 <td>{row?.jours}</td>
                 <td>
-                  <input
-                    type="number"
-                    value={row.indemnite}
-                    step="0.01"
-                    onChange={(e) =>
-                      handleInputChange(index, 'indemnite', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentage}
-                    step="0.01"
-                    onChange={(e) =>
-                      handleInputChange(index, 'pourcentage', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>
-                  <select
-                    defaultValue="5"
+                <select
+                    defaultValue=""
                     onChange={(e) => handleInputChange(index, 'coefficient', e.target.value)}
-                  >
-                    {['1', '2', '3', '4', '5', '6', '7'].map((coeff) => (
-                      <option key={coeff} value={coeff}>
-                        {coeff}
-                      </option>
-                    ))}
-                  </select>
+                >
+                    <option value="" disabled>
+                    Sélectionnez
+                    </option>
+                    <option value="1.15">1/7</option>
+                    <option value="3.50">2/7</option>
+                    <option value="7">3/7</option>
+                    <option value="11.50">4/7</option>
+                    <option value="17">5/7</option>
+                    <option value="24">6/7</option>
+                    <option value="32">7/7</option>
+                </select>
                 </td>
                 <td>{row?.total}</td>
                 <td>

@@ -9,6 +9,9 @@ import INFOG from './components/infog'
 import ITE from './components/ite'
 import Home from './components/Home'
 import HOSP from './components/hosp'
+import PRETIUM from './components/pretium'
+import ADT from './components/adt'
+import PART from './components/particuliers'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -40,6 +43,9 @@ const Main = () => {
           <Route path="itp" element={<ITP />} />
           <Route path="ite" element={<ITE />} />
           <Route path="hosp" element={<HOSP />} />
+          <Route path="pretium" element={<PRETIUM />} />
+          <Route path="adt" element={<ADT />} />
+          <Route path="particuliers" element={<PART />} />
         </Route>
       </Routes>
     </HashRouter>

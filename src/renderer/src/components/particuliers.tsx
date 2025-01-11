@@ -129,111 +129,15 @@ const ITP = () => {
       </div>
 
       <div id="main">
-        <h1>Incapacités personnelles permanentes</h1>
 
-        <table id="ipTable">
-          <thead>
-            <tr>
-              <th>Âge consolidation</th>
-              <th>Points</th>
-              <th>%</th>
-              <th>Total (€)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentageipp}
-                    onChange={(e) => handleInputChange(index, 'pourcentageipp', e.target.value)}
-                  />
-                </td>
-                <td>{(row.pointsipp * row.pourcentageipp).toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h1>Quantum Doloris</h1>
 
-        <h1>Incapacités ménagères permanentes</h1>
+        <h1>Préjudice Esthétique</h1>
 
-        <table id="ipTable">
-          <thead>
-            <tr>
-              <th>Âge consolidation</th>
-              <th>Points</th>
-              <th>%</th>
-              <th>Contribution (%)</th>
-              <th>Total (€)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentageimp}
-                    onChange={(e) => handleInputChange(index, 'pourcentageimp', e.target.value)}
-                  />
-                </td>
-                <td>
-                  <select
-                    value={row.contribution || contributionOptions[0]}
-                    onChange={(e) => handleInputChange(index, 'contribution', e.target.value)}
-                  >
-                    {contributionOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}%
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  {(row.pointsimp * row.pourcentageimp * (row.contribution / 100)).toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h1>Préjudice Sexuel</h1>
 
-        <h1>Incapacités économiques permanentes</h1>
+        <h1>Préjudice d'Agrément</h1>
 
-        <table id="ipTable">
-          <thead>
-            <tr>
-              <th>Âge consolidation</th>
-              <th>Points</th>
-              <th>%</th>
-              <th>Total (€)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, index) => (
-              <tr key={index}>
-                <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentageiep}
-                    onChange={(e) => handleInputChange(index, 'pourcentageiep', e.target.value)}
-                  />
-                </td>
-                <td>{(row.pointsiep * row.pourcentageiep).toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <div className="total-box">
-          <strong>Total : </strong> {getTotalSum()} €
-        </div>
       </div>
     </div>
   )
