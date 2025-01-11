@@ -145,7 +145,7 @@ const ITP = () => {
                 <td><select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'paye', e.target.value)}>
-                    <option value="" disabled>Sélectionnez</option>
+                    <option value="" disabled>Sélectionnez                    </option>
                     <option>Oui</option>
                     <option>Non</option></select></td>
                 <td><input type="number"value="100"/></td>
