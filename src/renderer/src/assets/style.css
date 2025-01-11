@@ -72,7 +72,6 @@ button:focus-visible {
 }
 
 #top-menu {
-  /* position: fixed;*/
   top: 0;
   background-color: #242424;
   padding: 10px;

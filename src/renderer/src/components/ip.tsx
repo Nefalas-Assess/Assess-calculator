@@ -123,11 +123,6 @@ const ITP = () => {
 
   return (
     <div id="content">
-      <div id="top-menu">
-        <button onClick={resetData}>Réinitialiser</button>
-        <button onClick={printMain}>Imprimer</button>
-      </div>
-
       <div id="main">
         <h1>Incapacités personnelles permanentes</h1>
 

@@ -98,13 +98,8 @@ const ITP = () => {
 
   return (
     <div id="content">
-      <div id="top-menu">
-        <button onClick={resetData}>Réinitialiser</button>
-      </div>
-
       <div id="main">
         <h1>Incapacités temporaires personnelles</h1>
-
         <table id="itpTable">
           <thead>
             <tr>

@@ -108,11 +108,8 @@ const ITM = () => {
 
   return (
     <div id="content">
-      <div id="top-menu">
-        <button onClick={resetData}>Réinitialiser</button>
-      </div>
-
       <div id="main"></div>
+      <h1>Incapacités temporaires ménagères</h1>
       <table id="itmTable">
         <thead>
           <tr>
