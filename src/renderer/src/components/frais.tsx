@@ -113,8 +113,74 @@ const ITP = () => {
     const updatedRows = rows.filter((_, i) => i !== index)
     setRows(updatedRows)
   }
-
   
+  // Fonction pour créer une nouvelle ligne pour le tableau des heures
+  const createRowHeures = () => ({
+    heures: '', // Nombre d'heures
+    total: '' // Total calculé automatiquement
+  })
+
+  // État pour le tableau des heures
+  const [rowsHeures, setRowsHeures] = useState([createRowHeures()])
+
+  // Fonction pour calculer le total pour une ligne du tableau des heures
+  const handleInputChangeHeures = (index, field, value) => {
+    const updatedRows = [...rowsHeures]
+    updatedRows[index][field] = value
+    const totalh = (parseFloat(updatedRows[index].heures) * 11.5).toFixed(2)
+    updatedRows[index].totalh = totalh
+    setRowsHeures(updatedRows)
+  }
+
+  const getTotalSumHeures = () => {
+    return rowsHeures.reduce((sum, row) => sum + (parseFloat(row.totalh) || 0), 0).toFixed(2)
+  }
+
+  // Fonction pour créer une nouvelle ligne pour le tableau des heures
+  const createRowFrais = () => ({
+    total: '' // Total calculé automatiquement
+  })
+  
+  // État pour le tableau des frais
+  const [fraisRows, setFraisRows] = useState([createRowFrais()])
+
+  // Fonction pour calculer le total des frais
+  const getTotalSumFrais = () => {
+    return fraisRows.reduce((sum, row) => sum + (parseFloat(row.total) || 0), 0).toFixed(2)
+  }
+  
+  // Fonction pour gérer les changements dans les champs du tableau des frais
+  const handleInputChangeFrais = (index, field, value) => {
+    const updatedRows = [...fraisRows]
+    updatedRows[index][field] = value
+  
+    // Calculer automatiquement le total si les champs nécessaires sont remplis
+    const montant = parseFloat(updatedRows[index].montant) || 0
+    const total = montant.toFixed(2)
+    updatedRows[index].total = total
+  
+    setFraisRows(updatedRows)
+  }
+  // Fonction pour ajouter une nouvelle ligne dans le tableau des frais
+  const addFraisRow = () => {
+    setFraisRows([...fraisRows, createRowFrais()])
+  }
+  
+  // Fonction pour supprimer une ligne du tableau des frais
+  const removeRowFrais = (index) => {
+    const updatedRows = fraisRows.filter((_, i) => i !== index)
+    setFraisRows(updatedRows)
+  }
+
+  const getTotalSumAll = () => {
+    // Calculer le total global des frais en additionnant tous les totaux
+    const totalFrais = getTotalSumFrais();  // Total des frais
+    const totalHeures = getTotalSumHeures();  // Total des heures
+    const totalIndemnites = getTotalSum();  // Total des indemnités
+    
+    // Retourner la somme de tous les totaux
+    return (parseFloat(totalFrais) + parseFloat(totalHeures) + parseFloat(totalIndemnites)).toFixed(2);
+  }
 
   return (
     <div id="content">
@@ -124,8 +190,50 @@ const ITP = () => {
       </div>
 
       <div id="main">
-
         <h1>Frais</h1>
+        <table id="ipTable">
+          <thead>
+            <tr>
+              <th>Indemnité/Frais</th>
+              <th>Numéro de facture</th>
+              <th>Payé</th>
+              <th>Total (€)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {fraisRows.map((row, index) => (
+              <tr key={index}>
+                <td><input
+                    type="text"
+                    onChange={(e) => handleInputChangeFrais(index, 'number', e.target.value)}/>
+                </td>
+                <td><input
+                    type="text"
+                    onChange={(e) => handleInputChangeFrais(index, 'number', e.target.value)}/>
+                </td>
+                <td><select
+                    defaultValue={row.paye}
+                    onChange={(e) => handleInputChangeFrais(index, 'paye', e.target.value)}>
+                    <option value="" disabled>Sélectionnez</option>
+                    <option>Oui</option>
+                    <option>Non</option></select>
+                </td>
+                <td><input
+                    type="number"
+                    value={row.montant}
+                    onChange={(e) => handleInputChangeFrais(index, 'montant', e.target.value)}/>
+                </td>
+                <td><button onClick={addFraisRow}>+</button><button onClick={() => removeRowFrais(index)}>-</button>
+                </td></tr>
+            ))}
+          </tbody>
+        </table>
+
+        <div className="total-box">
+          <strong>Total : </strong> {getTotalSumFrais()} €
+        </div>
+
         <table id="ipTable">
           <thead>
             <tr>
@@ -145,7 +253,7 @@ const ITP = () => {
                 <td><select
                     defaultValue=""
                     onChange={(e) => handleInputChange(index, 'paye', e.target.value)}>
-                    <option value="" disabled>Sélectionnez                    </option>
+                    <option value="" disabled>Sélectionnez</option>
                     <option>Oui</option>
                     <option>Non</option></select></td>
                 <td><input type="number"value="100"/></td>
@@ -155,7 +263,7 @@ const ITP = () => {
           <tbody>
             {rows.map((row, index) => (
               <tr key={index}>
-                <td>Vestimantaires</td>
+                <td>Vestimentaires</td>
                 <td></td>
                 <td></td>
                 <td><select
@@ -198,6 +306,40 @@ const ITP = () => {
 
         <div className="total-box">
           <strong>Total : </strong> {getTotalSum()} €
+        </div>
+
+
+        {/* Tableau des heures */}
+        <h1>Aide de tiers (non-qualifiés)</h1>
+        <table id="hospTable">
+          <thead>
+            <tr>
+              <th>Nombre d'heures</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rowsHeures.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="number"
+                    min="0"
+                    value={row.heures}
+                    onChange={(e) => handleInputChangeHeures(index, 'heures', e.target.value)}
+                  />
+                </td>
+                <td>{row?.totalh}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <div className="total-box">
+          <strong>Total des heures : </strong> {getTotalSumHeures()} €
+        </div>
+
+        <div className="total-box">
+          <strong>Total des frais : </strong> {getTotalSumAll()} €
         </div>
 
       </div>
