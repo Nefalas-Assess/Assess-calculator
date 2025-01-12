@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex } from '@renderer/helpers/general'
-import { useForm, useWatch } from 'react-hook-form'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -18,6 +18,11 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       coefficient_quantum_doloris: '',
       coefficient_prejudice_esthétique: ''
     }
+  })
+
+  const prejudiceSexuelField = useFieldArray({
+    control,
+    name: 'prejudice_sexuels' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -116,6 +121,59 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             </td>
             <td>{getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)}</td>
           </tr>
+        </tbody>
+      </table>
+      <h1>Préjudice Sexuel</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Date de naissance</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prejudiceSexuelField?.fields.map((child, index) => (
+            <tr key={child.id}>
+              <td>
+                <input
+                  type="text"
+                  {...register(`prejudice_sexuels.${index}.firstName`, {
+                    required: 'Prénom requis'
+                  })}
+                />
+                {errors.prejudice_sexuels?.[index]?.firstName && (
+                  <span>{errors.prejudice_sexuels[index].firstName.message}</span>
+                )}
+              </td>
+              <td>
+                <input
+                  type="text"
+                  {...register(`prejudice_sexuels.${index}.lastName`, { required: 'Nom requis' })}
+                />
+                {errors.prejudice_sexuels?.[index]?.lastName && (
+                  <span>{errors.prejudice_sexuels[index].lastName.message}</span>
+                )}
+              </td>
+              <td>
+                <input
+                  type="date"
+                  {...register(`prejudice_sexuels.${index}.birthDate`, {
+                    required: 'Date requise'
+                  })}
+                />
+                {errors.prejudice_sexuels?.[index]?.birthDate && (
+                  <span>{errors.prejudice_sexuels[index].birthDate.message}</span>
+                )}
+              </td>
+              <td>
+                <button type="button" onClick={() => remove(index)}>
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </form>

@@ -119,7 +119,7 @@ const ITP = () => {
     }
   }, [])
 
-  console.log(getPoint(data?.computed_info?.age_consolidation))
+  const point = getPoint(data?.computed_info?.age_consolidation)
 
   return (
     <div id="content">
@@ -139,7 +139,7 @@ const ITP = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
+                <td>{point}</td>
                 <td>
                   <input
                     type="number"
@@ -147,7 +147,7 @@ const ITP = () => {
                     onChange={(e) => handleInputChange(index, 'pourcentageipp', e.target.value)}
                   />
                 </td>
-                <td>{(row.pointsipp * row.pourcentageipp).toFixed(2)}</td>
+                <td>{(point * parseInt(row.pourcentageipp)).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -169,7 +169,7 @@ const ITP = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
+                <td>{point}</td>
                 <td>
                   <input
                     type="number"
@@ -189,9 +189,7 @@ const ITP = () => {
                     ))}
                   </select>
                 </td>
-                <td>
-                  {(row.pointsimp * row.pourcentageimp * (row.contribution / 100)).toFixed(2)}
-                </td>
+                <td>{(point * row.pourcentageimp * (row.contribution / 100)).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
@@ -212,7 +210,7 @@ const ITP = () => {
             {rows.map((row, index) => (
               <tr key={index}>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{getPoint(data?.computed_info?.age_consolidation)}</td>
+                <td>{point}</td>
                 <td>
                   <input
                     type="number"
@@ -220,7 +218,7 @@ const ITP = () => {
                     onChange={(e) => handleInputChange(index, 'pourcentageiep', e.target.value)}
                   />
                 </td>
-                <td>{(row.pointsiep * row.pourcentageiep).toFixed(2)}</td>
+                <td>{(point * row.pourcentageiep).toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
