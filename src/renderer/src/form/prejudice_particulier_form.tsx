@@ -176,7 +176,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
         </tbody>
       </table>
       <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
-        Ajouter un item
+        Ajouter une ligne
       </button>
       <h1>Préjudice d'Agrément</h1>
       <table>
@@ -213,7 +213,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
         </tbody>
       </table>
       <button type="button" onClick={() => prejudiceAgrementField?.append({ paid: true })}>
-        Ajouter un item
+        Ajouter une ligne
       </button>
     </form>
   )

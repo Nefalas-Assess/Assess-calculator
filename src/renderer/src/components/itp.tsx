@@ -39,7 +39,7 @@ const ITP = () => {
       if (!isNaN(debutDate) && !isNaN(finDate)) {
         // Calcul du nombre de jours entre les deux dates en tenant compte de la date de début et de fin
         const timeDiff = finDate.getTime() - debutDate.getTime() // En millisecondes
-        jours = Math.max(0, timeDiff / (1000 * 3600 * 24)) // Conversion en jours
+        jours = Math.max(0, timeDiff / (1000 * 3600 * 24) + 1) // Conversion en jours
 
         // Calcul du total basé sur les jours, indemnité et pourcentage
         total = (jours * indemniteitp * (pourcentage / 100)).toFixed(2)

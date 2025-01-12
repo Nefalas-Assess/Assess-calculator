@@ -6,7 +6,7 @@ const ITP = () => {
     debut: '', // Date de début par défaut
     fin: '', // Date de fin par défaut
     jours: '', // Nombre de jours calculé automatiquement
-    indemnitehosp: 7,
+    indemnitehosp: 75,
     pourcentage: '' // Pourcentage d'application
   })
 
@@ -97,7 +97,7 @@ const ITP = () => {
   return (
     <div id="content">
       <div id="main">
-        <h1>Hospitalisation</h1>
+        <h1>Préjudice ex haerede</h1>
         <table id="hospTable">
           <thead>
             <tr>
@@ -130,7 +130,7 @@ const ITP = () => {
                 <td>
                   <input
                     type="number"
-                    value={row.indemnite || 7}
+                    value={row.indemnite || 75}
                     step="0.01"
                     onChange={(e) =>
                       handleInputChange(index, 'indemnitehosp', parseFloat(e.target.value))

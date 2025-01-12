@@ -31,6 +31,7 @@ export const AppLayout = () => {
             <NavLink to="/ipec">Incapacités Permanentes Économiques CAP</NavLink>
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
             <NavLink to="/fune">Frais funéraires</NavLink>
+            <NavLink to="/exh">Préjudice ex haerede</NavLink>
           </div>
           <div className="content">
             <Outlet />

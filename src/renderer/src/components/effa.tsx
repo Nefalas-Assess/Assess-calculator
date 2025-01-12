@@ -37,7 +37,7 @@ const EFFA = () => {
       const finDate = new Date(fin)
       if (!isNaN(debutDate) && !isNaN(finDate)) {
         // Calcul du nombre de jours entre les deux dates
-        jours = Math.max(0, (finDate - debutDate) / (1000 * 60 * 60 * 24))
+        jours = Math.max(0, (finDate - debutDate) / (1000 * 60 * 60 * 24) + 1)
         // Calcul du total basé sur les jours, indemnité et pourcentage
         total = (jours * indemnite * (pourcentage / 100) * (coefficient / 5)).toFixed(2)
       }
