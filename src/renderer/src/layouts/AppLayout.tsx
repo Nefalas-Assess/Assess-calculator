@@ -25,7 +25,6 @@ export const AppLayout = () => {
             <NavLink to="/effa">Efforts Accrus</NavLink>
             <NavLink to="/hosp">Hospitalisation</NavLink>
             <NavLink to="/pretium">Pretium Doloris</NavLink>
-            <NavLink to="/adt">Aide de tiers</NavLink>
             <NavLink to="/ip">Incapacités Permanentes Forfaitaires</NavLink>
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
           </div>

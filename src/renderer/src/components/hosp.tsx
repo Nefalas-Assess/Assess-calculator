@@ -131,7 +131,7 @@ const ITP = () => {
                 <td>
                   <input
                     type="number"
-                    value={row.indemnitehosp}
+                    value={row.indemnite}
                     step="0.01"
                     onChange={(e) =>
                       handleInputChange(index, 'indemnitehosp', parseFloat(e.target.value))
