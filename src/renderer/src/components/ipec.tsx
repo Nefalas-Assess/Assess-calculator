@@ -66,7 +66,6 @@ const ITP = () => {
                   Sélectionnez
                 </option>
                 <option>Schryvers 2024</option>
-                <option>Levie</option>
               </select>
             </td>
           </tr>
@@ -103,13 +102,9 @@ const ITP = () => {
                 <option></option>
               </select></td>
           </tr>
-          <tr>
-            <td></td>
-            <td></td>
-          </tr>
         </table>
 
-        <h1>Incapacités permanentes économiques</h1>
+        <h1>Incapacités économiques permanentes</h1>
 
         {/* Tableau Salaire annuel brut */}
         <table id="itebTable">
