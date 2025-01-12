@@ -175,7 +175,8 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
                 <td>{days}</td>
                 <td>{data?.computed_info?.enfant_charge || 0}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`menage.${index}.amount`)} />
+                  <input type="number" step="0.01" {...register(`menage.${index}.amount`)} />( +{' '}
+                  {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
                   <input type="number" step="0.01" {...register(`menage.${index}.percentage`)} />
