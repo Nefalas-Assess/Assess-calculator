@@ -19,6 +19,7 @@ export const AppLayout = () => {
           <div className="layout-menu">
             <NavLink to="/infog">Informations générales</NavLink>
             <NavLink to="/frais">Frais</NavLink>
+            <NavLink to="/it">Incapacités Temporaires</NavLink>
             <NavLink to="/itp">Incapacités Temporaires Personnelles</NavLink>
             <NavLink to="/itm">Incapacités Temporaires Ménagères</NavLink>
             <NavLink to="/ite">Incapacités Temporaires Économiques</NavLink>

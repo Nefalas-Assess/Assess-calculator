@@ -17,6 +17,7 @@ import IPMC from './components/ipmc'
 import IPEC from './components/ipec'
 import FUNE from './components/fune'
 import EXH from './components/exh'
+import IT from './components/it'
 import DMP from './components/dmp'
 import { useContext } from 'react'
 
@@ -45,6 +46,7 @@ const Main = () => {
           <Route path="infog" element={<INFOG />} />
           <Route path="ip" element={<IP />} />
           <Route path="effa" element={<EFFA />} />
+          <Route path="it" element={<IT />} />
           <Route path="itm" element={<ITM />} />
           <Route path="itp" element={<ITP />} />
           <Route path="ite" element={<ITE />} />
