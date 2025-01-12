@@ -145,7 +145,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       <table>
         <thead>
           <tr>
-            <th>Indemintés/Frais</th>
+            <th>Indemnités/Frais</th>
             <th>Payé</th>
             <th>Montant</th>
             <th>Action</th>
@@ -155,7 +155,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           {prejudiceSexuelField?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input type="text" {...register(`prejudice_sexuels.${index}.indeminte`)} />
+                <input type="text" {...register(`prejudice_sexuels.${index}.indemnite`)} />
               </td>
               <td>
                 <select {...register(`prejudice_sexuels.${index}.paid`)}>
@@ -182,7 +182,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       <table>
         <thead>
           <tr>
-            <th>Indemintés/Frais</th>
+            <th>Indemnités/Frais</th>
             <th>Payé</th>
             <th>Montant</th>
             <th>Action</th>
@@ -192,7 +192,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           {prejudiceAgrementField?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input type="text" {...register(`prejudice_agrements.${index}.indeminte`)} />
+                <input type="text" {...register(`prejudice_agrements.${index}.indemnite`)} />
               </td>
               <td>
                 <select {...register(`prejudice_agrements.${index}.paid`)}>
