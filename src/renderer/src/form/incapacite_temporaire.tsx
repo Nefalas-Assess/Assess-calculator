@@ -36,14 +36,16 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
   const getTotalAmount = useCallback((item, days) => {
     const { amount = 0, percentage = 0, contribution = 0 } = item
 
-    const baseCalcul =
-      (parseInt(days) || 0) * (parseFloat(amount) || 0) * ((parseFloat(percentage) || 0) / 100)
-
     if (contribution) {
-      return baseCalcul * (parseInt(contribution) / 100 || 0)
+      const baseAmount = amount + (data?.computed_info?.enfant_charge || 0) * 10
+      return (
+        (parseInt(days) || 0) *
+        (parseFloat(baseAmount) || 0) *
+        ((parseFloat(percentage) || 0) / 100)
+      )
     }
 
-    return baseCalcul.toFixed(2)
+    return (parseInt(days) || 0) * (parseFloat(amount) || 0) * ((parseFloat(percentage) || 0) / 100)
   })
 
   const getSalaryTotalAmount = useCallback((item, days) => {
