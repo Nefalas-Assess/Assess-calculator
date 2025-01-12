@@ -26,6 +26,9 @@ export const AppLayout = () => {
             <NavLink to="/hosp">Hospitalisation</NavLink>
             <NavLink to="/pretium">Pretium Doloris</NavLink>
             <NavLink to="/ip">Incapacités Permanentes Forfaitaires</NavLink>
+            <NavLink to="/ippc">Incapacités Permanentes Personnelles CAP</NavLink>
+            <NavLink to="/ipmc">Incapacités Permanentes Ménagères CAP</NavLink>
+            <NavLink to="/ipec">Incapacités Permanentes Économiques CAP</NavLink>
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
           </div>
           <div className="content">

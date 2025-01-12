@@ -12,6 +12,9 @@ import HOSP from './components/hosp'
 import PRETIUM from './components/pretium'
 import PART from './components/particuliers'
 import FRAIS from './components/frais'
+import IPPC from './components/ippc'
+import IPMC from './components/ipmc'
+import IPEC from './components/ipec'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -46,6 +49,9 @@ const Main = () => {
           <Route path="pretium" element={<PRETIUM />} />
           <Route path="particuliers" element={<PART />} />
           <Route path="frais" element={<FRAIS />} />
+          <Route path="ippc" element={<IPPC />} />
+          <Route path="ipmc" element={<IPMC />} />
+          <Route path="ipec" element={<IPEC />} />
         </Route>
       </Routes>
     </HashRouter>
