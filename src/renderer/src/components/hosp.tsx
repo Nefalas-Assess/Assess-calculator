@@ -40,7 +40,7 @@ const ITP = () => {
         jours = Math.max(0, timeDiff / (1000 * 3600 * 24)) // Conversion en jours
 
         // Calcul du total basé sur les jours, indemnité et pourcentage
-        total = (jours * indemnitehosp * (pourcentage / 100)).toFixed(2)
+        total = (jours * indemnitehosp).toFixed(2)
       }
     }
     return { jours, total }
@@ -105,7 +105,6 @@ const ITP = () => {
               <th>Fin</th>
               <th>Jours</th>
               <th>Indemnité journalière (€)</th>
-              <th>%</th>
               <th>Total (€)</th>
               <th></th>
             </tr>
@@ -131,20 +130,10 @@ const ITP = () => {
                 <td>
                   <input
                     type="number"
-                    value={row.indemnite}
+                    value={row.indemnite || 7}
                     step="0.01"
                     onChange={(e) =>
                       handleInputChange(index, 'indemnitehosp', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentage}
-                    step="0.01"
-                    onChange={(e) =>
-                      handleInputChange(index, 'pourcentage', parseFloat(e.target.value))
                     }
                   />
                 </td>
