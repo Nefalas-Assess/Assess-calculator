@@ -82,7 +82,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Frais</h1>
+      <h1>Frais médicaux</h1>
       <table>
         <thead>
           <tr>
@@ -120,7 +120,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
       </table>
       <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>
       <div className="total-box">
-        <strong>Total : </strong> {totalSumFrais} €
+        <strong>Total frais médicaux : </strong> {totalSumFrais} €
       </div>
       <table id="ipTable">
         <thead>
@@ -213,7 +213,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
         <strong>Total des heures : </strong> {totalAides} €
       </div>
       <div className="total-box">
-        <strong>Total des frais : </strong> {totalSumAll} €
+        <strong>Total général : </strong> {totalSumAll} €
       </div>
     </form>
   )

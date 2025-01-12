@@ -17,6 +17,7 @@ import IPMC from './components/ipmc'
 import IPEC from './components/ipec'
 import FUNE from './components/fune'
 import EXH from './components/exh'
+import DMP from './components/dmp'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -56,6 +57,7 @@ const Main = () => {
           <Route path="ipec" element={<IPEC />} />
           <Route path="fune" element={<FUNE />} />
           <Route path="exh" element={<EXH />} />
+          <Route path="dmp" element={<DMP />} />
         </Route>
       </Routes>
     </HashRouter>

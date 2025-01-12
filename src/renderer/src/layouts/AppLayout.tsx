@@ -32,6 +32,7 @@ export const AppLayout = () => {
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
             <NavLink to="/fune">Frais funéraires</NavLink>
             <NavLink to="/exh">Préjudice ex haerede</NavLink>
+            <NavLink to="/dmp">Préjudice des proches</NavLink>
           </div>
           <div className="content">
             <Outlet />
