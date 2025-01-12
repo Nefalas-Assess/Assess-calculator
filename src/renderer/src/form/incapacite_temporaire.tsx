@@ -97,7 +97,7 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Personnelles</h1>
+      <h1>Incapacités temporaires personnelles</h1>
       <table id="ipTable">
         <thead>
           <tr>
@@ -144,7 +144,7 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => addNext(persoFields, 'personnel', { amount: 32 })}>
         Ajouter durée
       </button>
-      <h1>Menagères</h1>
+      <h1>Incapacités temporaires menagères</h1>
       <table id="ipTable">
         <thead>
           <tr>
@@ -204,7 +204,7 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => addNext(menageFields, 'menage')}>
         Ajouter durée
       </button>
-      <h1>Temporaire economique brut</h1>
+      <h1>Temporaire économique brut</h1>
       <table id="ipTable">
         <thead>
           <tr>
@@ -251,7 +251,7 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => addNext(ecoNetFields, 'ecoNet')}>
         Ajouter durée
       </button>
-      <h1>Temporaire economique net</h1>
+      <h1>Temporaire économique net</h1>
       <table id="ipTable">
         <thead>
           <tr>
