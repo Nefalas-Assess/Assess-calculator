@@ -25,21 +25,21 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
 
   const totalSumRest = useMemo(() => {
     return (
-      parseInt(totalDeplacementFrais || 0) +
-      parseInt(formValues?.administratif_value || 0) +
-      parseInt(formValues?.vestimentaire_value || 0)
+      parseFloat(totalDeplacementFrais || 0) +
+      parseFloat(formValues?.administratif_value || 0) +
+      parseFloat(formValues?.vestimentaire_value || 0)
     ).toFixed(2)
   }, [formValues, totalDeplacementFrais])
 
   const totalAides = useMemo(() => {
-    return (parseInt(formValues?.aides || 0) * 11.5).toFixed(2)
+    return (parseFloat(formValues?.aides || 0) * 11.5).toFixed(2)
   }, [formValues])
 
   const totalSumAll = useMemo(() => {
     return (
-      parseInt(totalSumFrais || 0) +
-      parseInt(totalSumRest || 0) +
-      parseInt(totalAides || 0)
+      parseFloat(totalSumFrais || 0) +
+      parseFloat(totalSumRest || 0) +
+      parseFloat(totalAides || 0)
     ).toFixed(2)
   }, [totalSumFrais, totalSumRest, totalAides])
 
