@@ -37,11 +37,12 @@ const IncapaciteTemporaireForm = ({ initialValues, onSubmit }) => {
     const { amount = 0, percentage = 0, contribution = 0 } = item
 
     if (contribution) {
-      const baseAmount = amount + (data?.computed_info?.enfant_charge || 0) * 10
+      const baseAmount = parseFloat(amount) + (data?.computed_info?.enfant_charge || 0) * 10
       return (
         (parseInt(days) || 0) *
         (parseFloat(baseAmount) || 0) *
-        ((parseFloat(percentage) || 0) / 100)
+        ((parseFloat(percentage) || 0) / 100) *
+        (parseFloat(contribution || 0) / 100)
       )
     }
 
