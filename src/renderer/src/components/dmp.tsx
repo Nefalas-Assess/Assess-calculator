@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const DommageMoralEtRevenu = () => {
+const DMP = () => {
   // Constante X, modifiable selon vos besoins
   const X = 1
 
@@ -123,4 +123,4 @@ const DommageMoralEtRevenu = () => {
   )
 }
 
-export default EFFA
+export default DMP
