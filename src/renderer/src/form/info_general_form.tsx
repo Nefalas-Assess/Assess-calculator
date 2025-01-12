@@ -11,6 +11,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
   } = useForm({
     defaultValues: initialValues || {
       nom_victime: '',
+      sexe: '',
       date_accident: '',
       date_naissance: '',
       date_consolidation: '',
@@ -46,6 +47,15 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
                 {...register('nom_victime', { required: 'Ce champ est requis' })}
               />
               {errors.nom_victime && <span>{errors.nom_victime.message}</span>}
+            </td>
+          </tr>
+          <tr>
+            <td>Sexe</td>
+            <td>
+              <select {...register('sexe')}>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+              </select>
             </td>
           </tr>
           <tr>

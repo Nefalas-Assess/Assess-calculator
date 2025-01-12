@@ -1,54 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const ITP = () => {
   const createRow = () => ({
     coefficient: '',
-    salaire: '32',
-    pourcentage: '',
+    frais: '',
     total: ''
   })
 
-  const [brutRows, setBrutRows] = useState([createRow()]);
-  const [netRows, setNetRows] = useState([createRow()]);
+  const [brutRows, setBrutRows] = useState([createRow()])
 
   const calculateRow = (row) => {
-    const { coefficient, salaire, pourcentage } = row;
-    let total = '';
+    const { coefficient, frais } = row
+    let total = ''
 
-    if (coefficient && salaire && pourcentage) {
-      total = (coefficient * salaire * 365 * pourcentage).toFixed(2)
+    if (coefficient && frais) {
+      total = ((1 -coefficient) * frais).toFixed(2)
     }
 
-    return { total };
-  };
+    return { total }
+  }
 
   const handleInputChange = (rows, setRows, index, field, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index][field] = value;
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
 
-    const { total } = calculateRow(updatedRows[index]);
-    updatedRows[index].total = total;
+    const { total } = calculateRow(updatedRows[index])
+    updatedRows[index].total = total
 
-    setRows(updatedRows);
-  };
+    setRows(updatedRows)
+  }
 
   const addRow = (rows, setRows) => {
-    setRows([...rows, createRow()]);
-  };
+    setRows([...rows, createRow()])
+  }
 
   const removeRow = (rows, setRows, index) => {
-    const updatedRows = rows.filter((_, i) => i !== index);
-    setRows(updatedRows);
-  };
+    const updatedRows = rows.filter((_, i) => i !== index)
+    setRows(updatedRows)
+  }
 
   const getTotalSum = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
-
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
 
   return (
     <div id="content">
       <div id="main">
-
         <h1>Variables</h1>
         <table id="IPVariables">
           <tr>
@@ -62,7 +58,6 @@ const ITP = () => {
                   Sélectionnez
                 </option>
                 <option>Schryvers 2024</option>
-                <option></option>
               </select>
             </td>
           </tr>
@@ -81,48 +76,50 @@ const ITP = () => {
                 <option>1</option>
                 <option>1.5</option>
                 <option>2</option>
+                <option>2.5</option>
                 <option>3</option>
-              </select></td>
+              </select>
+            </td>
           </tr>
         </table>
 
-        <h1>Incapacités personnelles permanentes</h1>
+        <h1>Incapacités économiques permanentes</h1>
 
         {/* Tableau Salaire annuel brut */}
         <table id="itebTable">
           <thead>
             <tr>
-              <th>Coefficient</th>
-              <th>Indemnité journalière (€)</th>
-              <th>%</th>
-              <th>Total Brut (€)</th>
+              <th></th>
+              <th>Frais funéraires (€)</th>
+              <th>Total anticipé (€)</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {brutRows.map((row, index) => (
               <tr key={index}>
-                <td></td>
+                <td><text>Coefficient = (Facteurs dommage anticipation frais funéraires)</text></td>
                 <td>
                   <input
                     type="number"
-                    value={row.salaire}
+                    value={row.frais}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'salaire', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentage}
-                    step="0.01"
-                    onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'pourcentage', parseFloat(e.target.value))
+                      handleInputChange(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'frais',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
                 <td>{row.total}</td>
+                <td>
+                  <button onClick={() => addRow(brutRows, setBrutRows)}>+</button>
+                  <button onClick={() => removeRow(brutRows, setBrutRows, index)}>-</button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -131,10 +128,9 @@ const ITP = () => {
         <div className="total-box">
           <strong>Total : </strong> {getTotalSum(brutRows, 'total')} €
         </div>
-
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ITP;
+export default ITP

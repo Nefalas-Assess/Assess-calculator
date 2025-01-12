@@ -15,6 +15,7 @@ import FRAIS from './components/frais'
 import IPPC from './components/ippc'
 import IPMC from './components/ipmc'
 import IPEC from './components/ipec'
+import FUNE from './components/fune'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -52,6 +53,7 @@ const Main = () => {
           <Route path="ippc" element={<IPPC />} />
           <Route path="ipmc" element={<IPMC />} />
           <Route path="ipec" element={<IPEC />} />
+          <Route path="fune" element={<FUNE />} />
         </Route>
       </Routes>
     </HashRouter>

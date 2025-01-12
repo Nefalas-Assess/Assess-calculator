@@ -30,6 +30,7 @@ export const AppLayout = () => {
             <NavLink to="/ipmc">Incapacités Permanentes Ménagères CAP</NavLink>
             <NavLink to="/ipec">Incapacités Permanentes Économiques CAP</NavLink>
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
+            <NavLink to="/fune">Frais funéraires</NavLink>
           </div>
           <div className="content">
             <Outlet />
