@@ -7,8 +7,7 @@ const IT = () => {
 
   const saveData = useCallback(
     (values) => {
-      console.log(values)
-      //   setData({ incapacite_temp: values })
+      setData({ incapacite_temp: values })
     },
     [setData]
   )
