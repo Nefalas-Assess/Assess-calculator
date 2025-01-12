@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex } from '@renderer/helpers/general'
@@ -7,13 +7,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
 
-  const {
-    control,
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm({
+  const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       coefficient_quantum_doloris: '',
       coefficient_prejudice_esthétique: ''
@@ -25,9 +19,26 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     name: 'prejudice_sexuels' // Champs dynamiques pour les enfants
   })
 
+  const prejudiceAgrementField = useFieldArray({
+    control,
+    name: 'prejudice_agrements'
+  })
+
   const formValues = watch()
 
-  const previousValuesRef = useRef(formValues)
+  // Utiliser useWatch pour surveiller les FieldArrays
+  const prejudiceSexuelValues = useWatch({
+    control,
+    name: 'prejudice_sexuels'
+  })
+
+  const prejudiceAgrementValues = useWatch({
+    control,
+    name: 'prejudice_agrements'
+  })
+
+  // Référence pour suivre les anciennes valeurs
+  const previousValuesRef = useRef({})
 
   const submitForm = useCallback(
     (data) => {
@@ -36,19 +47,26 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     [onSubmit]
   )
 
-  // Utilisation de useEffect pour soumettre dès que le champ change
   useEffect(() => {
-    // Comparer les anciennes et nouvelles valeurs
-    const valuesChanged = Object.keys(formValues).some(
-      (key) => formValues[key] !== previousValuesRef.current[key]
-    )
+    const valuesChanged =
+      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
+      JSON.stringify(prejudiceSexuelValues) !==
+        JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
+      JSON.stringify(prejudiceAgrementValues) !==
+        JSON.stringify(previousValuesRef.current?.prejudice_agrements)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
-      handleSubmit(submitForm)() // Soumet le formulaire
-      previousValuesRef.current = formValues // Mettre à jour les anciennes valeurs
+      // Éviter de soumettre si aucune modification réelle
+      previousValuesRef.current = {
+        formValues,
+        prejudice_sexuels: prejudiceSexuelValues,
+        prejudice_agrements: prejudiceAgrementValues
+      }
+
+      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
-  }, [formValues, submitForm])
+  }, [formValues, prejudiceSexuelValues, prejudiceAgrementValues, submitForm, handleSubmit])
 
   const getTotalWithCoef = useCallback(
     (coefficient) => {
@@ -127,9 +145,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       <table>
         <thead>
           <tr>
-            <th>Prénom</th>
-            <th>Nom</th>
-            <th>Date de naissance</th>
+            <th>Indemintés/Frais</th>
+            <th>Payé</th>
+            <th>Montant</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -137,38 +155,19 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           {prejudiceSexuelField?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input
-                  type="text"
-                  {...register(`prejudice_sexuels.${index}.firstName`, {
-                    required: 'Prénom requis'
-                  })}
-                />
-                {errors.prejudice_sexuels?.[index]?.firstName && (
-                  <span>{errors.prejudice_sexuels[index].firstName.message}</span>
-                )}
+                <input type="text" {...register(`prejudice_sexuels.${index}.indeminte`)} />
               </td>
               <td>
-                <input
-                  type="text"
-                  {...register(`prejudice_sexuels.${index}.lastName`, { required: 'Nom requis' })}
-                />
-                {errors.prejudice_sexuels?.[index]?.lastName && (
-                  <span>{errors.prejudice_sexuels[index].lastName.message}</span>
-                )}
+                <select {...register(`prejudice_sexuels.${index}.paid`)}>
+                  <option value={true}>Oui</option>
+                  <option value={false}>Non</option>
+                </select>
               </td>
               <td>
-                <input
-                  type="date"
-                  {...register(`prejudice_sexuels.${index}.birthDate`, {
-                    required: 'Date requise'
-                  })}
-                />
-                {errors.prejudice_sexuels?.[index]?.birthDate && (
-                  <span>{errors.prejudice_sexuels[index].birthDate.message}</span>
-                )}
+                <input type="number" {...register(`prejudice_sexuels.${index}.amount`)} />
               </td>
               <td>
-                <button type="button" onClick={() => remove(index)}>
+                <button type="button" onClick={() => prejudiceSexuelField.remove(index)}>
                   Supprimer
                 </button>
               </td>
@@ -176,6 +175,46 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           ))}
         </tbody>
       </table>
+      <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
+        Ajouter un item
+      </button>
+      <h1>Préjudice d'Agrément</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Indemintés/Frais</th>
+            <th>Payé</th>
+            <th>Montant</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prejudiceAgrementField?.fields.map((child, index) => (
+            <tr key={child.id}>
+              <td>
+                <input type="text" {...register(`prejudice_agrements.${index}.indeminte`)} />
+              </td>
+              <td>
+                <select {...register(`prejudice_agrements.${index}.paid`)}>
+                  <option value={true}>Oui</option>
+                  <option value={false}>Non</option>
+                </select>
+              </td>
+              <td>
+                <input type="number" {...register(`prejudice_agrements.${index}.amount`)} />
+              </td>
+              <td>
+                <button type="button" onClick={() => prejudiceAgrementField.remove(index)}>
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button type="button" onClick={() => prejudiceAgrementField?.append({ paid: true })}>
+        Ajouter un item
+      </button>
     </form>
   )
 }
