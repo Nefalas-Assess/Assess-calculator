@@ -31,3 +31,20 @@ export const findClosestIndex = (keys, value) => {
   // Si la valeur est supérieure à toutes les clés, retourne le dernier index
   return numericKeys.length - 1
 }
+
+export const getDays = (item) => {
+  const { start, end } = item
+
+  if (start && end) {
+    const debutDate = new Date(start)
+    const finDate = new Date(end)
+
+    // Vérification des dates valides
+    if (!isNaN(debutDate) && !isNaN(finDate)) {
+      // Calcul du nombre de jours entre les deux dates en tenant compte de la date de début et de fin
+      const timeDiff = finDate.getTime() - debutDate.getTime() // En millisecondes
+      const jours = Math.max(0, timeDiff / (1000 * 3600 * 24) + 1) // Conversion en jours
+      return jours
+    }
+  }
+}
