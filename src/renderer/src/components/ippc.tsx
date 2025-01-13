@@ -1,121 +1,58 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const IPPC = () => {
   const createRow = () => ({
-    coefficient: '',
-    indemnite: '32',
-    pourcentage: '',
+    debutippc: '',
+    finippc: '',
+    joursippc: '',
+    indemnite: 32,
     pourcentageippc: '',
-    total: ''
-  })
+    totalippc: ''
+  });
 
-  const createRowippc = () => ({
-    coefficient: '',
-    indemnite: '32',
-    pourcentage: '',
-    pourcentageippc: '',
-    total: ''
-  })
-
+  const [ippcRows, setIppcRows] = useState([createRow()]);
   const [brutRows, setBrutRows] = useState([createRow()])
-  const [ippcRows, setippcRows] = useState([createRowippc()])
 
-  // Pour le tableau de capitalisation
-  const calculateRow = (row) => {
-    const { coefficient, indemnite, pourcentage } = row
-    let total = ''
+  const calculateRowIppc = (row) => {
+    const { debutippc, finippc, indemnite, pourcentageippc } = row;
+    let joursippc = '';
+    let totalippc = '';
 
-    if (coefficient && indemnite && pourcentage) {
-      total = (coefficient * indemnite * 365 * pourcentage).toFixed(2)
+    if (debutippc && finippc) {
+      const debutDate = new Date(debutippc);
+      const finDate = new Date(finippc);
+
+      if (!isNaN(debutDate) && !isNaN(finDate)) {
+        const timeDiff = finDate.getTime() - debutDate.getTime();
+        joursippc = Math.max(0, Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1);
+
+        if (indemnite && pourcentageippc) {
+          totalippc = (joursippc * indemnite * (pourcentageippc / 100)).toFixed(2);
+        }
+      }
     }
 
-    return { total }
-  }
+    return { joursippc, totalippc };
+  };
 
-  const handleInputChange = (rows, setRows, index, field, value) => {
-    const updatedRows = [...rows]
-    updatedRows[index][field] = value
+  const handleInputChangeIppc = (index, field, value) => {
+    const updatedRows = [...ippcRows];
+    updatedRows[index][field] = value;
 
-    const { total } = calculateRow(updatedRows[index])
-    updatedRows[index].total = total
+    const { joursippc, totalippc } = calculateRowIppc(updatedRows[index]);
+    updatedRows[index].joursippc = joursippc;
+    updatedRows[index].totalippc = totalippc;
 
-    setRows(updatedRows)
-  }
+    setIppcRows(updatedRows);
+  };
 
-  const getTotalSum = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
-
-  // Pour le tableau [conso-paiement]
-  const calculateRowippc = (row) => {
-    const { joursippc, indemnite, pourcentageippc } = row
-    let totalippc = ''
-
-    if (joursippc && indemnite && pourcentageippc) {
-      totalippc = (joursippc * indemnite * pourcentageippc).toFixed(2)
-    }
-
-    return { totalippc }
-  }
-
-  const handleInputChangeippc = (rows, setRows, index, field, value) => {
-    const updatedRows = [...rows]
-    updatedRows[index][field] = value
-
-    const { totalippc } = calculateRowippc(updatedRows[index])
-    updatedRows[index].total = totalippc
-
-    setRows(updatedRows)
-  }
-
-  const getTotalSumippc = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
+  const getTotalSumIppc = (rows, field) =>
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
 
   return (
     <div id="content">
       <div id="main">
         <h1>Incapacités permanentes personnelles</h1>
-        <h3>Période entre la consolidation et le paiement</h3>
-        <table id="ippcTable">
-          <thead>
-            <tr>
-              <th>Date de consolidation</th>
-              <th>Date du paiement</th>
-              <th>Jours</th>
-              <th>Indemnité journalière (€)</th>
-              <th>%</th>
-              <th>Total (€)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ippcRows.map((row, index) => (
-              <tr key={index}>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.indemnite}
-                    onChange={(e) =>
-                      handleInputChange(index, 'indemnite', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    value={row.pourcentageippc}
-                    onChange={(e) =>
-                      handleInputChange(index, 'pourcentageippc', parseFloat(e.target.value))
-                    }
-                  />
-                </td>
-                <td>{row?.totalippc}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tr>
@@ -148,11 +85,72 @@ const IPPC = () => {
               </select>
             </td>
           </tr>
+          <tr>
+            <td>Date du paiement</td>
+            <td><input type="date"/></td>
+          </tr>
+        </table>
+
+        <h3>Période entre la consolidation et le paiement</h3>
+        <table id="ippcTable">
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
+              <th>Indemnité journalière (€)</th>
+              <th>%</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ippcRows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="date"
+                    value={row.debutippc}
+                    onChange={(e) =>
+                      handleInputChangeIppc(index, 'debutippc', e.target.value)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    value={row.finippc}
+                    onChange={(e) =>
+                      handleInputChangeIppc(index, 'finippc', e.target.value)
+                    }
+                  />
+                </td>
+                <td>{row.joursippc}</td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.indemnite}
+                    onChange={(e) =>
+                      handleInputChangeIppc(index, 'indemnite', parseFloat(e.target.value) || 0)
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.pourcentageippc}
+                    onChange={(e) =>
+                      handleInputChangeIppc(index, 'pourcentageippc', parseFloat(e.target.value) || 0)
+                    }
+                  />
+                </td>
+                <td>{row.totalippc}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
 
         <h3>Incapacités personnelles permanentes</h3>
-
-        <table id="ippcTable">
+        <table id="IPCAPTable">
           <thead>
             <tr>
               <th>Date du paiement</th>
@@ -164,7 +162,11 @@ const IPPC = () => {
           <tbody>
             {brutRows.map((row, index) => (
               <tr key={index}>
-                <td></td>
+                <td>
+                  <input
+                    type="date"
+                  />
+                </td>
                 <td>
                   <input
                     type="number"
@@ -202,9 +204,9 @@ const IPPC = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
+        {/* <div className="total-box">
           <strong>Total : </strong> {getTotalSum(brutRows, 'total')} €
-        </div>
+        </div> */}
       </div>
     </div>
   )

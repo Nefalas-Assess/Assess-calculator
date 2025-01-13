@@ -14,7 +14,7 @@ const ITP = () => {
     let total = ''
 
     if (coefficient && frais) {
-      total = ((1 -coefficient) * frais).toFixed(2)
+      total = ((1 - coefficient) * frais).toFixed(2)
     }
 
     return { total }
@@ -50,14 +50,8 @@ const ITP = () => {
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'table', e.target.value)}
-              >
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                <option>Schryvers 2024</option>
+              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
+                <option>Schryvers 2024 | Paiement anticipé frais funéraires</option>
               </select>
             </td>
           </tr>
@@ -81,6 +75,12 @@ const ITP = () => {
               </select>
             </td>
           </tr>
+          <tr>
+            <td>Date du décès</td>
+            <td>
+              <input type="date" />
+            </td>
+          </tr>
         </table>
 
         <h1>Incapacités économiques permanentes</h1>
@@ -89,7 +89,6 @@ const ITP = () => {
         <table id="itebTable">
           <thead>
             <tr>
-              <th></th>
               <th>Frais funéraires (€)</th>
               <th>Total anticipé (€)</th>
               <th>Actions</th>
@@ -98,7 +97,6 @@ const ITP = () => {
           <tbody>
             {brutRows.map((row, index) => (
               <tr key={index}>
-                <td><text>Coefficient = (Facteurs dommage anticipation frais funéraires)</text></td>
                 <td>
                   <input
                     type="number"

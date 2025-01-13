@@ -113,7 +113,7 @@ const ITP = () => {
     const updatedRows = rows.filter((_, i) => i !== index)
     setRows(updatedRows)
   }
-  
+
   // Fonction pour créer une nouvelle ligne pour le tableau des heures
   const createRowHeures = () => ({
     heures: '', // Nombre d'heures
@@ -128,19 +128,19 @@ const ITP = () => {
     const updatedRows = [...rowsHeures]
     updatedRows[index][field] = value
     const totalh = (parseFloat(updatedRows[index].heures) * 11.5 * 365).toFixed(2)
-    updatedRows[index].totalh = totalh
+    updatedRows[index].total = totalh
     setRowsHeures(updatedRows)
   }
 
   const getTotalSumHeures = () => {
-    return rowsHeures.reduce((sum, row) => sum + (parseFloat(row.totalh) || 0), 0).toFixed(2)
+    return rowsHeures.reduce((sum, row) => sum + (parseFloat(row.total) || 0), 0).toFixed(2)
   }
 
   // Fonction pour créer une nouvelle ligne pour le tableau des heures
   const createRowFrais = () => ({
     total: '' // Total calculé automatiquement
   })
-  
+
   // État pour le tableau des frais
   const [fraisRows, setFraisRows] = useState([createRowFrais()])
 
@@ -148,24 +148,24 @@ const ITP = () => {
   const getTotalSumFrais = () => {
     return fraisRows.reduce((sum, row) => sum + (parseFloat(row.total) || 0), 0).toFixed(2)
   }
-  
+
   // Fonction pour gérer les changements dans les champs du tableau des frais
   const handleInputChangeFrais = (index, field, value) => {
     const updatedRows = [...fraisRows]
     updatedRows[index][field] = value
-  
+
     // Calculer automatiquement le total si les champs nécessaires sont remplis
     const montant = parseFloat(updatedRows[index].montant) || 0
     const total = montant.toFixed(2)
     updatedRows[index].total = total
-  
+
     setFraisRows(updatedRows)
   }
   // Fonction pour ajouter une nouvelle ligne dans le tableau des frais
   const addFraisRow = () => {
     setFraisRows([...fraisRows, createRowFrais()])
   }
-  
+
   // Fonction pour supprimer une ligne du tableau des frais
   const removeRowFrais = (index) => {
     const updatedRows = fraisRows.filter((_, i) => i !== index)
@@ -174,12 +174,14 @@ const ITP = () => {
 
   const getTotalSumAll = () => {
     // Calculer le total global des frais en additionnant tous les totaux
-    const totalFrais = getTotalSumFrais();  // Total des frais
-    const totalHeures = getTotalSumHeures();  // Total des heures
-    const totalIndemnites = getTotalSum();  // Total des indemnités
-    
+    const totalFrais = getTotalSumFrais() // Total des frais
+    const totalHeures = getTotalSumHeures() // Total des heures
+    const totalIndemnites = getTotalSum() // Total des indemnités
+
     // Retourner la somme de tous les totaux
-    return (parseFloat(totalFrais) + parseFloat(totalHeures) + parseFloat(totalIndemnites)).toFixed(2);
+    return (parseFloat(totalFrais) + parseFloat(totalHeures) + parseFloat(totalIndemnites)).toFixed(
+      2
+    )
   }
 
   return (
@@ -190,9 +192,129 @@ const ITP = () => {
       </div>
 
       <div id="main">
+        <h1>Incapacités permanentes ménagères</h1>
+        <h3>Variables du calcul de capitalisation</h3>
+        <table id="IPVariables">
+          <tr>
+            <td>Tables de référence</td>
+            <td>
+              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
+                <option>
+                  Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
+                </option>
+                <option></option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Taux d'intérêt de la capitalisation</td>
+            <td>
+              <select
+                defaultValue=""
+                onChange={(e) => handleInputChange(index, 'int', e.target.value)}
+              >
+                <option value="" disabled>
+                  Sélectionnez
+                </option>
+                <option>0.5</option>
+                <option>0.8</option>
+                <option>1</option>
+                <option>1.5</option>
+                <option>2</option>
+                <option>3</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Date du paiement</td>
+            <td>
+              <input type="date" />
+            </td>
+          </tr>
+        </table>
 
+        <h3>Période entre la consolidation et le paiement</h3>
+        <table id="ipmcTable">
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
+              <th>Indemnité journalière (€)</th>
+              <th>Coefficient</th>
+              <th>%</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input type="date" />
+                </td>
+                <td>
+                  <input type="date" />
+                </td>
+                <td></td>
+                <td>
+                  <input type="number" />
+                </td>
+                <td>
+                  <select>
+                    <option value="0">0</option>
+                    <option value="100">100</option>
+                    <option value="65">65</option>
+                    <option value="50">50</option>
+                    <option value="35">35</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" />
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        {/* Tableau des heures */}
+        <h3>Incapacités personnelles permanentes</h3>
+        <table id="IPCAPTable">
+          <thead>
+            <tr>
+              <th>Date du paiement</th>
+              <th>Indemnité journalière (€)</th>
+              <th>Coefficient</th>
+              <th>%</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input type="date" />
+                </td>
+                <td>
+                  <input type="number" />
+                </td>
+                <td>
+                  <select>
+                    <option value="0">0</option>
+                    <option value="100">100</option>
+                    <option value="65">65</option>
+                    <option value="50">50</option>
+                    <option value="35">35</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" />
+                </td>
+                <td></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
         <h1>Aide de tiers (non-qualifiés)</h1>
         <table id="hospTable">
           <thead>
@@ -212,19 +334,15 @@ const ITP = () => {
                     onChange={(e) => handleInputChangeHeures(index, 'heures', e.target.value)}
                   />
                 </td>
-                <td>{row?.totalh}</td>
+                <td>{row?.total}</td>
               </tr>
             ))}
           </tbody>
         </table>
-        <div className="total-box">
-          <strong>Total Aide de tiers (non-qualifiés) : </strong> {getTotalSumHeures()} €
-        </div>
 
         <div className="total-box">
           <strong>Total : </strong> {getTotalSumAll()} €
         </div>
-
       </div>
     </div>
   )

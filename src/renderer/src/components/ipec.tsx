@@ -1,76 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const ITP = () => {
-    const createRow = () => ({
-        coefficient: '',
-        salaire: '',
-        pourcentage: '',
-        total: '',
-      });
+  const createRow = () => ({
+    coefficient: '',
+    salaire: '',
+    pourcentage: '',
+    total: ''
+  })
 
-  const [brutRows, setBrutRows] = useState([createRow()]);
-  const [netRows, setNetRows] = useState([createRow()]);
+  const [brutRows, setBrutRows] = useState([createRow()])
+  const [netRows, setNetRows] = useState([createRow()])
 
   const calculateRow = (row) => {
-    const { coefficient, salaire, pourcentage } = row;
-    let total = '';
+    const { coefficient, salaire, pourcentage } = row
+    let total = ''
 
     if (coefficient && salaire && pourcentage) {
-      total = (
-        coefficient *
-        salaire *
-        (pourcentage / 100)
-      ).toFixed(2);
+      total = (coefficient * salaire * pourcentage).toFixed(2)
     }
 
-    return { total };
-  };
+    return { total }
+  }
 
   const handleInputChange = (rows, setRows, index, field, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index][field] = value;
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
 
-    const { total } = calculateRow(updatedRows[index]);
-    updatedRows[index].total = total;
+    const { total } = calculateRow(updatedRows[index])
+    updatedRows[index].total = total
 
-    setRows(updatedRows);
-  };
+    setRows(updatedRows)
+  }
 
   const addRow = (rows, setRows) => {
-    setRows([...rows, createRow()]);
-  };
+    setRows([...rows, createRow()])
+  }
 
   const removeRow = (rows, setRows, index) => {
-    const updatedRows = rows.filter((_, i) => i !== index);
-    setRows(updatedRows);
-  };
+    const updatedRows = rows.filter((_, i) => i !== index)
+    setRows(updatedRows)
+  }
 
   const getTotalSum = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
-
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
 
   return (
     <div id="content">
       <div id="main">
-
-        <h1>Variables</h1>
+        <h1>Incapacités permanentes économiques</h1>
+        <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'table', e.target.value)}
-              >
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                <option>Schryvers 2024</option>
+              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
+                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel</option>
+                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (65 ans)</option>
+                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (66 ans)</option>
+                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (67 ans)</option>
+                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (68 ans)</option>
               </select>
             </td>
           </tr>
           <tr>
-            <td>Taux d'intérêt</td>
+            <td>Taux d'intérêt de la capitalisation</td>
             <td>
               <select
                 defaultValue=""
@@ -84,23 +77,15 @@ const ITP = () => {
                 <option>1</option>
                 <option>1.5</option>
                 <option>2</option>
-                <option>2.5</option>
                 <option>3</option>
-              </select></td>
+              </select>
+            </td>
           </tr>
           <tr>
-            <td>Âge de la retraite</td>
+            <td>Date du paiement</td>
             <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'retraite', e.target.value)}
-              >
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                <option></option>
-                <option></option>
-              </select></td>
+              <input type="date" />
+            </td>
           </tr>
         </table>
 
@@ -110,7 +95,6 @@ const ITP = () => {
         <table id="itebTable">
           <thead>
             <tr>
-              <th>Coefficient</th>
               <th>Salaire annuel brut (€)</th>
               <th>%</th>
               <th>Total Brut (€)</th>
@@ -119,14 +103,19 @@ const ITP = () => {
           <tbody>
             {brutRows.map((row, index) => (
               <tr key={index}>
-                <td></td>
                 <td>
                   <input
                     type="number"
                     value={row.salaire}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'salaire', parseFloat(e.target.value))
+                      handleInputChange(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'salaire',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -136,7 +125,13 @@ const ITP = () => {
                     value={row.pourcentage}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'pourcentage', parseFloat(e.target.value))
+                      handleInputChange(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'pourcentage',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -154,7 +149,6 @@ const ITP = () => {
         <table id="itenTable">
           <thead>
             <tr>
-              <th>Coefficient</th>
               <th>Salaire annuel net (€)</th>
               <th>%</th>
               <th>Total Net (€)</th>
@@ -163,14 +157,19 @@ const ITP = () => {
           <tbody>
             {netRows.map((row, index) => (
               <tr key={index}>
-                <td></td>
                 <td>
                   <input
                     type="number"
                     value={row.salaire}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(netRows, setNetRows, index, 'salaire', parseFloat(e.target.value))
+                      handleInputChange(
+                        netRows,
+                        setNetRows,
+                        index,
+                        'salaire',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -180,7 +179,13 @@ const ITP = () => {
                     value={row.pourcentage}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(netRows, setNetRows, index, 'pourcentage', parseFloat(e.target.value))
+                      handleInputChange(
+                        netRows,
+                        setNetRows,
+                        index,
+                        'pourcentage',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -195,7 +200,7 @@ const ITP = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ITP;
+export default ITP
