@@ -197,7 +197,6 @@ const ITP = () => {
         <table id="hospTable">
           <thead>
             <tr>
-              <th>Coefficient</th>
               <th>Nombre d'heures par jour</th>
               <th>Total (€)</th>
             </tr>
@@ -205,7 +204,6 @@ const ITP = () => {
           <tbody>
             {rowsHeures.map((row, index) => (
               <tr key={index}>
-                <td></td>
                 <td>
                   <input
                     type="number"

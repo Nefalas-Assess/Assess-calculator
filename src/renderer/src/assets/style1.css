@@ -12,14 +12,15 @@
   min-width: 210px;
   border-right: 2px solid black;
   overflow-y: auto;
+  background-color: #eeeeee;
 
   a {
     display: block;
     text-align: left;
     margin: 10px;
     padding: 5px;
-    background-color: #242424;
-    color: white;
+    background-color: #8bbdff;
+    color: black;
     border-radius: 5px;
     &:hover{
       background-color: gray;
@@ -45,11 +46,10 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  color: white;
+  background-color: white;
+  color: black;
   cursor: pointer;
   transition: border-color 0.25s;
-  margin-bottom: 10px
 }
 button:hover {
   border-color: #8bbdff;
@@ -62,7 +62,7 @@ button:focus-visible {
 
 
 #menu button:hover {
-  background-color: gray;
+  background-color: white;
 }
 
 /* Contenu */
@@ -72,6 +72,7 @@ button:focus-visible {
   flex-direction: column;
   justify-content: flex-start; /* Commencer en haut de la page */
   flex: 1;
+  background-color: #eeeeee;
 }
 
 #top-menu {
@@ -103,14 +104,13 @@ h1 {
   margin-top: 10;
   font-size: 24px;
   text-align: left;
-  margin-bottom: 10px
+  color:black;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-  margin-bottom: 10px
+  margin-top: 20px;
 }
 
 table, th, td {
@@ -122,6 +122,7 @@ th, td {
   text-align: center;
   max-width: 200px;
   min-width: 100px;
+  color:black;
 }
 
 /* Style des boutons */

@@ -1,73 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-const ITP = () => {
+const IPPC = () => {
   const createRow = () => ({
     coefficient: '',
-    salaire: '32',
+    indemnite: '32',
     pourcentage: '',
+    pourcentageippc: '',
     total: ''
   })
 
-  const [brutRows, setBrutRows] = useState([createRow()]);
-  const [netRows, setNetRows] = useState([createRow()]);
+  const createRowippc = () => ({
+    coefficient: '',
+    indemnite: '32',
+    pourcentage: '',
+    pourcentageippc: '',
+    total: ''
+  })
 
+  const [brutRows, setBrutRows] = useState([createRow()])
+  const [ippcRows, setippcRows] = useState([createRowippc()])
+
+  // Pour le tableau de capitalisation
   const calculateRow = (row) => {
-    const { coefficient, salaire, pourcentage } = row;
-    let total = '';
+    const { coefficient, indemnite, pourcentage } = row
+    let total = ''
 
-    if (coefficient && salaire && pourcentage) {
-      total = (coefficient * salaire * 365 * pourcentage).toFixed(2)
+    if (coefficient && indemnite && pourcentage) {
+      total = (coefficient * indemnite * 365 * pourcentage).toFixed(2)
     }
 
-    return { total };
-  };
+    return { total }
+  }
 
   const handleInputChange = (rows, setRows, index, field, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index][field] = value;
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
 
-    const { total } = calculateRow(updatedRows[index]);
-    updatedRows[index].total = total;
+    const { total } = calculateRow(updatedRows[index])
+    updatedRows[index].total = total
 
-    setRows(updatedRows);
-  };
-
-  const addRow = (rows, setRows) => {
-    setRows([...rows, createRow()]);
-  };
-
-  const removeRow = (rows, setRows, index) => {
-    const updatedRows = rows.filter((_, i) => i !== index);
-    setRows(updatedRows);
-  };
+    setRows(updatedRows)
+  }
 
   const getTotalSum = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
 
+  // Pour le tableau [conso-paiement]
+  const calculateRowippc = (row) => {
+    const { joursippc, indemnite, pourcentageippc } = row
+    let totalippc = ''
+
+    if (joursippc && indemnite && pourcentageippc) {
+      totalippc = (joursippc * indemnite * pourcentageippc).toFixed(2)
+    }
+
+    return { totalippc }
+  }
+
+  const handleInputChangeippc = (rows, setRows, index, field, value) => {
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
+
+    const { totalippc } = calculateRowippc(updatedRows[index])
+    updatedRows[index].total = totalippc
+
+    setRows(updatedRows)
+  }
+
+  const getTotalSumippc = (rows, field) =>
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
 
   return (
     <div id="content">
       <div id="main">
+        <h1>Incapacités permanentes personnelles</h1>
+        <h3>Période entre la consolidation et le paiement</h3>
+        <table id="ippcTable">
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
+              <th>Indemnité journalière (€)</th>
+              <th>%</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ippcRows.map((row, index) => (
+              <tr key={index}>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.indemnite}
+                    onChange={(e) =>
+                      handleInputChange(index, 'indemnite', parseFloat(e.target.value))
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.pourcentageippc}
+                    onChange={(e) =>
+                      handleInputChange(index, 'pourcentageippc', parseFloat(e.target.value))
+                    }
+                  />
+                </td>
+                <td>{row?.totalippc}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        <h1>Variables</h1>
+        <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'table', e.target.value)}
-              >
-                <option value="" disabled>
-                  Sélectionnez
+              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
+                <option>
+                  Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
                 </option>
-                <option>Schryvers 2024</option>
                 <option></option>
               </select>
             </td>
           </tr>
           <tr>
-            <td>Taux d'intérêt</td>
+            <td>Taux d'intérêt de la capitalisation</td>
             <td>
               <select
                 defaultValue=""
@@ -82,20 +145,20 @@ const ITP = () => {
                 <option>1.5</option>
                 <option>2</option>
                 <option>3</option>
-              </select></td>
+              </select>
+            </td>
           </tr>
         </table>
 
-        <h1>Incapacités personnelles permanentes</h1>
+        <h3>Incapacités personnelles permanentes</h3>
 
-        {/* Tableau Salaire annuel brut */}
-        <table id="itebTable">
+        <table id="ippcTable">
           <thead>
             <tr>
-              <th>Coefficient</th>
+              <th>Date du paiement</th>
               <th>Indemnité journalière (€)</th>
               <th>%</th>
-              <th>Total Brut (€)</th>
+              <th>Total (€)</th>
             </tr>
           </thead>
           <tbody>
@@ -105,10 +168,15 @@ const ITP = () => {
                 <td>
                   <input
                     type="number"
-                    value={row.salaire}
-                    step="0.01"
+                    value={row.indemnite}
                     onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'salaire', parseFloat(e.target.value))
+                      handleInputChange(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'indemnité',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -118,7 +186,13 @@ const ITP = () => {
                     value={row.pourcentage}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(brutRows, setBrutRows, index, 'pourcentage', parseFloat(e.target.value))
+                      handleInputChange(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'pourcentage',
+                        parseFloat(e.target.value)
+                      )
                     }
                   />
                 </td>
@@ -131,10 +205,9 @@ const ITP = () => {
         <div className="total-box">
           <strong>Total : </strong> {getTotalSum(brutRows, 'total')} €
         </div>
-
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ITP;
+export default IPPC

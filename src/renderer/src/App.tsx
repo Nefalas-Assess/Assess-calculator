@@ -3,10 +3,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import AppLayout from './layouts/AppLayout'
 import EFFA from './components/effa'
 import IP from './components/ip'
-import ITM from './components/itm'
-import ITP from './components/itp'
 import INFOG from './components/infog'
-import ITE from './components/ite'
 import Home from './components/Home'
 import HOSP from './components/hosp'
 import PRETIUM from './components/pretium'
@@ -47,9 +44,6 @@ const Main = () => {
           <Route path="ip" element={<IP />} />
           <Route path="effa" element={<EFFA />} />
           <Route path="it" element={<IT />} />
-          <Route path="itm" element={<ITM />} />
-          <Route path="itp" element={<ITP />} />
-          <Route path="ite" element={<ITE />} />
           <Route path="hosp" element={<HOSP />} />
           <Route path="pretium" element={<PRETIUM />} />
           <Route path="particuliers" element={<PART />} />
