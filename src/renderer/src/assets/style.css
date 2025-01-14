@@ -171,6 +171,15 @@ button {
   margin: 20px;
 }
 
-.total-td{
+.total-td {
   background-color: #2b3b4f;
+}
+
+.sub-nav {
+  padding: 0 15px;
+  color: white;
+  .sub-nav-title {
+    cursor: pointer;
+    user-select: none;  
+  }
 }

@@ -1,9 +1,11 @@
 import { AppContext } from '@renderer/providers/AppProvider'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { NavLink, Outlet } from 'react-router'
 
 export const AppLayout = () => {
   const { data, save, back } = useContext(AppContext)
+
+  const [incPerma, setIncPerma] = useState(false)
 
   return (
     <div className="app">
@@ -23,10 +25,19 @@ export const AppLayout = () => {
             <NavLink to="/effa">Efforts Accrus</NavLink>
             <NavLink to="/hosp">Hospitalisation</NavLink>
             <NavLink to="/pretium">Pretium Doloris</NavLink>
-            <NavLink to="/ip">Incapacités Permanentes Forfaitaires</NavLink>
-            <NavLink to="/ippc">Incapacités Permanentes Personnelles CAP</NavLink>
-            <NavLink to="/ipmc">Incapacités Permanentes Ménagères CAP</NavLink>
-            <NavLink to="/ipec">Incapacités Permanentes Économiques CAP</NavLink>
+            <div className="sub-nav">
+              <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
+                Incapacités Permanentes
+              </div>
+              {incPerma && (
+                <div>
+                  <NavLink to="/ip">Forfaitaires</NavLink>
+                  <NavLink to="/ippc">Personnelles CAP</NavLink>
+                  <NavLink to="/ipmc">Ménagères CAP</NavLink>
+                  <NavLink to="/ipec">Économiques CAP</NavLink>
+                </div>
+              )}
+            </div>
             <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
             <NavLink to="/fune">Frais funéraires</NavLink>
             <NavLink to="/exh">Préjudice ex haerede</NavLink>
