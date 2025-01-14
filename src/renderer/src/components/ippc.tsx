@@ -11,7 +11,8 @@ const IPPC = () => {
   });
 
   const [ippcRows, setIppcRows] = useState([createRow()]);
-  const [brutRows, setBrutRows] = useState([createRow()])
+  const [brutRows, setBrutRows] = useState([createRow()]);
+  const [datePaiement, setDatePaiement] = useState('');
 
   const calculateRowIppc = (row) => {
     const { debutippc, finippc, indemnite, pourcentageippc } = row;
@@ -46,8 +47,30 @@ const IPPC = () => {
     setIppcRows(updatedRows);
   };
 
-  const getTotalSumIppc = (rows, field) =>
+  const handleDatePaiementChange = (value) => {
+    setDatePaiement(value);
+
+    const updatedIppcRows = ippcRows.map((row) => ({
+      ...row,
+      finippc: value
+    }));
+    setIppcRows(updatedIppcRows);
+
+    const updatedBrutRows = brutRows.map((row) => ({
+      ...row,
+      finippc: value
+    }));
+    setBrutRows(updatedBrutRows);
+  };
+
+  const getTotalSum = (rows, field) =>
     rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
+
+  const getTotalSumAll = () => {
+    const totalIppc = parseFloat(getTotalSum(ippcRows, 'totalippc')) || 0;
+    const totalBrut = parseFloat(getTotalSum(brutRows, 'totalippc')) || 0;
+    return (totalIppc + totalBrut).toFixed(2);
+  };
 
   return (
     <div id="content">
@@ -55,40 +78,45 @@ const IPPC = () => {
         <h1>Incapacités permanentes personnelles</h1>
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
-          <tr>
-            <td>Tables de référence</td>
-            <td>
-              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
-                <option>
-                  Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
-                </option>
-                <option></option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Taux d'intérêt de la capitalisation</td>
-            <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'int', e.target.value)}
-              >
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                <option>0.5</option>
-                <option>0.8</option>
-                <option>1</option>
-                <option>1.5</option>
-                <option>2</option>
-                <option>3</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>Date du paiement</td>
-            <td><input type="date"/></td>
-          </tr>
+          <tbody>
+            <tr>
+              <td>Tables de référence</td>
+              <td>
+                <select>
+                  <option>
+                    Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
+                  </option>
+                  <option></option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Taux d'intérêt de la capitalisation</td>
+              <td>
+                <select defaultValue="">
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
+                  <option>0.5</option>
+                  <option>0.8</option>
+                  <option>1</option>
+                  <option>1.5</option>
+                  <option>2</option>
+                  <option>3</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>Date du paiement</td>
+              <td>
+                <input
+                  type="date"
+                  value={datePaiement}
+                  onChange={(e) => handleDatePaiementChange(e.target.value)}
+                />
+              </td>
+            </tr>
+          </tbody>
         </table>
 
         <h3>Période entre la consolidation et le paiement</h3>
@@ -116,13 +144,7 @@ const IPPC = () => {
                   />
                 </td>
                 <td>
-                  <input
-                    type="date"
-                    value={row.finippc}
-                    onChange={(e) =>
-                      handleInputChangeIppc(index, 'finippc', e.target.value)
-                    }
-                  />
+                  <input type="date" value={row.finippc} readOnly />
                 </td>
                 <td>{row.joursippc}</td>
                 <td>
@@ -163,53 +185,39 @@ const IPPC = () => {
             {brutRows.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <input
-                    type="date"
-                  />
+                  <input type="date" value={datePaiement} readOnly />
                 </td>
                 <td>
                   <input
                     type="number"
                     value={row.indemnite}
                     onChange={(e) =>
-                      handleInputChange(
-                        brutRows,
-                        setBrutRows,
-                        index,
-                        'indemnité',
-                        parseFloat(e.target.value)
-                      )
+                      handleInputChangeIppc(index, 'indemnite', parseFloat(e.target.value) || 0)
                     }
                   />
                 </td>
                 <td>
                   <input
                     type="number"
-                    value={row.pourcentage}
+                    value={row.pourcentageippc}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(
-                        brutRows,
-                        setBrutRows,
-                        index,
-                        'pourcentage',
-                        parseFloat(e.target.value)
-                      )
+                      handleInputChangeIppc(index, 'pourcentageippc', parseFloat(e.target.value) || 0)
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>{row.totalippc}</td>
               </tr>
             ))}
           </tbody>
         </table>
 
-        {/* <div className="total-box">
-          <strong>Total : </strong> {getTotalSum(brutRows, 'total')} €
-        </div> */}
+        <div className="total-box">
+          <strong>Total : </strong> {getTotalSumAll()} €
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default IPPC
+export default IPPC;
