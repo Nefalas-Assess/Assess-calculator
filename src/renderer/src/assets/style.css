@@ -183,3 +183,7 @@ button {
     user-select: none;  
   }
 }
+
+#main {
+  max-width: 1200px;
+}

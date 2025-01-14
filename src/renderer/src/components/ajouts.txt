@@ -38,3 +38,4 @@ Ajouts d'une rubrique "Calcul des intérêts" avec sélection de Non (par défau
 qui ouvre ensuite une cadre avec le taux d'intérêts à appliquer aux indemnités temporaires.
 
 Bouton dans le top menu qui permet de changer de mode sombre/clair.
+https://g.co/gemini/share/b7bea65938c0
