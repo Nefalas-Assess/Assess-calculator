@@ -188,3 +188,7 @@ button {
 .int {
   display: none;
 }
+
+.int.visible {
+  display: block;
+}

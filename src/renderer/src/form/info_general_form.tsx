@@ -18,6 +18,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       date_consolidation: '',
       statut: 'marié', // Valeur par défaut
       profession: 'employe', // Valeur par défaut
+      calcul_interets: 'non',
       children: [] // Liste vide d'enfants par défaut
     }
   })
@@ -159,13 +160,12 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       </button>
 
       {/* Sélecteur pour les intérêts */}
-      <h3>Calcul des intérêts</h3>
       <div>
         <label>
-          Voulez-vous calculer les intérêts ? 
+          <h3>Voulez-vous calculer les intérêts ? </h3>
           <select {...register('calcul_interets')}>
-            <option value="oui">Oui</option>
             <option value="non">Non</option>
+            <option value="oui">Oui</option>
           </select>
         </label>
       </div>
@@ -173,8 +173,18 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       {/* Section visible uniquement si "Oui" est sélectionné */}
       {calculInterets === 'oui' && (
         <div className="int">
-          <h4>Section pour le calcul des intérêts</h4>
-          {/* Ajoutez ici le contenu spécifique à l'affichage des intérêts */}
+          <select {...register('taux_int')}>
+            <option>0.5%</option>
+            <option>1%</option>
+            <option>1.5%</option>
+            <option>2%</option>
+            <option>2.5%</option>
+            <option>3%</option>
+            <option>3.5%</option>
+            <option>4%</option>
+            <option>4.5%</option>
+            <option>5%</option>
+          </select>
         </div>
       )}
 
