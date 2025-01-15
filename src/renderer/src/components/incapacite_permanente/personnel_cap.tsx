@@ -1,6 +1,16 @@
-import React, { useState } from 'react'
+import IPPersonnelCapForm from '@renderer/form/incapacite_perma/personnel_cap'
+import { AppContext } from '@renderer/providers/AppProvider'
+import React, { useCallback, useContext, useState } from 'react'
 
-const IPPC = () => {
+const PersonnelCap = () => {
+  const { data, setData } = useContext(AppContext)
+
+  const saveData = useCallback(
+    (values) => {
+      setData({ incapacite_perma_personnel_cap: values })
+    },
+    [setData]
+  )
   const createRow = () => ({
     debutippc: '',
     finippc: '',
@@ -75,6 +85,11 @@ const IPPC = () => {
   return (
     <div id="content">
       <div id="main">
+        <IPPersonnelCapForm
+          onSubmit={saveData}
+          initialValues={data?.incapacite_perma_personnel_cap}
+        />
+
         <h1>Incapacités permanentes personnelles capitalisées</h1>
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
@@ -224,4 +239,4 @@ const IPPC = () => {
   )
 }
 
-export default IPPC
+export default PersonnelCap

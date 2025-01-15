@@ -1,6 +1,6 @@
 import { isValid } from 'date-fns'
-import React, { useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 
 export const InfoForm = ({ onSubmit, initialValues }) => {
   const {
@@ -28,14 +28,42 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
     name: 'children' // Champs dynamiques pour les enfants
   })
 
-  const calculInterets = watch('calcul_interets') // Suivi de l'état de "calcul_interets"
+  const formValues = watch() // Suivi de l'état de "calcul_interets"
+
+  // Utiliser useWatch pour surveiller les FieldArrays
+  const childrenValues = useWatch({
+    control,
+    name: 'children'
+  })
+
+  const submitForm = useCallback(
+    (data) => {
+      onSubmit(data) // Soumettre avec l'onSubmit passé en prop
+    },
+    [onSubmit]
+  )
+
+  const previousValuesRef = useRef({})
+
+  useEffect(() => {
+    const valuesChanged =
+      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
+      JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children)
+
+    // Si des valeurs ont changé, soumettre le formulaire
+    if (valuesChanged) {
+      // Éviter de soumettre si aucune modification réelle
+      previousValuesRef.current = {
+        formValues,
+        children: childrenValues
+      }
+
+      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
+    }
+  }, [formValues, childrenValues, submitForm, handleSubmit])
 
   const addChild = () => {
     append({ firstName: '', lastName: '', birthDate: '' }) // Nouveau champ enfant
-  }
-
-  const submitForm = (data) => {
-    onSubmit(data)
   }
 
   return (
@@ -171,7 +199,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       </div>
 
       {/* Section visible uniquement si "Oui" est sélectionné */}
-      {calculInterets === 'oui' && (
+      {formValues?.calcul_interets === 'oui' && (
         <div className="int">
           <select {...register('taux_int')}>
             <option>0.5%</option>
@@ -187,8 +215,6 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
           </select>
         </div>
       )}
-
-      <button type="submit">Enregistrer</button>
     </form>
   )
 }

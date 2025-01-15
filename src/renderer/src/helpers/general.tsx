@@ -32,8 +32,13 @@ export const findClosestIndex = (keys, value) => {
   return numericKeys.length - 1
 }
 
-export const getDays = (item = {}) => {
-  const { start, end } = item
+export const getDays = (item = {}, varName) => {
+  let { start, end } = item
+
+  if ((!start || !end) && varName) {
+    start = item?.[varName?.[0]]
+    end = item?.[varName?.[1]]
+  }
 
   if (start && end) {
     const debutDate = new Date(start)
