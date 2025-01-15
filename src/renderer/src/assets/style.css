@@ -115,6 +115,7 @@ table {
 
 table, th, td {
   border: 1px solid black;
+  max-width: 1200px;
 }
 
 th, td {
@@ -182,8 +183,4 @@ button {
     cursor: pointer;
     user-select: none;  
   }
-}
-
-#main {
-  max-width: 1200px;
 }

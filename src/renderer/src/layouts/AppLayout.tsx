@@ -6,6 +6,8 @@ export const AppLayout = () => {
   const { data, save, back } = useContext(AppContext)
 
   const [incPerma, setIncPerma] = useState(false)
+  const [incTemp, setIncTemp] = useState(false)
+  const [Dead, setDead] = useState(false)
 
   return (
     <div className="app">
@@ -21,10 +23,19 @@ export const AppLayout = () => {
           <div className="layout-menu">
             <NavLink to="/infog">Informations générales</NavLink>
             <NavLink to="/frais">Frais</NavLink>
-            <NavLink to="/it">Incapacités Temporaires</NavLink>
-            <NavLink to="/effa">Efforts Accrus</NavLink>
-            <NavLink to="/hosp">Hospitalisation</NavLink>
-            <NavLink to="/pretium">Pretium Doloris</NavLink>
+            <div className="sub-nav">
+              <div className="sub-nav-title" onClick={() => setIncTemp(!incTemp)}>
+                Incapacités Temporaires
+              </div>
+              {incTemp && (
+                <div>
+                  <NavLink to="/it">Incapacités Temporaires</NavLink>
+                  <NavLink to="/effa">Efforts Accrus</NavLink>
+                  <NavLink to="/hosp">Hospitalisation</NavLink>
+                  <NavLink to="/pretium">Pretium Doloris</NavLink>
+                </div>
+              )}
+            </div>
             <div className="sub-nav">
               <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
                 Incapacités Permanentes
@@ -32,16 +43,26 @@ export const AppLayout = () => {
               {incPerma && (
                 <div>
                   <NavLink to="/ip">Forfaitaires</NavLink>
-                  <NavLink to="/ippc">Personnelles CAP</NavLink>
-                  <NavLink to="/ipmc">Ménagères CAP</NavLink>
-                  <NavLink to="/ipec">Économiques CAP</NavLink>
+                  <NavLink to="/ippc">Personnelles capitalisées</NavLink>
+                  <NavLink to="/ipmc">Ménagères capitalisées</NavLink>
+                  <NavLink to="/ipec">Économiques capitalisées</NavLink>
+                  <NavLink to="/frais_cap">Frais capitalisés</NavLink>
+                  <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
                 </div>
               )}
             </div>
-            <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
-            <NavLink to="/fune">Frais funéraires</NavLink>
-            <NavLink to="/exh">Préjudice ex haerede</NavLink>
-            <NavLink to="/dmp">Préjudice des proches</NavLink>
+            <div className="sub-nav">
+              <div className="sub-nav-title" onClick={() => setDead(!Dead)}>
+                Décès
+              </div>
+              {Dead && (
+                <div>
+                  <NavLink to="/fune">Frais funéraires</NavLink>
+                  <NavLink to="/exh">Préjudice ex haerede</NavLink>
+                  <NavLink to="/dmp">Préjudice des proches</NavLink>
+                </div>
+              )}
+            </div>
           </div>
           <div className="content">
             <Outlet />

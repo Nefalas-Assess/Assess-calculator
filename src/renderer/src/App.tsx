@@ -16,6 +16,7 @@ import FUNE from './components/fune'
 import EXH from './components/exh'
 import IT from './components/it'
 import DMP from './components/dmp'
+import FC from './components/frais_cap'
 import { useContext } from 'react'
 
 // const ProtectedRoute = ({ children }) => {
@@ -54,6 +55,7 @@ const Main = () => {
           <Route path="fune" element={<FUNE />} />
           <Route path="exh" element={<EXH />} />
           <Route path="dmp" element={<DMP />} />
+          <Route path="frais_cap" element={<FC />} />
         </Route>
       </Routes>
     </HashRouter>

@@ -1,45 +1,93 @@
 import React, { useState } from 'react'
 
-const ITP = () => {
+const IPEC = () => {
   const createRow = () => ({
-    coefficient: '',
+    debut: '',
     salaire: '',
     pourcentage: '',
+    jours: '',
     total: ''
   })
 
-  const [brutRows, setBrutRows] = useState([createRow()])
-  const [netRows, setNetRows] = useState([createRow()])
+  // Section Période entre la consolidation et le paiement
+  const [brutRows, setBrutRows] = useState([createRow()]) // Période entre la consolidation et le paiement
+  const [netRows, setNetRows] = useState([createRow()]) // Période entre la consolidation et le paiement
 
-  const calculateRow = (row) => {
-    const { coefficient, salaire, pourcentage } = row
+  // Section Incapacités économiques permanentes
+  const [itebRows, setItebRows] = useState([createRow()]) // Incapacités économiques permanentes (Brut)
+  const [itenRows, setItenRows] = useState([createRow()]) // Incapacités économiques permanentes (Net)
+
+  const calculateRowWithCoefficient = (row, paymentDate, isNet = false) => {
+    const { salaire, pourcentage } = row
     let total = ''
+    let jours = ''
 
-    if (coefficient && salaire && pourcentage) {
-      total = (coefficient * salaire * pourcentage).toFixed(2)
+    if (row.debut && paymentDate) {
+      const dateDebut = new Date(row.debut)
+      const datePaiement = new Date(paymentDate)
+      jours = Math.max(0, (datePaiement - dateDebut) / (1000 * 60 * 60 * 24) + 1) // Différence en jours
     }
 
-    return { total }
+    if (salaire && pourcentage && jours) {
+      total = ((jours * salaire * pourcentage) / 365).toFixed(2)
+    }
+
+    if (isNet) {
+      total = (parseFloat(total) * coefficient).toFixed(2)
+    } else {
+      total = (parseFloat(total) * coefficient).toFixed(2)
+    }
+
+    return { total, jours }
   }
 
-  const handleInputChange = (rows, setRows, index, field, value) => {
+  // Période entre la consolidation et le paiement
+  const handleInputChangeBrut = (rows, setRows, index, field, value, paymentDate) => {
     const updatedRows = [...rows]
     updatedRows[index][field] = value
 
-    const { total } = calculateRow(updatedRows[index])
+    const { total, jours } = calculateRow(updatedRows[index], paymentDate)
     updatedRows[index].total = total
+    updatedRows[index].jours = jours
 
     setRows(updatedRows)
   }
 
-  const addRow = (rows, setRows) => {
-    setRows([...rows, createRow()])
-  }
+  const handleInputChangeNet = (rows, setRows, index, field, value, paymentDate) => {
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
 
-  const removeRow = (rows, setRows, index) => {
-    const updatedRows = rows.filter((_, i) => i !== index)
+    const { total, jours } = calculateRow(updatedRows[index], paymentDate)
+    updatedRows[index].total = total
+    updatedRows[index].jours = jours
+
     setRows(updatedRows)
   }
+
+  const handleInputChangeIteb = (rows, setRows, index, field, value, paymentDate) => {
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
+
+    const { total, jours } = calculateRowWithCoefficient(updatedRows[index], paymentDate)
+    updatedRows[index].total = total
+    updatedRows[index].jours = jours
+
+    setRows(updatedRows)
+  }
+
+  const handleInputChangeIten = (rows, setRows, index, field, value, paymentDate) => {
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
+
+    const { total, jours } = calculateRowWithCoefficient(updatedRows[index], paymentDate, true) // true pour net
+    updatedRows[index].total = total
+    updatedRows[index].jours = jours
+
+    setRows(updatedRows)
+  }
+
+  const [paymentDate, setPaymentDate] = useState('')
+  const [coefficient, setCoefficient] = useState(1) // Coefficient à définir
 
   const getTotalSum = (rows, field) =>
     rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
@@ -53,7 +101,7 @@ const ITP = () => {
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select onChange={(e) => handleInputChange(index, 'table', e.target.value)}>
+              <select>
                 <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel</option>
                 <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (65 ans)</option>
                 <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (66 ans)</option>
@@ -65,10 +113,7 @@ const ITP = () => {
           <tr>
             <td>Taux d'intérêt de la capitalisation</td>
             <td>
-              <select
-                defaultValue=""
-                onChange={(e) => handleInputChange(index, 'int', e.target.value)}
-              >
+              <select defaultValue="">
                 <option value="" disabled>
                   Sélectionnez
                 </option>
@@ -84,17 +129,24 @@ const ITP = () => {
           <tr>
             <td>Date du paiement</td>
             <td>
-              <input type="date" />
+              <input
+                type="date"
+                value={paymentDate}
+                onChange={(e) => setPaymentDate(e.target.value)}
+              />
             </td>
           </tr>
         </table>
 
-        <h1>Incapacités économiques permanentes</h1>
+        <h3>Période entre la consolidation et le paiement</h3>
 
-        {/* Tableau Salaire annuel brut */}
-        <table id="itebTable">
+        {/* Tableau Salaire annuel brut pour la Période entre la consolidation et le paiement */}
+        <table id="ipecBrutTable">
           <thead>
             <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
               <th>Salaire annuel brut (€)</th>
               <th>%</th>
               <th>Total Brut (€)</th>
@@ -105,16 +157,37 @@ const ITP = () => {
               <tr key={index}>
                 <td>
                   <input
+                    type="date"
+                    value={row.debut}
+                    onChange={(e) =>
+                      handleInputChangeBrut(
+                        brutRows,
+                        setBrutRows,
+                        index,
+                        'debut',
+                        e.target.value,
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input type="date" value={paymentDate} readOnly />
+                </td>
+                <td>{row.jours}</td>
+                <td>
+                  <input
                     type="number"
                     value={row.salaire}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(
+                      handleInputChangeBrut(
                         brutRows,
                         setBrutRows,
                         index,
                         'salaire',
-                        parseFloat(e.target.value)
+                        parseFloat(e.target.value),
+                        paymentDate
                       )
                     }
                   />
@@ -125,12 +198,13 @@ const ITP = () => {
                     value={row.pourcentage}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(
+                      handleInputChangeBrut(
                         brutRows,
                         setBrutRows,
                         index,
                         'pourcentage',
-                        parseFloat(e.target.value)
+                        parseFloat(e.target.value),
+                        paymentDate
                       )
                     }
                   />
@@ -141,14 +215,13 @@ const ITP = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
-          <strong>Total Brut : </strong> {getTotalSum(brutRows, 'total')} €
-        </div>
-
         {/* Tableau Salaire annuel net */}
-        <table id="itenTable">
+        <table id="ipecNetTable">
           <thead>
             <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
               <th>Salaire annuel net (€)</th>
               <th>%</th>
               <th>Total Net (€)</th>
@@ -159,16 +232,37 @@ const ITP = () => {
               <tr key={index}>
                 <td>
                   <input
+                    type="date"
+                    value={row.debut}
+                    onChange={(e) =>
+                      handleInputChangeBrut(
+                        netRows,
+                        setNetRows,
+                        index,
+                        'debut',
+                        e.target.value,
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input type="date" value={paymentDate} readOnly />
+                </td>
+                <td>{row.jours}</td>
+                <td>
+                  <input
                     type="number"
                     value={row.salaire}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(
+                      handleInputChangeBrut(
                         netRows,
                         setNetRows,
                         index,
                         'salaire',
-                        parseFloat(e.target.value)
+                        parseFloat(e.target.value),
+                        paymentDate
                       )
                     }
                   />
@@ -179,12 +273,13 @@ const ITP = () => {
                     value={row.pourcentage}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChange(
+                      handleInputChangeBrut(
                         netRows,
                         setNetRows,
                         index,
                         'pourcentage',
-                        parseFloat(e.target.value)
+                        parseFloat(e.target.value),
+                        paymentDate
                       )
                     }
                   />
@@ -195,12 +290,123 @@ const ITP = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
-          <strong>Total Net : </strong> {getTotalSum(netRows, 'total')} €
-        </div>
+        <h3>Incapacités économiques permanentes</h3>
+
+        {/* Tableau Salaire annuel brut pour Incapacités économiques permanentes */}
+        <table id="itebTable">
+          <thead>
+            <tr>
+              <th>Salaire annuel brut (€)</th>
+              <th>%</th>
+              <th>Total Brut (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itebRows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="number"
+                    value={row.salaire}
+                    step="0.01"
+                    onChange={(e) =>
+                      handleInputChangeIteb(
+                        itebRows,
+                        setItebRows,
+                        index,
+                        'salaire',
+                        parseFloat(e.target.value),
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.pourcentage}
+                    step="0.01"
+                    onChange={(e) =>
+                      handleInputChangeIteb(
+                        itebRows,
+                        setItebRows,
+                        index,
+                        'pourcentage',
+                        parseFloat(e.target.value),
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>{row.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Tableau Salaire annuel net pour Incapacités économiques permanentes */}
+        <table id="itenTable">
+          <thead>
+            <tr>
+              <th>Salaire annuel net (€)</th>
+              <th>%</th>
+              <th>Total Net (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itenRows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  <input
+                    type="number"
+                    value={row.salaire}
+                    step="0.01"
+                    onChange={(e) =>
+                      handleInputChangeIteb(
+                        itenRows,
+                        setItenRows,
+                        index,
+                        'salaire',
+                        parseFloat(e.target.value),
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    value={row.pourcentage}
+                    step="0.01"
+                    onChange={(e) =>
+                      handleInputChangeIteb(
+                        itenRows,
+                        setItenRows,
+                        index,
+                        'pourcentage',
+                        parseFloat(e.target.value),
+                        paymentDate
+                      )
+                    }
+                  />
+                </td>
+                <td>{row.total}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {/* <div>
+          <label>Coefficient</label>
+          <input
+            type="number"
+            step="0.01"
+            value={coefficient}
+            onChange={(e) => setCoefficient(parseFloat(e.target.value))}
+          />
+        </div> */}
       </div>
     </div>
   )
 }
 
-export default ITP
+export default IPEC

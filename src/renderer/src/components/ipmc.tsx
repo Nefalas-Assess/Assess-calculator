@@ -241,7 +241,7 @@ const IPMC = () => {
           </tbody>
         </table>
 
-        <h1>Aide de tiers (non-qualifiés)</h1>
+        <h3>Aide de tiers (non-qualifiés)</h3>
         <table id="hospTable">
           <thead>
             <tr>

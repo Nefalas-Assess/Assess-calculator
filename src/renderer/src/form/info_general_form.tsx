@@ -77,7 +77,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
             </td>
           </tr>
           <tr>
-            <td>Statut</td>
+            <td>Situation conjugale</td>
             <td>
               <select {...register('statut')}>
                 <option value="marié">Marié</option>
@@ -86,7 +86,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
             </td>
           </tr>
           <tr>
-            <td>Profession</td>
+            <td>Statut professionnel</td>
             <td>
               <select {...register('profession')}>
                 <option value="employe">Employé</option>
