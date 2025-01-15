@@ -74,7 +74,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
     const timeDiff = datePaiementObj - dateFraisObj
     const daysDiff = timeDiff / (1000 * 3600 * 24)
 
-    return (interestRate * daysDiff).toFixed(2)
+    return (interestRate * (daysDiff / 365)).toFixed(2)
   }
 
   useEffect(() => {
