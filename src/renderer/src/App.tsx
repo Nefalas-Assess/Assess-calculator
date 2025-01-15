@@ -1,12 +1,12 @@
 import AppProvider, { AppContext } from './providers/AppProvider'
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import AppLayout from './layouts/AppLayout'
-import EFFA from './components/effa'
+import EFFA from './components/incapacite_temporaire/effa'
 import IP from './components/ip'
 import INFOG from './components/infog'
 import Home from './components/Home'
-import HOSP from './components/hosp'
-import PRETIUM from './components/pretium'
+import HOSP from './components/incapacite_temporaire/hosp'
+import PRETIUM from './components/incapacite_temporaire/pretium'
 import PART from './components/particuliers'
 import FRAIS from './components/frais'
 import IPPC from './components/ippc'
@@ -14,22 +14,25 @@ import IPMC from './components/ipmc'
 import IPEC from './components/ipec'
 import FUNE from './components/fune'
 import EXH from './components/exh'
-import IT from './components/it'
 import DMP from './components/dmp'
 import FC from './components/frais_cap'
 import { useContext } from 'react'
+import Personnel from './components/incapacite_temporaire/personnel'
+import Menagere from './components/incapacite_temporaire/menagere'
+import Economique from './components/incapacite_temporaire/economique'
 
-// const ProtectedRoute = ({ children }) => {
-//   const { filePath } = useContext(AppContext)
-
-//   if (!filePath) {
-//     // Si aucun fichier n'est importé, redirigez vers la page d'accueil
-//     return <Navigate to="/" replace />
-//   }
-
-//   // Sinon, affichez les composants enfants
-//   return children
-// }
+const IncapaciteTemp = () => {
+  return (
+    <Routes>
+      <Route path="/personnel" element={<Personnel />} />
+      <Route path="/menagère" element={<Menagere />} />
+      <Route path="/economique" element={<Economique />} />
+      <Route path="/hosp" element={<HOSP />} />
+      <Route path="/pretium" element={<PRETIUM />} />
+      <Route path="/effa" element={<EFFA />} />
+    </Routes>
+  )
+}
 
 const Main = () => {
   const { filePath } = useContext(AppContext)
@@ -43,10 +46,7 @@ const Main = () => {
           <Route index element={<INFOG />} />
           <Route path="infog" element={<INFOG />} />
           <Route path="ip" element={<IP />} />
-          <Route path="effa" element={<EFFA />} />
-          <Route path="it" element={<IT />} />
-          <Route path="hosp" element={<HOSP />} />
-          <Route path="pretium" element={<PRETIUM />} />
+          <Route path="it/*" element={<IncapaciteTemp />} />
           <Route path="particuliers" element={<PART />} />
           <Route path="frais" element={<FRAIS />} />
           <Route path="ippc" element={<IPPC />} />

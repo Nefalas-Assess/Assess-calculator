@@ -1,8 +1,8 @@
-import HospitalisationForm from '@renderer/form/hospitalisation'
+import HospitalisationForm from '@renderer/form/incapacite_temp/hospitalisation'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const ITP = () => {
+const Hospitalisation = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -21,4 +21,4 @@ const ITP = () => {
   )
 }
 
-export default ITP
+export default Hospitalisation

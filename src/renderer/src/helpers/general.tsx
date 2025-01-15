@@ -32,7 +32,7 @@ export const findClosestIndex = (keys, value) => {
   return numericKeys.length - 1
 }
 
-export const getDays = (item) => {
+export const getDays = (item = {}) => {
   const { start, end } = item
 
   if (start && end) {

@@ -1,13 +1,31 @@
 import { AppContext } from '@renderer/providers/AppProvider'
-import { useContext, useState } from 'react'
-import { NavLink, Outlet } from 'react-router'
+import { useContext, useEffect, useState } from 'react'
+import { NavLink, Outlet, useLocation } from 'react-router'
+
+const LinkItem = ({ to, children }) => {
+  return (
+    <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={to}>
+      {children}
+    </NavLink>
+  )
+}
 
 export const AppLayout = () => {
   const { data, save, back } = useContext(AppContext)
 
   const [incPerma, setIncPerma] = useState(false)
   const [incTemp, setIncTemp] = useState(false)
-  const [Dead, setDead] = useState(false)
+  const [dead, setDead] = useState(false)
+
+  const location = useLocation() // Utilisé pour détecter l'URL actuelle
+
+  // Mettre incTemp à true lors du chargement si une condition est remplie
+  useEffect(() => {
+    // Vérifie si l'URL actuelle correspond à une des routes enfants d'"Incapacités Temporaires"
+    if (location.pathname.startsWith('/it')) {
+      setIncTemp(true)
+    }
+  }, [location.pathname]) // Réagir uniquement si le chemin change
 
   return (
     <div className="app">
@@ -21,18 +39,20 @@ export const AppLayout = () => {
         </div>
         <div className="core">
           <div className="layout-menu">
-            <NavLink to="/infog">Informations générales</NavLink>
-            <NavLink to="/frais">Frais</NavLink>
+            <LinkItem to="/infog">Informations générales</LinkItem>
+            <LinkItem to="/frais">Frais</LinkItem>
             <div className="sub-nav">
               <div className="sub-nav-title" onClick={() => setIncTemp(!incTemp)}>
                 Incapacités Temporaires
               </div>
               {incTemp && (
                 <div>
-                  <NavLink to="/it">Incapacités Temporaires</NavLink>
-                  <NavLink to="/effa">Efforts Accrus</NavLink>
-                  <NavLink to="/hosp">Hospitalisation</NavLink>
-                  <NavLink to="/pretium">Pretium Doloris</NavLink>
+                  <LinkItem to="/it/personnel">Personnelle</LinkItem>
+                  <LinkItem to="/it/menagère">Ménagère</LinkItem>
+                  <LinkItem to="/it/economique">Economique</LinkItem>
+                  <LinkItem to="/it/effa">Efforts Accrus</LinkItem>
+                  <LinkItem to="/it/hosp">Hospitalisation</LinkItem>
+                  <LinkItem to="/it/pretium">Pretium Doloris</LinkItem>
                 </div>
               )}
             </div>
@@ -42,24 +62,24 @@ export const AppLayout = () => {
               </div>
               {incPerma && (
                 <div>
-                  <NavLink to="/ip">Forfaitaires</NavLink>
-                  <NavLink to="/ippc">Personnelles capitalisées</NavLink>
-                  <NavLink to="/ipmc">Ménagères capitalisées</NavLink>
-                  <NavLink to="/ipec">Économiques capitalisées</NavLink>
-                  <NavLink to="/frais_cap">Frais capitalisés</NavLink>
-                  <NavLink to="/particuliers">Préjudices Particuliers</NavLink>
+                  <LinkItem to="/ip">Forfaitaires</LinkItem>
+                  <LinkItem to="/ippc">Personnelles capitalisées</LinkItem>
+                  <LinkItem to="/ipmc">Ménagères capitalisées</LinkItem>
+                  <LinkItem to="/ipec">Économiques capitalisées</LinkItem>
+                  <LinkItem to="/frais_cap">Frais capitalisés</LinkItem>
+                  <LinkItem to="/particuliers">Préjudices Particuliers</LinkItem>
                 </div>
               )}
             </div>
             <div className="sub-nav">
-              <div className="sub-nav-title" onClick={() => setDead(!Dead)}>
+              <div className="sub-nav-title" onClick={() => setDead(!dead)}>
                 Décès
               </div>
-              {Dead && (
+              {dead && (
                 <div>
-                  <NavLink to="/fune">Frais funéraires</NavLink>
-                  <NavLink to="/exh">Préjudice ex haerede</NavLink>
-                  <NavLink to="/dmp">Préjudice des proches</NavLink>
+                  <LinkItem to="/fune">Frais funéraires</LinkItem>
+                  <LinkItem to="/exh">Préjudice ex haerede</LinkItem>
+                  <LinkItem to="/dmp">Préjudice des proches</LinkItem>
                 </div>
               )}
             </div>
