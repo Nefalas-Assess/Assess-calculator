@@ -81,7 +81,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Quantum Doloris</h1>
+      <h1>Préjudices particuliers</h1>
+      <h3>Quantum Doloris</h3>
       <table id="ipTable">
         <thead>
           <tr>
@@ -111,7 +112,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           </tr>
         </tbody>
       </table>
-      <h1>Préjudice Esthétique</h1>
+      <h3>Préjudice Esthétique</h3>
       <table id="ipTable">
         <thead>
           <tr>
@@ -141,7 +142,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           </tr>
         </tbody>
       </table>
-      <h1>Préjudice Sexuel</h1>
+      <h3>Préjudice Sexuel</h3>
       <table>
         <thead>
           <tr>
@@ -178,7 +179,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
         Ajouter une ligne
       </button>
-      <h1>Préjudice d'Agrément</h1>
+      <h3>Préjudice d'Agrément</h3>
       <table>
         <thead>
           <tr>

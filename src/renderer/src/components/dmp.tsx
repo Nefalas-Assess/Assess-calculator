@@ -48,7 +48,8 @@ const DMP = () => {
   return (
     <div id="content">
       <div id="main">
-        <h1>Dommage moral des proches</h1>
+        <h1>Préjudices des proches</h1>
+        <h3>Dommage moral des proches</h3>
 
         <table>
           <thead>
@@ -76,7 +77,7 @@ const DMP = () => {
           </tbody>
         </table>
 
-        <h1>Perte du revenu du défunt</h1>
+        <h3>Perte du revenu du défunt</h3>
 
         <table id="itebTable">
           <thead>

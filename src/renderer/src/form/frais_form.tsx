@@ -63,6 +63,20 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
     [onSubmit]
   )
 
+  // Fonction pour calculer les intérêts
+  const calculateInterest = (dateFrais, datePaiement, interestRate) => {
+    if (!dateFrais || !datePaiement) return 0
+
+    const dateFraisObj = new Date(dateFrais)
+    const datePaiementObj = new Date(datePaiement)
+
+    // Calculer la différence en jours
+    const timeDiff = datePaiementObj - dateFraisObj
+    const daysDiff = timeDiff / (1000 * 3600 * 24)
+
+    return (interestRate * daysDiff).toFixed(2)
+  }
+
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
@@ -82,7 +96,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Frais médicaux</h1>
+      <h1>Frais (médicaux)</h1>
       <table>
         <thead>
           <tr>
@@ -91,6 +105,9 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <th>Payé</th>
             <th>Montant</th>
             <th>Action</th>
+            <th className="int">Date frais</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
           </tr>
         </thead>
         <tbody>
@@ -114,6 +131,20 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
               <td>
                 <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
               </td>
+              <td className="int">
+                <input type="date" {...register(`frais.${index}.date_frais`)} />
+              </td>
+              <td className="int">
+                <input type="date" {...register(`frais.${index}.date_paiement`)} />
+              </td>
+              <td className="int">
+                {/* Affichage des intérêts */}
+                {calculateInterest(
+                  formValues?.frais[index]?.date_frais,
+                  formValues?.frais[index]?.date_paiement,
+                  0.05 // Taux d'intérêt, ajustez-le comme nécessaire
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -122,6 +153,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
       <div className="total-box">
         <strong>Total frais médicaux : </strong> {totalSumFrais} €
       </div>
+
       <table id="ipTable">
         <thead>
           <tr>
@@ -178,9 +210,6 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             </td>
             <td>
               <select {...register('deplacement_paid')}>
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
                 <option>Oui</option>
                 <option>Non</option>
               </select>

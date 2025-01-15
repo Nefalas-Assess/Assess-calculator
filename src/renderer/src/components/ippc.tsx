@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const IPPC = () => {
   const createRow = () => ({
@@ -8,74 +8,74 @@ const IPPC = () => {
     indemnite: 32,
     pourcentageippc: '',
     totalippc: ''
-  });
+  })
 
-  const [ippcRows, setIppcRows] = useState([createRow()]);
-  const [brutRows, setBrutRows] = useState([createRow()]);
-  const [datePaiement, setDatePaiement] = useState('');
+  const [ippcRows, setIppcRows] = useState([createRow()])
+  const [brutRows, setBrutRows] = useState([createRow()])
+  const [datePaiement, setDatePaiement] = useState('')
 
   const calculateRowIppc = (row) => {
-    const { debutippc, finippc, indemnite, pourcentageippc } = row;
-    let joursippc = '';
-    let totalippc = '';
+    const { debutippc, finippc, indemnite, pourcentageippc } = row
+    let joursippc = ''
+    let totalippc = ''
 
     if (debutippc && finippc) {
-      const debutDate = new Date(debutippc);
-      const finDate = new Date(finippc);
+      const debutDate = new Date(debutippc)
+      const finDate = new Date(finippc)
 
       if (!isNaN(debutDate) && !isNaN(finDate)) {
-        const timeDiff = finDate.getTime() - debutDate.getTime();
-        joursippc = Math.max(0, Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1);
+        const timeDiff = finDate.getTime() - debutDate.getTime()
+        joursippc = Math.max(0, Math.ceil(timeDiff / (1000 * 3600 * 24)) + 1)
 
         if (indemnite && pourcentageippc) {
-          totalippc = (joursippc * indemnite * (pourcentageippc / 100)).toFixed(2);
+          totalippc = (joursippc * indemnite * (pourcentageippc / 100)).toFixed(2)
         }
       }
     }
 
-    return { joursippc, totalippc };
-  };
+    return { joursippc, totalippc }
+  }
 
   const handleInputChangeIppc = (index, field, value) => {
-    const updatedRows = [...ippcRows];
-    updatedRows[index][field] = value;
+    const updatedRows = [...ippcRows]
+    updatedRows[index][field] = value
 
-    const { joursippc, totalippc } = calculateRowIppc(updatedRows[index]);
-    updatedRows[index].joursippc = joursippc;
-    updatedRows[index].totalippc = totalippc;
+    const { joursippc, totalippc } = calculateRowIppc(updatedRows[index])
+    updatedRows[index].joursippc = joursippc
+    updatedRows[index].totalippc = totalippc
 
-    setIppcRows(updatedRows);
-  };
+    setIppcRows(updatedRows)
+  }
 
   const handleDatePaiementChange = (value) => {
-    setDatePaiement(value);
+    setDatePaiement(value)
 
     const updatedIppcRows = ippcRows.map((row) => ({
       ...row,
       finippc: value
-    }));
-    setIppcRows(updatedIppcRows);
+    }))
+    setIppcRows(updatedIppcRows)
 
     const updatedBrutRows = brutRows.map((row) => ({
       ...row,
       finippc: value
-    }));
-    setBrutRows(updatedBrutRows);
-  };
+    }))
+    setBrutRows(updatedBrutRows)
+  }
 
   const getTotalSum = (rows, field) =>
-    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2);
+    rows.reduce((sum, row) => sum + (parseFloat(row[field]) || 0), 0).toFixed(2)
 
   const getTotalSumAll = () => {
-    const totalIppc = parseFloat(getTotalSum(ippcRows, 'totalippc')) || 0;
-    const totalBrut = parseFloat(getTotalSum(brutRows, 'totalippc')) || 0;
-    return (totalIppc + totalBrut).toFixed(2);
-  };
+    const totalIppc = parseFloat(getTotalSum(ippcRows, 'totalippc')) || 0
+    const totalBrut = parseFloat(getTotalSum(brutRows, 'totalippc')) || 0
+    return (totalIppc + totalBrut).toFixed(2)
+  }
 
   return (
     <div id="content">
       <div id="main">
-        <h1>Incapacités permanentes personnelles</h1>
+        <h1>Incapacités permanentes personnelles capitalisées</h1>
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tbody>
@@ -83,9 +83,7 @@ const IPPC = () => {
               <td>Tables de référence</td>
               <td>
                 <select>
-                  <option>
-                    Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
-                  </option>
+                  <option>Schryvers 2024 rente viagère de 1€/an mensuelle</option>
                   <option></option>
                 </select>
               </td>
@@ -138,9 +136,7 @@ const IPPC = () => {
                   <input
                     type="date"
                     value={row.debutippc}
-                    onChange={(e) =>
-                      handleInputChangeIppc(index, 'debutippc', e.target.value)
-                    }
+                    onChange={(e) => handleInputChangeIppc(index, 'debutippc', e.target.value)}
                   />
                 </td>
                 <td>
@@ -161,7 +157,11 @@ const IPPC = () => {
                     type="number"
                     value={row.pourcentageippc}
                     onChange={(e) =>
-                      handleInputChangeIppc(index, 'pourcentageippc', parseFloat(e.target.value) || 0)
+                      handleInputChangeIppc(
+                        index,
+                        'pourcentageippc',
+                        parseFloat(e.target.value) || 0
+                      )
                     }
                   />
                 </td>
@@ -202,7 +202,11 @@ const IPPC = () => {
                     value={row.pourcentageippc}
                     step="0.01"
                     onChange={(e) =>
-                      handleInputChangeIppc(index, 'pourcentageippc', parseFloat(e.target.value) || 0)
+                      handleInputChangeIppc(
+                        index,
+                        'pourcentageippc',
+                        parseFloat(e.target.value) || 0
+                      )
                     }
                   />
                 </td>
@@ -217,7 +221,7 @@ const IPPC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default IPPC;
+export default IPPC

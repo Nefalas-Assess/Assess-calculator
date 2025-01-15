@@ -95,18 +95,25 @@ const IPEC = () => {
   return (
     <div id="content">
       <div id="main">
-        <h1>Incapacités permanentes économiques</h1>
+        <h1>Incapacités permanentes économiques capitalisées</h1>
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tr>
             <td>Tables de référence</td>
             <td>
               <select>
-                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel</option>
-                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (65 ans)</option>
-                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (66 ans)</option>
-                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (67 ans)</option>
-                <option>Schryvers 2024 | VA rente viagère de 1 euro par an mensuel (68 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)</option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)</option>
               </select>
             </td>
           </tr>

@@ -7,6 +7,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
     control,
     register,
     handleSubmit,
+    watch,
     formState: { errors }
   } = useForm({
     defaultValues: initialValues || {
@@ -25,6 +26,8 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
     control,
     name: 'children' // Champs dynamiques pour les enfants
   })
+
+  const calculInterets = watch('calcul_interets') // Suivi de l'état de "calcul_interets"
 
   const addChild = () => {
     append({ firstName: '', lastName: '', birthDate: '' }) // Nouveau champ enfant
@@ -154,6 +157,26 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       <button type="button" onClick={addChild}>
         Ajouter un enfant
       </button>
+
+      {/* Sélecteur pour les intérêts */}
+      <h3>Calcul des intérêts</h3>
+      <div>
+        <label>
+          Voulez-vous calculer les intérêts ? 
+          <select {...register('calcul_interets')}>
+            <option value="oui">Oui</option>
+            <option value="non">Non</option>
+          </select>
+        </label>
+      </div>
+
+      {/* Section visible uniquement si "Oui" est sélectionné */}
+      {calculInterets === 'oui' && (
+        <div className="int">
+          <h4>Section pour le calcul des intérêts</h4>
+          {/* Ajoutez ici le contenu spécifique à l'affichage des intérêts */}
+        </div>
+      )}
 
       <button type="submit">Enregistrer</button>
     </form>

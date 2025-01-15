@@ -45,7 +45,8 @@ const ITP = () => {
   return (
     <div id="content">
       <div id="main">
-        <h1>Variables</h1>
+        <h1>Frais funéraires anticipés</h1>
+        <h3>Variables</h3>
         <table id="IPVariables">
           <tr>
             <td>Tables de référence</td>
@@ -83,7 +84,7 @@ const ITP = () => {
           </tr>
         </table>
 
-        <h1>Incapacités économiques permanentes</h1>
+        <h3>Frais</h3>
 
         {/* Tableau Salaire annuel brut */}
         <table id="itebTable">

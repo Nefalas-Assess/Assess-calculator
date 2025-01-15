@@ -9,25 +9,25 @@ const IPMC = () => {
     indemnite: 30,
     coefficient: 0,
     pourcentage: 0,
-    total: '',
-  });
+    total: ''
+  })
 
   const createRowHeures = () => ({
     heures: '',
-    total: '',
-  });
+    total: ''
+  })
 
-  const [rows, setRows] = useState([createRow()]);
-  const [rowsHeures, setRowsHeures] = useState([createRowHeures()]);
-  const [datePaiement, setDatePaiement] = useState('');
+  const [rows, setRows] = useState([createRow()])
+  const [rowsHeures, setRowsHeures] = useState([createRowHeures()])
+  const [datePaiement, setDatePaiement] = useState('')
 
   const handleInputChange = (index, field, value) => {
-    const updatedRows = [...rows];
-    updatedRows[index][field] = value;
+    const updatedRows = [...rows]
+    updatedRows[index][field] = value
 
     if (field === 'debut' || field === 'fin') {
-      const jours = calculateDays(updatedRows[index].debut, updatedRows[index].fin);
-      updatedRows[index].jours = jours;
+      const jours = calculateDays(updatedRows[index].debut, updatedRows[index].fin)
+      updatedRows[index].jours = jours
     }
 
     const total = calculateTotal(
@@ -35,66 +35,64 @@ const IPMC = () => {
       parseFloat(updatedRows[index].indemnite) || 30,
       parseFloat(updatedRows[index].coefficient) || 0,
       parseFloat(updatedRows[index].pourcentage) || 0
-    );
-    updatedRows[index].total = total;
+    )
+    updatedRows[index].total = total
 
-    setRows(updatedRows);
-  };
+    setRows(updatedRows)
+  }
 
   const handleInputChangeHeures = (index, field, value) => {
-    const updatedRowsHeures = [...rowsHeures];
-    updatedRowsHeures[index][field] = value;
+    const updatedRowsHeures = [...rowsHeures]
+    updatedRowsHeures[index][field] = value
 
     if (field === 'heures') {
-      const total = (parseFloat(value) * 11.5 * 365).toFixed(2);
-      updatedRowsHeures[index].total = isNaN(total) ? '' : total;
+      const total = (parseFloat(value) * 11.5 * 365).toFixed(2)
+      updatedRowsHeures[index].total = isNaN(total) ? '' : total
     }
 
-    setRowsHeures(updatedRowsHeures);
-  };
+    setRowsHeures(updatedRowsHeures)
+  }
 
   const calculateDays = (debut, fin) => {
-    if (!debut || !fin) return '';
-    const debutDate = new Date(debut);
-    const finDate = new Date(fin);
+    if (!debut || !fin) return ''
+    const debutDate = new Date(debut)
+    const finDate = new Date(fin)
 
     if (!isNaN(debutDate) && !isNaN(finDate)) {
-      return Math.max(0, (finDate - debutDate) / (1000 * 60 * 60 * 24));
+      return Math.max(0, (finDate - debutDate) / (1000 * 60 * 60 * 24))
     }
-    return '';
-  };
+    return ''
+  }
 
   const calculateTotal = (jours, indemnite, coefficient, pourcentage) => {
-    return (jours * indemnite * (coefficient / 100) * (pourcentage / 100)).toFixed(2);
-  };
+    return (jours * indemnite * (coefficient / 100) * (pourcentage / 100)).toFixed(2)
+  }
 
   const getTotalSumAll = () => {
-    const totalRows = rows.reduce((sum, row) => sum + parseFloat(row.total || 0), 0);
-    const totalHeures = rowsHeures.reduce((sum, row) => sum + parseFloat(row.total || 0), 0);
-    return (totalRows + totalHeures).toFixed(2);
-  };
+    const totalRows = rows.reduce((sum, row) => sum + parseFloat(row.total || 0), 0)
+    const totalHeures = rowsHeures.reduce((sum, row) => sum + parseFloat(row.total || 0), 0)
+    return (totalRows + totalHeures).toFixed(2)
+  }
 
   const handleDatePaiementChange = (value) => {
-    setDatePaiement(value);
+    setDatePaiement(value)
 
     // Synchronisation automatique
-    const updatedRows = rows.map((row) => ({ ...row, fin: value }));
-    setRows(updatedRows);
-  };
+    const updatedRows = rows.map((row) => ({ ...row, fin: value }))
+    setRows(updatedRows)
+  }
 
   return (
     <div id="content">
       <div id="main">
-        <h1>Incapacités permanentes ménagères</h1>
+        <h1>Incapacités permanentes ménagères capitalisées</h1>
         <h3>Variables du calcul de capitalisation</h3>
         <table id="IPVariables">
           <tr>
             <td>Tables de référence</td>
             <td>
               <select>
-                <option>
-                  Schryvers 2024 | VA rente viagère de 1 euro par an payable mensuellement
-                </option>
+                <option>Schryvers 2024 rente viagère de 1€/an mensuelle</option>
                 <option></option>
               </select>
             </td>
@@ -271,7 +269,7 @@ const IPMC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default IPMC
