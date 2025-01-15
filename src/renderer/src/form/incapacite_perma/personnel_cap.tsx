@@ -1,10 +1,12 @@
 import { getDays } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
-import { isValid } from 'date-fns'
+import { intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
+  const { data } = useContext(AppContext)
+
   const { register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
@@ -36,6 +38,34 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
     }
   }, [formValues, submitForm, handleSubmit])
 
+  const days = useMemo(() => {
+    return getDays(formValues, ['conso_start', 'paiement'])
+  }, [formValues])
+
+  const getConsoAmount = useCallback(
+    (values) => {
+      const { conso_amount, conso_pourcentage } = values || {}
+      return (
+        parseInt(days || 0) *
+        parseFloat(conso_amount || 0) *
+        (parseFloat(conso_pourcentage || 0) / 100)
+      ).toFixed(2)
+    },
+    [days]
+  )
+
+  const getAge = useCallback(
+    (date) => {
+      const { years } = intervalToDuration({
+        start: data?.general_info?.date_naissance,
+        end: date
+      })
+
+      return years
+    },
+    [data]
+  )
+
   return (
     <form onSubmit={handleSubmit(submitForm)}>
       <h1>Incapacités permanentes personnelles capitalisées</h1>
@@ -47,7 +77,6 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <select {...register('reference')}>
                 <option value="schryvers">Schryvers 2024 rente viagère de 1€/an mensuelle</option>
-                <option></option>
               </select>
             </td>
           </tr>
@@ -96,14 +125,14 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
-            <td>{getDays(formValues, ['conso_start', 'paiement'])}</td>
+            <td>{days || 0}</td>
             <td>
               <input type="number" {...register('conso_amount')} />
             </td>
             <td>
               <input type="number" {...register('conso_pourcentage')} />
             </td>
-            {/* <td>{row.totalippc}</td> */}
+            <td>{getConsoAmount(formValues)}</td>
           </tr>
         </tbody>
       </table>
@@ -129,7 +158,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" step="0.01" {...register('perso_pourcentage')} />
             </td>
-            {/* <td>{row.totalippc}</td> */}
+            <td>{('TO DO', getAge(formValues?.paiement))}</td>
           </tr>
         </tbody>
       </table>
