@@ -3,6 +3,8 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import { intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
+import menTable from '@renderer/data/data_cap_h'
+import womenTable from '@renderer/data/data_cap_f'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
   const { data } = useContext(AppContext)
@@ -42,6 +44,8 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
     return getDays(formValues, ['conso_start', 'paiement'])
   }, [formValues])
 
+  const interetOptions = [0.5, 0.8, 1, 1.5, 2, 3]
+
   const getConsoAmount = useCallback(
     (values) => {
       const { conso_amount, conso_pourcentage } = values || {}
@@ -54,14 +58,26 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
     [days]
   )
 
-  const getAge = useCallback(
-    (date) => {
+  const getCapAmount = useCallback(
+    (values) => {
+      const { paiement = '', interet = 0, perso_amount = 0, perso_pourcentage = 0 } = values
       const { years } = intervalToDuration({
         start: data?.general_info?.date_naissance,
-        end: date
+        end: paiement
       })
 
-      return years
+      const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
+
+      const index = interetOptions?.findIndex((e) => e === parseFloat(interet || 0))
+
+      const coefficient = table?.[years]?.[index]
+
+      return (
+        parseFloat(perso_amount) *
+        (parseFloat(perso_pourcentage) / 100) *
+        365 *
+        parseFloat(coefficient)
+      ).toFixed(2)
     },
     [data]
   )
@@ -87,12 +103,11 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
                 <option value="" disabled>
                   Sélectionnez
                 </option>
-                <option>0.5</option>
-                <option>0.8</option>
-                <option>1</option>
-                <option>1.5</option>
-                <option>2</option>
-                <option>3</option>
+                {interetOptions?.map((it, key) => (
+                  <option value={it} key={key}>
+                    {it}
+                  </option>
+                ))}
               </select>
             </td>
           </tr>
@@ -158,7 +173,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" step="0.01" {...register('perso_pourcentage')} />
             </td>
-            <td>{('TO DO', getAge(formValues?.paiement))}</td>
+            <td>{('TO DO', getCapAmount(formValues))}</td>
           </tr>
         </tbody>
       </table>
