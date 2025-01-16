@@ -84,7 +84,9 @@ export const AppLayout = () => {
               )}
             </div>
           </div>
-          <div className="content">
+          <div
+            className={`content ${data?.general_info?.calcul_interets !== 'true' && 'contentWithOutInteret'}`}
+          >
             <Outlet />
           </div>
         </div>

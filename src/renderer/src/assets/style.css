@@ -189,10 +189,5 @@ button {
   min-width: 400px;
 }
 
-/* .int {
-  display: none;
-} */
 
-.int.visible {
-  display: block;
-}
+

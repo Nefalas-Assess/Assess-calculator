@@ -1,6 +1,4 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
@@ -73,17 +71,6 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
     [formValues]
   )
 
-  const getTotalAmount = useCallback((values) => {
-    let total = 0
-    for (let i = 0; i < values.length; i += 1) {
-      const item = values[i]
-      const days = getDays(item)
-      const amount = getAmount(item, days)
-      total += parseFloat(amount)
-    }
-    return total?.toFixed(2)
-  }, [])
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Pretium Doloris Temporaire</h1>
@@ -129,7 +116,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`pretium.${index}.date_paiement`)} />
+                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
                 <td className="int"></td>
                 <td>
