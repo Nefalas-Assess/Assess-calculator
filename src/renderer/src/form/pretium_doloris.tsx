@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -124,7 +125,9 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
                     <option value="32">7/7</option>
                   </select>
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
                   <input type="date" {...register(`pretium.${index}.date_paiement`)} />
                 </td>
@@ -137,10 +140,6 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
               </tr>
             )
           })}
-          <tr>
-            <td colSpan={'4'}></td>
-            <td className="total-td">{getTotalAmount(formValues?.periods)}</td>
-          </tr>
         </tbody>
       </table>
       <button type="button" onClick={() => addNext(append, {})}>

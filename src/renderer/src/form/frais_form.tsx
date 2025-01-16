@@ -137,11 +137,13 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
               </td>
               <td className="int">
                 {/* Affichage des intérêts */}
-                {calculateInterest(
-                  formValues?.frais[index]?.date_frais,
-                  formValues?.frais[index]?.date_paiement,
-                  0.05 // Taux d'intérêt, ajustez-le comme nécessaire
-                )}
+                <Money
+                  value={calculateInterest(
+                    formValues?.frais[index]?.date_frais,
+                    formValues?.frais[index]?.date_paiement,
+                    0.05 // Taux d'intérêt, ajustez-le comme nécessaire
+                  )}
+                />
               </td>
               <td>
                 <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
@@ -152,7 +154,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
       </table>
       <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>
       <div className="total-box">
-        <strong>Total frais médicaux : </strong> {totalSumFrais} €
+        <strong>Total frais médicaux : </strong> <Money value={totalSumFrais}/>
       </div>
 
       <table id="ipTable">
