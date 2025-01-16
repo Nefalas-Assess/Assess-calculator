@@ -83,6 +83,8 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Indemnité journalière (€)</th>
             <th>Total (€)</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
             <th></th>
           </tr>
         </thead>
@@ -104,6 +106,10 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`periods.${index}.amount`)} />
                 </td>
                 <td>{total}</td>
+                <td className="int">
+                  <input type="date" {...register(`hosp.${index}.date_paiement`)} />
+                </td>
+                <td className="int"></td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

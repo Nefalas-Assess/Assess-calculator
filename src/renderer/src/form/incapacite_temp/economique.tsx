@@ -102,7 +102,9 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Salaire annuel net</th>
             <th>%</th>
-            <th>Total Brut (€)</th>
+            <th>Total Net (€)</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
             <th></th>
           </tr>
         </thead>
@@ -127,6 +129,10 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`net.${index}.percentage`)} />
                 </td>
                 <td>{total}</td>
+                <td className="int">
+                  <input type="date" {...register(`iten.${index}.date_paiement`)} />
+                </td>
+                <td className="int"></td>
                 <td>
                   <button type="button" onClick={() => netFields.remove(index)}>
                     Supprimer
@@ -140,6 +146,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
         Ajouter durée
       </button>
+
       <h1>BRUT</h1>
       <table id="ipTable">
         <thead>
@@ -150,6 +157,8 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Salaire annuel brut</th>
             <th>%</th>
             <th>Total Brut (€)</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
             <th></th>
           </tr>
         </thead>
@@ -174,6 +183,10 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`brut.${index}.percentage`)} />
                 </td>
                 <td>{total}</td>
+                <td className="int">
+                  <input type="date" {...register(`iteb.${index}.date_paiement`)} />
+                </td>
+                <td className="int"></td>
                 <td>
                   <button type="button" onClick={() => brutFields.remove(index)}>
                     Supprimer

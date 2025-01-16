@@ -201,18 +201,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       {/* Section visible uniquement si "Oui" est sélectionné */}
       {formValues?.calcul_interets === 'oui' && (
         <div className="int">
-          <select {...register('taux_int')}>
-            <option>0.5%</option>
-            <option>1%</option>
-            <option>1.5%</option>
-            <option>2%</option>
-            <option>2.5%</option>
-            <option>3%</option>
-            <option>3.5%</option>
-            <option>4%</option>
-            <option>4.5%</option>
-            <option>5%</option>
-          </select>
+          <input type="number" {...register('taux_int')}></input><label>%</label>
         </div>
       )}
     </form>

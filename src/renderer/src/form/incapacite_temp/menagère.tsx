@@ -112,6 +112,8 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             <th>%</th>
             <th>Contribution (%)</th>
             <th>Total (€)</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
             <th></th>
           </tr>
         </thead>
@@ -131,7 +133,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                 <td>{days}</td>
                 <td>{data?.computed_info?.enfant_charge || 0}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`periods.${index}.amount`)} />( +{' '}
+                  <input type="number" {...register(`periods.${index}.amount`)} />( +{' '}
                   {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
@@ -147,6 +149,10 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                   </select>
                 </td>
                 <td>{total}</td>
+                <td className="int">
+                  <input type="date" {...register(`itm.${index}.date_paiement`)} />
+                </td>
+                <td className="int"></td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

@@ -196,3 +196,7 @@ button {
 .int.visible {
   display: block;
 }
+
+.pinc {
+  max-width: 20px;
+}

@@ -92,6 +92,8 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
             <th>%</th>
             <th>Coefficient</th>
             <th>Total (€)</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts (€)</th>
             <th></th>
           </tr>
         </thead>
@@ -127,6 +129,10 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
                   </select>
                 </td>
                 <td>{total}</td>
+                <td className="int">
+                  <input type="date" {...register(`effa.${index}.date_paiement`)} />
+                </td>
+                <td className="int"></td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

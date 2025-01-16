@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 export const FraisForm = ({ onSubmit, initialValues }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -104,10 +105,10 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <th>Numéro de facture </th>
             <th>Payé</th>
             <th>Montant</th>
-            <th>Action</th>
             <th className="int">Date frais</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts (€)</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -128,9 +129,6 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
               <td>
                 <input type="number" {...register(`frais.${index}.amount`)} />
               </td>
-              <td>
-                <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
-              </td>
               <td className="int">
                 <input type="date" {...register(`frais.${index}.date_frais`)} />
               </td>
@@ -144,6 +142,9 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
                   formValues?.frais[index]?.date_paiement,
                   0.05 // Taux d'intérêt, ajustez-le comme nécessaire
                 )}
+              </td>
+              <td>
+                <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
               </td>
             </tr>
           ))}
