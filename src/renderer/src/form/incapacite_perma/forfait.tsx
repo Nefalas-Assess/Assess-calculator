@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -70,7 +71,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <th>Âge consolidation</th>
             <th>Points</th>
             <th>%</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -80,7 +81,9 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" {...register(`pourcentage_ipp`)} />
             </td>
-            <td>{(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)}</td>
+            <td>
+              <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -94,7 +97,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <th>Points</th>
             <th>%</th>
             <th>Contribution (%)</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -114,11 +117,13 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
               </select>
             </td>
             <td>
-              {(
-                point *
-                parseInt(formValues?.pourcentage_imp || 0) *
-                ((formValues?.contribution_imp || 0) / 100)
-              ).toFixed(2)}
+              <Money
+                value={(
+                  point *
+                  parseInt(formValues?.pourcentage_imp || 0) *
+                  ((formValues?.contribution_imp || 0) / 100)
+                ).toFixed(2)}
+              />
             </td>
           </tr>
         </tbody>
@@ -132,7 +137,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <th>Âge consolidation</th>
             <th>Points</th>
             <th>%</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -142,13 +147,15 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" {...register(`pourcentage_iep`)} />
             </td>
-            <td>{(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)}</td>
+            <td>
+              <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
+            </td>
           </tr>
         </tbody>
       </table>
 
       <div className="total-box">
-        <strong>Total : </strong> {getTotalSum(formValues)} €
+        <strong>Total : </strong> <Money value={getTotalSum(formValues)} />
       </div>
     </form>
   )

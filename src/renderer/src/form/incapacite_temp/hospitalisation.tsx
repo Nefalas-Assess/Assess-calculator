@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 const HospitalisationForm = ({ initialValues, onSubmit }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -105,9 +106,11 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
                 <td>
                   <input type="number" step="0.01" {...register(`periods.${index}.amount`)} />
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
-                  <input type="date" {...register(`hosp.${index}.date_paiement`)} />
+                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
                 <td className="int"></td>
                 <td>

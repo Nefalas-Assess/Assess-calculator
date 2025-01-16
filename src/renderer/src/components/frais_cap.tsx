@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import React, { useState } from 'react'
 
 const Frais_cap = () => {
@@ -44,7 +45,8 @@ const Frais_cap = () => {
               <th>Date du paiement</th>
               <th className="custom-size">Table de référence</th>
               <th>Taux d'intérêt de la capitalisation</th>
-              <th>Total (€)</th>
+              <th>Montant (€)</th>
+              <th>Total</th>
               <th></th>
             </tr>
           </thead>
@@ -85,7 +87,10 @@ const Frais_cap = () => {
                   </select>
                 </td>
                 <td>
-                  <input type="number" defaultValue={row.total} />
+                  <input type="number"/>
+                </td>
+                <td>
+                  <Money value={row.total}/>
                 </td>
                 <td>
                   <button onClick={() => removeRow(index)}>Supprimer</button>
@@ -98,7 +103,7 @@ const Frais_cap = () => {
       </div>
       <div className="total-box">
         <strong>Total : </strong>
-        {totalSum.toFixed(2)} €
+        <Money value={totalSum.toFixed(2)}/>
       </div>
     </div>
   )

@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
@@ -111,9 +112,9 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             <th>Indemnité journalière (€)</th>
             <th>%</th>
             <th>Contribution (%)</th>
-            <th>Total (€)</th>
+            <th>Total</th>
             <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
+            <th className="int">Intérêts</th>
             <th></th>
           </tr>
         </thead>
@@ -148,9 +149,11 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                     <option value="35">35</option>
                   </select>
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
-                  <input type="date" {...register(`itm.${index}.date_paiement`)} />
+                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
                 <td className="int"></td>
                 <td>

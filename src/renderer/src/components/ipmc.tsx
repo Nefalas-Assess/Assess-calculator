@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
+import Money from '@renderer/generic/money'
 
 const IPMC = () => {
   const createRow = () => ({
@@ -135,7 +136,7 @@ const IPMC = () => {
               <th>Indemnité journalière (€)</th>
               <th>Contribution</th>
               <th>%</th>
-              <th>Total (€)</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -181,7 +182,9 @@ const IPMC = () => {
                     onChange={(e) => handleInputChange(index, 'pourcentage', e.target.value)}
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -195,7 +198,7 @@ const IPMC = () => {
               <th>Indemnité journalière (€)</th>
               <th>Contribution</th>
               <th>%</th>
-              <th>Total (€)</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -233,7 +236,9 @@ const IPMC = () => {
                     onChange={(e) => handleInputChange(index, 'pourcentage', e.target.value)}
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -244,7 +249,7 @@ const IPMC = () => {
           <thead>
             <tr>
               <th>Nombre d'heures par jour</th>
-              <th>Total (€)</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -258,7 +263,9 @@ const IPMC = () => {
                     onChange={(e) => handleInputChangeHeures(index, 'heures', e.target.value)}
                   />
                 </td>
-                <td>{row?.total}</td>
+                <td>
+                  <Money value={row?.total} />
+                </td>
               </tr>
             ))}
           </tbody>

@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -88,7 +89,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Coefficient</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -108,7 +109,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                 <option value={7}>7/7</option>
               </select>
             </td>
-            <td>{getTotalWithCoef(formValues?.coefficient_quantum_doloris)}</td>
+            <td>
+              <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -118,7 +121,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Coefficient</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -138,7 +141,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                 <option value={7}>7/7</option>
               </select>
             </td>
-            <td>{getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)}</td>
+            <td>
+              <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
+            </td>
           </tr>
         </tbody>
       </table>

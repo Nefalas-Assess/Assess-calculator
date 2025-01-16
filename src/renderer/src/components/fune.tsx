@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import React, { useState } from 'react'
 
 const ITP = () => {
@@ -91,7 +92,7 @@ const ITP = () => {
           <thead>
             <tr>
               <th>Frais funéraires (€)</th>
-              <th>Total anticipé (€)</th>
+              <th>Total anticipé</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -114,7 +115,9 @@ const ITP = () => {
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
                 <td>
                   <button onClick={() => addRow(brutRows, setBrutRows)}>+</button>
                   <button onClick={() => removeRow(brutRows, setBrutRows, index)}>-</button>
@@ -125,7 +128,7 @@ const ITP = () => {
         </table>
 
         <div className="total-box">
-          <strong>Total : </strong> {getTotalSum(brutRows, 'total')} €
+          <strong>Total : </strong> <Money value={getTotalSum(brutRows, 'total')}/>
         </div>
       </div>
     </div>

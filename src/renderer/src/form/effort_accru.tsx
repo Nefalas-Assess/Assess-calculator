@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 const EffortAccruForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -91,9 +92,9 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
             <th>Indemnité journalière (€)</th>
             <th>%</th>
             <th>Coefficient</th>
-            <th>Total (€)</th>
+            <th>Total</th>
             <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
+            <th className="int">Intérêts</th>
             <th></th>
           </tr>
         </thead>
@@ -128,7 +129,9 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
                     <option value={7}>7</option>
                   </select>
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
                   <input type="date" {...register(`effa.${index}.date_paiement`)} />
                 </td>

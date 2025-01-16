@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import React, { useState } from 'react'
 
 const IPEC = () => {
@@ -156,7 +157,7 @@ const IPEC = () => {
               <th>Jours</th>
               <th>Salaire annuel brut (€)</th>
               <th>%</th>
-              <th>Total Brut (€)</th>
+              <th>Total Brut</th>
             </tr>
           </thead>
           <tbody>
@@ -216,7 +217,9 @@ const IPEC = () => {
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -231,7 +234,7 @@ const IPEC = () => {
               <th>Jours</th>
               <th>Salaire annuel net (€)</th>
               <th>%</th>
-              <th>Total Net (€)</th>
+              <th>Total Net</th>
             </tr>
           </thead>
           <tbody>
@@ -291,7 +294,9 @@ const IPEC = () => {
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -305,7 +310,7 @@ const IPEC = () => {
             <tr>
               <th>Salaire annuel brut (€)</th>
               <th>%</th>
-              <th>Total Brut (€)</th>
+              <th>Total Brut</th>
             </tr>
           </thead>
           <tbody>
@@ -345,7 +350,9 @@ const IPEC = () => {
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -357,7 +364,7 @@ const IPEC = () => {
             <tr>
               <th>Salaire annuel net (€)</th>
               <th>%</th>
-              <th>Total Net (€)</th>
+              <th>Total Net</th>
             </tr>
           </thead>
           <tbody>
@@ -397,7 +404,9 @@ const IPEC = () => {
                     }
                   />
                 </td>
-                <td>{row.total}</td>
+                <td>
+                  <Money value={row.total} />
+                </td>
               </tr>
             ))}
           </tbody>

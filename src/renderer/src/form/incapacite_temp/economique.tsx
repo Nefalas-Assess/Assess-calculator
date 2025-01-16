@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import Money from '@renderer/generic/money'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -102,9 +103,9 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Salaire annuel net</th>
             <th>%</th>
-            <th>Total Net (€)</th>
+            <th>Total Net</th>
             <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
+            <th className="int">Intérêts</th>
             <th></th>
           </tr>
         </thead>
@@ -128,7 +129,9 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                 <td>
                   <input type="number" step="0.01" {...register(`net.${index}.percentage`)} />
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
                   <input type="date" {...register(`iten.${index}.date_paiement`)} />
                 </td>
@@ -156,9 +159,9 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Salaire annuel brut</th>
             <th>%</th>
-            <th>Total Brut (€)</th>
+            <th>Total Brut</th>
             <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
+            <th className="int">Intérêts</th>
             <th></th>
           </tr>
         </thead>
@@ -182,9 +185,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                 <td>
                   <input type="number" step="0.01" {...register(`brut.${index}.percentage`)} />
                 </td>
-                <td>{total}</td>
+                <td>
+                  <Money value={total} />
+                </td>
                 <td className="int">
-                  <input type="date" {...register(`iteb.${index}.date_paiement`)} />
+                  <input type="date" {...register(`brut.${index}.date_paiement`)} />
                 </td>
                 <td className="int"></td>
                 <td>

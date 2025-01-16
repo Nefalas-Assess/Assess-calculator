@@ -1,3 +1,4 @@
+import Money from '@renderer/generic/money'
 import React, { useState } from 'react'
 
 const DMP = () => {
@@ -110,7 +111,9 @@ const DMP = () => {
                     }
                   />
                 </td>
-                <td>{row.total.toFixed(2)} €</td>
+                <td>
+                  <Money value={row.total.toFixed(2)} />
+                </td>
               </tr>
             ))}
           </tbody>
