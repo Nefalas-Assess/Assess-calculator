@@ -5,6 +5,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import { useForm, useFieldArray } from 'react-hook-form'
 import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
+import Money from '@renderer/generic/money'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
   const { data } = useContext(AppContext)
@@ -147,7 +148,9 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" {...register('conso_pourcentage')} />
             </td>
-            <td>{getConsoAmount(formValues)}</td>
+            <td>
+              <Money value={getConsoAmount(formValues)} />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -173,7 +176,9 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" step="0.01" {...register('perso_pourcentage')} />
             </td>
-            <td>{('TO DO', getCapAmount(formValues))}</td>
+            <td>
+              <Money value={getCapAmount(formValues)} />
+            </td>
           </tr>
         </tbody>
       </table>
