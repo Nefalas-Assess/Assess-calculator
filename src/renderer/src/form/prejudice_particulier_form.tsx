@@ -90,6 +90,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Âge consolidation</th>
             <th>Coefficient</th>
             <th>Total</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -112,9 +114,14 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <td>
               <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
             </td>
+            <td className="int">
+              <input type="date" {...register(`date_paiement`)} />
+            </td>
+            <td className="int">Nombre de jours entre [Date consolidation & Date du paiement] * Total * (%int de infog / 365)</td>
           </tr>
         </tbody>
       </table>
+
       <h3>Préjudice Esthétique</h3>
       <table id="ipTable">
         <thead>
@@ -122,6 +129,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Âge consolidation</th>
             <th>Coefficient</th>
             <th>Total</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -144,9 +153,14 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <td>
               <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
             </td>
+            <td className="int">
+              <input type="date" {...register(`date_paiement`)} />
+            </td>
+            <td className="int">Same</td>
           </tr>
         </tbody>
       </table>
+
       <h3>Préjudice Sexuel</h3>
       <table>
         <thead>
@@ -154,6 +168,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Indemnités/Frais</th>
             <th>Payé</th>
             <th>Montant</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -172,6 +188,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <td>
                 <input type="number" {...register(`prejudice_sexuels.${index}.amount`)} />
               </td>
+              <td className="int">
+                <input type="date" {...register(`periods.${index}.date_paiement`)} />
+              </td>
+              <td className="int">Same</td>
               <td>
                 <button type="button" onClick={() => prejudiceSexuelField.remove(index)}>
                   Supprimer
@@ -184,6 +204,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
         Ajouter une ligne
       </button>
+
       <h3>Préjudice d'Agrément</h3>
       <table>
         <thead>
@@ -191,6 +212,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Indemnités/Frais</th>
             <th>Payé</th>
             <th>Montant</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -209,6 +232,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <td>
                 <input type="number" {...register(`prejudice_agrements.${index}.amount`)} />
               </td>
+              <td className="int">
+                <input type="date" {...register(`periods.${index}.date_paiement`)} />
+              </td>
+              <td className="int">Same</td>
               <td>
                 <button type="button" onClick={() => prejudiceAgrementField.remove(index)}>
                   Supprimer

@@ -127,7 +127,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`net.${index}.amount`)} />
                 </td>
                 <td>
-                  <input type="number" step="0.01" {...register(`net.${index}.percentage`)} />
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    {...register(`net.${index}.percentage`)}
+                  />
                 </td>
                 <td>
                   <Money value={total} />
@@ -135,7 +139,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`iten.${index}.date_paiement`)} />
                 </td>
-                <td className="int"></td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
                 <td>
                   <button type="button" onClick={() => netFields.remove(index)}>
                     Supprimer
@@ -183,7 +187,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`brut.${index}.amount`)} />
                 </td>
                 <td>
-                  <input type="number" step="0.01" {...register(`brut.${index}.percentage`)} />
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    {...register(`brut.${index}.percentage`)}
+                  />
                 </td>
                 <td>
                   <Money value={total} />
@@ -191,7 +199,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`brut.${index}.date_paiement`)} />
                 </td>
-                <td className="int"></td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
                 <td>
                   <button type="button" onClick={() => brutFields.remove(index)}>
                     Supprimer

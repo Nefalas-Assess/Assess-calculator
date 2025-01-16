@@ -135,8 +135,9 @@ const IPMC = () => {
               <th>Jours</th>
               <th>Indemnité journalière (€)</th>
               <th>Contribution</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total</th>
+              <th className="int">Intérêts</th>
             </tr>
           </thead>
           <tbody>
@@ -174,7 +175,7 @@ const IPMC = () => {
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     min="0"
@@ -185,6 +186,7 @@ const IPMC = () => {
                 <td>
                   <Money value={row.total} />
                 </td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
               </tr>
             ))}
           </tbody>
@@ -197,7 +199,7 @@ const IPMC = () => {
               <th>Date du paiement</th>
               <th>Indemnité journalière (€)</th>
               <th>Contribution</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total</th>
             </tr>
           </thead>
@@ -228,7 +230,7 @@ const IPMC = () => {
                   </select>
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     min="0"

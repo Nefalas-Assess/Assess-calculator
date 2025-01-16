@@ -169,7 +169,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
         </thead>
         <tbody>
           <tr>
-            <td>Administratif</td>
+            <td>Administratif [€ 50 - € 150]</td>
             <td></td>
             <td></td>
             <td>
@@ -217,13 +217,16 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
                 <option>Non</option>
               </select>
             </td>
-            <td>{totalDeplacementFrais}</td>
+            <td>
+              <Money value={totalDeplacementFrais} />
+            </td>
           </tr>
         </tbody>
       </table>
       <div className="total-box">
-        <strong>Total : </strong> {totalSumRest} €
+        <strong>Total : </strong> <Money value={totalSumRest}/>
       </div>
+
       <h1>Aide de tiers (non-qualifiés)</h1>
       <table id="hospTable">
         <thead>
@@ -237,15 +240,17 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="number" min={0} {...register(`aides`)} />
             </td>
-            <td>{totalAides}</td>
+            <td>
+              <Money value={totalAides} />
+            </td>
           </tr>
         </tbody>
       </table>
       <div className="total-box">
-        <strong>Total des heures : </strong> {totalAides} €
+        <strong>Total des heures : </strong> <Money value={totalAides}/>
       </div>
       <div className="total-box">
-        <strong>Total général : </strong> {totalSumAll} €
+        <strong>Total général : </strong> <Money value={totalSumAll}/>
       </div>
     </form>
   )

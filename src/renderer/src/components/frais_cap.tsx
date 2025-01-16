@@ -41,7 +41,7 @@ const Frais_cap = () => {
         <table id="FraisCapTable">
           <thead>
             <tr>
-              <th>Frais</th>
+              <th>Frais annualisé(s)</th>
               <th>Date du paiement</th>
               <th className="custom-size">Table de référence</th>
               <th>Taux d'intérêt de la capitalisation</th>

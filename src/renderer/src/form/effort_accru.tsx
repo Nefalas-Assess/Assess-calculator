@@ -116,7 +116,11 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
                   <input type="number" step="0.01" {...register(`efforts.${index}.amount`)} />
                 </td>
                 <td>
-                  <input type="number" {...register(`efforts.${index}.pourcentage`)} />
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    {...register(`efforts.${index}.pourcentage`)}
+                  />
                 </td>
                 <td>
                   <select {...register(`efforts.${index}.coefficient`)}>
@@ -135,7 +139,7 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`effa.${index}.date_paiement`)} />
                 </td>
-                <td className="int"></td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

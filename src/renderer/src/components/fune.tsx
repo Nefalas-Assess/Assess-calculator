@@ -91,7 +91,8 @@ const ITP = () => {
         <table id="itebTable">
           <thead>
             <tr>
-              <th>Frais funéraires (€)</th>
+              <th>Frais</th>
+              <th>Montant (€)</th>
               <th>Total anticipé</th>
               <th>Actions</th>
             </tr>
@@ -99,6 +100,9 @@ const ITP = () => {
           <tbody>
             {brutRows.map((row, index) => (
               <tr key={index}>
+                <td>
+                  <input style={{ width: 400 }} type="text"></input>
+                </td>
                 <td>
                   <input
                     type="number"

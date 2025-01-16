@@ -156,8 +156,9 @@ const IPEC = () => {
               <th>Date du paiement</th>
               <th>Jours</th>
               <th>Salaire annuel brut (€)</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total Brut</th>
+              <th className="int">Intérêts</th>
             </tr>
           </thead>
           <tbody>
@@ -201,7 +202,7 @@ const IPEC = () => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     step="0.01"
@@ -220,6 +221,7 @@ const IPEC = () => {
                 <td>
                   <Money value={row.total} />
                 </td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
               </tr>
             ))}
           </tbody>
@@ -233,8 +235,9 @@ const IPEC = () => {
               <th>Date du paiement</th>
               <th>Jours</th>
               <th>Salaire annuel net (€)</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total Net</th>
+              <th className="int">Intérêts</th>
             </tr>
           </thead>
           <tbody>
@@ -278,7 +281,7 @@ const IPEC = () => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     step="0.01"
@@ -297,6 +300,7 @@ const IPEC = () => {
                 <td>
                   <Money value={row.total} />
                 </td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
               </tr>
             ))}
           </tbody>
@@ -309,7 +313,7 @@ const IPEC = () => {
           <thead>
             <tr>
               <th>Salaire annuel brut (€)</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total Brut</th>
             </tr>
           </thead>
@@ -334,7 +338,7 @@ const IPEC = () => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     step="0.01"
@@ -363,7 +367,7 @@ const IPEC = () => {
           <thead>
             <tr>
               <th>Salaire annuel net (€)</th>
-              <th>%</th>
+              <th style={{ width: 50 }}>%</th>
               <th>Total Net</th>
             </tr>
           </thead>
@@ -388,7 +392,7 @@ const IPEC = () => {
                   />
                 </td>
                 <td>
-                  <input
+                  <input style={{ width: 50 }}
                     type="number"
                     value={row.pourcentage}
                     step="0.01"
@@ -411,15 +415,6 @@ const IPEC = () => {
             ))}
           </tbody>
         </table>
-        {/* <div>
-          <label>Coefficient</label>
-          <input
-            type="number"
-            step="0.01"
-            value={coefficient}
-            onChange={(e) => setCoefficient(parseFloat(e.target.value))}
-          />
-        </div> */}
       </div>
     </div>
   )

@@ -70,8 +70,10 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Points</th>
-            <th>%</th>
+            <th style={{ width: 50 }} >%</th>
             <th>Total</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -79,11 +81,15 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input type="number" {...register(`pourcentage_ipp`)} />
+              <input style={{ width: 50 }} type="number" {...register(`pourcentage_ipp`)} />
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
             </td>
+            <td className="int">
+              <input type="date" {...register(`date_paiement`)} />
+            </td>
+            <td className="int">Nombre de jours entre [Date consolidation & Date du paiement] * Total * (%int de infog / 365)</td>
           </tr>
         </tbody>
       </table>
@@ -95,9 +101,11 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Points</th>
-            <th>%</th>
-            <th>Contribution (%)</th>
+            <th style={{ width: 50 }}>%</th>
+            <th style={{ width: 120 }}>Contribution (%)</th>
             <th>Total</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -105,10 +113,10 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input type="number" {...register(`pourcentage_imp`)} />
+              <input style={{ width: 50 }} type="number" {...register(`pourcentage_imp`)} />
             </td>
             <td>
-              <select {...register(`contribution_imp`)}>
+              <select style={{ width: 120 }} {...register(`contribution_imp`)}>
                 {contributionOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}%
@@ -125,6 +133,10 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
                 ).toFixed(2)}
               />
             </td>
+            <td className="int">
+              <input type="date" {...register(`date_paiement`)} />
+            </td>
+            <td className="int">Same</td>
           </tr>
         </tbody>
       </table>
@@ -136,8 +148,10 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Points</th>
-            <th>%</th>
+            <th style={{ width: 50 }}>%</th>
             <th>Total</th>
+            <th className="int">Date du paiement</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -145,11 +159,15 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input type="number" {...register(`pourcentage_iep`)} />
+              <input style={{ width: 50 }} type="number" {...register(`pourcentage_iep`)} />
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
             </td>
+            <td className="int">
+              <input type="date" {...register(`date_paiement`)} />
+            </td>
+            <td className="int">Same</td>
           </tr>
         </tbody>
       </table>

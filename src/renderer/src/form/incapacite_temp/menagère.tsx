@@ -110,7 +110,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Enfant(s)</th>
             <th>Indemnité journalière (€)</th>
-            <th>%</th>
+            <th style={{ width: 50 }}>%</th>
             <th>Contribution (%)</th>
             <th>Total</th>
             <th className="int">Date du paiement</th>
@@ -138,7 +138,11 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                   {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
-                  <input type="number" step="0.01" {...register(`periods.${index}.percentage`)} />
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    {...register(`periods.${index}.percentage`)}
+                  />
                 </td>
                 <td>
                   <select {...register(`periods.${index}.contribution`)}>
@@ -155,7 +159,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
-                <td className="int"></td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

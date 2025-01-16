@@ -177,17 +177,36 @@ button {
 }
 
 .sub-nav {
-  padding: 0 15px;
+  padding: 0 10px;
   color: white;
   .sub-nav-title {
     cursor: pointer;
-    user-select: none;  
-  }
+    user-select: none; 
+    padding: 5px;
+    margin: 10px 0;
+    background-color: #242424;
+    color: white;
+    border-radius: 5px;
+    &:hover{
+      background-color: gray;
+    }
+
+    &.active {
+      color: #8bbdff;
+    }
+  } 
+}
+
+.sub-nav-title {
+  font-weight: 500;
+  color: #8bbdff;
+  text-decoration: inherit;
+}
+.sub-nav-title:hover {
+  border-color: #8bbdff;
+  color: #8bbdff;
 }
 
 .custom-size {
   min-width: 400px;
 }
-
-
-

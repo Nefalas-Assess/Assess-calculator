@@ -65,9 +65,22 @@ const DMP = () => {
             {rows.map((row, index) => (
               <>
                 <tr key={index}>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                  <td>
+                    <input style={{ width: 300 }} type="text"></input>
+                  </td>
+                  <td>
+                    <select>
+                      <option></option>
+                      <option>Partenaire [€ 15.000 - € 45.000]</option>
+                      <option>Parent/Enfant [€ 15.000 - € 45.000]</option>
+                      <option>Frère/Soeur [€ 7.500 - € 25.000]</option>
+                      <option>Grand-parent/Petit-enfant [€ 7.500 - € 25.000]</option>
+                      <option>Fausse couche [€ 3.000 - € 9.000]</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="number"></input>
+                  </td>
                   <td>
                     <button onClick={addRow}>+</button>
                     <button onClick={() => removeRow(index)}>-</button>
@@ -120,7 +133,7 @@ const DMP = () => {
         </table>
 
         <div className="total-box">
-          <strong>Total : </strong> {getTotalSum()} €
+          <strong>Total : </strong> <Money value={getTotalSum()}/>
         </div>
       </div>
     </div>

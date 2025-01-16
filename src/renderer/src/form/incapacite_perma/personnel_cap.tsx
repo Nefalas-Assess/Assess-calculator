@@ -129,8 +129,9 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <th>Date du paiement</th>
             <th>Jours</th>
             <th>Indemnité journalière (€)</th>
-            <th>%</th>
+            <th style={{ width: 50 }}>%</th>
             <th>Total (€)</th>
+            <th className="int">Intérêts</th>
           </tr>
         </thead>
         <tbody>
@@ -146,11 +147,12 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
               <input type="number" {...register('conso_amount')} />
             </td>
             <td>
-              <input type="number" {...register('conso_pourcentage')} />
+              <input style={{ width: 50 }} type="number" {...register('conso_pourcentage')} />
             </td>
             <td>
               <Money value={getConsoAmount(formValues)} />
             </td>
+            <td className="int">Nombre de jours entre [Date médiane entre (Début Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
           </tr>
         </tbody>
       </table>
@@ -161,7 +163,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
           <tr>
             <th>Date du paiement</th>
             <th>Indemnité journalière (€)</th>
-            <th>%</th>
+            <th style={{ width: 50 }}>%</th>
             <th>Total (€)</th>
           </tr>
         </thead>
@@ -174,7 +176,12 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
               <input type="number" {...register('perso_amount')} />
             </td>
             <td>
-              <input type="number" step="0.01" {...register('perso_pourcentage')} />
+              <input
+                style={{ width: 50 }}
+                type="number"
+                step="0.01"
+                {...register('perso_pourcentage')}
+              />
             </td>
             <td>
               <Money value={getCapAmount(formValues)} />

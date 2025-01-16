@@ -112,7 +112,7 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
-                <td className="int"></td>
+                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer
