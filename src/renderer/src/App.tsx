@@ -17,9 +17,9 @@ import Personnel from './components/incapacite_temporaire/personnel'
 import Menagere from './components/incapacite_temporaire/menagere'
 import Economique from './components/incapacite_temporaire/economique'
 import FRAIS from './components/frais'
-import FUNE from './components/fune'
-import EXH from './components/exh'
-import DMP from './components/dmp'
+import FUNE from './components/deces/fune'
+import EXH from './components/deces/exh'
+import DMP from './components/deces/dmp'
 import { useContext } from 'react'
 
 const IncapaciteTemp = () => {
