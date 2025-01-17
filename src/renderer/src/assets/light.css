@@ -6,6 +6,7 @@
     height: 100%;
     min-height: 100vh;
     width: 100%;
+    background-color: rgb(230, 230, 230);
   }
 
   .layout-menu {
@@ -13,14 +14,14 @@
     min-width: 210px;
     border-right: 2px solid black;
     overflow-y: auto;
-    background-color: #eeeeee;
+    background-color: #242424;
 
     a {
       display: block;
       text-align: left;
       margin: 10px;
       padding: 5px;
-      background-color: #8bbdff;
+      background-color: rgb(230, 230, 230);
       color: black;
       border-radius: 5px;
       &:hover{
@@ -73,7 +74,8 @@
     flex-direction: column;
     justify-content: flex-start; /* Commencer en haut de la page */
     flex: 1;
-    background-color: #eeeeee;
+    background-color: rgb(230, 230, 230);
+    min-height: 100vh;
   }
 
   #top-menu {
@@ -94,11 +96,41 @@
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    /* background-color: #242424; */
   }
 
   #top-menu button:hover {
     background-color: gray;
+  }
+
+  .sub-nav {
+    padding: 0 10px;
+    color: white;
+    .sub-nav-title {
+      cursor: pointer;
+      user-select: none; 
+      padding: 5px;
+      margin: 10px 0;
+      background-color: rgb(230, 230, 230);
+      color: black;
+      border-radius: 5px;
+      &:hover{
+        background-color: gray;
+      }
+  
+      &.active {
+        color: #8bbdff;
+      }
+    } 
+  }
+  
+  .sub-nav-title {
+    font-weight: 500;
+    color: #8bbdff;
+    text-decoration: inherit;
+  }
+  .sub-nav-title:hover {
+    border-color: #8bbdff;
+    color: #8bbdff;
   }
 
   h1 {
@@ -108,10 +140,19 @@
     color:black;
   }
 
+  h2 {
+    color:black;
+  }
+
+  h3 {
+    color:black;
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px
   }
 
   table, th, td {
@@ -137,11 +178,12 @@
   .total-box {
     margin-top: 20px;
     padding: 10px;
-    background-color: #242424;
+    background-color: rgb(230, 230, 230);
     border: 1px solid black;
     font-size: 18px;
     text-align: center;
     font-weight: bold;
+    color: black;
   }
 
   #inv {
@@ -172,4 +214,5 @@
     border-top: 1px solid black;
     margin: 20px;
   }
+
 }
