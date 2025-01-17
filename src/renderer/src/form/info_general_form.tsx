@@ -63,7 +63,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
   }, [formValues, childrenValues, submitForm, handleSubmit])
 
   const addChild = () => {
-    append({ firstName: '', lastName: '', birthDate: '' }) // Nouveau champ enfant
+    append({ Name: '', birthDate: '' }) // Nouveau champ enfant
   }
 
   return (
@@ -75,6 +75,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
             <td>Nom de la victime</td>
             <td>
               <input
+                style={{ width: 300 }}
                 type="text"
                 {...register('nom_victime', { required: 'Ce champ est requis' })}
               />
@@ -138,7 +139,6 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       <table>
         <thead>
           <tr>
-            <th>Prénom</th>
             <th>Nom</th>
             <th>Date de naissance</th>
             <th>Action</th>
@@ -149,20 +149,12 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
             <tr key={child.id}>
               <td>
                 <input
+                  style={{ width: 300 }}
                   type="text"
-                  {...register(`children.${index}.firstName`, { required: 'Prénom requis' })}
+                  {...register(`children.${index}.Name`, { required: 'Nom requis' })}
                 />
-                {errors.children?.[index]?.firstName && (
-                  <span>{errors.children[index].firstName.message}</span>
-                )}
-              </td>
-              <td>
-                <input
-                  type="text"
-                  {...register(`children.${index}.lastName`, { required: 'Nom requis' })}
-                />
-                {errors.children?.[index]?.lastName && (
-                  <span>{errors.children[index].lastName.message}</span>
+                {errors.children?.[index]?.Name && (
+                  <span>{errors.children[index].Name.message}</span>
                 )}
               </td>
               <td>
@@ -201,8 +193,154 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       {/* Section visible uniquement si "Oui" est sélectionné */}
       {formValues?.calcul_interets && (
         <div className="int">
-          <input type="number" {...register('taux_int')}></input>
-          <label>%</label>
+          <table id="taux_it_Table">
+            <tbody>
+              <tr>
+                <td>2014</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.75"
+                    {...register('taux_int2014')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2015</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.5"
+                    {...register('taux_int2015')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2016</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.25"
+                    {...register('taux_int2016')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2017</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2017')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2018</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2018')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2019</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2019')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2020</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.75"
+                    {...register('taux_int2020')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2021</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.75"
+                    {...register('taux_int2021')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.5"
+                    {...register('taux_int2022')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2023</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="5.25"
+                    {...register('taux_int2023')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2024</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="5.75"
+                    {...register('taux_int2024')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2025</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="4.5"
+                    {...register('taux_int2025')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       )}
     </form>

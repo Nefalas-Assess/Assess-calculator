@@ -210,3 +210,11 @@ button {
 .custom-size {
   min-width: 400px;
 }
+
+#infogTable {
+  max-width: 600px;
+}
+
+#taux_it_Table{
+  max-width: 300px;
+}
