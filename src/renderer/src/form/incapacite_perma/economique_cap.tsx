@@ -6,6 +6,7 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
+import Interest from '@renderer/generic/interet'
 
 export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
   const { data } = useContext(AppContext)
@@ -210,21 +211,14 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
               <Money value={getConsoAmount(formValues?.brut, 'brut')} />
             </td>
             <td className="int">
-              {formValues?.paiement && (
-                <Money
-                  value={
-                    getDays({
-                      start: getMedDate({
-                        start: formValues?.brut?.conso_start,
-                        end: formValues?.paiement
-                      }),
-                      end: formValues?.paiement
-                    }) *
-                    getConsoAmount(formValues?.brut, 'brut') *
-                    (data?.computed_info?.rate / 365)
-                  }
-                />
-              )}
+              <Interest
+                amount={getConsoAmount(formValues?.brut, 'brut')}
+                start={getMedDate({
+                  start: formValues?.brut?.conso_start,
+                  end: formValues?.paiement
+                })}
+                end={formValues?.paiement}
+              />
             </td>
           </tr>
         </tbody>

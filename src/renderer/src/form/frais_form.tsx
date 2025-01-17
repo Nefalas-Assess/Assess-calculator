@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import Interest from '@renderer/generic/interet'
 
 export const FraisForm = ({ onSubmit, initialValues }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -64,20 +65,6 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
     [onSubmit]
   )
 
-  // Fonction pour calculer les intérêts
-  const calculateInterest = (dateFrais, datePaiement, interestRate) => {
-    if (!dateFrais || !datePaiement) return 0
-
-    const dateFraisObj = new Date(dateFrais)
-    const datePaiementObj = new Date(datePaiement)
-
-    // Calculer la différence en jours
-    const timeDiff = datePaiementObj - dateFraisObj
-    const daysDiff = timeDiff / (1000 * 3600 * 24)
-
-    return (interestRate * (daysDiff / 365)).toFixed(2)
-  }
-
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
@@ -136,13 +123,10 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
                 <input type="date" {...register(`frais.${index}.date_paiement`)} />
               </td>
               <td className="int">
-                {/* Affichage des intérêts */}
-                <Money
-                  value={calculateInterest(
-                    formValues?.frais[index]?.date_frais,
-                    formValues?.frais[index]?.date_paiement,
-                    0.05 // Taux d'intérêt, ajustez-le comme nécessaire
-                  )}
+                <Interest
+                  amount={formValues?.frais[index]?.amount}
+                  start={formValues?.frais[index]?.date_frais}
+                  end={formValues?.frais[index]?.date_paiement}
                 />
               </td>
               <td>
@@ -154,7 +138,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
       </table>
       <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>
       <div className="total-box">
-        <strong>Total frais médicaux : </strong> <Money value={totalSumFrais}/>
+        <strong>Total frais médicaux : </strong> <Money value={totalSumFrais} />
       </div>
 
       <table id="ipTable">
@@ -224,7 +208,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
         </tbody>
       </table>
       <div className="total-box">
-        <strong>Total : </strong> <Money value={totalSumRest}/>
+        <strong>Total : </strong> <Money value={totalSumRest} />
       </div>
 
       <h1>Aide de tiers (non-qualifiés)</h1>
@@ -247,10 +231,10 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
         </tbody>
       </table>
       <div className="total-box">
-        <strong>Total des heures : </strong> <Money value={totalAides}/>
+        <strong>Total des heures : </strong> <Money value={totalAides} />
       </div>
       <div className="total-box">
-        <strong>Total général : </strong> <Money value={totalSumAll}/>
+        <strong>Total général : </strong> <Money value={totalSumAll} />
       </div>
     </form>
   )

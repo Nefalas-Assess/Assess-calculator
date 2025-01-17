@@ -4,6 +4,7 @@ import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import Interest from '@renderer/generic/interet'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -142,15 +143,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <input type="date" {...register(`net.${index}.date_paiement`)} />
                 </td>
                 <td className="int">
-                  {values?.date_paiement && (
-                    <Money
-                      value={
-                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
-                        total *
-                        (data?.computed_info?.rate / 365)
-                      }
-                    />
-                  )}
+                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
                 <td>
                   <button type="button" onClick={() => netFields.remove(index)}>

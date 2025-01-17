@@ -4,6 +4,7 @@ import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import Interest from '@renderer/generic/interet'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -168,15 +169,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <input type="date" {...register(`date_paiement_prejudice_esthétique`)} />
             </td>
             <td className="int">
-              <Money
-                value={
-                  getDays({
-                    start: data?.general_info?.date_consolidation,
-                    end: formValues?.date_paiement_prejudice_esthétique
-                  }) *
-                  getTotalWithCoef(formValues?.coefficient_prejudice_esthétique || 0) *
-                  (data?.computed_info?.rate / 365)
-                }
+              <Interest
+                amount={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique || 0)}
+                start={data?.general_info?.date_consolidation}
+                end={formValues?.date_paiement_prejudice_esthétique}
               />
             </td>
           </tr>
