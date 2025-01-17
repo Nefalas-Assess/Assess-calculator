@@ -6,6 +6,7 @@ export const AppContext = createContext()
 
 const AppProvider = ({ children }) => {
   const [data, setData] = useState(null)
+  const [darkMode, setDarkMode] = useState(true)
   const [filePath, setFilePath] = useState(null)
 
   const handleSave = useCallback(async () => {
@@ -51,9 +52,14 @@ const AppProvider = ({ children }) => {
     [computeData]
   )
 
+  const toggleDarkMode = useCallback(() => {
+    setDarkMode(!darkMode)
+  }, [setDarkMode, darkMode])
+
   const resetData = useCallback(() => {
     setData(initial)
   }, [])
+
   // the value passed in here will be accessible anywhere in our application
   // you can pass any value, in our case we pass our state and it's update method
   return (
@@ -65,7 +71,9 @@ const AppProvider = ({ children }) => {
         filePath,
         setFilePath,
         save: handleSave,
-        back: handleBackHome
+        back: handleBackHome,
+        toggleDarkMode,
+        mode: darkMode ? 'dark' : 'light'
       }}
     >
       {children}
