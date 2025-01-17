@@ -7,7 +7,7 @@ import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
 
-export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
+export const IPMenageCapForm = ({ onSubmit, initialValues }) => {
   const { data } = useContext(AppContext)
 
   const { register, handleSubmit, watch } = useForm({
@@ -85,7 +85,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Incapacités permanentes personnelles capitalisées</h1>
+      <h1>Incapacités permanentes ménagères capitalisées</h1>
       <h3>Variables du calcul de capitalisation</h3>
       <table id="IPVariables">
         <tbody>
@@ -206,4 +206,4 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
   )
 }
 
-export default IPPersonnelCapForm
+export default IPMenageCapForm

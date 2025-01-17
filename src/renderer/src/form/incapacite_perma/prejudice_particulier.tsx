@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex } from '@renderer/helpers/general'
+import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 
@@ -52,9 +52,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(prejudiceSexuelValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
+      JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
       JSON.stringify(prejudiceAgrementValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_agrements)
+      JSON.stringify(previousValuesRef.current?.prejudice_agrements)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
@@ -115,9 +115,20 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement`)} />
+              <input type="date" {...register(`date_paiement_quantum_doloris`)} />
             </td>
-            <td className="int">Nombre de jours entre [Date consolidation & Date du paiement] * Total * (%int de infog / 365)</td>
+            <td className="int">
+              <Money
+                value={
+                  getDays({
+                    start: data?.general_info?.date_consolidation,
+                    end: formValues?.date_paiement_quantum_doloris
+                  }) *
+                  getTotalWithCoef(formValues?.coefficient_quantum_doloris || 0) *
+                  (data?.computed_info?.rate / 365)
+                }
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -154,9 +165,20 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement`)} />
+              <input type="date" {...register(`date_paiement_prejudice_esthétique`)} />
             </td>
-            <td className="int">Same</td>
+            <td className="int">
+              <Money
+                value={
+                  getDays({
+                    start: data?.general_info?.date_consolidation,
+                    end: formValues?.date_paiement_prejudice_esthétique
+                  }) *
+                  getTotalWithCoef(formValues?.coefficient_prejudice_esthétique || 0) *
+                  (data?.computed_info?.rate / 365)
+                }
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -189,7 +211,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                 <input type="number" {...register(`prejudice_sexuels.${index}.amount`)} />
               </td>
               <td className="int">
-                <input type="date" {...register(`periods.${index}.date_paiement`)} />
+                <input type="date" {...register(`prejudice_sexuels.${index}.date_paiement`)} />
               </td>
               <td className="int">Same</td>
               <td>
@@ -233,7 +255,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                 <input type="number" {...register(`prejudice_agrements.${index}.amount`)} />
               </td>
               <td className="int">
-                <input type="date" {...register(`periods.${index}.date_paiement`)} />
+                <input type="date" {...register(`prejudice_agrements.${index}.date_paiement`)} />
               </td>
               <td className="int">Same</td>
               <td>
