@@ -196,121 +196,13 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
           <table id="taux_it_Table">
             <tbody>
               <tr>
-                <td>2014</td>
+                <td>2025</td>
                 <td>
                   <input
                     style={{ width: 50 }}
                     type="number"
-                    value="2.75"
-                    {...register('taux_int2014')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2015</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="2.5"
-                    {...register('taux_int2015')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2016</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="2.25"
-                    {...register('taux_int2016')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2017</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="2"
-                    {...register('taux_int2017')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2018</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="2"
-                    {...register('taux_int2018')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2019</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="2"
-                    {...register('taux_int2019')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2020</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="1.75"
-                    {...register('taux_int2020')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2021</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="1.75"
-                    {...register('taux_int2021')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2022</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="1.5"
-                    {...register('taux_int2022')}
-                  ></input>
-                  %
-                </td>
-              </tr>
-              <tr>
-                <td>2023</td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    value="5.25"
-                    {...register('taux_int2023')}
+                    value="4.5"
+                    {...register('taux_int2025')}
                   ></input>
                   %
                 </td>
@@ -328,13 +220,205 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
                 </td>
               </tr>
               <tr>
-                <td>2025</td>
+                <td>2023</td>
                 <td>
                   <input
                     style={{ width: 50 }}
                     type="number"
-                    value="4.5"
-                    {...register('taux_int2025')}
+                    value="5.25"
+                    {...register('taux_int2023')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2022</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.5"
+                    {...register('taux_int2022')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2021</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.75"
+                    {...register('taux_int2021')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2020</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="1.75"
+                    {...register('taux_int2020')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2019</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2019')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2018</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2018')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2017</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2"
+                    {...register('taux_int2017')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2016</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.25"
+                    {...register('taux_int2016')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2015</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.5"
+                    {...register('taux_int2015')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2014</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.75"
+                    {...register('taux_int2014')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2013</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="2.75"
+                    {...register('taux_int2013')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2012</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="4.25"
+                    {...register('taux_int2012')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2011</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="3.75"
+                    {...register('taux_int2011')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2010</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="3.25"
+                    {...register('taux_int2010')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2009</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="5.5"
+                    {...register('taux_int2009')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2008</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="7"
+                    {...register('taux_int2008')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>2007</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="6"
+                    {...register('taux_int2007')}
                   ></input>
                   %
                 </td>
