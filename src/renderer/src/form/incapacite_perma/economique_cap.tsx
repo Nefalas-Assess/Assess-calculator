@@ -179,7 +179,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
       </table>
 
       <h3>Période entre la consolidation et le paiement</h3>
-      <table id="ippcTable">
+      <table id="ippcTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Date de consolidation</th>
@@ -187,7 +187,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
             <th>Jours</th>
             <th>Salaire annuel brut (€)</th>
             <th style={{ width: 50 }}>%</th>
-            <th>Total brut (€)</th>
+            <th>Total brut</th>
             <th className="int">Intérêts</th>
           </tr>
         </thead>
@@ -199,7 +199,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
-            <td>{days?.brut || 0}</td>
+            <td style={{ width: 50 }}>{days?.brut || 0}</td>
             <td>
               <input type="number" {...register('brut.conso_amount')} />
             </td>
@@ -229,7 +229,8 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
           </tr>
         </tbody>
       </table>
-      <table id="ippcTable">
+
+      <table id="ippcTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Date de consolidation</th>
@@ -237,7 +238,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
             <th>Jours</th>
             <th>Salaire annuel net (€)</th>
             <th style={{ width: 50 }}>%</th>
-            <th>Total net (€)</th>
+            <th>Total net</th>
             <th className="int">Intérêts</th>
           </tr>
         </thead>
@@ -249,7 +250,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
-            <td>{days?.net || 0}</td>
+            <td style={{ width: 50 }}>{days?.net || 0}</td>
             <td>
               <input type="number" {...register('net.conso_amount')} />
             </td>
@@ -281,12 +282,12 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
       </table>
 
       <h3>Incapacités économiques permanentes</h3>
-      <table id="itebTable">
+      <table id="itebTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Salaire annuel brut (€)</th>
             <th style={{ width: 50 }}>%</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -308,12 +309,13 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
           </tr>
         </tbody>
       </table>
-      <table id="itebTable">
+
+      <table id="itebTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Salaire annuel net (€)</th>
             <th style={{ width: 50 }}>%</th>
-            <th>Total (€)</th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>

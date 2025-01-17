@@ -52,7 +52,7 @@ const DMP = () => {
         <h1>Préjudices des proches</h1>
         <h3>Dommage moral des proches</h3>
 
-        <table>
+        <table style={{ width: 1000 }}>
           <thead>
             <tr>
               <th>Nom du membre de la famille</th>
@@ -78,7 +78,7 @@ const DMP = () => {
                       <option>Fausse couche [€ 3.000 - € 9.000]</option>
                     </select>
                   </td>
-                  <td>
+                  <td style={{ width: 100 }}>
                     <input type="number"></input>
                   </td>
                   <td>
@@ -93,7 +93,7 @@ const DMP = () => {
 
         <h3>Perte du revenu du défunt</h3>
 
-        <table id="itebTable">
+        <table id="itebTable" style={{ width: 1000 }}>
           <thead>
             <tr>
               <th>Revenu total du ménage (€)</th>
@@ -132,7 +132,7 @@ const DMP = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
+        <div className="total-box" style={{ width: 1000 }}>
           <strong>Total : </strong> <Money value={getTotalSum()}/>
         </div>
       </div>

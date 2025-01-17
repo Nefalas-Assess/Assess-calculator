@@ -88,7 +88,7 @@ const ITP = () => {
         <h3>Frais</h3>
 
         {/* Tableau Salaire annuel brut */}
-        <table id="itebTable">
+        <table id="itebTable" style={{ width: 1000 }}>
           <thead>
             <tr>
               <th>Frais</th>
@@ -101,7 +101,7 @@ const ITP = () => {
             {brutRows.map((row, index) => (
               <tr key={index}>
                 <td>
-                  <input style={{ width: 400 }} type="text"></input>
+                  <input style={{ width: 300 }} type="text"></input>
                 </td>
                 <td>
                   <input
@@ -131,7 +131,7 @@ const ITP = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
+        <div className="total-box" style={{ width: 1000 }}>
           <strong>Total : </strong> <Money value={getTotalSum(brutRows, 'total')}/>
         </div>
       </div>

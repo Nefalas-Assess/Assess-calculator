@@ -99,7 +99,7 @@ const ITP = () => {
     <div id="content">
       <div id="main">
         <h1>Préjudice ex haerede</h1>
-        <table id="hospTable">
+        <table id="hospTable" style={{ width: 1000 }}>
           <thead>
             <tr>
               <th>Début</th>
@@ -127,10 +127,11 @@ const ITP = () => {
                     onChange={(e) => handleInputChange(index, 'fin', e.target.value)}
                   />
                 </td>
-                <td>{row?.jours}</td>
+                <td style={{ width: 50 }}>{row?.jours}</td>
                 <td>
                   <input
                     type="number"
+                    style={{ width: 50 }}
                     value={row.indemnite || 75}
                     step="0.01"
                     onChange={(e) =>
@@ -150,7 +151,7 @@ const ITP = () => {
           </tbody>
         </table>
 
-        <div className="total-box">
+        <div className="total-box" style={{ width: 1000 }}>
           <strong>Total : </strong> <Money value={getTotalSum()}/>
         </div>
       </div>

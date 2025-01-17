@@ -97,7 +97,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>NET</h1>
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -118,17 +118,17 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             const total = getSalaryTotalAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`net.${index}.start`)} />
                 </td>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`net.${index}.end`)} />
                 </td>
-                <td>{days}</td>
+                <td style={{ width: 50 }}>{days}</td>
                 <td>
                   <input type="number" step="0.01" {...register(`net.${index}.amount`)} />
                 </td>
-                <td>
+                <td style={{ width: 50 }}>
                   <input
                     style={{ width: 50 }}
                     type="number"
@@ -167,7 +167,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
       </button>
 
       <h1>BRUT</h1>
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -188,17 +188,17 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             const total = getSalaryTotalAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`brut.${index}.start`)} />
                 </td>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`brut.${index}.end`)} />
                 </td>
-                <td>{days}</td>
+                <td style={{ width: 50 }}>{days}</td>
                 <td>
                   <input type="number" step="0.01" {...register(`brut.${index}.amount`)} />
                 </td>
-                <td>
+                <td style={{ width: 50 }}>
                   <input
                     style={{ width: 50 }}
                     type="number"

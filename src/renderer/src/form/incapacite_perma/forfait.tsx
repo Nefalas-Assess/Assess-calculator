@@ -65,7 +65,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
     <form onSubmit={handleSubmit(submitForm)}>
       <h1>Incapacités personnelles permanentes</h1>
 
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -96,7 +96,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
 
       <h1>Incapacités ménagères permanentes</h1>
 
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -143,7 +143,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
 
       <h1>Incapacités économiques permanentes</h1>
 
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -172,7 +172,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
         </tbody>
       </table>
 
-      <div className="total-box">
+      <div className="total-box" style={{ width: 1000 }}>
         <strong>Total : </strong> <Money value={getTotalSum(formValues)} />
       </div>
     </form>

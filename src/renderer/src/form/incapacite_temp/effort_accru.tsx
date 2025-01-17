@@ -83,7 +83,7 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Efforts accrus</h1>
-      <table>
+      <table style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -111,18 +111,18 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
                 <td>
                   <input type="date" {...register(`efforts.${index}.end`)} />
                 </td>
-                <td>{days}</td>
+                <td style={{ width: 50 }}>{days}</td>
                 <td>
                   <input type="number" step="0.01" {...register(`efforts.${index}.amount`)} />
                 </td>
-                <td>
+                <td style={{ width: 50 }}>
                   <input
                     style={{ width: 50 }}
                     type="number"
                     {...register(`efforts.${index}.pourcentage`)}
                   />
                 </td>
-                <td>
+                <td style={{ width: 50 }}>
                   <select {...register(`efforts.${index}.coefficient`)}>
                     <option value={1}>1</option>
                     <option value={2}>2</option>

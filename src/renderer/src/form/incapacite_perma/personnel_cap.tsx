@@ -122,12 +122,12 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
       </table>
 
       <h3>Période entre la consolidation et le paiement</h3>
-      <table id="ippcTable">
+      <table id="ippcTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Date de consolidation</th>
             <th>Date du paiement</th>
-            <th>Jours</th>
+            <th style={{ width: 50 }}>Jours</th>
             <th>Indemnité journalière (€)</th>
             <th style={{ width: 50 }}>%</th>
             <th>Total (€)</th>
@@ -142,9 +142,9 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
             <td>
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
-            <td>{days || 0}</td>
+            <td style={{ width: 50 }}>{days || 0}</td>
             <td>
-              <input type="number" {...register('conso_amount')} />
+              <input style={{ width: 50 }} type="number" {...register('conso_amount')} />
             </td>
             <td>
               <input style={{ width: 50 }} type="number" {...register('conso_pourcentage')} />
@@ -171,7 +171,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
       </table>
 
       <h3>Incapacités personnelles permanentes</h3>
-      <table id="IPCAPTable">
+      <table id="IPCAPTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Date du paiement</th>
@@ -186,7 +186,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
             <td>
-              <input type="number" {...register('perso_amount')} />
+              <input style={{ width: 50 }} type="number" {...register('perso_amount')} />
             </td>
             <td>
               <input

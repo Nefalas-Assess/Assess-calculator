@@ -77,7 +77,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Pretium Doloris Temporaire</h1>
-      <table>
+      <table style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>

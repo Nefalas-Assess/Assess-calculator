@@ -103,7 +103,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Menagères</h1>
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -126,17 +126,21 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             const total = getTotalAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`periods.${index}.start`)} />
                 </td>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`periods.${index}.end`)} />
                 </td>
-                <td>{days}</td>
-                <td>{data?.computed_info?.enfant_charge || 0}</td>
-                <td>
-                  <input type="number" {...register(`periods.${index}.amount`)} />( +{' '}
-                  {(data?.computed_info?.enfant_charge || 0) * 10}€ )
+                <td style={{ width: 50 }}>{days}</td>
+                <td style={{ width: 50 }}>{data?.computed_info?.enfant_charge || 0}</td>
+                <td style={{ width: 200 }}>
+                  <input
+                    type="number"
+                    style={{ width: 50 }}
+                    {...register(`periods.${index}.amount`)}
+                  />
+                  ( + {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
                   <input
@@ -145,7 +149,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
                     {...register(`periods.${index}.percentage`)}
                   />
                 </td>
-                <td>
+                <td style={{ width: 140 }}>
                   <select {...register(`periods.${index}.contribution`)}>
                     <option value="0">0</option>
                     <option value="100">100</option>

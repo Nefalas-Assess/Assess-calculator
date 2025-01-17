@@ -84,7 +84,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Préjudices particuliers</h1>
       <h3>Quantum Doloris</h3>
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 400 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -134,7 +134,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       </table>
 
       <h3>Préjudice Esthétique</h3>
-      <table id="ipTable">
+      <table id="ipTable" style={{ width: 400 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -184,7 +184,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       </table>
 
       <h3>Préjudice Sexuel</h3>
-      <table>
+      <table style={{ width: 800 }}>
         <thead>
           <tr>
             <th>Indemnités/Frais</th>
@@ -203,8 +203,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               </td>
               <td>
                 <select {...register(`prejudice_sexuels.${index}.paid`)}>
-                  <option value={true}>Oui</option>
                   <option value={false}>Non</option>
+                  <option value={true}>Oui</option>
                 </select>
               </td>
               <td>
@@ -228,7 +228,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       </button>
 
       <h3>Préjudice d'Agrément</h3>
-      <table>
+      <table style={{ width: 800 }}>
         <thead>
           <tr>
             <th>Indemnités/Frais</th>
@@ -247,8 +247,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               </td>
               <td>
                 <select {...register(`prejudice_agrements.${index}.paid`)}>
-                  <option value={true}>Oui</option>
                   <option value={false}>Non</option>
+                  <option value={true}>Oui</option>
                 </select>
               </td>
               <td>

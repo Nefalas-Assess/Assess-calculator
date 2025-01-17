@@ -78,7 +78,7 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Hospitalisation</h1>
-      <table>
+      <table style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -104,9 +104,13 @@ const HospitalisationForm = ({ initialValues, onSubmit }) => {
                 <td>
                   <input type="date" {...register(`periods.${index}.end`)} />
                 </td>
-                <td>{days}</td>
-                <td>
-                  <input type="number" step="0.01" {...register(`periods.${index}.amount`)} />
+                <td style={{ width: 50 }}>{days}</td>
+                <td style={{ width: 200 }}>
+                  <input
+                    type="number"
+                    style={{ width: 50 }}
+                    {...register(`periods.${index}.amount`)}
+                  />
                 </td>
                 <td>
                   <Money value={total} />

@@ -118,10 +118,10 @@ const ITPersonnelForm = ({ initialValues, onSubmit }) => {
             const total = getTotalAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`periods.${index}.start`)} />
                 </td>
-                <td>
+                <td style={{ width: 140 }}>
                   <input type="date" {...register(`periods.${index}.end`)} />
                 </td>
                 <td>{days}</td>
