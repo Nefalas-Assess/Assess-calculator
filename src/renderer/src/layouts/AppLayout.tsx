@@ -25,6 +25,9 @@ export const AppLayout = () => {
     if (location.pathname.startsWith('/it')) {
       setIncTemp(true)
     }
+    if (location.pathname.startsWith('/ip')) {
+      setIncPerma(true)
+    }
   }, [location.pathname]) // Réagir uniquement si le chemin change
 
   return (
@@ -62,12 +65,12 @@ export const AppLayout = () => {
               </div>
               {incPerma && (
                 <div>
-                  <LinkItem to="/ip">Forfaitaires</LinkItem>
-                  <LinkItem to="/ippc">Personnelles capitalisées</LinkItem>
-                  <LinkItem to="/ipmc">Ménagères capitalisées</LinkItem>
-                  <LinkItem to="/ipec">Économiques capitalisées</LinkItem>
-                  <LinkItem to="/frais_cap">Frais capitalisés</LinkItem>
-                  <LinkItem to="/particuliers">Préjudices Particuliers</LinkItem>
+                  <LinkItem to="/ip/forfait">Forfaitaires</LinkItem>
+                  <LinkItem to="/ip/personnel">Personnelles capitalisées</LinkItem>
+                  <LinkItem to="/ip/menagère">Ménagères capitalisées</LinkItem>
+                  <LinkItem to="/ip/economique">Économiques capitalisées</LinkItem>
+                  <LinkItem to="/ip/frais">Frais capitalisés</LinkItem>
+                  <LinkItem to="/ip/particuliers">Préjudices Particuliers</LinkItem>
                 </div>
               )}
             </div>
