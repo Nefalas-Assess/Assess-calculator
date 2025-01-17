@@ -63,7 +63,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
   }, [formValues, childrenValues, submitForm, handleSubmit])
 
   const addChild = () => {
-    append({ Name: '', birthDate: '' }) // Nouveau champ enfant
+    append({ name: '', birthDate: '' }) // Nouveau champ enfant
   }
 
   return (
@@ -151,10 +151,10 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
                 <input
                   style={{ width: 300 }}
                   type="text"
-                  {...register(`children.${index}.Name`, { required: 'Nom requis' })}
+                  {...register(`children.${index}.name`, { required: 'Nom requis' })}
                 />
-                {errors.children?.[index]?.Name && (
-                  <span>{errors.children[index].Name.message}</span>
+                {errors.children?.[index]?.name && (
+                  <span>{errors.children[index].name.message}</span>
                 )}
               </td>
               <td>
