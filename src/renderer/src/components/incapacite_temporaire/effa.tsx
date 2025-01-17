@@ -1,4 +1,4 @@
-import EffortAccruForm from '@renderer/form/effort_accru'
+import EffortAccruForm from '@renderer/form/incapacite_temp/effort_accru'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 

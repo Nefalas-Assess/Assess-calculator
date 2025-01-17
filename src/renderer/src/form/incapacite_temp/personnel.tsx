@@ -1,8 +1,11 @@
 import Money from '@renderer/generic/money'
-import React, { useCallback, useEffect, useRef } from 'react'
+import { getMedDate } from '@renderer/helpers/general'
+import { AppContext } from '@renderer/providers/AppProvider'
+import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
 const ITPersonnelForm = ({ initialValues, onSubmit }) => {
+  const { data } = useContext(AppContext)
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       periods: [{ amount: 32 }]
@@ -127,7 +130,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit }) => {
                 </td>
                 <td>
                   <input
-                    style={{width: 50}}
+                    style={{ width: 50 }}
                     type="number"
                     {...register(`periods.${index}.percentage`)}
                   />
@@ -138,7 +141,17 @@ const ITPersonnelForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
-                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
+                <td className="int">
+                  {values?.date_paiement && (
+                    <Money
+                      value={
+                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
+                        total *
+                        (data?.computed_info?.rate / 365)
+                      }
+                    />
+                  )}
+                </td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer

@@ -1,11 +1,13 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays } from '@renderer/helpers/general'
+import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
+  const { data } = useContext(AppContext)
+
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       net: [{}],
@@ -137,9 +139,19 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`iten.${index}.date_paiement`)} />
+                  <input type="date" {...register(`net.${index}.date_paiement`)} />
                 </td>
-                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
+                <td className="int">
+                  {values?.date_paiement && (
+                    <Money
+                      value={
+                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
+                        total *
+                        (data?.computed_info?.rate / 365)
+                      }
+                    />
+                  )}
+                </td>
                 <td>
                   <button type="button" onClick={() => netFields.remove(index)}>
                     Supprimer
@@ -199,7 +211,17 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                 <td className="int">
                   <input type="date" {...register(`brut.${index}.date_paiement`)} />
                 </td>
-                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
+                <td className="int">
+                  {values?.date_paiement && (
+                    <Money
+                      value={
+                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
+                        total *
+                        (data?.computed_info?.rate / 365)
+                      }
+                    />
+                  )}
+                </td>
                 <td>
                   <button type="button" onClick={() => brutFields.remove(index)}>
                     Supprimer

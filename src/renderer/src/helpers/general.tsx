@@ -1,3 +1,5 @@
+import { addDays, differenceInDays } from 'date-fns'
+
 export const getChildrenUnder25 = (children) => {
   const now = new Date()
   return children?.filter((child) => {
@@ -52,4 +54,17 @@ export const getDays = (item = {}, varName) => {
       return jours
     }
   }
+}
+
+export const getMedDate = (item, varName) => {
+  let { start, end } = item
+
+  if ((!start || !end) && varName) {
+    start = item?.[varName?.[0]]
+    end = item?.[varName?.[1]]
+  }
+
+  const diffInDays = differenceInDays(end, start)
+
+  return addDays(start, diffInDays / 2)
 }

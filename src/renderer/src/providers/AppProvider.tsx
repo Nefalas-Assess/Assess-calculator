@@ -37,6 +37,9 @@ const AppProvider = ({ children }) => {
       if (children) {
         res.computed_info.enfant_charge = getChildrenUnder25(children)
       }
+      if (res?.general_info?.calcul_interets === 'true') {
+        res.computed_info.rate = parseFloat(res?.general_info?.taux_int)
+      }
     }
     return res
   }, [])

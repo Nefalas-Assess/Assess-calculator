@@ -1,30 +1,29 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays } from '@renderer/helpers/general'
+import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import { AppContext } from '@renderer/providers/AppProvider'
 
-const EffortAccruForm = ({ initialValues, onSubmit }) => {
+const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      efforts: [{ coefficient: 5, amount: 30 }]
+      periods: [{}]
     }
   })
 
   const { fields, remove, append } = useFieldArray({
     control,
-    name: 'efforts' // Champs dynamiques pour les enfants
+    name: 'periods' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
 
   // Utiliser useWatch pour surveiller les FieldArrays
-  const effortsValues = useWatch({
+  const periodsValues = useWatch({
     control,
-    name: 'efforts'
+    name: 'periods'
   })
 
   // Référence pour suivre les anciennes valeurs
@@ -40,32 +39,27 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(effortsValues) !== JSON.stringify(previousValuesRef.current?.efforts)
+      JSON.stringify(periodsValues) !== JSON.stringify(previousValuesRef.current?.periods)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
       // Éviter de soumettre si aucune modification réelle
       previousValuesRef.current = {
         formValues,
-        efforts: effortsValues
+        periods: periodsValues
       }
 
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
-  }, [formValues, effortsValues, submitForm, handleSubmit])
+  }, [formValues, periodsValues, submitForm, handleSubmit])
 
-  const getTotalAmount = useCallback((values, days) => {
-    return (
-      parseInt(days || 0) *
-      parseFloat(values?.amount || 0) *
-      parseFloat((values?.pourcentage || 0) / 100) *
-      (parseInt(values?.coefficient || 0) / 5)
-    ).toFixed(2)
+  const getAmount = useCallback((values, days) => {
+    return (parseInt(days || 0) * parseFloat(values?.coefficient || 0)).toFixed(2)
   }, [])
 
   const addNext = useCallback(
     (append, initial = {}) => {
-      const lastRowEnd = formValues?.efforts?.[formValues?.efforts?.length - 1]?.end
+      const lastRowEnd = formValues?.periods?.[formValues?.periods?.length - 1]?.end
 
       if (lastRowEnd) {
         const finDate = new Date(lastRowEnd)
@@ -82,17 +76,15 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Efforts accrus</h1>
+      <h1>Pretium Doloris Temporaire</h1>
       <table>
         <thead>
           <tr>
             <th>Début</th>
             <th>Fin</th>
             <th>Jours</th>
-            <th>Indemnité journalière (€)</th>
-            <th>%</th>
             <th>Coefficient</th>
-            <th>Total</th>
+            <th>Total (€)</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
             <th></th>
@@ -100,46 +92,46 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
         </thead>
         <tbody>
           {fields.map((child, index) => {
-            const values = formValues?.efforts[index]
+            const values = formValues?.periods[index]
             const days = getDays(values)
-            const total = getTotalAmount(values, days)
+            const total = getAmount(values, days)
             return (
               <tr key={child.id}>
                 <td>
-                  <input type="date" {...register(`efforts.${index}.start`)} />
+                  <input type="date" {...register(`periods.${index}.start`)} />
                 </td>
                 <td>
-                  <input type="date" {...register(`efforts.${index}.end`)} />
+                  <input type="date" {...register(`periods.${index}.end`)} />
                 </td>
                 <td>{days}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`efforts.${index}.amount`)} />
-                </td>
-                <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    {...register(`efforts.${index}.pourcentage`)}
-                  />
-                </td>
-                <td>
-                  <select {...register(`efforts.${index}.coefficient`)}>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                    <option value={7}>7</option>
+                  <select {...register(`periods.${index}.coefficient`)}>
+                    <option value="1.15">1/7</option>
+                    <option value="3.50">2/7</option>
+                    <option value="7">3/7</option>
+                    <option value="11.50">4/7</option>
+                    <option value="17">5/7</option>
+                    <option value="24">6/7</option>
+                    <option value="32">7/7</option>
                   </select>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`effa.${index}.date_paiement`)} />
+                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
                 </td>
-                <td className="int">Nombre de jours entre [Date médiane entre (Début	Fin) & Date du paiement] * Total * (%int de infog / 365)</td>
+                <td className="int">
+                  {values?.date_paiement && (
+                    <Money
+                      value={
+                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
+                        total *
+                        (data?.computed_info?.rate / 365)
+                      }
+                    />
+                  )}
+                </td>
                 <td>
                   <button type="button" onClick={() => remove(index)}>
                     Supprimer
@@ -150,11 +142,11 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append, { coefficient: 5, amount: 30 })}>
+      <button type="button" onClick={() => addNext(append, {})}>
         Ajouter une ligne
       </button>
     </form>
   )
 }
 
-export default EffortAccruForm
+export default PretiumDolorisForm
