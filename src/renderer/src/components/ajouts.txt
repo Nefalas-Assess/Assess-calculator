@@ -44,7 +44,7 @@ qui ouvre ensuite une cadre avec le taux d'intérêts à appliquer aux indemnit�
     => 31/12/2022 = 185j
     1,5%
     = 10.000 x 0.015 x (185/365)
-    = 76,02
+    = 76,03
 
     2023
     5,25%
@@ -54,10 +54,11 @@ qui ouvre ensuite une cadre avec le taux d'intérêts à appliquer aux indemnit�
     2024
     => 23/11/2024 = 328j
     5,75%
-    = 10.605,018 x 0.0575 x (328/365)
-    = 609,78
+    
+    =10000*((((0,015*185/365)+1)*(1,0525))*((0,0575*(328/365))+1))
+    =11.152,99
 
-    Total intérêts = € 1.214,80
+    = Montant * (((1 + %2022 * (nbre jours/365 )) * (1 + %2023 * (nbre jours/365 ))) * (1 + %2024 * (nbre jours/365 )))
 
 Bouton dans le top menu qui permet de changer de mode sombre/clair.
 https://g.co/gemini/share/b7bea65938c0

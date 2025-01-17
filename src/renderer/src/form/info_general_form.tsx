@@ -423,6 +423,78 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
                   %
                 </td>
               </tr>
+              <tr>
+                <td>2006 - 1996</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="7"
+                    {...register('taux_int1996')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>1995 - 1986</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="8"
+                    {...register('taux_int1986')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>1985</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="10"
+                    {...register('taux_int1985')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>1984 - 1981</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="12"
+                    {...register('taux_int1981')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>1980 - 1974</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="8"
+                    {...register('taux_int1974')}
+                  ></input>
+                  %
+                </td>
+              </tr>
+              <tr>
+                <td>1973 - 1970</td>
+                <td>
+                  <input
+                    style={{ width: 50 }}
+                    type="number"
+                    value="6.5"
+                    {...register('taux_int1970')}
+                  ></input>
+                  %
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
