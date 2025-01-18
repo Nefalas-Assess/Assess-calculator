@@ -11,7 +11,7 @@ const LinkItem = ({ to, children }) => {
 }
 
 export const AppLayout = () => {
-  const { data, save, back, toggleDarkMode, mode, } = useContext(AppContext)
+  const { data, save, back, toggleDarkMode, mode } = useContext(AppContext)
 
   const [incPerma, setIncPerma] = useState(false)
   const [incTemp, setIncTemp] = useState(false)
@@ -37,7 +37,7 @@ export const AppLayout = () => {
           <div className="left">Assess</div>
           <div className="right">
             <button onClick={toggleDarkMode}>Toggle</button>
-            {/* <button onClick={print}>Imprimer</button> */}
+            {/* <button onClick={printRecap}>Imprimer</button> */}
             <button onClick={save}>Sauvegarder</button>
             <button onClick={back}>Home</button>
           </div>

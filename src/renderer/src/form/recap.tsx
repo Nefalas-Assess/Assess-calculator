@@ -19,7 +19,7 @@ import InfoGeneralForm from './info_general_form';
 
 const AllForms = () => {
   return (
-    <div>
+    <div id="recap_content">
       <h1>Récapitulatif</h1>
       <InfoGeneralForm onSubmit={undefined} initialValues={undefined} />
       <FraisForm onSubmit={undefined} initialValues={undefined} />
