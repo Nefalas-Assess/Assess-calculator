@@ -1,4 +1,5 @@
 import Money from '@renderer/generic/money'
+import Interest from '@renderer/generic/interet'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'

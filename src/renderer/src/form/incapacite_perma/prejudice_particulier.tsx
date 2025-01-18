@@ -53,9 +53,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(prejudiceSexuelValues) !==
-      JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
+        JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
       JSON.stringify(prejudiceAgrementValues) !==
-      JSON.stringify(previousValuesRef.current?.prejudice_agrements)
+        JSON.stringify(previousValuesRef.current?.prejudice_agrements)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
@@ -85,7 +85,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Préjudices particuliers</h1>
       <h3>Quantum Doloris</h3>
-      <table id="ipTable" style={{ width: 400 }}>
+      <table id="ipTable" style={{ width: 800 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -135,7 +135,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
       </table>
 
       <h3>Préjudice Esthétique</h3>
-      <table id="ipTable" style={{ width: 400 }}>
+      <table id="ipTable" style={{ width: 800 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
