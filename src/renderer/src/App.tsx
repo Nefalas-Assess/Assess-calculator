@@ -20,6 +20,7 @@ import FRAIS from './components/frais'
 import FUNE from './components/deces/fune'
 import EXH from './components/deces/exh'
 import DMP from './components/deces/dmp'
+import RECAP from './form/recap'
 import { useContext } from 'react'
 
 const IncapaciteTemp = () => {
@@ -65,6 +66,7 @@ const Main = () => {
           <Route path="fune" element={<FUNE />} />
           <Route path="exh" element={<EXH />} />
           <Route path="dmp" element={<DMP />} />
+          <Route path="recap" element={<RECAP />} />
         </Route>
       </Routes>
     </HashRouter>

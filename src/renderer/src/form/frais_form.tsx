@@ -85,7 +85,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
   return (
     <form onSubmit={handleSubmit(submitForm)}>
       <h1>Frais (médicaux)</h1>
-      <table>
+      <table style={{ width: 1000 }}>
         <thead>
           <tr>
             <th>Indemintés/Frais</th>

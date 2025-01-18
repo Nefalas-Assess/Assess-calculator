@@ -88,6 +88,9 @@ export const AppLayout = () => {
                 </div>
               )}
             </div>
+            <div>
+              <LinkItem to="/recap">Récapitulatif</LinkItem>
+            </div>
           </div>
           <div
             className={`content ${data?.general_info?.calcul_interets !== 'true' && 'contentWithOutInteret'}`}

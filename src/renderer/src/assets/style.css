@@ -145,6 +145,7 @@ button {
   font-size: 18px;
   text-align: center;
   font-weight: bold;
+  max-width: 1000px;
 }
 
 .home {
@@ -221,4 +222,12 @@ button {
 
 #IPVariables{
   max-width: 800px;
+}
+
+#ipTable {
+  max-width: 1000px;
+}
+
+#hospTable {
+  max-width: 1000px;
 }
