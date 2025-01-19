@@ -17,8 +17,8 @@ const Personnel = () => {
     <div id="content">
       <div id="main">
         <ITPersonnelForm onSubmit={saveData} initialValues={data?.incapacite_temp_personnel} />
-        <TotalBox />
-        <TotalBox name="interest" />
+        <TotalBox label="Total général :" />
+        <TotalBox label="Total intérêts :" name="interest" />
       </div>
     </div>
   )

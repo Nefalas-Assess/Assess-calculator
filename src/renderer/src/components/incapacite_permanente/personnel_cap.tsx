@@ -1,4 +1,5 @@
 import IPPersonnelCapForm from '@renderer/form/incapacite_perma/personnel_cap'
+import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
@@ -19,6 +20,8 @@ const PersonnelCap = () => {
           onSubmit={saveData}
           initialValues={data?.incapacite_perma_personnel_cap}
         />
+        <TotalBox label="Total général :" />
+        <TotalBox label="Total intérêts :" name="interest" />
       </div>
     </div>
   )

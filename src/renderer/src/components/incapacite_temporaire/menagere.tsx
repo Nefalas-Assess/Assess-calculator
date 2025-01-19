@@ -18,7 +18,7 @@ const Menagere = () => {
       <div id="main">
         <ITMenagereForm onSubmit={saveData} initialValues={data?.incapacite_temp_menagere} />
         <TotalBox label="Total général :" />
-        <TotalBox name="interest" />
+        <TotalBox label="Total intérêts :" name="interest" />
       </div>
     </div>
   )

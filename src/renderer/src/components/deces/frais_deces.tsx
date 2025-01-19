@@ -1,5 +1,6 @@
 import FraisFunForm from '@renderer/form/deces/frais'
 import Money from '@renderer/generic/money'
+import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
@@ -17,6 +18,7 @@ const FraisFun = () => {
     <div id="content">
       <div id="main">
         <FraisFunForm onSubmit={saveData} initialValues={data?.frais_funeraire} />
+        <TotalBox label="Total général :" />
       </div>
     </div>
   )

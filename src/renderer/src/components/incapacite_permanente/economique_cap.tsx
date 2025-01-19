@@ -1,5 +1,6 @@
 import IPEcoCapForm from '@renderer/form/incapacite_perma/economique_cap'
 import Money from '@renderer/generic/money'
+import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
@@ -108,6 +109,8 @@ const EconomiqueCap = () => {
     <div id="content">
       <div id="main">
         <IPEcoCapForm onSubmit={saveData} initialValues={data?.incapacite_perma_economique_cap} />
+        <TotalBox label="Total général :" />
+        <TotalBox label="Total intérêts :" name="interest" />
       </div>
     </div>
   )

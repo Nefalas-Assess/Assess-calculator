@@ -1,5 +1,6 @@
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
+import TotalBox from '@renderer/generic/totalBox'
 import { getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'

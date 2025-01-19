@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import PrejudiceParticuliersForm from '@renderer/form/incapacite_perma/prejudice_particulier'
+import TotalBox from '@renderer/generic/totalBox'
 
 const Particuliers = () => {
   const { data, setData } = useContext(AppContext)
@@ -19,6 +20,8 @@ const Particuliers = () => {
           onSubmit={saveData}
           initialValues={data?.prejudice_particulier}
         />
+        <TotalBox label="Total général :" />
+        <TotalBox label="Total intérêts :" name="interest" />
       </div>
     </div>
   )
