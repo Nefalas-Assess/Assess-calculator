@@ -17,12 +17,15 @@ import Personnel from './components/incapacite_temporaire/personnel'
 import Menagere from './components/incapacite_temporaire/menagere'
 import Economique from './components/incapacite_temporaire/economique'
 import FRAIS from './components/frais'
-import FUNE from './components/deces/fune'
-import EXH from './components/deces/exh'
-import DMP from './components/deces/dmp'
+import FUNE from './components/deces/frais_deces'
+import EXH from './components/deces/prejudice_exh'
+import DMP from './components/deces/prejudice_proche'
 import RECAP from './form/recap'
 import { useContext } from 'react'
 import Recapitulatif from './components/recapitulatif'
+import FraisFun from './components/deces/frais_deces'
+import PrejudiceEXH from './components/deces/prejudice_exh'
+import PrejudiceProche from './components/deces/prejudice_proche'
 
 const IncapaciteTemp = () => {
   return (
@@ -50,6 +53,16 @@ const IncapacitePerma = () => {
   )
 }
 
+const Deces = () => {
+  return (
+    <Routes>
+      <Route path="/frais" element={<FraisFun />} />
+      <Route path="/prejudice_exh" element={<PrejudiceEXH />} />
+      <Route path="/prejudice_proche" element={<PrejudiceProche />} />
+    </Routes>
+  )
+}
+
 const Main = () => {
   const { filePath } = useContext(AppContext)
 
@@ -63,11 +76,8 @@ const Main = () => {
           <Route path="infog" element={<INFOG />} />
           <Route path="ip/*" element={<IncapacitePerma />} />
           <Route path="it/*" element={<IncapaciteTemp />} />
+          <Route path="deces/*" element={<Deces />} />
           <Route path="frais" element={<FRAIS />} />
-          <Route path="fune" element={<FUNE />} />
-          <Route path="exh" element={<EXH />} />
-          <Route path="dmp" element={<DMP />} />
-          <Route path="recapV2" element={<RECAP />} />
           <Route path="recap" element={<Recapitulatif />} />
         </Route>
       </Routes>

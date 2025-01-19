@@ -62,7 +62,7 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Hospitalisation</h1>
+      <h1>Capitalisation des frais</h1>
       <table>
         <thead>
           <tr>

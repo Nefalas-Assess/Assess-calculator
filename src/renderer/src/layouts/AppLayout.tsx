@@ -28,6 +28,9 @@ export const AppLayout = () => {
     if (location.pathname.startsWith('/ip')) {
       setIncPerma(true)
     }
+    if (location.pathname.startsWith('/deces')) {
+      setDead(true)
+    }
   }, [location.pathname]) // Réagir uniquement si le chemin change
 
   return (
@@ -82,14 +85,13 @@ export const AppLayout = () => {
               </div>
               {dead && (
                 <div>
-                  <LinkItem to="/fune">Frais funéraires</LinkItem>
-                  <LinkItem to="/exh">Préjudice ex haerede</LinkItem>
-                  <LinkItem to="/dmp">Préjudice des proches</LinkItem>
+                  <LinkItem to="/deces/frais">Frais funéraires</LinkItem>
+                  <LinkItem to="/deces/prejudice_exh">Préjudice ex haerede</LinkItem>
+                  <LinkItem to="/deces/prejudice_proche">Préjudice des proches</LinkItem>
                 </div>
               )}
             </div>
             <div>
-              <LinkItem to="/recapV2">Récapitulatif</LinkItem>
               <LinkItem to="/recap">Récapitulatif</LinkItem>
             </div>
           </div>
