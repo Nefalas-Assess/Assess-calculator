@@ -89,6 +89,7 @@ export const AppLayout = () => {
               )}
             </div>
             <div>
+              <LinkItem to="/recapV2">Récapitulatif</LinkItem>
               <LinkItem to="/recap">Récapitulatif</LinkItem>
             </div>
           </div>

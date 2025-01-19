@@ -3,7 +3,7 @@ import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const IPEC = () => {
+const EconomiqueCap = () => {
   const createRow = () => ({
     debut: '',
     salaire: '',
@@ -221,4 +221,4 @@ const IPEC = () => {
   )
 }
 
-export default IPEC
+export default EconomiqueCap

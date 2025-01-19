@@ -22,6 +22,7 @@ import EXH from './components/deces/exh'
 import DMP from './components/deces/dmp'
 import RECAP from './form/recap'
 import { useContext } from 'react'
+import Recapitulatif from './components/recapitulatif'
 
 const IncapaciteTemp = () => {
   return (
@@ -66,7 +67,8 @@ const Main = () => {
           <Route path="fune" element={<FUNE />} />
           <Route path="exh" element={<EXH />} />
           <Route path="dmp" element={<DMP />} />
-          <Route path="recap" element={<RECAP />} />
+          <Route path="recapV2" element={<RECAP />} />
+          <Route path="recap" element={<Recapitulatif />} />
         </Route>
       </Routes>
     </HashRouter>

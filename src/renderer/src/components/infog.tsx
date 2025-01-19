@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import InfoForm from '../form/info_general_form'
 import { AppContext } from '@renderer/providers/AppProvider'
 
-const ITP = () => {
+const InfoG = () => {
   const { setData, data } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -22,4 +22,4 @@ const ITP = () => {
   )
 }
 
-export default ITP
+export default InfoG

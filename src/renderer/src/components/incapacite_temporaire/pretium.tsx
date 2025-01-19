@@ -2,7 +2,7 @@ import PretiumDolorisForm from '@renderer/form/incapacite_temp/pretium_doloris'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const EFFA = () => {
+const PretiumDoloris = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -21,4 +21,4 @@ const EFFA = () => {
   )
 }
 
-export default EFFA
+export default PretiumDoloris

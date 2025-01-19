@@ -3,7 +3,7 @@ import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const Frais_cap = () => {
+const FraisCap = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -22,4 +22,4 @@ const Frais_cap = () => {
   )
 }
 
-export default Frais_cap
+export default FraisCap

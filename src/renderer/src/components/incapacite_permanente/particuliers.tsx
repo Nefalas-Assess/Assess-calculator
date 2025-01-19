@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import PrejudiceParticuliersForm from '@renderer/form/incapacite_perma/prejudice_particulier'
 
-const ITP = () => {
+const Particuliers = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -24,4 +24,4 @@ const ITP = () => {
   )
 }
 
-export default ITP
+export default Particuliers

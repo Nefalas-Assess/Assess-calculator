@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import FraisForm from '@renderer/form/frais_form'
 
-const ITP = () => {
+const Frais = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -21,4 +21,4 @@ const ITP = () => {
   )
 }
 
-export default ITP
+export default Frais

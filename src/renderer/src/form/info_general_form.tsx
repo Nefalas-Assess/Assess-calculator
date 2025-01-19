@@ -148,23 +148,10 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
           {childrenFields?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input
-                  style={{ width: 300 }}
-                  type="text"
-                  {...register(`children.${index}.name`, { required: 'Nom requis' })}
-                />
-                {errors.children?.[index]?.name && (
-                  <span>{errors.children[index].name.message}</span>
-                )}
+                <input style={{ width: 300 }} type="text" {...register(`children.${index}.name`)} />
               </td>
               <td>
-                <input
-                  type="date"
-                  {...register(`children.${index}.birthDate`, { required: 'Date requise' })}
-                />
-                {errors.children?.[index]?.birthDate && (
-                  <span>{errors.children[index].birthDate.message}</span>
-                )}
+                <input type="date" {...register(`children.${index}.birthDate`)} />
               </td>
               <td>
                 <button type="button" onClick={() => childrenFields?.remove(index)}>

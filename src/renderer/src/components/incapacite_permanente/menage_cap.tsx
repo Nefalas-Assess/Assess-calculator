@@ -3,7 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import Money from '@renderer/generic/money'
 import IPMenageCapForm from '@renderer/form/incapacite_perma/menage_cap'
 
-const IPMC = () => {
+const MenageCap = () => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -22,4 +22,4 @@ const IPMC = () => {
   )
 }
 
-export default IPMC
+export default MenageCap
