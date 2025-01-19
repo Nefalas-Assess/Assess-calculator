@@ -15,21 +15,14 @@ import FraisCap from './incapacite_permanente/frais_cap'
 import Particuliers from './incapacite_permanente/particuliers'
 
 const Recapitulatif = () => {
-
-  const contentRef = useRef();
+  const contentRef = useRef()
 
   const handlePrint = () => {
-    const printContent = contentRef.current;
-    const originalContent = document.body.innerHTML;
+    const content = contentRef.current.outerHTML
 
-    // Remplace le contenu du document avec celui de la div à imprimer
-    document.body.innerHTML = printContent.innerHTML;
-    window.print();
-
-    // Rétablit le contenu original après impression
-    document.body.innerHTML = originalContent;
-    window.location.reload();
-  };
+    // Envoyez un message au main process via IPC pour imprimer
+    window.api.print(content)
+  }
 
   return (
     <div ref={contentRef} id="content">
