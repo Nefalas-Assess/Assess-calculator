@@ -1,8 +1,9 @@
+import Field from '@renderer/generic/field'
 import { isValid } from 'date-fns'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 
-export const InfoForm = ({ onSubmit, initialValues }) => {
+export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const {
     control,
     register,
@@ -74,62 +75,80 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
           <tr>
             <td>Nom de la victime</td>
             <td>
-              <input
-                style={{ width: 300 }}
-                type="text"
-                {...register('nom_victime', { required: 'Ce champ est requis' })}
-              />
-              {errors.nom_victime && <span>{errors.nom_victime.message}</span>}
+              {editable ? (
+                <>
+                  <input
+                    style={{ width: 300 }}
+                    type="text"
+                    {...register('nom_victime', { required: 'Ce champ est requis' })}
+                  />
+                  {errors.nom_victime && <span>{errors.nom_victime.message}</span>}
+                </>
+              ) : (
+                <div>{formValues?.nom_victime}</div>
+              )}
             </td>
           </tr>
           <tr>
             <td>Sexe</td>
             <td>
-              <select {...register('sexe')}>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-              </select>
+              <Field values={formValues} name="sexe" editable={editable}>
+                <select {...register('sexe')}>
+                  <option value="homme">Homme</option>
+                  <option value="femme">Femme</option>
+                </select>
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de l'accident</td>
             <td>
-              <input type="date" {...register('date_accident')} />
+              <Field values={formValues} name="date_accident" editable={editable}>
+                <input type="date" {...register('date_accident')} />
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de naissance</td>
             <td>
-              <input type="date" {...register('date_naissance')} />
+              <Field values={formValues} name="date_naissance" editable={editable}>
+                <input type="date" {...register('date_naissance')} />
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de consolidation</td>
             <td>
-              <input type="date" {...register('date_consolidation')} />
+              <Field values={formValues} name="date_consolidation" editable={editable}>
+                <input type="date" {...register('date_consolidation')} />
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Situation conjugale</td>
             <td>
-              <select {...register('statut')}>
-                <option value="marié">Marié</option>
-                <option value="célibataire">Célibataire</option>
-              </select>
+              <Field values={formValues} name="statut" editable={editable}>
+                <select {...register('statut')}>
+                  <option value="marié">Marié</option>
+                  <option value="célibataire">Célibataire</option>
+                </select>
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Statut professionnel</td>
             <td>
-              <select {...register('profession')}>
-                <option value="employe">Employé</option>
-                <option value="ouvrier">Ouvrier</option>
-                <option value="sans_emploi">Sans emploi</option>
-                <option value="retraite">Retraité</option>
-                <option value="independant">Indépendant</option>
-                <option value="fonctionnaire">Fonctionnaire</option>
-                <option value="invalide">Invalide</option>
-              </select>
+              <Field values={formValues} name="profession" editable={editable}>
+                <select {...register('profession')}>
+                  <option value="employe">Employé</option>
+                  <option value="ouvrier">Ouvrier</option>
+                  <option value="sans_emploi">Sans emploi</option>
+                  <option value="retraite">Retraité</option>
+                  <option value="independant">Indépendant</option>
+                  <option value="fonctionnaire">Fonctionnaire</option>
+                  <option value="invalide">Invalide</option>
+                </select>
+              </Field>
             </td>
           </tr>
         </tbody>
