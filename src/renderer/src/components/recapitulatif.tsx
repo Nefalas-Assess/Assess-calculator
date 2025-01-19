@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import InfoG from './infog'
 import Frais from './frais'
 import Personnel from './incapacite_temporaire/personnel'
@@ -15,8 +15,27 @@ import FraisCap from './incapacite_permanente/frais_cap'
 import Particuliers from './incapacite_permanente/particuliers'
 
 const Recapitulatif = () => {
+
+  const contentRef = useRef();
+
+  const handlePrint = () => {
+    const printContent = contentRef.current;
+    const originalContent = document.body.innerHTML;
+
+    // Remplace le contenu du document avec celui de la div à imprimer
+    document.body.innerHTML = printContent.innerHTML;
+    window.print();
+
+    // Rétablit le contenu original après impression
+    document.body.innerHTML = originalContent;
+    window.location.reload();
+  };
+
   return (
-    <div id="content">
+    <div ref={contentRef} id="content">
+      <div id="button">
+        <button onClick={handlePrint} style={{ marginTop: '20px' }}></button>
+      </div>
       <InfoG />
       <Frais />
       <Personnel />
