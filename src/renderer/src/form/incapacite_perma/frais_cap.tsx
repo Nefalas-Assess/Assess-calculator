@@ -4,6 +4,7 @@ import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import { useCapitalization } from '@renderer/hooks/capitalization'
 
 const FraisCapForm = ({ initialValues, onSubmit }) => {
   const { data } = useContext(AppContext)
@@ -54,11 +55,17 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
     }
   }, [formValues, chargesValues, submitForm, handleSubmit])
 
-  const getTotalAmount = useCallback((values) => {
-    return parseFloat(values?.amount || 0).toFixed(2)
-  }, [])
+  const interetOptions = [0.5, 0.8, 1, 1.5, 2, 3]
 
-  const contributionOptions = [0, 100, 65, 50, 35]
+  const getTotalAmount = useCallback((values) => {
+    const coef = useCapitalization({
+      end: values?.date_payment,
+      ref: values?.reference,
+      index: interetOptions?.findIndex((e) => e === parseFloat(values?.rate))
+    })
+
+    return (parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)
+  }, [])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -66,11 +73,11 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
       <table>
         <thead>
           <tr>
-            <th>Frais annualisé(s)</th>
+            <th>Frais</th>
             <th>Date du paiement</th>
             <th className="custom-size">Table de référence</th>
             <th>Taux d'intérêt de la capitalisation</th>
-            <th>Montant (€)</th>
+            <th>Montant annualisé(€)</th>
             <th>Total</th>
             <th></th>
           </tr>
@@ -82,7 +89,7 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td>
-                  <input type="number" {...register(`charges.${index}.yearly`)} />
+                  <input type="text" {...register(`charges.${index}.name`)} />
                 </td>
                 <td>
                   <input type="date" {...register(`charges.${index}.date_payment`)} />
@@ -129,7 +136,7 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
                 </td>
                 <td>
                   <select style={{ width: 120 }} {...register(`charges.${index}.rate`)}>
-                    {contributionOptions.map((option) => (
+                    {interetOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}%
                       </option>

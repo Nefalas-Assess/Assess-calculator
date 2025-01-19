@@ -12,7 +12,10 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
 
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      members: [{}]
+      members: data?.general_info?.children?.map((it, key) => ({
+        name: it?.name,
+        link: 'parent/enfant'
+      }))
     }
   })
 

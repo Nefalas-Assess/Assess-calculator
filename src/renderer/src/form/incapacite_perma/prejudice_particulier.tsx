@@ -53,9 +53,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(prejudiceSexuelValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
+      JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
       JSON.stringify(prejudiceAgrementValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_agrements)
+      JSON.stringify(previousValuesRef.current?.prejudice_agrements)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
@@ -209,7 +209,13 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <td className="int">
                 <input type="date" {...register(`prejudice_sexuels.${index}.date_paiement`)} />
               </td>
-              <td className="int">Same</td>
+              <td className="int">
+                <Interest
+                  amount={formValues?.prejudice_sexuels?.[index]?.amount}
+                  start={data?.general_info?.date_consolidation}
+                  end={formValues?.prejudice_sexuels?.[index]?.date_paiement}
+                />
+              </td>
               <td>
                 <button type="button" onClick={() => prejudiceSexuelField.remove(index)}>
                   Supprimer
@@ -253,7 +259,13 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
               <td className="int">
                 <input type="date" {...register(`prejudice_agrements.${index}.date_paiement`)} />
               </td>
-              <td className="int">Same</td>
+              <td className="int">
+                <Interest
+                  amount={formValues?.prejudice_agrements?.[index]?.amount}
+                  start={data?.general_info?.date_consolidation}
+                  end={formValues?.prejudice_agrements?.[index]?.date_paiement}
+                />
+              </td>
               <td>
                 <button type="button" onClick={() => prejudiceAgrementField.remove(index)}>
                   Supprimer

@@ -7,6 +7,7 @@ import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import { useCapitalization } from '@renderer/hooks/capitalization'
 
 export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
   const { data } = useContext(AppContext)
@@ -86,26 +87,19 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
 
   const getCapAmount = useCallback(
     (values) => {
-      const { paiement = '', interet = 0, perso_amount = 0, perso_pourcentage = 0 } = values
-      const { years } = intervalToDuration({
-        start: data?.general_info?.date_naissance,
-        end: paiement
+      const { amount = 0, pourcentage = 0 } = values
+
+      const index = interetOptions?.findIndex((e) => e === parseFloat(formValues?.interet || 0))
+
+      const coef = useCapitalization({
+        end: formValues?.paiement,
+        ref: formValues?.reference,
+        index
       })
 
-      const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
-
-      const index = interetOptions?.findIndex((e) => e === parseFloat(interet || 0))
-
-      const coefficient = table?.[years]?.[index]
-
-      return (
-        parseFloat(perso_amount) *
-        (parseFloat(perso_pourcentage) / 100) *
-        365 *
-        parseFloat(coefficient)
-      ).toFixed(2)
+      return (parseFloat(amount) * (parseFloat(pourcentage) / 100) * parseFloat(coef)).toFixed(2)
     },
-    [data]
+    [data, formValues]
   )
 
   return (
@@ -298,7 +292,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
               />
             </td>
             <td>
-              <Money value={getCapAmount(formValues)} />
+              <Money value={getCapAmount(formValues?.brut)} />
             </td>
           </tr>
         </tbody>
@@ -326,7 +320,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues }) => {
               />
             </td>
             <td>
-              <Money value={getCapAmount(formValues)} />
+              <Money value={getCapAmount(formValues?.net)} />
             </td>
           </tr>
         </tbody>

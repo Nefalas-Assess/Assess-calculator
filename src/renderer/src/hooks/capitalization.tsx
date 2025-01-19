@@ -65,13 +65,11 @@ export const useCapitalization = (props = {}) => {
     end
   })
 
-  console.log(ref)
-
   const table = getCapitalizationTable(ref, sexe)
 
   const rowIndex = Object?.keys(table)?.findIndex((e) => parseInt(e) === age)
   const row = Object?.values(table)?.[rowIndex]
 
   if (amount) return amount * row[index]
-  return row[index]
+  return row?.[index]
 }

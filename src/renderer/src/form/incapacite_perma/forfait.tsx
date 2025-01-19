@@ -71,7 +71,7 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
           <tr>
             <th>Âge consolidation</th>
             <th>Points</th>
-            <th style={{ width: 50 }} >%</th>
+            <th style={{ width: 50 }}>%</th>
             <th>Total</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
@@ -88,9 +88,15 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
               <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement`)} />
+              <input type="date" {...register(`perso_date_paiement`)} />
             </td>
-            <td className="int">Nombre de jours entre [Date consolidation & Date du paiement] * Total * (%int de infog / 365)</td>
+            <td className="int">
+              <Interest
+                amount={point * parseInt(formValues?.pourcentage_ipp || 0)}
+                start={data?.general_info?.date_consolidation}
+                end={formValues?.perso_date_paiement}
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -135,9 +141,19 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
               />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement`)} />
+              <input type="date" {...register(`menage_date_paiement`)} />
             </td>
-            <td className="int">Same</td>
+            <td className="int">
+              <Interest
+                amount={
+                  point *
+                  parseInt(formValues?.pourcentage_imp || 0) *
+                  ((formValues?.contribution_imp || 0) / 100)
+                }
+                start={data?.general_info?.date_consolidation}
+                end={formValues?.menage_date_paiement}
+              />
+            </td>
           </tr>
         </tbody>
       </table>
@@ -166,16 +182,18 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
               <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement`)} />
+              <input type="date" {...register(`eco_date_paiement`)} />
             </td>
-            <td className="int">Same</td>
+            <td className="int">
+              <Interest
+                amount={point * parseInt(formValues?.pourcentage_iep || 0)}
+                start={data?.general_info?.date_consolidation}
+                end={formValues?.eco_date_paiement}
+              />
+            </td>
           </tr>
         </tbody>
       </table>
-
-      <div className="total-box" style={{ width: 1000 }}>
-        <strong>Total : </strong> <Money value={getTotalSum(formValues)} />
-      </div>
     </form>
   )
 }
