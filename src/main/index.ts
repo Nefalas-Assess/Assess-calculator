@@ -52,7 +52,7 @@ function createWindow(): void {
     return fs.readFile(filePath, 'utf8')
   })
 
-  ipcMain.handle('print-content', (event, content) => {
+  ipcMain.handle('print-content', (event, doc) => {
     // Créez une nouvelle fenêtre invisible pour l'impression
     const printWindow = new BrowserWindow({
       width: 800,
@@ -64,8 +64,21 @@ function createWindow(): void {
       }
     })
 
+    // Injectez le contenu HTML et les styles
+    const html = `
+      <html>
+        <head>
+          <style>${doc?.styles}</style>
+        </head>
+        <body>
+          ${doc?.content}
+        </body>
+      </html>
+    `
+
+    printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
+
     // Chargez le contenu HTML de la div dans la fenêtre
-    printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(content)}`)
 
     // Une fois le contenu chargé, imprimez
     printWindow.webContents.on('did-finish-load', () => {

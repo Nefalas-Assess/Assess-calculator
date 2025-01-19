@@ -70,7 +70,7 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Capitalisation des frais</h1>
-      <table>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Frais</th>
@@ -134,8 +134,8 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
                     </option>
                   </select>
                 </td>
-                <td>
-                  <select style={{ width: 120 }} {...register(`charges.${index}.rate`)}>
+                <td style={{ maxWidth: 120 }}>
+                  <select {...register(`charges.${index}.rate`)}>
                     {interetOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}%

@@ -231,3 +231,9 @@ button {
 #hospTable {
   max-width: 1000px;
 }
+
+@media print {
+  body {
+    background: green;
+  }
+}

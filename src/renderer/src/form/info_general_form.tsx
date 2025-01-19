@@ -136,7 +136,7 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
       </table>
 
       <h3>Enfants</h3>
-      <table style={{ width: 1200 }}>
+      <table style={{ maxWidth: 1000 }}>
         <thead>
           <tr>
             <th>Nom</th>

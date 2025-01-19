@@ -20,8 +20,21 @@ const Recapitulatif = () => {
   const handlePrint = () => {
     const content = contentRef.current.outerHTML
 
+    const styles = Array.from(document.styleSheets)
+      .map((styleSheet) => {
+        try {
+          return Array.from(styleSheet.cssRules)
+            .map((rule) => rule.cssText)
+            .join('')
+        } catch (e) {
+          console.error('Erreur lors du chargement des styles:', e)
+          return ''
+        }
+      })
+      .join('')
+
     // Envoyez un message au main process via IPC pour imprimer
-    window.api.print(content)
+    window.api.print(content, styles)
   }
 
   return (
