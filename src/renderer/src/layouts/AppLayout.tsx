@@ -37,12 +37,14 @@ export const AppLayout = () => {
     <div className={`app ${mode}`}>
       <div className="app-layout">
         <div className="app-header">
-          <div className="left">Assess</div>
+          <div style={{ color: ' #8bbdff' }} className="left">
+            Assess
+          </div>
           <div className="right">
-            <button onClick={toggleDarkMode}>Toggle</button>
+            <button onClick={toggleDarkMode}>Mode</button>
             {/* <button onClick={printRecap}>Imprimer</button> */}
             <button onClick={save}>Sauvegarder</button>
-            <button onClick={back}>Home</button>
+            <button onClick={back}>Accueil</button>
           </div>
         </div>
         <div className="core">
