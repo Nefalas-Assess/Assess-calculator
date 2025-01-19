@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import TotalBox from '@renderer/generic/totalBox'
 
 export const FraisForm = ({ onSubmit, initialValues }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -202,7 +203,7 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
               </select>
             </td>
             <td>
-              <Money value={totalDeplacementFrais} />
+              <Money value={totalDeplacementFrais} ignore />
             </td>
           </tr>
         </tbody>
@@ -230,12 +231,8 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
           </tr>
         </tbody>
       </table>
-      <div className="total-box">
-        <strong>Total des heures : </strong> <Money value={totalAides} />
-      </div>
-      <div className="total-box">
-        <strong>Total général : </strong> <Money value={totalSumAll} />
-      </div>
+      <TotalBox label="Total général :" />
+      <TotalBox label="Total intérêts :" name="interest" />
     </form>
   )
 }

@@ -63,7 +63,7 @@ const Interest = ({ amount, start, end }) => {
     currency: 'EUR'
   })
 
-  return formatter?.format(total - parseFloat(amount))
+  return <div className="interest">{formatter?.format(total - parseFloat(amount))}</div>
 }
 
 export default Interest
