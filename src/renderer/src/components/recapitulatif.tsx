@@ -40,7 +40,7 @@ const Recapitulatif = () => {
   return (
     <div ref={contentRef} id="content">
       <div id="button">
-        <button onClick={handlePrint} style={{ marginTop: '20px' }}></button>
+        <button onClick={handlePrint} style={{ marginTop: '20px' }}>Imprimer</button>
       </div>
       <InfoG editable={false} />
       <Frais editable={false} />
