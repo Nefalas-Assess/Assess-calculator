@@ -1,4 +1,4 @@
-import { format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import { useCallback } from 'react'
 import { Controller } from 'react-hook-form'
 
@@ -6,7 +6,10 @@ const Field = ({ editable, name, type, children, control }) => {
   const renderValue = useCallback(
     (val) => {
       if (type === 'date') {
-        return format(val, 'dd/MM/yyyy')
+        if (val) {
+          const date = new Date(val)
+          return isValid(date) ? format(date, 'dd/MM/yyyy') : '-'
+        }
       }
       return val
     },

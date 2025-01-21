@@ -1,6 +1,6 @@
 import { getDays, getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
-import { intervalToDuration, isValid } from 'date-fns'
+import { format, intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import menTable from '@renderer/data/data_cap_h'
@@ -127,8 +127,8 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           <tr>
             <td>Date du paiement</td>
             <td>
-              <Field control={control} name={`paiement`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name={`paiement`} editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
@@ -151,22 +151,21 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         <tbody>
           <tr>
             <td>
-              <Field control={control} name={`conso_start`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name={`conso_start`} editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
-            <td>
-              <input type="date" value={formValues?.paiement} readOnly />
-            </td>
+            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+
             <td style={{ width: 50 }}>{days || 0}</td>
             <td>
-              <Field control={control} name={`conso_amount`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              <Field control={control} name={`conso_amount`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
               </Field>
             </td>
             <td>
-              <Field control={control} name={`conso_pourcentage`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} step="0.01" type="number" {...props} />}
+              <Field control={control} name={`conso_pourcentage`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
               </Field>
             </td>
             <td>
@@ -195,17 +194,16 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         </thead>
         <tbody>
           <tr>
+            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+
             <td>
-              <input type="date" value={formValues?.paiement} readOnly />
-            </td>
-            <td>
-              <Field control={control} name={`perso_amount`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              <Field control={control} name={`perso_amount`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
               </Field>
             </td>
             <td>
-              <Field control={control} name={`perso_pourcentage`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} step="0.01" type="number" {...props} />}
+              <Field control={control} name={`perso_pourcentage`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
               </Field>
             </td>
             <td>

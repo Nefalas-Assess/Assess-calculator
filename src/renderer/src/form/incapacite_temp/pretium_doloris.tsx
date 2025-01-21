@@ -100,13 +100,23 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.start`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.end`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>{days}</td>
@@ -137,8 +147,9 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
                     control={control}
                     name={`periods.${index}.date_paiement`}
                     editable={editable}
+                    type="date"
                   >
-                    {(props) => <input type="date" {...props} />}
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td className="int">

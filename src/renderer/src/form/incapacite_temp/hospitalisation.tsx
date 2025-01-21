@@ -101,19 +101,34 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.start`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.end`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
                 <td>
-                  <Field control={control} name={`periods.${index}.amount`} editable={editable}>
-                    {(props) => <input type="number" {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`periods.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>
@@ -124,8 +139,9 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
                     control={control}
                     name={`periods.${index}.date_paiement`}
                     editable={editable}
+                    type="date"
                   >
-                    {(props) => <input type="date" {...props} />}
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td className="int">

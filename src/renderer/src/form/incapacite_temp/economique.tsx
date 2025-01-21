@@ -121,32 +121,57 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`net.${index}.start`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`net.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`net.${index}.end`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`net.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>{days}</td>
                 <td>
-                  <Field control={control} name={`net.${index}.amount`} editable={editable}>
-                    {(props) => <input type="number" step="0.01" {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`net.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input step="0.01" {...props} />}
                   </Field>
                 </td>
                 <td>
-                  <Field control={control} name={`net.${index}.percentage`} editable={editable}>
-                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`net.${index}.percentage`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <Field control={control} name={`net.${index}.date_paiement`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`net.${index}.date_paiement`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td className="int">
@@ -194,32 +219,57 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`brut.${index}.start`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`brut.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`brut.${index}.end`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`brut.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>{days}</td>
                 <td>
-                  <Field control={control} name={`brut.${index}.amount`} editable={editable}>
-                    {(props) => <input type="number" step="0.01" {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`brut.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input step="0.01" {...props} />}
                   </Field>
                 </td>
                 <td>
-                  <Field control={control} name={`brut.${index}.percentage`} editable={editable}>
-                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`brut.${index}.percentage`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <Field control={control} name={`brut.${index}.date_paiement`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`brut.${index}.date_paiement`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td className="int">

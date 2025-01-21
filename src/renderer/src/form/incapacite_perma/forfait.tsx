@@ -83,16 +83,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <Field control={control} name={`pourcentage_ipp`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              <Field control={control} name={`pourcentage_ipp`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
               </Field>
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <Field control={control} name={`perso_date_paiement`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name={`perso_date_paiement`} editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
             <td className="int">
@@ -125,8 +125,8 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <Field control={control} name={`pourcentage_imp`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              <Field control={control} name={`pourcentage_imp`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
               </Field>
             </td>
             <td>
@@ -152,8 +152,13 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
               />
             </td>
             <td className="int">
-              <Field control={control} name={`menage_date_paiement`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field
+                control={control}
+                type="date"
+                name={`menage_date_paiement`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
               </Field>
             </td>
             <td className="int">
@@ -189,16 +194,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <Field control={control} name={`pourcentage_iep`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              <Field control={control} name={`pourcentage_iep`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
               </Field>
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <Field control={control} name={`eco_date_paiement`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name={`eco_date_paiement`} editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
             <td className="int">

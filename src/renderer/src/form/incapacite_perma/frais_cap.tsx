@@ -91,7 +91,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
               <tr key={child.id}>
                 <td>
                   <Field control={control} name={`charges.${index}.name`} editable={editable}>
-                    {(props) => <input type="text" {...props} />}
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>
@@ -99,8 +99,9 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                     control={control}
                     name={`charges.${index}.date_payment`}
                     editable={editable}
+                    type="date"
                   >
-                    {(props) => <input type="date" {...props} />}
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>
@@ -161,8 +162,13 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Field control={control} name={`charges.${index}.amount`} editable={editable}>
-                    {(props) => <input type="number" {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`charges.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>

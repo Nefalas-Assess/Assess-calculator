@@ -129,26 +129,46 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.start`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <Field control={control} name={`periods.${index}.end`} editable={editable}>
-                    {(props) => <input type="date" {...props} />}
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
                 <td style={{ width: 50 }}>{data?.computed_info?.enfant_charge || 0}</td>
                 <td style={{ width: 200 }}>
-                  <Field control={control} name={`periods.${index}.amount`} editable={editable}>
-                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`periods.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                   ( + {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
-                  <Field control={control} name={`periods.${index}.percentage`} editable={editable}>
-                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`periods.${index}.percentage`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                 </td>
                 <td style={{ width: 140 }}>
@@ -176,8 +196,9 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                     control={control}
                     name={`periods.${index}.date_paiement`}
                     editable={editable}
+                    type="date"
                   >
-                    {(props) => <input type="date" {...props} />}
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td className="int">

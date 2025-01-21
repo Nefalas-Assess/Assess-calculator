@@ -121,8 +121,13 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
               <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
             </td>
             <td className="int">
-              <Field control={control} name={`date_paiement_quantum_doloris`} editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field
+                control={control}
+                type="date"
+                name={`date_paiement_quantum_doloris`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
               </Field>
             </td>
             <td className="int">
@@ -185,8 +190,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                 control={control}
                 name={`date_paiement_prejudice_esthétique`}
                 editable={editable}
+                type="date"
               >
-                {(props) => <input type="date" {...props} />}
+                {(props) => <input {...props} />}
               </Field>
             </td>
             <td className="int">
@@ -221,7 +227,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   name={`prejudice_sexuels.${index}.indemnite`}
                   editable={editable}
                 >
-                  {(props) => <input type="text" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td>
@@ -243,8 +249,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_sexuels.${index}.amount`}
                   editable={editable}
+                  type="number"
                 >
-                  {(props) => <input type="number" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
@@ -252,8 +259,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_sexuels.${index}.date_paiement`}
                   editable={editable}
+                  type="date"
                 >
-                  {(props) => <input type="date" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
@@ -301,7 +309,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   name={`prejudice_agrements.${index}.indemnite`}
                   editable={editable}
                 >
-                  {(props) => <input type="text" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td>
@@ -323,8 +331,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_agrements.${index}.amount`}
                   editable={editable}
+                  type="number"
                 >
-                  {(props) => <input type="number" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
@@ -332,8 +341,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_agrements.${index}.date_paiement`}
                   editable={editable}
+                  type="date"
                 >
-                  {(props) => <input type="date" {...props} />}
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
