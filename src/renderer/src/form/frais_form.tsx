@@ -3,8 +3,9 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import TotalBox from '@renderer/generic/totalBox'
+import Field from '@renderer/generic/field'
 
-export const FraisForm = ({ onSubmit, initialValues }) => {
+export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       frais: [{}],
@@ -96,32 +97,46 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <th className="int">Date frais</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts (€)</th>
-            <th>Action</th>
+            {editable && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
           {fraisFields?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input type="text" {...register(`frais.${index}.indemnite`)} />
+                <Field control={control} name={`frais.${index}.indemnite`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
               </td>
               <td>
-                <input type="text" {...register(`frais.${index}.facture`)} />
+                <Field control={control} name={`frais.${index}.facture`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
               </td>
               <td>
-                <select {...register(`frais.${index}.paid`)}>
-                  <option value={true}>Oui</option>
-                  <option value={false}>Non</option>
-                </select>
+                <Field control={control} name={`frais.${index}.paid`} editable={editable}>
+                  {(props) => (
+                    <select {...props}>
+                      <option value={true}>Oui</option>
+                      <option value={false}>Non</option>
+                    </select>
+                  )}
+                </Field>
               </td>
               <td>
-                <input type="number" {...register(`frais.${index}.amount`)} />
+                <Field control={control} name={`frais.${index}.amount`} editable={editable}>
+                  {(props) => <input type="number" {...props} />}
+                </Field>
               </td>
               <td className="int">
-                <input type="date" {...register(`frais.${index}.date_frais`)} />
+                <Field control={control} name={`frais.${index}.date_frais`} editable={editable}>
+                  {(props) => <input type="date" {...props} />}
+                </Field>
               </td>
               <td className="int">
-                <input type="date" {...register(`frais.${index}.date_paiement`)} />
+                <Field control={control} name={`frais.${index}.date_paiement`} editable={editable}>
+                  {(props) => <input type="date" {...props} />}
+                </Field>
               </td>
               <td className="int">
                 <Interest
@@ -130,14 +145,16 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
                   end={formValues?.frais[index]?.date_paiement}
                 />
               </td>
-              <td>
-                <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
-              </td>
+              {editable && (
+                <td>
+                  <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>
+      {editable && <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>}
       <div className="total-box">
         <strong>Total frais médicaux : </strong> <Money value={totalSumFrais} />
       </div>
@@ -158,13 +175,19 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <td></td>
             <td></td>
             <td>
-              <select {...register('administratif_paid')}>
-                <option>Oui</option>
-                <option>Non</option>
-              </select>
+              <Field control={control} name={`administratif_paid`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option>Oui</option>
+                    <option>Non</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
-              <input type="number" {...register('administratif_value')} />
+              <Field control={control} name={`administratif_value`} editable={editable}>
+                {(props) => <input type="number" {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
@@ -172,35 +195,54 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
             <td></td>
             <td></td>
             <td>
-              <select {...register('vestimentaire_paid')}>
-                <option>Oui</option>
-                <option>Non</option>
-              </select>
+              <Field control={control} name={`vestimentaire_paid`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option>Oui</option>
+                    <option>Non</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
-              <input type="number" {...register('vestimentaire_value')} />
+              <Field control={control} name={`vestimentaire_value`} editable={editable}>
+                {(props) => <input type="number" {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Déplacement</td>
             <td>
-              <input type="number" {...register('deplacement_value')} />
-              KM
+              <Field control={control} name={`deplacement_value`} editable={editable}>
+                {(props) => (
+                  <>
+                    <input type="number" {...props} /> KM
+                  </>
+                )}
+              </Field>
             </td>
             <td>
-              <select {...register('deplacement_type')}>
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                <option value="0.42">Véhicule automobile</option>
-                <option value="0.28">Autre</option>
-              </select>
+              <Field control={control} name={`deplacement_type`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
+                    <option value="0.42">Véhicule automobile</option>
+                    <option value="0.28">Autre</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
-              <select {...register('deplacement_paid')}>
-                <option>Oui</option>
-                <option>Non</option>
-              </select>
+              <Field control={control} name={`deplacement_paid`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option>Oui</option>
+                    <option>Non</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
               <Money value={totalDeplacementFrais} ignore />
@@ -223,7 +265,9 @@ export const FraisForm = ({ onSubmit, initialValues }) => {
         <tbody>
           <tr>
             <td>
-              <input type="number" min={0} {...register(`aides`)} />
+              <Field control={control} name={`aides`} editable={editable}>
+                {(props) => <input type="number" min={0} {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={totalAides} />

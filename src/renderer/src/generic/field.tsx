@@ -1,9 +1,13 @@
-import get from 'lodash/get'
+import { Controller } from 'react-hook-form'
 
-const Field = ({ values, editable, name, children }) => {
-  if (editable) return children
-
-  return <div>{get(values, name)}</div>
+const Field = ({ editable, name, children, control }) => {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field }) => (!editable ? field?.value : children({ ...field }))}
+    />
+  )
 }
 
 export default Field

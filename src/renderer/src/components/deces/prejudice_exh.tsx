@@ -4,7 +4,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const PrejudiceEXH = () => {
+const PrejudiceEXH = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -17,7 +17,11 @@ const PrejudiceEXH = () => {
   return (
     <div id="content">
       <div id="main">
-        <PrejudiceEXHForm onSubmit={saveData} initialValues={data?.prejudice_exh} />
+        <PrejudiceEXHForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.prejudice_exh}
+        />
         <TotalBox label="Total général :" />
       </div>
     </div>

@@ -43,19 +43,19 @@ const Recapitulatif = () => {
         <button onClick={handlePrint} style={{ marginTop: '20px' }}></button>
       </div>
       <InfoG editable={false} />
-      <Frais />
-      <Personnel />
-      <Menagere />
-      <Economique />
-      <EFFA />
-      <Hospitalisation />
-      <PretiumDoloris />
-      <Forfait />
-      <PersonnelCap />
-      <MenageCap />
-      <EconomiqueCap />
-      <FraisCap />
-      <Particuliers />
+      <Frais editable={false} />
+      <Personnel editable={false} />
+      <Menagere editable={false} />
+      <Economique editable={false} />
+      <EFFA editable={false} />
+      <Hospitalisation editable={false} />
+      <PretiumDoloris editable={false} />
+      <Forfait editable={false} />
+      <PersonnelCap editable={false} />
+      <MenageCap editable={false} />
+      <EconomiqueCap editable={false} />
+      <FraisCap editable={false} />
+      <Particuliers editable={false} />
     </div>
   )
 }

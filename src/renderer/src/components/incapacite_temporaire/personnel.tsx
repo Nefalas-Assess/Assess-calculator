@@ -3,7 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import ITPersonnelForm from '@renderer/form/incapacite_temp/personnel'
 import TotalBox from '@renderer/generic/totalBox'
 
-const Personnel = () => {
+const Personnel = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -16,7 +16,11 @@ const Personnel = () => {
   return (
     <div id="content">
       <div id="main">
-        <ITPersonnelForm onSubmit={saveData} initialValues={data?.incapacite_temp_personnel} />
+        <ITPersonnelForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.incapacite_temp_personnel}
+        />
         <TotalBox label="Total général :" />
         <TotalBox label="Total intérêts :" name="interest" />
       </div>

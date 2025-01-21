@@ -1,3 +1,4 @@
+import Field from '@renderer/generic/field'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
 import { getMedDate } from '@renderer/helpers/general'
@@ -5,7 +6,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
-const ITMenagereForm = ({ initialValues, onSubmit }) => {
+const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -117,7 +118,7 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             <th>Total</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -128,59 +129,77 @@ const ITMenagereForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`periods.${index}.start`)} />
+                  <Field control={control} name={`periods.${index}.start`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`periods.${index}.end`)} />
+                  <Field control={control} name={`periods.${index}.end`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
                 <td style={{ width: 50 }}>{data?.computed_info?.enfant_charge || 0}</td>
                 <td style={{ width: 200 }}>
-                  <input
-                    type="number"
-                    style={{ width: 50 }}
-                    {...register(`periods.${index}.amount`)}
-                  />
+                  <Field control={control} name={`periods.${index}.amount`} editable={editable}>
+                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  </Field>
                   ( + {(data?.computed_info?.enfant_charge || 0) * 10}€ )
                 </td>
                 <td>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    {...register(`periods.${index}.percentage`)}
-                  />
+                  <Field control={control} name={`periods.${index}.percentage`} editable={editable}>
+                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <select {...register(`periods.${index}.contribution`)}>
-                    <option value="0">0</option>
-                    <option value="100">100</option>
-                    <option value="65">65</option>
-                    <option value="50">50</option>
-                    <option value="35">35</option>
-                  </select>
+                  <Field
+                    control={control}
+                    name={`periods.${index}.contribution`}
+                    editable={editable}
+                  >
+                    {(props) => (
+                      <select {...props}>
+                        <option value="0">0</option>
+                        <option value="100">100</option>
+                        <option value="65">65</option>
+                        <option value="50">50</option>
+                        <option value="35">35</option>
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
+                  <Field
+                    control={control}
+                    name={`periods.${index}.date_paiement`}
+                    editable={editable}
+                  >
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td className="int">
                   <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append, { amount: 30 })}>
-        Ajouter durée
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(append, { amount: 30 })}>
+          Ajouter durée
+        </button>
+      )}
     </form>
   )
 }

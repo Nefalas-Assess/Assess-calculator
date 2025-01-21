@@ -5,8 +5,9 @@ import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
+const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -109,7 +110,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Total Net</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -120,44 +121,55 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`net.${index}.start`)} />
+                  <Field control={control} name={`net.${index}.start`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`net.${index}.end`)} />
+                  <Field control={control} name={`net.${index}.end`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
-                <td style={{ width: 50 }}>{days}</td>
+                <td>{days}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`net.${index}.amount`)} />
+                  <Field control={control} name={`net.${index}.amount`} editable={editable}>
+                    {(props) => <input type="number" step="0.01" {...props} />}
+                  </Field>
                 </td>
-                <td style={{ width: 50 }}>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    {...register(`net.${index}.percentage`)}
-                  />
+                <td>
+                  <Field control={control} name={`net.${index}.percentage`} editable={editable}>
+                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`net.${index}.date_paiement`)} />
+                  <Field control={control} name={`net.${index}.date_paiement`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td className="int">
                   <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => netFields.remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => netFields.remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
-        Ajouter durée
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
+          Ajouter durée
+        </button>
+      )}
 
       <h1>BRUT</h1>
       <table id="ipTable" style={{ width: 1000 }}>
@@ -171,7 +183,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             <th>Total Brut</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -182,27 +194,33 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`brut.${index}.start`)} />
+                  <Field control={control} name={`brut.${index}.start`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 140 }}>
-                  <input type="date" {...register(`brut.${index}.end`)} />
+                  <Field control={control} name={`brut.${index}.end`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
-                <td style={{ width: 50 }}>{days}</td>
+                <td>{days}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`brut.${index}.amount`)} />
+                  <Field control={control} name={`brut.${index}.amount`} editable={editable}>
+                    {(props) => <input type="number" step="0.01" {...props} />}
+                  </Field>
                 </td>
-                <td style={{ width: 50 }}>
-                  <input
-                    style={{ width: 50 }}
-                    type="number"
-                    {...register(`brut.${index}.percentage`)}
-                  />
+                <td>
+                  <Field control={control} name={`brut.${index}.percentage`} editable={editable}>
+                    {(props) => <input type="number" style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`brut.${index}.date_paiement`)} />
+                  <Field control={control} name={`brut.${index}.date_paiement`} editable={editable}>
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td className="int">
                   {values?.date_paiement && (
@@ -215,19 +233,23 @@ const ITEconomiqueForm = ({ initialValues, onSubmit }) => {
                     />
                   )}
                 </td>
-                <td>
-                  <button type="button" onClick={() => brutFields.remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => brutFields.remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(brutFields?.append, 'brut')}>
-        Ajouter durée
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(brutFields?.append, 'brut')}>
+          Ajouter durée
+        </button>
+      )}
     </form>
   )
 }
