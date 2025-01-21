@@ -5,8 +5,9 @@ import { findClosestIndex, getDays } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
+const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -99,24 +100,30 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           <tr>
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>
-              <select {...register('coefficient_quantum_doloris')}>
-                <option value="" disabled>
-                  Select
-                </option>
-                <option value={1}>1/7</option>
-                <option value={2}>2/7</option>
-                <option value={3}>3/7</option>
-                <option value={4}>4/7</option>
-                <option value={5}>5/7</option>
-                <option value={6}>6/7</option>
-                <option value={7}>7/7</option>
-              </select>
+              <Field control={control} name={`coefficient_quantum_doloris`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    <option value={1}>1/7</option>
+                    <option value={2}>2/7</option>
+                    <option value={3}>3/7</option>
+                    <option value={4}>4/7</option>
+                    <option value={5}>5/7</option>
+                    <option value={6}>6/7</option>
+                    <option value={7}>7/7</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
               <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement_quantum_doloris`)} />
+              <Field control={control} name={`date_paiement_quantum_doloris`} editable={editable}>
+                {(props) => <input type="date" {...props} />}
+              </Field>
             </td>
             <td className="int">
               <Money
@@ -149,24 +156,38 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
           <tr>
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>
-              <select {...register('coefficient_prejudice_esthétique')}>
-                <option value="" disabled>
-                  Select
-                </option>
-                <option value={1}>1/7</option>
-                <option value={2}>2/7</option>
-                <option value={3}>3/7</option>
-                <option value={4}>4/7</option>
-                <option value={5}>5/7</option>
-                <option value={6}>6/7</option>
-                <option value={7}>7/7</option>
-              </select>
+              <Field
+                control={control}
+                name={`coefficient_prejudice_esthétique`}
+                editable={editable}
+              >
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Select
+                    </option>
+                    <option value={1}>1/7</option>
+                    <option value={2}>2/7</option>
+                    <option value={3}>3/7</option>
+                    <option value={4}>4/7</option>
+                    <option value={5}>5/7</option>
+                    <option value={6}>6/7</option>
+                    <option value={7}>7/7</option>
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
               <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`date_paiement_prejudice_esthétique`)} />
+              <Field
+                control={control}
+                name={`date_paiement_prejudice_esthétique`}
+                editable={editable}
+              >
+                {(props) => <input type="date" {...props} />}
+              </Field>
             </td>
             <td className="int">
               <Interest
@@ -188,26 +209,52 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Montant</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th>Action</th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
           {prejudiceSexuelField?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input type="text" {...register(`prejudice_sexuels.${index}.indemnite`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_sexuels.${index}.indemnite`}
+                  editable={editable}
+                >
+                  {(props) => <input type="text" {...props} />}
+                </Field>
               </td>
               <td>
-                <select {...register(`prejudice_sexuels.${index}.paid`)}>
-                  <option value={false}>Non</option>
-                  <option value={true}>Oui</option>
-                </select>
+                <Field
+                  control={control}
+                  name={`prejudice_sexuels.${index}.paid`}
+                  editable={editable}
+                >
+                  {(props) => (
+                    <select {...props}>
+                      <option value={false}>Non</option>
+                      <option value={true}>Oui</option>
+                    </select>
+                  )}
+                </Field>
               </td>
               <td>
-                <input type="number" {...register(`prejudice_sexuels.${index}.amount`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_sexuels.${index}.amount`}
+                  editable={editable}
+                >
+                  {(props) => <input type="number" {...props} />}
+                </Field>
               </td>
               <td className="int">
-                <input type="date" {...register(`prejudice_sexuels.${index}.date_paiement`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_sexuels.${index}.date_paiement`}
+                  editable={editable}
+                >
+                  {(props) => <input type="date" {...props} />}
+                </Field>
               </td>
               <td className="int">
                 <Interest
@@ -216,18 +263,22 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                   end={formValues?.prejudice_sexuels?.[index]?.date_paiement}
                 />
               </td>
-              <td>
-                <button type="button" onClick={() => prejudiceSexuelField.remove(index)}>
-                  Supprimer
-                </button>
-              </td>
+              {editable && (
+                <td>
+                  <button type="button" onClick={() => prejudiceSexuelField.remove(index)}>
+                    Supprimer
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => prejudiceSexuelField?.append({ paid: true })}>
+          Ajouter une ligne
+        </button>
+      )}
 
       <h3>Préjudice d'Agrément</h3>
       <table style={{ width: 800 }}>
@@ -238,26 +289,52 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
             <th>Montant</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th>Action</th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
           {prejudiceAgrementField?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input type="text" {...register(`prejudice_agrements.${index}.indemnite`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_agrements.${index}.indemnite`}
+                  editable={editable}
+                >
+                  {(props) => <input type="text" {...props} />}
+                </Field>
               </td>
               <td>
-                <select {...register(`prejudice_agrements.${index}.paid`)}>
-                  <option value={false}>Non</option>
-                  <option value={true}>Oui</option>
-                </select>
+                <Field
+                  control={control}
+                  name={`prejudice_agrements.${index}.paid`}
+                  editable={editable}
+                >
+                  {(props) => (
+                    <select {...props}>
+                      <option value={false}>Non</option>
+                      <option value={true}>Oui</option>
+                    </select>
+                  )}
+                </Field>
               </td>
               <td>
-                <input type="number" {...register(`prejudice_agrements.${index}.amount`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_agrements.${index}.amount`}
+                  editable={editable}
+                >
+                  {(props) => <input type="number" {...props} />}
+                </Field>
               </td>
               <td className="int">
-                <input type="date" {...register(`prejudice_agrements.${index}.date_paiement`)} />
+                <Field
+                  control={control}
+                  name={`prejudice_agrements.${index}.date_paiement`}
+                  editable={editable}
+                >
+                  {(props) => <input type="date" {...props} />}
+                </Field>
               </td>
               <td className="int">
                 <Interest
@@ -266,18 +343,22 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit }) => {
                   end={formValues?.prejudice_agrements?.[index]?.date_paiement}
                 />
               </td>
-              <td>
-                <button type="button" onClick={() => prejudiceAgrementField.remove(index)}>
-                  Supprimer
-                </button>
-              </td>
+              {editable && (
+                <td>
+                  <button type="button" onClick={() => prejudiceAgrementField.remove(index)}>
+                    Supprimer
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={() => prejudiceAgrementField?.append({ paid: true })}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => prejudiceAgrementField?.append({ paid: true })}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

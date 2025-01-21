@@ -5,8 +5,9 @@ import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
+import Field from '@renderer/generic/field'
 
-const FraisCapForm = ({ initialValues, onSubmit }) => {
+const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -79,7 +80,7 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
             <th>Taux d'intérêt de la capitalisation</th>
             <th>Montant annualisé(€)</th>
             <th>Total</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -89,79 +90,101 @@ const FraisCapForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td>
-                  <input type="text" {...register(`charges.${index}.name`)} />
+                  <Field control={control} name={`charges.${index}.name`} editable={editable}>
+                    {(props) => <input type="text" {...props} />}
+                  </Field>
                 </td>
                 <td>
-                  <input type="date" {...register(`charges.${index}.date_payment`)} />
+                  <Field
+                    control={control}
+                    name={`charges.${index}.date_payment`}
+                    editable={editable}
+                  >
+                    {(props) => <input type="date" {...props} />}
+                  </Field>
                 </td>
                 <td>
-                  <select {...register(`charges.${index}.reference`)}>
-                    <option value="schryvers">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle
-                    </option>
-                    <option value="schryvers_65">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)
-                    </option>
-                    <option value="schryvers_66">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)
-                    </option>
-                    <option value="schryvers_67">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)
-                    </option>
-                    <option value="schryvers_68">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)
-                    </option>
-                    <option value="schryvers_69">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)
-                    </option>
-                    <option value="schryvers_70">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)
-                    </option>
-                    <option value="schryvers_71">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)
-                    </option>
-                    <option value="schryvers_72">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)
-                    </option>
-                    <option value="schryvers_73">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)
-                    </option>
-                    <option value="schryvers_74">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)
-                    </option>
-                    <option value="schryvers_75">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)
-                    </option>
-                  </select>
+                  <Field control={control} name={`charges.${index}.reference`} editable={editable}>
+                    {(props) => (
+                      <select {...props}>
+                        <option value="schryvers">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle
+                        </option>
+                        <option value="schryvers_65">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)
+                        </option>
+                        <option value="schryvers_66">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)
+                        </option>
+                        <option value="schryvers_67">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)
+                        </option>
+                        <option value="schryvers_68">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)
+                        </option>
+                        <option value="schryvers_69">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)
+                        </option>
+                        <option value="schryvers_70">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)
+                        </option>
+                        <option value="schryvers_71">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)
+                        </option>
+                        <option value="schryvers_72">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)
+                        </option>
+                        <option value="schryvers_73">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)
+                        </option>
+                        <option value="schryvers_74">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)
+                        </option>
+                        <option value="schryvers_75">
+                          Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)
+                        </option>
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td style={{ maxWidth: 120 }}>
-                  <select {...register(`charges.${index}.rate`)}>
-                    {interetOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}%
-                      </option>
-                    ))}
-                  </select>
+                  <Field control={control} name={`charges.${index}.rate`} editable={editable}>
+                    {(props) => (
+                      <select {...props}>
+                        {interetOptions.map((option) => (
+                          <option key={option} value={option}>
+                            {option}%
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td>
-                  <input type="number" step="0.01" {...register(`charges.${index}.amount`)} />
+                  <Field control={control} name={`charges.${index}.amount`} editable={editable}>
+                    {(props) => <input type="number" {...props} />}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => append({ ref: 'schryvers' })}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => append({ ref: 'schryvers' })}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

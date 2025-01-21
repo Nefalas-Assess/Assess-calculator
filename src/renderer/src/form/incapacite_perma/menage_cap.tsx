@@ -7,11 +7,12 @@ import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-export const IPMenageCapForm = ({ onSubmit, initialValues }) => {
+export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
       conso_amount: 32,
@@ -93,30 +94,42 @@ export const IPMenageCapForm = ({ onSubmit, initialValues }) => {
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select {...register('reference')}>
-                <option value="schryvers">Schryvers 2024 rente viagère de 1€/an mensuelle</option>
-              </select>
+              <Field control={control} name="reference" editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="schryvers">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle
+                    </option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Taux d'intérêt de la capitalisation</td>
             <td>
-              <select {...register('interet')}>
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                {interetOptions?.map((it, key) => (
-                  <option value={it} key={key}>
-                    {it}
-                  </option>
-                ))}
-              </select>
+              <Field control={control} name="interet" editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
+                    {interetOptions?.map((it, key) => (
+                      <option value={it} key={key}>
+                        {it}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date du paiement</td>
             <td>
-              <input type="date" {...register('paiement')} />
+              <Field control={control} name={`paiement`} editable={editable}>
+                {(props) => <input type="date" {...props} />}
+              </Field>
             </td>
           </tr>
         </tbody>
@@ -138,17 +151,23 @@ export const IPMenageCapForm = ({ onSubmit, initialValues }) => {
         <tbody>
           <tr>
             <td>
-              <input type="date" {...register('conso_start')} />
+              <Field control={control} name={`conso_start`} editable={editable}>
+                {(props) => <input type="date" {...props} />}
+              </Field>
             </td>
             <td>
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
             <td style={{ width: 50 }}>{days || 0}</td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('conso_amount')} />
+              <Field control={control} name={`conso_amount`} editable={editable}>
+                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              </Field>
             </td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('conso_pourcentage')} />
+              <Field control={control} name={`conso_pourcentage`} editable={editable}>
+                {(props) => <input style={{ width: 50 }} step="0.01" type="number" {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={getConsoAmount(formValues)} />
@@ -180,15 +199,14 @@ export const IPMenageCapForm = ({ onSubmit, initialValues }) => {
               <input type="date" value={formValues?.paiement} readOnly />
             </td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('perso_amount')} />
+              <Field control={control} name={`perso_amount`} editable={editable}>
+                {(props) => <input style={{ width: 50 }} type="number" {...props} />}
+              </Field>
             </td>
             <td>
-              <input
-                style={{ width: 50 }}
-                type="number"
-                step="0.01"
-                {...register('perso_pourcentage')}
-              />
+              <Field control={control} name={`perso_pourcentage`} editable={editable}>
+                {(props) => <input style={{ width: 50 }} step="0.01" type="number" {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={getCapAmount(formValues)} />
