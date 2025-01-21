@@ -124,18 +124,33 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`frais.${index}.amount`} editable={editable}>
-                  {(props) => <input type="number" {...props} />}
+                <Field
+                  control={control}
+                  type="number"
+                  name={`frais.${index}.amount`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
-                <Field control={control} name={`frais.${index}.date_frais`} editable={editable}>
-                  {(props) => <input type="date" {...props} />}
+                <Field
+                  control={control}
+                  type="date"
+                  name={`frais.${index}.date_frais`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
-                <Field control={control} name={`frais.${index}.date_paiement`} editable={editable}>
-                  {(props) => <input type="date" {...props} />}
+                <Field
+                  control={control}
+                  type="date"
+                  name={`frais.${index}.date_paiement`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td className="int">
@@ -185,8 +200,13 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Field control={control} name={`administratif_value`} editable={editable}>
-                {(props) => <input type="number" {...props} />}
+              <Field
+                control={control}
+                type="number"
+                name={`administratif_value`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
@@ -205,18 +225,23 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Field control={control} name={`vestimentaire_value`} editable={editable}>
-                {(props) => <input type="number" {...props} />}
+              <Field
+                control={control}
+                type="number"
+                name={`vestimentaire_value`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
           <tr>
             <td>Déplacement</td>
             <td>
-              <Field control={control} name={`deplacement_value`} editable={editable}>
+              <Field control={control} type="number" name={`deplacement_value`} editable={editable}>
                 {(props) => (
                   <>
-                    <input type="number" {...props} /> KM
+                    <input {...props} /> KM
                   </>
                 )}
               </Field>
@@ -265,8 +290,8 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         <tbody>
           <tr>
             <td>
-              <Field control={control} name={`aides`} editable={editable}>
-                {(props) => <input type="number" min={0} {...props} />}
+              <Field control={control} type="number" name={`aides`} editable={editable}>
+                {(props) => <input min={0} {...props} />}
               </Field>
             </td>
             <td>

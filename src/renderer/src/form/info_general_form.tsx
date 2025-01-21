@@ -6,7 +6,6 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const {
     control,
-    register,
     handleSubmit,
     watch,
     formState: { errors }
@@ -96,24 +95,24 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           <tr>
             <td>Date de l'accident</td>
             <td>
-              <Field control={control} name="date_accident" editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name="date_accident" editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
           <tr>
             <td>Date de naissance</td>
             <td>
-              <Field control={control} name="date_naissance" editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name="date_naissance" editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
           <tr>
             <td>Date de consolidation</td>
             <td>
-              <Field control={control} name="date_consolidation" editable={editable}>
-                {(props) => <input type="date" {...props} />}
+              <Field control={control} type="date" name="date_consolidation" editable={editable}>
+                {(props) => <input {...props} />}
               </Field>
             </td>
           </tr>
@@ -169,8 +168,13 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`children.${index}.birthDate`} editable={editable}>
-                  {(props) => <input type="date" {...props} />}
+                <Field
+                  control={control}
+                  type="date"
+                  name={`children.${index}.birthDate`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               {editable && (
