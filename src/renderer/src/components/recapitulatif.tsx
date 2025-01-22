@@ -15,41 +15,47 @@ import FraisCap from './incapacite_permanente/frais_cap'
 import Particuliers from './incapacite_permanente/particuliers'
 
 const Recapitulatif = () => {
-
-  const contentRef = useRef();
+  const contentRef = useRef()
 
   const handlePrint = () => {
-    const printContent = contentRef.current;
-    const originalContent = document.body.innerHTML;
+    const content = contentRef.current.outerHTML
 
-    // Remplace le contenu du document avec celui de la div à imprimer
-    document.body.innerHTML = printContent.innerHTML;
-    window.print();
+    const styles = Array.from(document.styleSheets)
+      .map((styleSheet) => {
+        try {
+          return Array.from(styleSheet.cssRules)
+            .map((rule) => rule.cssText)
+            .join('')
+        } catch (e) {
+          console.error('Erreur lors du chargement des styles:', e)
+          return ''
+        }
+      })
+      .join('')
 
-    // Rétablit le contenu original après impression
-    document.body.innerHTML = originalContent;
-    window.location.reload();
-  };
+    // Envoyez un message au main process via IPC pour imprimer
+    window.api.print(content, styles)
+  }
 
   return (
     <div ref={contentRef} id="content">
       <div id="button">
-        <button onClick={handlePrint} style={{ marginTop: '20px' }}></button>
+        <button onClick={handlePrint} style={{ marginTop: '20px' }}>Imprimer</button>
       </div>
-      <InfoG />
-      <Frais />
-      <Personnel />
-      <Menagere />
-      <Economique />
-      <EFFA />
-      <Hospitalisation />
-      <PretiumDoloris />
-      <Forfait />
-      <PersonnelCap />
-      <MenageCap />
-      <EconomiqueCap />
-      <FraisCap />
-      <Particuliers />
+      <InfoG editable={false} />
+      <Frais editable={false} />
+      <Personnel editable={false} />
+      <Menagere editable={false} />
+      <Economique editable={false} />
+      <EFFA editable={false} />
+      <Hospitalisation editable={false} />
+      <PretiumDoloris editable={false} />
+      <Forfait editable={false} />
+      <PersonnelCap editable={false} />
+      <MenageCap editable={false} />
+      <EconomiqueCap editable={false} />
+      <FraisCap editable={false} />
+      <Particuliers editable={false} />
     </div>
   )
 }

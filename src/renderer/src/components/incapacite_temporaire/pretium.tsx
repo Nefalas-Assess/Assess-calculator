@@ -3,7 +3,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const PretiumDoloris = () => {
+const PretiumDoloris = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -16,7 +16,11 @@ const PretiumDoloris = () => {
   return (
     <div id="content">
       <div id="main">
-        <PretiumDolorisForm onSubmit={saveData} initialValues={data?.pretium_doloris} />
+        <PretiumDolorisForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.pretium_doloris}
+        />
         <TotalBox label="Total général :" />
         <TotalBox label="Total intérêts :" name="interest" />
       </div>

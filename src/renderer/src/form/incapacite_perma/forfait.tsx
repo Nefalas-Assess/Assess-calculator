@@ -4,9 +4,10 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import { isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
+import Field from '@renderer/generic/field'
 
-export const ForfaitForm = ({ onSubmit, initialValues }) => {
-  const { register, handleSubmit, watch } = useForm({
+export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
+  const { register, handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {}
   })
 
@@ -82,13 +83,17 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register(`pourcentage_ipp`)} />
+              <Field control={control} name={`pourcentage_ipp`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`perso_date_paiement`)} />
+              <Field control={control} type="date" name={`perso_date_paiement`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td className="int">
               <Interest
@@ -120,16 +125,22 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register(`pourcentage_imp`)} />
+              <Field control={control} name={`pourcentage_imp`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
-              <select style={{ width: 120 }} {...register(`contribution_imp`)}>
-                {contributionOptions.map((option) => (
-                  <option key={option} value={option}>
-                    {option}%
-                  </option>
-                ))}
-              </select>
+              <Field control={control} name={`contribution_imp`} editable={editable}>
+                {(props) => (
+                  <select style={{ width: 120 }} {...props}>
+                    {contributionOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}%
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </Field>
             </td>
             <td>
               <Money
@@ -141,7 +152,14 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
               />
             </td>
             <td className="int">
-              <input type="date" {...register(`menage_date_paiement`)} />
+              <Field
+                control={control}
+                type="date"
+                name={`menage_date_paiement`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td className="int">
               <Interest
@@ -176,13 +194,17 @@ export const ForfaitForm = ({ onSubmit, initialValues }) => {
             <td>{data?.computed_info?.age_consolidation}</td>
             <td>{point}</td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register(`pourcentage_iep`)} />
+              <Field control={control} name={`pourcentage_iep`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
             </td>
             <td className="int">
-              <input type="date" {...register(`eco_date_paiement`)} />
+              <Field control={control} type="date" name={`eco_date_paiement`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td className="int">
               <Interest

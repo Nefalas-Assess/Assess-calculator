@@ -26,6 +26,8 @@ import Recapitulatif from './components/recapitulatif'
 import FraisFun from './components/deces/frais_deces'
 import PrejudiceEXH from './components/deces/prejudice_exh'
 import PrejudiceProche from './components/deces/prejudice_proche'
+import Provisions from './components/provisions'
+
 
 const IncapaciteTemp = () => {
   return (
@@ -78,6 +80,7 @@ const Main = () => {
           <Route path="it/*" element={<IncapaciteTemp />} />
           <Route path="deces/*" element={<Deces />} />
           <Route path="frais" element={<FRAIS />} />
+          <Route path="provisions" element={<Provisions />} />
           <Route path="recap" element={<Recapitulatif />} />
         </Route>
       </Routes>

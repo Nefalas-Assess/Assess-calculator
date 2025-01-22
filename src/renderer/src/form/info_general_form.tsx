@@ -1,11 +1,11 @@
+import Field from '@renderer/generic/field'
 import { isValid } from 'date-fns'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 
-export const InfoForm = ({ onSubmit, initialValues }) => {
+export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const {
     control,
-    register,
     handleSubmit,
     watch,
     formState: { errors }
@@ -74,155 +74,142 @@ export const InfoForm = ({ onSubmit, initialValues }) => {
           <tr>
             <td>Nom de la victime</td>
             <td>
-              <input
-                style={{ width: 300 }}
-                type="text"
-                {...register('nom_victime', { required: 'Ce champ est requis' })}
-              />
-              {errors.nom_victime && <span>{errors.nom_victime.message}</span>}
+              <Field control={control} name="nom_victime" editable={editable}>
+                {(props) => <input style={{ width: 200 }} {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Sexe</td>
             <td>
-              <select {...register('sexe')}>
-                <option value="homme">Homme</option>
-                <option value="femme">Femme</option>
-              </select>
+              <Field control={control} name="sexe" editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="homme">Homme</option>
+                    <option value="femme">Femme</option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de l'accident</td>
             <td>
-              <input type="date" {...register('date_accident')} />
+              <Field control={control} type="date" name="date_accident" editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de naissance</td>
             <td>
-              <input type="date" {...register('date_naissance')} />
+              <Field control={control} type="date" name="date_naissance" editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date de consolidation</td>
             <td>
-              <input type="date" {...register('date_consolidation')} />
+              <Field control={control} type="date" name="date_consolidation" editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Situation conjugale</td>
             <td>
-              <select {...register('statut')}>
-                <option value="marié">Marié</option>
-                <option value="célibataire">Célibataire</option>
-              </select>
+              <Field control={control} name="statut" editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="marié">Marié</option>
+                    <option value="célibataire">Célibataire</option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Statut professionnel</td>
             <td>
-              <select {...register('profession')}>
-                <option value="employe">Employé</option>
-                <option value="ouvrier">Ouvrier</option>
-                <option value="sans_emploi">Sans emploi</option>
-                <option value="retraite">Retraité</option>
-                <option value="independant">Indépendant</option>
-                <option value="fonctionnaire">Fonctionnaire</option>
-                <option value="invalide">Invalide</option>
-              </select>
+              <Field control={control} name="profession" editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="employe">Employé</option>
+                    <option value="ouvrier">Ouvrier</option>
+                    <option value="sans_emploi">Sans emploi</option>
+                    <option value="retraite">Retraité</option>
+                    <option value="independant">Indépendant</option>
+                    <option value="fonctionnaire">Fonctionnaire</option>
+                    <option value="invalide">Invalide</option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
         </tbody>
       </table>
 
       <h3>Enfants</h3>
-      <table style={{ width: 1200 }}>
+      <table style={{ maxWidth: 1000 }}>
         <thead>
           <tr>
             <th>Nom</th>
             <th>Date de naissance</th>
-            <th>Action</th>
+            {editable && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
           {childrenFields?.fields.map((child, index) => (
             <tr key={child.id}>
               <td>
-                <input style={{ width: 300 }} type="text" {...register(`children.${index}.name`)} />
+                <Field control={control} name={`children.${index}.name`} editable={editable}>
+                  {(props) => <input style={{ width: 300 }} {...props} />}
+                </Field>
               </td>
               <td>
-                <input type="date" {...register(`children.${index}.birthDate`)} />
+                <Field
+                  control={control}
+                  type="date"
+                  name={`children.${index}.birthDate`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
+                </Field>
               </td>
-              <td>
-                <button type="button" onClick={() => childrenFields?.remove(index)}>
-                  Supprimer
-                </button>
-              </td>
+              {editable && (
+                <td>
+                  <button type="button" onClick={() => childrenFields?.remove(index)}>
+                    Supprimer
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      <button type="button" onClick={addChild}>
-        Ajouter un enfant
-      </button>
+      {editable && (
+        <button type="button" onClick={addChild}>
+          Ajouter un enfant
+        </button>
+      )}
 
       {/* Sélecteur pour les intérêts */}
-      <div>
-        <label>
-          <h3>Voulez-vous calculer les intérêts ? </h3>
-          <select {...register('calcul_interets')}>
-            <option value={false}>Non</option>
-            <option value={true}>Oui</option>
-          </select>
-        </label>
-      </div>
-
-      {/* <div className="int">
-        <table id="taux_it_Table">
-          <thead>
-            <tr>
-              <th>Range</th>
-              <th>Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rateFields?.fields?.map((rate, index) => {
-              return (
-                <tr key={rate.id}>
-                  <th>
-                    <input
-                      type="number"
-                      min="1900"
-                      max="2099"
-                      step="1"
-                      {...register(`rate.${index}.start`)}
-                    />
-                    -
-                    <input
-                      type="number"
-                      min="1900"
-                      max="2099"
-                      step="1"
-                      {...register(`rate.${index}.end`)}
-                    />
-                  </th>
-                  <th>
-                    <input
-                      style={{ width: 50 }}
-                      type="number"
-                      {...register(`rate.${index}.amount`)}
-                    />
-                    %
-                  </th>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        <button type="button" onClick={() => rateFields?.append()}>
-          Ajouter un interet
-        </button>
-      </div> */}
+      {editable && (
+        <div>
+          <label>
+            <h3>Voulez-vous calculer les intérêts ? </h3>
+            <Field control={control} name="calcul_interets" editable={editable}>
+              {(props) => (
+                <select {...props}>
+                  <option value={false}>Non</option>
+                  <option value={true}>Oui</option>
+                </select>
+              )}
+            </Field>
+          </label>
+        </div>
+      )}
     </form>
   )
 }

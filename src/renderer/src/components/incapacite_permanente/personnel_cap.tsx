@@ -3,7 +3,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const PersonnelCap = () => {
+const PersonnelCap = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -18,6 +18,7 @@ const PersonnelCap = () => {
       <div id="main">
         <IPPersonnelCapForm
           onSubmit={saveData}
+          editable={editable}
           initialValues={data?.incapacite_perma_personnel_cap}
         />
         <TotalBox label="Total général :" />

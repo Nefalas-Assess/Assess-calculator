@@ -5,8 +5,9 @@ import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-const EffortAccruForm = ({ initialValues, onSubmit }) => {
+const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -96,7 +97,7 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
             <th>Total</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -106,56 +107,100 @@ const EffortAccruForm = ({ initialValues, onSubmit }) => {
             const total = getTotalAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
-                  <input type="date" {...register(`efforts.${index}.start`)} />
+                <td style={{ width: 140 }}>
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`efforts.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
-                <td>
-                  <input type="date" {...register(`efforts.${index}.end`)} />
+                <td style={{ width: 140 }}>
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`efforts.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
-                <td style={{ width: 50 }}>{days}</td>
+                <td>{days}</td>
                 <td>
-                  <input type="number" step="0.01" {...register(`efforts.${index}.amount`)} />
-                </td>
-                <td style={{ width: 50 }}>
-                  <input
-                    style={{ width: 50 }}
+                  <Field
+                    control={control}
                     type="number"
-                    {...register(`efforts.${index}.pourcentage`)}
-                  />
+                    name={`efforts.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input step="0.01" {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    name={`efforts.${index}.pourcentage`}
+                    editable={editable}
+                    type="number"
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 50 }}>
-                  <select {...register(`efforts.${index}.coefficient`)}>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                    <option value={7}>7</option>
-                  </select>
+                  <Field
+                    control={control}
+                    name={`efforts.${index}.coefficient`}
+                    editable={editable}
+                  >
+                    {(props) => (
+                      <select {...props}>
+                        <option value={1}>1</option>
+                        <option value={2}>2</option>
+                        <option value={3}>3</option>
+                        <option value={4}>4</option>
+                        <option value={5}>5</option>
+                        <option value={6}>6</option>
+                        <option value={7}>7</option>
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`efforts.${index}.date_paiement`)} />
+                  <Field
+                    control={control}
+                    name={`efforts.${index}.date_paiement`}
+                    editable={editable}
+                    type="date"
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td className="int">
                   <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append, { coefficient: 5, amount: 30 })}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(append, { coefficient: 5, amount: 30 })}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

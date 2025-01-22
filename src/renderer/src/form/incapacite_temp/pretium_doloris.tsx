@@ -4,8 +4,9 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
+const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -88,7 +89,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
             <th>Total (€)</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -98,46 +99,79 @@ const PretiumDolorisForm = ({ initialValues, onSubmit }) => {
             const total = getAmount(values, days)
             return (
               <tr key={child.id}>
-                <td>
-                  <input type="date" {...register(`periods.${index}.start`)} />
+                <td style={{ width: 140 }}>
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
-                <td>
-                  <input type="date" {...register(`periods.${index}.end`)} />
+                <td style={{ width: 140 }}>
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td>{days}</td>
                 <td>
-                  <select {...register(`periods.${index}.coefficient`)}>
-                    <option value="1.15">1/7</option>
-                    <option value="3.50">2/7</option>
-                    <option value="7">3/7</option>
-                    <option value="11.50">4/7</option>
-                    <option value="17">5/7</option>
-                    <option value="24">6/7</option>
-                    <option value="32">7/7</option>
-                  </select>
+                  <Field
+                    control={control}
+                    name={`periods.${index}.coefficient`}
+                    editable={editable}
+                  >
+                    {(props) => (
+                      <select {...props}>
+                        <option value="1.15">1/7</option>
+                        <option value="3.50">2/7</option>
+                        <option value="7">3/7</option>
+                        <option value="11.50">4/7</option>
+                        <option value="17">5/7</option>
+                        <option value="24">6/7</option>
+                        <option value="32">7/7</option>
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
                 <td className="int">
-                  <input type="date" {...register(`periods.${index}.date_paiement`)} />
+                  <Field
+                    control={control}
+                    name={`periods.${index}.date_paiement`}
+                    editable={editable}
+                    type="date"
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td className="int">
                   <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append, {})}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(append, {})}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

@@ -51,6 +51,43 @@ function createWindow(): void {
   ipcMain.handle('file:read', async (_, filePath) => {
     return fs.readFile(filePath, 'utf8')
   })
+
+  ipcMain.handle('print-content', (event, doc) => {
+    // Créez une nouvelle fenêtre invisible pour l'impression
+    const printWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      show: false, // La fenêtre est invisible
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+      }
+    })
+
+    // Injectez le contenu HTML et les styles
+    const html = `
+      <html>
+        <head>
+          <style>${doc?.styles}</style>
+        </head>
+        <body>
+          ${doc?.content}
+        </body>
+      </html>
+    `
+
+    printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
+
+    // Chargez le contenu HTML de la div dans la fenêtre
+
+    // Une fois le contenu chargé, imprimez
+    printWindow.webContents.on('did-finish-load', () => {
+      printWindow.webContents.print({ silent: false }, (success, errorType) => {
+        if (!success) console.error("Erreur lors de l'impression:", errorType)
+        printWindow.close() // Fermez la fenêtre après l'impression
+      })
+    })
+  })
 }
 
 // This method will be called when Electron has finished

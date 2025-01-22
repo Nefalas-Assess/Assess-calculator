@@ -4,7 +4,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const FraisFun = () => {
+const FraisFun = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -17,7 +17,11 @@ const FraisFun = () => {
   return (
     <div id="content">
       <div id="main">
-        <FraisFunForm onSubmit={saveData} initialValues={data?.frais_funeraire} />
+        <FraisFunForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.frais_funeraire}
+        />
         <TotalBox label="Total général :" />
       </div>
     </div>

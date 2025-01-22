@@ -3,7 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import ForfaitForm from '@renderer/form/incapacite_perma/forfait'
 import TotalBox from '@renderer/generic/totalBox'
 
-const Forfait = () => {
+const Forfait = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -16,7 +16,7 @@ const Forfait = () => {
   return (
     <div id="content">
       <div id="main">
-        <ForfaitForm onSubmit={saveData} initialValues={data?.forfait_ip} />
+        <ForfaitForm onSubmit={saveData} editable={editable} initialValues={data?.forfait_ip} />
         <TotalBox label="Total général :" />
         <TotalBox label="Total intérêts :" name="interest" />
       </div>

@@ -1,17 +1,18 @@
 import { getDays, getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
-import { intervalToDuration, isValid } from 'date-fns'
+import { format, intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
+export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
       conso_amount: 32,
@@ -93,30 +94,42 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select {...register('reference')}>
-                <option value="schryvers">Schryvers 2024 rente viagère de 1€/an mensuelle</option>
-              </select>
+              <Field control={control} name={`reference`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="schryvers">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle
+                    </option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Taux d'intérêt de la capitalisation</td>
             <td>
-              <select {...register('interet')}>
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                {interetOptions?.map((it, key) => (
-                  <option value={it} key={key}>
-                    {it}
-                  </option>
-                ))}
-              </select>
+              <Field control={control} name={`interet`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
+                    {interetOptions?.map((it, key) => (
+                      <option value={it} key={key}>
+                        {it}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date du paiement</td>
             <td>
-              <input type="date" {...register('paiement')} />
+              <Field control={control} type="date" name={`paiement`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
           </tr>
         </tbody>
@@ -138,17 +151,22 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
         <tbody>
           <tr>
             <td>
-              <input type="date" {...register('conso_start')} />
+              <Field control={control} type="date" name={`conso_start`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
-            <td>
-              <input type="date" value={formValues?.paiement} readOnly />
-            </td>
+            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+
             <td style={{ width: 50 }}>{days || 0}</td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('conso_amount')} />
+              <Field control={control} name={`conso_amount`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('conso_pourcentage')} />
+              <Field control={control} name={`conso_pourcentage`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={getConsoAmount(formValues)} />
@@ -176,19 +194,16 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues }) => {
         </thead>
         <tbody>
           <tr>
+            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
             <td>
-              <input type="date" value={formValues?.paiement} readOnly />
+              <Field control={control} name={`perso_amount`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} {...props} />}
+              </Field>
             </td>
             <td>
-              <input style={{ width: 50 }} type="number" {...register('perso_amount')} />
-            </td>
-            <td>
-              <input
-                style={{ width: 50 }}
-                type="number"
-                step="0.01"
-                {...register('perso_pourcentage')}
-              />
+              <Field control={control} name={`perso_pourcentage`} type="number" editable={editable}>
+                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={getCapAmount(formValues)} />

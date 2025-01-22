@@ -2,7 +2,7 @@ import React, { useCallback, useContext } from 'react'
 import InfoForm from '../form/info_general_form'
 import { AppContext } from '@renderer/providers/AppProvider'
 
-const InfoG = () => {
+const InfoG = ({ editable }) => {
   const { setData, data } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -16,7 +16,7 @@ const InfoG = () => {
     <div id="content">
       <div id="main">
         <h1>Informations générales</h1>
-        <InfoForm onSubmit={saveData} initialValues={data?.general_info} />
+        <InfoForm onSubmit={saveData} editable={editable} initialValues={data?.general_info} />
       </div>
     </div>
   )

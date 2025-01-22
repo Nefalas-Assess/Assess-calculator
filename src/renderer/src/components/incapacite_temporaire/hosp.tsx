@@ -3,7 +3,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useState } from 'react'
 
-const Hospitalisation = () => {
+const Hospitalisation = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -16,7 +16,11 @@ const Hospitalisation = () => {
   return (
     <div id="content">
       <div id="main">
-        <HospitalisationForm onSubmit={saveData} initialValues={data?.hospitalisation} />
+        <HospitalisationForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.hospitalisation}
+        />
         <TotalBox label="Total général :" />
         <TotalBox label="Total intérêts :" name="interest" />
       </div>

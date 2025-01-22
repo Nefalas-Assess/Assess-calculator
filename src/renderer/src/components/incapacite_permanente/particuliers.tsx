@@ -3,7 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import PrejudiceParticuliersForm from '@renderer/form/incapacite_perma/prejudice_particulier'
 import TotalBox from '@renderer/generic/totalBox'
 
-const Particuliers = () => {
+const Particuliers = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
 
   const saveData = useCallback(
@@ -18,6 +18,7 @@ const Particuliers = () => {
       <div id="main">
         <PrejudiceParticuliersForm
           onSubmit={saveData}
+          editable={editable}
           initialValues={data?.prejudice_particulier}
         />
         <TotalBox label="Total général :" />
