@@ -1,10 +1,12 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import ITEconomiqueForm from '@renderer/form/incapacite_temp/economique'
 import TotalBox from '@renderer/generic/totalBox'
 
 const Economique = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
+
+  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -15,14 +17,14 @@ const Economique = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main">
+      <div id="main" ref={ref}>
         <ITEconomiqueForm
           onSubmit={saveData}
           editable={editable}
           initialValues={data?.incapacite_temp_economique}
         />
-        <TotalBox label="Total général :" />
-        <TotalBox label="Total intérêts :" name="interest" />
+        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
       </div>
     </div>
   )

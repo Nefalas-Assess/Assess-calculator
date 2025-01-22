@@ -5,8 +5,9 @@ import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
+import Field from '@renderer/generic/field'
 
-const PrejudiceEXHForm = ({ initialValues, onSubmit }) => {
+const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -87,7 +88,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit }) => {
             <th>Jours</th>
             <th>Indemnité journalière (€)</th>
             <th>Total (€)</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -98,35 +99,56 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td>
-                  <input type="date" {...register(`periods.${index}.start`)} />
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.start`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td>
-                  <input type="date" {...register(`periods.${index}.end`)} />
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`periods.${index}.end`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
                 <td style={{ width: 200 }}>
-                  <input
+                  <Field
+                    control={control}
                     type="number"
-                    style={{ width: 50 }}
-                    {...register(`periods.${index}.amount`)}
-                  />
+                    name={`periods.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
                 <td>
                   <Money value={total} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append)}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(append)}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

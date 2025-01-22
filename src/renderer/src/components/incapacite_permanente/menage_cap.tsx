@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import Money from '@renderer/generic/money'
 import IPMenageCapForm from '@renderer/form/incapacite_perma/menage_cap'
@@ -6,6 +6,8 @@ import TotalBox from '@renderer/generic/totalBox'
 
 const MenageCap = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
+
+  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -16,14 +18,14 @@ const MenageCap = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main">
+      <div id="main" ref={ref}>
         <IPMenageCapForm
           onSubmit={saveData}
           editable={editable}
           initialValues={data?.incapacite_perma_menage_cap}
         />
-        <TotalBox label="Total général :" />
-        <TotalBox label="Total intérêts :" name="interest" />
+        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
       </div>
     </div>
   )

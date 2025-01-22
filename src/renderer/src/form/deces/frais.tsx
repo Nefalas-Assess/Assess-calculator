@@ -6,8 +6,9 @@ import Money from '@renderer/generic/money'
 import { intervalToDuration } from 'date-fns'
 import data_f from '@renderer/data/data_ff_f'
 import data_h from '@renderer/data/data_ff_h'
+import Field from '@renderer/generic/field'
 
-const FraisFunForm = ({ initialValues, onSubmit }) => {
+const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -84,27 +85,39 @@ const FraisFunForm = ({ initialValues, onSubmit }) => {
         <tr>
           <td>Tables de référence</td>
           <td>
-            <select {...register('ref')}>
-              <option value="schryvers">Schryvers 2024 | Paiement anticipé frais funéraires</option>
-            </select>
+            <Field control={control} name={`ref`} editable={editable}>
+              {(props) => (
+                <select {...props}>
+                  <option value="schryvers">
+                    Schryvers 2024 | Paiement anticipé frais funéraires
+                  </option>
+                </select>
+              )}
+            </Field>
           </td>
         </tr>
         <tr>
           <td>Taux d'intérêt</td>
           <td>
-            <select style={{ width: 120 }} {...register(`rate`)}>
-              {contributionOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}%
-                </option>
-              ))}
-            </select>
+            <Field control={control} name={`rate`} editable={editable}>
+              {(props) => (
+                <select style={{ width: 120 }} {...props}>
+                  {contributionOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}%
+                    </option>
+                  ))}
+                </select>
+              )}
+            </Field>
           </td>
         </tr>
         <tr>
           <td>Date du décès</td>
           <td>
-            <input type="date" {...register('date')} />
+            <Field control={control} type="date" name={`date`} editable={editable}>
+              {(props) => <input {...props} />}
+            </Field>
           </td>
         </tr>
       </table>
@@ -116,7 +129,7 @@ const FraisFunForm = ({ initialValues, onSubmit }) => {
             <th>Frais</th>
             <th>Montant (€)</th>
             <th>Total anticipé</th>
-            <th>Actions</th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -124,27 +137,40 @@ const FraisFunForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td>
-                  <input {...register(`charges.${index}.name`)} />
+                  <Field control={control} name={`charges.${index}.name`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td>
-                  <input type="number" {...register(`charges.${index}.amount`)} />
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`charges.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td>
                   <Money value={getTotalAnticipated(index)} />
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => append({})}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => append({})}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }

@@ -300,8 +300,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
           </tr>
         </tbody>
       </table>
-      <TotalBox label="Total général :" />
-      <TotalBox label="Total intérêts :" name="interest" />
     </form>
   )
 }

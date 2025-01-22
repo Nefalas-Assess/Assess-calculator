@@ -6,8 +6,9 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import { useCapitalization } from '@renderer/hooks/capitalization'
+import Field from '@renderer/generic/field'
 
-const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
+const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
@@ -99,63 +100,75 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
           <tr>
             <td>Tables de référence</td>
             <td>
-              <select {...register('reference')}>
-                <option value="schryvers">Schryvers 2024 rente viagère de 1€/an mensuelle</option>
-                <option value="schryvers_65">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)
-                </option>
-                <option value="schryvers_66">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)
-                </option>
-                <option value="schryvers_67">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)
-                </option>
-                <option value="schryvers_68">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)
-                </option>
-                <option value="schryvers_69">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)
-                </option>
-                <option value="schryvers_70">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)
-                </option>
-                <option value="schryvers_71">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)
-                </option>
-                <option value="schryvers_72">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)
-                </option>
-                <option value="schryvers_73">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)
-                </option>
-                <option value="schryvers_74">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)
-                </option>
-                <option value="schryvers_75">
-                  Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)
-                </option>
-              </select>
+              <Field control={control} name={`reference`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="schryvers">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle
+                    </option>
+                    <option value="schryvers_65">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)
+                    </option>
+                    <option value="schryvers_66">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)
+                    </option>
+                    <option value="schryvers_67">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)
+                    </option>
+                    <option value="schryvers_68">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)
+                    </option>
+                    <option value="schryvers_69">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)
+                    </option>
+                    <option value="schryvers_70">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)
+                    </option>
+                    <option value="schryvers_71">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)
+                    </option>
+                    <option value="schryvers_72">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)
+                    </option>
+                    <option value="schryvers_73">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)
+                    </option>
+                    <option value="schryvers_74">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)
+                    </option>
+                    <option value="schryvers_75">
+                      Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)
+                    </option>
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Taux d'intérêt de la capitalisation</td>
             <td>
-              <select {...register('interet')}>
-                <option value="" disabled>
-                  Sélectionnez
-                </option>
-                {interetOptions?.map((it, key) => (
-                  <option value={it} key={key}>
-                    {it}
-                  </option>
-                ))}
-              </select>
+              <Field control={control} name={`interet`} editable={editable}>
+                {(props) => (
+                  <select {...props}>
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
+                    {interetOptions?.map((it, key) => (
+                      <option value={it} key={key}>
+                        {it}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </Field>
             </td>
           </tr>
           <tr>
             <td>Date du décès</td>
             <td>
-              <input type="date" {...register('deces')} />
+              <Field control={control} type="date" name={`deces`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
           </tr>
         </tbody>
@@ -167,7 +180,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
             <th>Nom du membre de la famille</th>
             <th>Lien de parenté</th>
             <th>Indemnité (€)</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -175,39 +188,52 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
             return (
               <tr key={child.id}>
                 <td>
-                  <input type="text" {...register(`members.${index}.name`)} />
+                  <Field control={control} name={`members.${index}.name`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
                 </td>
                 <td>
-                  <select {...register(`members.${index}.link`)}>
-                    <option value="partenaire">Partenaire [€ 15.000 - € 45.000]</option>
-                    <option value="parent/enfant">Parent/Enfant [€ 15.000 - € 45.000]</option>
-                    <option value="frère/soeur"> Frère/Soeur [€ 7.500 - € 25.000]</option>
-                    <option value="grand_parent/petit_enfant">
-                      Grand-parent/Petit-enfant [€ 7.500 - € 25.000]
-                    </option>
-                    <option value="fausse_couche">Fausse couche [€ 3.000 - € 9.000]</option>
-                  </select>
+                  <Field control={control} name={`members.${index}.link`} editable={editable}>
+                    {(props) => (
+                      <select {...props}>
+                        <option value="partenaire">Partenaire [€ 15.000 - € 45.000]</option>
+                        <option value="parent/enfant">Parent/Enfant [€ 15.000 - € 45.000]</option>
+                        <option value="frère/soeur"> Frère/Soeur [€ 7.500 - € 25.000]</option>
+                        <option value="grand_parent/petit_enfant">
+                          Grand-parent/Petit-enfant [€ 7.500 - € 25.000]
+                        </option>
+                        <option value="fausse_couche">Fausse couche [€ 3.000 - € 9.000]</option>
+                      </select>
+                    )}
+                  </Field>
                 </td>
                 <td style={{ width: 200 }}>
-                  <input
+                  <Field
+                    control={control}
                     type="number"
-                    style={{ width: 50 }}
-                    {...register(`members.${index}.amount`)}
-                  />
+                    name={`members.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 50 }} {...props} />}
+                  </Field>
                 </td>
-                <td>
-                  <button type="button" onClick={() => remove(index)}>
-                    Supprimer
-                  </button>
-                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
               </tr>
             )
           })}
         </tbody>
       </table>
-      <button type="button" onClick={() => addNext(append)}>
-        Ajouter une ligne
-      </button>
+      {editable && (
+        <button type="button" onClick={() => addNext(append)}>
+          Ajouter une ligne
+        </button>
+      )}
       <h3>Perte du revenu du défunt</h3>
 
       <table id="itebTable" style={{ width: 1000 }}>
@@ -222,13 +248,19 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit }) => {
         <tbody>
           <tr>
             <td>
-              <input type="number" {...register('revenue_defunt')} />
+              <Field control={control} type="number" name={`revenue_defunt`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td>
-              <input type="number" {...register('revenue_total')} />
+              <Field control={control} type="number" name={`revenue_total`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td>
-              <input type="number" {...register('members_amount')} />
+              <Field control={control} type="number" name={`members_amount`} editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
             </td>
             <td>
               <Money value={getTotalAmount()} />

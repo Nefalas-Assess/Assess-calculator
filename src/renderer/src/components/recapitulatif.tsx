@@ -13,6 +13,9 @@ import MenageCap from './incapacite_permanente/menage_cap'
 import EconomiqueCap from './incapacite_permanente/economique_cap'
 import FraisCap from './incapacite_permanente/frais_cap'
 import Particuliers from './incapacite_permanente/particuliers'
+import FraisFun from './deces/frais_deces'
+import PrejudiceEXH from './deces/prejudice_exh'
+import PrejudiceProche from './deces/prejudice_proche'
 
 const Recapitulatif = () => {
   const contentRef = useRef()
@@ -40,7 +43,9 @@ const Recapitulatif = () => {
   return (
     <div ref={contentRef} id="content">
       <div id="button">
-        <button onClick={handlePrint} style={{ marginTop: '20px' }}>Imprimer</button>
+        <button onClick={handlePrint} style={{ marginTop: '20px' }}>
+          Imprimer
+        </button>
       </div>
       <InfoG editable={false} />
       <Frais editable={false} />
@@ -56,6 +61,10 @@ const Recapitulatif = () => {
       <EconomiqueCap editable={false} />
       <FraisCap editable={false} />
       <Particuliers editable={false} />
+
+      <FraisFun editable={false} />
+      <PrejudiceEXH editable={false} />
+      <PrejudiceProche editable={false} />
     </div>
   )
 }
