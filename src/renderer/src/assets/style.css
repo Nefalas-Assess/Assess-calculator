@@ -97,7 +97,7 @@ button:focus-visible {
     left: 0;
     width: 100vw; /* Adapte la largeur au viewport */
     height: 100vh; /* Adapte la hauteur au viewport */
-    transform: scale(0.75); /* Assure un scaling initial */
+    transform: scale(0.85); /* Assure un scaling initial */
     transform-origin: top left; /* Fixe l'origine de mise à l'échelle */
   }
 }
