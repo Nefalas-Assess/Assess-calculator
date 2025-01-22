@@ -41,31 +41,33 @@ const Recapitulatif = () => {
   }
 
   return (
-    <div ref={contentRef} id="content">
+    <>
       <div id="button">
         <button onClick={handlePrint} style={{ marginTop: '20px' }}>
           Imprimer
         </button>
       </div>
-      <InfoG editable={false} />
-      <Frais editable={false} />
-      <Personnel editable={false} />
-      <Menagere editable={false} />
-      <Economique editable={false} />
-      <EFFA editable={false} />
-      <Hospitalisation editable={false} />
-      <PretiumDoloris editable={false} />
-      <Forfait editable={false} />
-      <PersonnelCap editable={false} />
-      <MenageCap editable={false} />
-      <EconomiqueCap editable={false} />
-      <FraisCap editable={false} />
-      <Particuliers editable={false} />
+      <div ref={contentRef} id="content">
+        <InfoG editable={false} />
+        <Frais editable={false} />
+        <Personnel editable={false} />
+        <Menagere editable={false} />
+        <Economique editable={false} />
+        <EFFA editable={false} />
+        <Hospitalisation editable={false} />
+        <PretiumDoloris editable={false} />
+        <Forfait editable={false} />
+        <PersonnelCap editable={false} />
+        <MenageCap editable={false} />
+        <EconomiqueCap editable={false} />
+        <FraisCap editable={false} />
+        <Particuliers editable={false} />
 
-      <FraisFun editable={false} />
-      <PrejudiceEXH editable={false} />
-      <PrejudiceProche editable={false} />
-    </div>
+        <FraisFun editable={false} />
+        <PrejudiceEXH editable={false} />
+        <PrejudiceProche editable={false} />
+      </div>
+    </>
   )
 }
 
