@@ -6,6 +6,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -56,13 +57,11 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, chargesValues, submitForm, handleSubmit])
 
-  const interetOptions = [0.5, 0.8, 1, 1.5, 2, 3]
-
   const getTotalAmount = useCallback((values) => {
     const coef = useCapitalization({
       end: values?.date_payment,
       ref: values?.reference,
-      index: interetOptions?.findIndex((e) => e === parseFloat(values?.rate))
+      index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
     })
 
     return (parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)
@@ -105,61 +104,22 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Field control={control} name={`charges.${index}.reference`} editable={editable}>
-                    {(props) => (
-                      <select {...props}>
-                        <option value="schryvers">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle
-                        </option>
-                        <option value="schryvers_65">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)
-                        </option>
-                        <option value="schryvers_66">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)
-                        </option>
-                        <option value="schryvers_67">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)
-                        </option>
-                        <option value="schryvers_68">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (68 ans)
-                        </option>
-                        <option value="schryvers_69">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (69 ans)
-                        </option>
-                        <option value="schryvers_70">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (70 ans)
-                        </option>
-                        <option value="schryvers_71">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (71 ans)
-                        </option>
-                        <option value="schryvers_72">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (72 ans)
-                        </option>
-                        <option value="schryvers_73">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (73 ans)
-                        </option>
-                        <option value="schryvers_74">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (74 ans)
-                        </option>
-                        <option value="schryvers_75">
-                          Schryvers 2024 rente viagère de 1€/an mensuelle (75 ans)
-                        </option>
-                      </select>
-                    )}
-                  </Field>
+                  <Field
+                    control={control}
+                    type="select"
+                    options={constants.reference}
+                    name={`charges.${index}.reference`}
+                    editable={editable}
+                  ></Field>
                 </td>
                 <td style={{ maxWidth: 120 }}>
-                  <Field control={control} name={`charges.${index}.rate`} editable={editable}>
-                    {(props) => (
-                      <select {...props}>
-                        {interetOptions.map((option) => (
-                          <option key={option} value={option}>
-                            {option}%
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  </Field>
+                  <Field
+                    control={control}
+                    type="select"
+                    options={constants.interet_amount}
+                    name={`charges.${index}.rate`}
+                    editable={editable}
+                  ></Field>
                 </td>
                 <td>
                   <Field

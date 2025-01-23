@@ -8,6 +8,7 @@ import womenTable from '@renderer/data/data_cap_f'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -47,8 +48,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     return getDays(formValues, ['conso_start', 'paiement'])
   }, [formValues])
 
-  const interetOptions = [0.5, 0.8, 1, 1.5, 2, 3]
-
   const getConsoAmount = useCallback(
     (values) => {
       const { conso_amount, conso_pourcentage } = values || {}
@@ -71,7 +70,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
       const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
 
-      const index = interetOptions?.findIndex((e) => e === parseFloat(interet || 0))
+      const index = constants.interet_amount?.findIndex((e) => e === parseFloat(interet || 0))
 
       const coefficient = table?.[years]?.[index]
 
@@ -94,34 +93,25 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           <tr>
             <td>Tables de référence</td>
             <td>
-              <Field control={control} name="reference" editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="schryvers">
-                      Schryvers 2024 rente viagère de 1€/an mensuelle
-                    </option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.reference_light}
+                name="reference"
+                editable={editable}
+              ></Field>
             </td>
           </tr>
           <tr>
             <td>Taux d'intérêt de la capitalisation</td>
             <td>
-              <Field control={control} name="interet" editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="" disabled>
-                      Sélectionnez
-                    </option>
-                    {interetOptions?.map((it, key) => (
-                      <option value={it} key={key}>
-                        {it}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.interet_amount}
+                name="interet"
+                editable={editable}
+              ></Field>
             </td>
           </tr>
           <tr>

@@ -6,6 +6,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -235,15 +236,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_sexuels.${index}.paid`}
                   editable={editable}
-                >
-                  {(props) => (
-                    <select {...props} defaultValue="">
-                      <option value="" disabled>Sélectionnez</option>
-                      <option value={false}>Non</option>
-                      <option value={true}>Oui</option>
-                    </select>
-                  )}
-                </Field>
+                  type="select"
+                  options={constants.boolean}
+                ></Field>
               </td>
               <td>
                 <Field
@@ -318,15 +313,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   control={control}
                   name={`prejudice_agrements.${index}.paid`}
                   editable={editable}
-                >
-                  {(props) => (
-                    <select {...props} defaultValue="">
-                      <option value="" disabled>Sélectionnez</option>
-                      <option value={false}>Non</option>
-                      <option value={true}>Oui</option>
-                    </select>
-                  )}
-                </Field>
+                  type="select"
+                  options={constants.boolean}
+                ></Field>
               </td>
               <td>
                 <Field

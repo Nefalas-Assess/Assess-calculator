@@ -1,3 +1,4 @@
+import constants from '@renderer/constants'
 import Field from '@renderer/generic/field'
 import { isValid } from 'date-fns'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -82,14 +83,13 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           <tr>
             <td>Sexe</td>
             <td>
-              <Field control={control} name="sexe" editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="homme">Homme</option>
-                    <option value="femme">Femme</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.sexe}
+                name="sexe"
+                editable={editable}
+              />
             </td>
           </tr>
           <tr>
@@ -119,32 +119,25 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           <tr>
             <td>Situation conjugale</td>
             <td>
-              <Field control={control} name="statut" editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="marié">Marié</option>
-                    <option value="célibataire">Célibataire</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.marital_status}
+                name="statut"
+                editable={editable}
+              />
             </td>
           </tr>
           <tr>
             <td>Statut professionnel</td>
             <td>
-              <Field control={control} name="profession" editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="employe">Employé</option>
-                    <option value="ouvrier">Ouvrier</option>
-                    <option value="sans_emploi">Sans emploi</option>
-                    <option value="retraite">Retraité</option>
-                    <option value="independant">Indépendant</option>
-                    <option value="fonctionnaire">Fonctionnaire</option>
-                    <option value="invalide">Invalide</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.profession}
+                name="profession"
+                editable={editable}
+              ></Field>
             </td>
           </tr>
         </tbody>
@@ -199,14 +192,13 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         <div>
           <label>
             <h3>Voulez-vous calculer les intérêts ? </h3>
-            <Field control={control} name="calcul_interets" editable={editable}>
-              {(props) => (
-                <select {...props}>
-                  <option value={false}>Non</option>
-                  <option value={true}>Oui</option>
-                </select>
-              )}
-            </Field>
+            <Field
+              control={control}
+              type="select"
+              options={constants.boolean}
+              name="calcul_interets"
+              editable={editable}
+            ></Field>
           </label>
         </div>
       )}

@@ -7,6 +7,7 @@ import { intervalToDuration } from 'date-fns'
 import data_f from '@renderer/data/data_ff_f'
 import data_h from '@renderer/data/data_ff_h'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -58,8 +59,6 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, chargesValues, submitForm, handleSubmit])
 
-  const contributionOptions = [0.5, 0.8, 1, 1.5, 2, 3]
-
   const getTotalAnticipated = useCallback(
     (index) => {
       const amount = parseFloat(formValues?.charges?.[index]?.amount, 10)
@@ -67,7 +66,9 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         start: data?.general_info?.date_naissance,
         end: formValues?.date
       })
-      const rate = contributionOptions?.findIndex((e) => e === parseFloat(formValues?.rate))
+      const rate = constants?.interet_amount?.findIndex(
+        (e) => e?.value === parseFloat(formValues?.rate)
+      )
       const table = data?.general_info?.sexe === 'homme' ? data_h : data_f
 
       const coef = table?.[age]?.[rate]
@@ -85,31 +86,25 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         <tr>
           <td>Tables de référence</td>
           <td>
-            <Field control={control} name={`ref`} editable={editable}>
-              {(props) => (
-                <select {...props}>
-                  <option value="schryvers">
-                    Schryvers 2024 | Paiement anticipé frais funéraires
-                  </option>
-                </select>
-              )}
-            </Field>
+            <Field
+              control={control}
+              type="select"
+              options={constants.reference_light}
+              name={`ref`}
+              editable={editable}
+            ></Field>
           </td>
         </tr>
         <tr>
           <td>Taux d'intérêt</td>
           <td>
-            <Field control={control} name={`rate`} editable={editable}>
-              {(props) => (
-                <select style={{ width: 120 }} {...props}>
-                  {contributionOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}%
-                    </option>
-                  ))}
-                </select>
-              )}
-            </Field>
+            <Field
+              control={control}
+              type="select"
+              options={constants.interet_amount}
+              name={`rate`}
+              editable={editable}
+            ></Field>
           </td>
         </tr>
         <tr>

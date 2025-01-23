@@ -4,6 +4,7 @@ import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import TotalBox from '@renderer/generic/totalBox'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -114,17 +115,13 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`frais.${index}.paid`} editable={editable}>
-                  {(props) => (
-                    <select {...props} defaultValue="">
-                      <option value="" disabled>
-                        Sélectionnez
-                      </option>
-                      <option value={true}>Oui</option>
-                      <option value={false}>Non</option>
-                    </select>
-                  )}
-                </Field>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.boolean}
+                  name={`frais.${index}.paid`}
+                  editable={editable}
+                ></Field>
               </td>
               <td>
                 <Field
@@ -193,17 +190,13 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <td></td>
             <td></td>
             <td>
-              <Field control={control} name={`administratif_paid`} editable={editable}>
-                {(props) => (
-                  <select {...props} defaultValue="">
-                    <option value="" disabled>
-                      Sélectionnez
-                    </option>
-                    <option>Oui</option>
-                    <option>Non</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.boolean}
+                name={`administratif_paid`}
+                editable={editable}
+              ></Field>
             </td>
             <td>
               <Field
@@ -221,17 +214,13 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <td></td>
             <td></td>
             <td>
-              <Field control={control} name={`vestimentaire_paid`} editable={editable}>
-                {(props) => (
-                  <select {...props} defaultValue="">
-                    <option value="" disabled>
-                      Sélectionnez
-                    </option>
-                    <option>Oui</option>
-                    <option>Non</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.boolean}
+                name={`vestimentaire_paid`}
+                editable={editable}
+              ></Field>
             </td>
             <td>
               <Field
@@ -256,30 +245,22 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Field control={control} name={`deplacement_type`} editable={editable}>
-                {(props) => (
-                  <select {...props}>
-                    <option value="" disabled>
-                      Sélectionnez
-                    </option>
-                    <option value="0.42">Véhicule automobile</option>
-                    <option value="0.28">Autre</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.deplacement_type}
+                name={`deplacement_type`}
+                editable={editable}
+              ></Field>
             </td>
             <td>
-              <Field control={control} name={`deplacement_paid`} editable={editable}>
-                {(props) => (
-                  <select {...props} defaultValue="">
-                    <option value="" disabled>
-                      Sélectionnez
-                    </option>
-                    <option>Oui</option>
-                    <option>Non</option>
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                type="select"
+                options={constants.boolean}
+                name={`deplacement_paid`}
+                editable={editable}
+              ></Field>
             </td>
             <td>
               <Money value={totalDeplacementFrais} ignore />
