@@ -16,6 +16,7 @@ import Particuliers from './incapacite_permanente/particuliers'
 import FraisFun from './deces/frais_deces'
 import PrejudiceEXH from './deces/prejudice_exh'
 import PrejudiceProche from './deces/prejudice_proche'
+import icon from '../assets/icon.png'
 
 const Recapitulatif = () => {
   const contentRef = useRef()
@@ -48,6 +49,7 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="content">
+        <img src={icon} style={{ width: '100px', height: '100px' }}/>
         <InfoG editable={false} />
         <Frais editable={false} />
         <Personnel editable={false} />
