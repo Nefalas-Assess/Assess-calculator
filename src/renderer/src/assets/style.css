@@ -262,3 +262,8 @@ button {
     background: green;
   }
 }
+
+.logo{
+  display: flex;
+  flex-direction: row-reverse;
+}
