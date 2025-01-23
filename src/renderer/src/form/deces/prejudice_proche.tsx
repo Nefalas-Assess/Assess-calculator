@@ -207,14 +207,14 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     )}
                   </Field>
                 </td>
-                <td style={{ width: 200 }}>
+                <td>
                   <Field
                     control={control}
                     type="number"
                     name={`members.${index}.amount`}
                     editable={editable}
                   >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
+                    {(props) => <input style={{ width: 100 }} {...props} />}
                   </Field>
                 </td>
                 {editable && (

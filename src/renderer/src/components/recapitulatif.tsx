@@ -42,7 +42,7 @@ const Recapitulatif = () => {
 
   return (
     <>
-      <div id="button">
+      <div id="top-menu">
         <button onClick={handlePrint} style={{ marginTop: '20px' }}>
           Imprimer
         </button>
