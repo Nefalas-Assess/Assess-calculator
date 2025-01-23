@@ -168,9 +168,6 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
       <div className="total-box">
         <strong>Total des provisions : </strong> <Money value={totals.totalAmount.toFixed(2)} />
       </div>
-      <div className="total-box">
-        <strong>Total des intérêts : </strong> <Money value={totals.totalInterest.toFixed(2)} />
-      </div>
     </>
   )
 }
