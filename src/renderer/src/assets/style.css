@@ -143,7 +143,7 @@ table {
 }
 
 table, th, td {
-  border: 1px solid black;
+  border: 2px solid black;
   /* max-width: 1200px; */
 }
 
@@ -166,7 +166,7 @@ button {
   margin-top: 20px;
   padding: 10px;
   background-color: #242424;
-  border: 1px solid black;
+  border: 2px solid black;
   font-size: 18px;
   text-align: center;
   font-weight: bold;

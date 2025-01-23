@@ -1,15 +1,11 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import Interest from '@renderer/generic/interet'
+import Money from '@renderer/generic/money'
 
 const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
-
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       provisions: [{}]
@@ -18,23 +14,20 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { fields, remove, append } = useFieldArray({
     control,
-    name: 'provisions' // Champs dynamiques pour les enfants
+    name: 'provisions'
   })
 
   const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
   const provisionsValues = useWatch({
     control,
     name: 'provisions'
   })
 
-  // Référence pour suivre les anciennes valeurs
   const previousValuesRef = useRef({})
 
   const submitForm = useCallback(
     (data) => {
-      onSubmit(data) // Soumettre avec l'onSubmit passé en prop
+      onSubmit(data)
     },
     [onSubmit]
   )
@@ -44,15 +37,13 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(provisionsValues) !== JSON.stringify(previousValuesRef.current?.provisions)
 
-    // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
       previousValuesRef.current = {
         formValues,
         provisions: provisionsValues
       }
 
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
+      handleSubmit(submitForm)()
     }
   }, [formValues, provisionsValues, submitForm, handleSubmit])
 
@@ -63,7 +54,7 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
       if (lastRowEnd) {
         const finDate = new Date(lastRowEnd)
         if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
+          finDate.setDate(finDate.getDate() + 1)
           append({ start: finDate.toISOString().split('T')[0], ...initial })
         }
       } else {
@@ -73,77 +64,114 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
+  // Calcul des totaux pour Montant et Intérêts
+  const totals = useMemo(() => {
+    const totalAmount = provisionsValues.reduce(
+      (acc, curr) => acc + (parseFloat(curr.amount) || 0),
+      0
+    )
+    const totalInterest = provisionsValues.reduce((acc, curr) => {
+      const interest =
+        curr.date_provision && curr.date_paiement ? (
+          <Interest
+            amount={curr.amount || 0}
+            start={curr.date_provision}
+            end={curr.date_paiement}
+          />
+        ) : (
+          0
+        )
+      return acc + parseFloat(interest)
+    }, 0)
+
+    return {
+      totalAmount: totalAmount * -1,
+      totalInterest: totalInterest * -1
+    }
+  }, [provisionsValues])
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Provisions</h1>
-      <table style={{ width: 700 }}>
-        <thead>
-          <tr>
-            <th>Date de provision</th>
-            <th>Montant</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            const values = formValues?.provisions[index]
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`provisions.${index}.date_provision`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`provisions.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`provisions.${index}.date_paiement`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest
-                    amount={values?.amount || 0}
-                    start={values?.date_provision}
-                    end={values?.date_paiement}
-                  />
-                </td>
-                {editable && (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Provisions</h1>
+        <table style={{ width: 700 }}>
+          <thead>
+            <tr>
+              <th>Date de provision</th>
+              <th>Montant</th>
+              <th className="int">Date du paiement</th>
+              <th className="int">Intérêts (€)</th>
+              {editable && <th></th>}
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((child, index) => {
+              const values = formValues?.provisions[index]
+              return (
+                <tr key={child.id}>
                   <td>
-                    <button onClick={() => remove(index)}>Supprimer</button>
+                    <Field
+                      control={control}
+                      type="date"
+                      name={`provisions.${index}.date_provision`}
+                      editable={editable}
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
                   </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append, {})}>
-          Ajouter provisions
-        </button>
-      )}
-    </form>
+                  <td>
+                    <Field
+                      control={control}
+                      type="number"
+                      name={`provisions.${index}.amount`}
+                      editable={editable}
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  <td className="int">
+                    <Field
+                      control={control}
+                      type="date"
+                      name={`provisions.${index}.date_paiement`}
+                      editable={editable}
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  <td className="int">
+                    <Interest
+                      amount={values?.amount || 0}
+                      start={values?.date_provision}
+                      end={values?.date_paiement}
+                    />
+                  </td>
+                  {editable && (
+                    <td>
+                      <button type="button" onClick={() => remove(index)}>
+                        Supprimer
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+
+        {editable && (
+          <button type="button" onClick={() => addNext(append, {})}>
+            Ajouter provisions
+          </button>
+        )}
+      </form>
+      <div className="total-box">
+        <strong>Total des provisions : </strong> <Money value={totals.totalAmount.toFixed(2)} />
+      </div>
+      <div className="total-box">
+        <strong>Total des intérêts : </strong> <Money value={totals.totalInterest.toFixed(2)} />
+      </div>
+    </>
   )
 }
 
