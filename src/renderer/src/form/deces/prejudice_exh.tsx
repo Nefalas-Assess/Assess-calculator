@@ -119,14 +119,14 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
-                <td style={{ width: 200 }}>
+                <td>
                   <Field
                     control={control}
                     type="number"
                     name={`periods.${index}.amount`}
                     editable={editable}
                   >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
+                    {(props) => <input style={{ width: 50 }} defaultValue={75} {...props} />}
                   </Field>
                 </td>
                 <td>
