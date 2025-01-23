@@ -262,3 +262,11 @@ button {
     background: green;
   }
 }
+<<<<<<< HEAD
+=======
+
+.logo{
+  display: flex;
+  flex-direction: row-reverse;
+}
+>>>>>>> 564d8dafaa9d11b0382281a5d32e6df9a9539419

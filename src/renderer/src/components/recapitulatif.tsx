@@ -49,7 +49,9 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="content">
-        <img src={icon} style={{ width: '100px', height: '100px' }}/>
+        <div className="logo">
+          <img src={icon} style={{ width: '100px', height: '100px' }} />
+        </div>
         <InfoG editable={false} />
         <Frais editable={false} />
         <Personnel editable={false} />
