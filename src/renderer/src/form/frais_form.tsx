@@ -93,7 +93,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <th>Indemintés/Frais</th>
             <th>Numéro de facture </th>
             <th>Payé</th>
-            <th>Montant</th>
+            <th>Montant (€)</th>
             <th className="int">Date frais</th>
             <th className="int">Date du paiement</th>
             <th className="int">Intérêts (€)</th>
@@ -116,7 +116,10 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               <td>
                 <Field control={control} name={`frais.${index}.paid`} editable={editable}>
                   {(props) => (
-                    <select {...props}>
+                    <select {...props} defaultValue="">
+                      <option value="" disabled>
+                        Sélectionnez
+                      </option>
                       <option value={true}>Oui</option>
                       <option value={false}>Non</option>
                     </select>
@@ -192,7 +195,10 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Field control={control} name={`administratif_paid`} editable={editable}>
                 {(props) => (
-                  <select {...props}>
+                  <select {...props} defaultValue="">
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
                     <option>Oui</option>
                     <option>Non</option>
                   </select>
@@ -217,7 +223,10 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Field control={control} name={`vestimentaire_paid`} editable={editable}>
                 {(props) => (
-                  <select {...props}>
+                  <select {...props} defaultValue="">
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
                     <option>Oui</option>
                     <option>Non</option>
                   </select>
@@ -262,7 +271,10 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Field control={control} name={`deplacement_paid`} editable={editable}>
                 {(props) => (
-                  <select {...props}>
+                  <select {...props} defaultValue="">
+                    <option value="" disabled>
+                      Sélectionnez
+                    </option>
                     <option>Oui</option>
                     <option>Non</option>
                   </select>

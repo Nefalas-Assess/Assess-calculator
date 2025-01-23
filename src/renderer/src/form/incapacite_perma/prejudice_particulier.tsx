@@ -237,7 +237,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   editable={editable}
                 >
                   {(props) => (
-                    <select {...props}>
+                    <select {...props} defaultValue="">
+                      <option value="" disabled>Sélectionnez</option>
                       <option value={false}>Non</option>
                       <option value={true}>Oui</option>
                     </select>
@@ -319,7 +320,8 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   editable={editable}
                 >
                   {(props) => (
-                    <select {...props}>
+                    <select {...props} defaultValue="">
+                      <option value="" disabled>Sélectionnez</option>
                       <option value={false}>Non</option>
                       <option value={true}>Oui</option>
                     </select>
