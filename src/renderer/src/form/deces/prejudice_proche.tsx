@@ -216,7 +216,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Money value={getTotalAmount()} />
+              {!data?.general_info?.date_naissance ? (
+                <span>Date de naissance manquante</span>
+              ) : (
+                <Money value={getTotalAmount()} />
+              )}
             </td>
           </tr>
         </tbody>

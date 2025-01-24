@@ -60,14 +60,15 @@ export const useCapitalization = (props = {}) => {
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
+
   const { years: age } = intervalToDuration({
-    start: start || data?.general_info?.date_naissance,
+    start: start || new Date(data?.general_info?.date_naissance),
     end
   })
 
   const table = getCapitalizationTable(ref, sexe)
 
-  const rowIndex = Object?.keys(table)?.findIndex((e) => parseInt(e) === age)
+  const rowIndex = Object?.keys(table)?.findIndex((e) => parseInt(e) === (age || 0))
   const row = Object?.values(table)?.[rowIndex]
 
   if (amount) return amount * row[index]

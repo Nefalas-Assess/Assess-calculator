@@ -24,8 +24,11 @@ export default {
     { value: 0.42, label: 'Véhicule automobile' },
     { value: 0.28, label: 'Autre' }
   ],
-  reference_light: [
+  reference_funeraire: [
     { value: 'schryvers', label: 'Schryvers 2024 | Paiement anticipé frais funéraires' }
+  ],
+  reference_light: [
+    { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' }
   ],
   reference: [
     { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },

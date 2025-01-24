@@ -89,7 +89,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
             <Field
               control={control}
               type="select"
-              options={constants.reference_light}
+              options={constants.reference_funeraire}
               name={`ref`}
               editable={editable}
             ></Field>

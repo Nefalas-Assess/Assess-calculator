@@ -87,7 +87,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const getCapAmount = useCallback(
     (values) => {
-      const { amount = 0, pourcentage = 0 } = values
+      const { amount = 0, pourcentage = 0 } = values || {}
 
       const index = constants?.interet_amount?.findIndex(
         (e) => e?.value === parseFloat(formValues?.interet || 0)
