@@ -266,3 +266,40 @@ button {
   display: flex;
   flex-direction: row-reverse;
 }
+
+/* ToastContext.module.css */
+.toast {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%); /* Start outside of view */
+  animation: slide-in 0.5s forwards, slide-out 0.5s forwards 1.5s;
+}
+
+/* Animation d'entrée */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de sortie */
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

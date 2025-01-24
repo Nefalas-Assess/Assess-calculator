@@ -1,5 +1,6 @@
 import { AppContext } from '@renderer/providers/AppProvider'
-import { useContext, useEffect, useState } from 'react'
+import { useToast } from '@renderer/providers/ToastProvider'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
 
 const LinkItem = ({ to, children }) => {
@@ -12,6 +13,8 @@ const LinkItem = ({ to, children }) => {
 
 export const AppLayout = () => {
   const { data, save, back, toggleDarkMode, mode } = useContext(AppContext)
+
+  const { addToast } = useToast()
 
   const [incPerma, setIncPerma] = useState(false)
   const [incTemp, setIncTemp] = useState(false)
@@ -33,6 +36,11 @@ export const AppLayout = () => {
     }
   }, [location.pathname]) // Réagir uniquement si le chemin change
 
+  const handleSave = useCallback(() => {
+    save()
+    addToast('Fichier sauvegardé')
+  }, [save])
+
   return (
     <div className={`app ${mode}`}>
       <div className="app-layout">
@@ -43,7 +51,7 @@ export const AppLayout = () => {
           <div className="right">
             <button onClick={toggleDarkMode}>Mode</button>
             {/* <button onClick={printRecap}>Imprimer</button> */}
-            <button onClick={save}>Sauvegarder</button>
+            <button onClick={handleSave}>Sauvegarder</button>
             <button onClick={back}>Accueil</button>
           </div>
         </div>

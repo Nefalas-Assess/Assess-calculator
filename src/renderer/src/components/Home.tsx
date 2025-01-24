@@ -1,8 +1,11 @@
 import { AppContext } from '@renderer/providers/AppProvider'
+import { useToast } from '@renderer/providers/ToastProvider'
 import { useContext, useState } from 'react'
 
 const Home = () => {
   const { setFilePath, setData } = useContext(AppContext)
+
+  const { addToast } = useToast()
 
   const [error, setError] = useState(null)
   const [fileName, setFileName] = useState(null)
@@ -23,6 +26,8 @@ const Home = () => {
         await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
         setFilePath(filePath)
       }
+
+      addToast('Fichier créé')
     } catch (err) {
       setError('Erreur lors de la création du fichier')
       console.error(err)
@@ -43,6 +48,8 @@ const Home = () => {
         setFilePath(filePath)
         setData(JSON.parse(fileData))
       }
+
+      addToast('Fichier importé')
     } catch (err) {
       setError("Erreur lors de l'importation du fichier")
       console.error(err)

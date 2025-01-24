@@ -1,33 +1,30 @@
 import AppProvider, { AppContext } from './providers/AppProvider'
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import AppLayout from './layouts/AppLayout'
-import INFOG from './components/infog'
-import Home from './components/Home'
-import IPForfait from './components/incapacite_permanente/forfait'
-import IPPersonnel from './components/incapacite_permanente/personnel_cap'
-import IPMenagère from './components/incapacite_permanente/menage_cap'
-import IPFrais from './components/incapacite_permanente/frais_cap'
-import IPEconomique from './components/incapacite_permanente/economique_cap'
-import IPParticulier from './components/incapacite_permanente/particuliers'
+import Home from '@renderer/components/Home'
+import IPForfait from '@renderer/components/incapacite_permanente/forfait'
+import IPPersonnel from '@renderer/components/incapacite_permanente/personnel_cap'
+import IPMenagère from '@renderer/components/incapacite_permanente/menage_cap'
+import IPFrais from '@renderer/components/incapacite_permanente/frais_cap'
+import IPEconomique from '@renderer/components/incapacite_permanente/economique_cap'
+import IPParticulier from '@renderer/components/incapacite_permanente/particuliers'
 
-import EFFA from './components/incapacite_temporaire/effa'
-import HOSP from './components/incapacite_temporaire/hosp'
-import PRETIUM from './components/incapacite_temporaire/pretium'
-import Personnel from './components/incapacite_temporaire/personnel'
-import Menagere from './components/incapacite_temporaire/menagere'
-import Economique from './components/incapacite_temporaire/economique'
-import FRAIS from './components/frais'
-import FUNE from './components/deces/frais_deces'
-import EXH from './components/deces/prejudice_exh'
-import DMP from './components/deces/prejudice_proche'
-import RECAP from './form/recap'
+import EFFA from '@renderer/components/incapacite_temporaire/effa'
+import HOSP from '@renderer/components/incapacite_temporaire/hosp'
+import PRETIUM from '@renderer/components/incapacite_temporaire/pretium'
+import Personnel from '@renderer/components/incapacite_temporaire/personnel'
+import Menagere from '@renderer/components/incapacite_temporaire/menagere'
+import Economique from '@renderer/components/incapacite_temporaire/economique'
+import INFOG from '@renderer/components/general/infog'
+import FRAIS from '@renderer/components/general/frais'
+import Provisions from '@renderer/components/general/provisions'
+import Recapitulatif from '@renderer/components/general/recapitulatif'
+import FraisFun from '@renderer/components/deces/frais_deces'
+import PrejudiceEXH from '@renderer/components/deces/prejudice_exh'
+import PrejudiceProche from '@renderer/components/deces/prejudice_proche'
 import { useContext } from 'react'
-import Recapitulatif from './components/recapitulatif'
-import FraisFun from './components/deces/frais_deces'
-import PrejudiceEXH from './components/deces/prejudice_exh'
-import PrejudiceProche from './components/deces/prejudice_proche'
-import Provisions from './components/provisions'
-
+import Toasts from './components/Toasts'
+import ToastProvider from './providers/ToastProvider'
 
 const IncapaciteTemp = () => {
   return (
@@ -90,9 +87,11 @@ const Main = () => {
 
 function App(): JSX.Element {
   return (
-    <AppProvider>
-      <Main />
-    </AppProvider>
+    <ToastProvider>
+      <AppProvider>
+        <Main />
+      </AppProvider>
+    </ToastProvider>
   )
 }
 

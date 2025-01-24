@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
-import InfoForm from '../form/info_general_form'
 import { AppContext } from '@renderer/providers/AppProvider'
+import InfoForm from '@renderer/form/info_general_form'
 
 const InfoG = ({ editable }) => {
   const { setData, data } = useContext(AppContext)
