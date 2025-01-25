@@ -1,3 +1,4 @@
+import ActionMenuButton from '@renderer/generic/actionButton'
 import Field from '@renderer/generic/field'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
@@ -5,11 +6,12 @@ import { getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import get from 'lodash/get'
 
 const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, setValue, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       periods: [{ amount: 30 }]
     }
@@ -101,6 +103,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     },
     [formValues]
   )
+
+  const copyDate = useCallback((name) => {
+    const initial = get(data, name)
+    const filteredData = initial.map(({ start, end }) => ({ start, end, amount: 30 }))
+    setValue('periods', filteredData)
+  }, [])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -217,9 +225,17 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(append, { amount: 30 })}>
-          Ajouter durée
-        </button>
+        <div className="buttons-row">
+          <button type="button" onClick={() => addNext(append, { amount: 30 })}>
+            Ajouter durée
+          </button>
+          <ActionMenuButton
+            label="Copier dates"
+            actions={[
+              { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods') }
+            ]}
+          />
+        </div>
       )}
     </form>
   )

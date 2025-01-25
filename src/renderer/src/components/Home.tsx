@@ -13,7 +13,7 @@ const Home = () => {
   const createNewFile = async () => {
     try {
       // Données initiales pour le fichier
-      const defaultData = { exampleKey: 'exampleValue' }
+      const defaultData = {}
 
       // Appel pour sauvegarder un nouveau fichier
       const { canceled, filePath } = await window.api.showSaveDialog({
