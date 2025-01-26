@@ -141,9 +141,8 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
         <tbody>
           <tr>
             <td>
-              <Field control={control} type="date" name={`conso_start`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
+              {data?.general_info?.date_consolidation &&
+                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
             </td>
             <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
 
@@ -164,7 +163,10 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
             <td className="int">
               <Interest
                 amount={getConsoAmount(formValues)}
-                start={getMedDate(formValues, ['conso_start', 'paiement'])}
+                start={getMedDate({
+                  start: data?.general_info?.date_consolidation,
+                  end: formValues?.paiement
+                })}
                 end={formValues?.paiement}
               />
             </td>
