@@ -1,3 +1,4 @@
+import ActionMenuButton from '@renderer/generic/actionButton'
 import Field from '@renderer/generic/field'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
@@ -6,10 +7,12 @@ import { getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, setValue, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       periods: [{ amount: 32 }]
     }
@@ -93,6 +96,19 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
       } else {
         append({ ...initial })
       }
+    },
+    [formValues]
+  )
+
+  const copyDate = useCallback(
+    (name) => {
+      const initial = get(data, name)
+      let filteredData = initial.map(({ start, end }) => ({ start, end, amount: 32 }))
+      const currentData = cloneDeep(formValues?.periods)
+      if (formValues?.periods) {
+        filteredData = currentData.concat(filteredData)
+      }
+      setValue('periods', filteredData)
     },
     [formValues]
   )
@@ -191,9 +207,25 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(append, { amount: 32 })}>
-          Ajouter durée
-        </button>
+        <div className="buttons-row">
+          <button type="button" onClick={() => addNext(append, { amount: 32 })}>
+            Ajouter durée
+          </button>
+          <ActionMenuButton
+            label="Importer dates"
+            actions={[
+              { label: 'Ménagère', action: () => copyDate('incapacite_temp_menagere.periods') },
+              {
+                label: 'Economique net',
+                action: () => copyDate('incapacite_temp_economique.net')
+              },
+              {
+                label: 'Economique brut',
+                action: () => copyDate('incapacite_temp_economique.brut')
+              }
+            ]}
+          />
+        </div>
       )}
     </form>
   )

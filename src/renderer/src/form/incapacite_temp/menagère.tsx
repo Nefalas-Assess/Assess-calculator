@@ -240,7 +240,15 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
           <ActionMenuButton
             label="Importer dates"
             actions={[
-              { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods') }
+              { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods') },
+              {
+                label: 'Economique net',
+                action: () => copyDate('incapacite_temp_economique.net')
+              },
+              {
+                label: 'Economique brut',
+                action: () => copyDate('incapacite_temp_economique.brut')
+              }
             ]}
           />
         </div>

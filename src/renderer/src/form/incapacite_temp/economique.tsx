@@ -6,11 +6,14 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import ActionMenuButton from '@renderer/generic/actionButton'
+import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {
       net: [{}],
       brut: [{}]
@@ -95,6 +98,19 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       ((parseFloat(percentage) || 0) / 100)
     ).toFixed(2)
   }, [])
+
+  const copyDate = useCallback(
+    (name, fieldName) => {
+      const initial = typeof name === 'string' ? get(data, name) : name
+      let filteredData = initial.map(({ start, end }) => ({ start, end, amount: 30 }))
+      const currentData = cloneDeep(formValues?.[fieldName])
+      if (currentData) {
+        filteredData = currentData.concat(filteredData)
+      }
+      setValue(fieldName, filteredData)
+    },
+    [formValues]
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -192,9 +208,28 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
-          Ajouter durée
-        </button>
+        <div className="buttons-row">
+          <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
+            Ajouter durée
+          </button>
+          <ActionMenuButton
+            label="Importer dates"
+            actions={[
+              {
+                label: 'Personnel',
+                action: () => copyDate('incapacite_temp_personnel.periods', 'net')
+              },
+              {
+                label: 'Ménagère',
+                action: () => copyDate('incapacite_temp_menagere.periods', 'net')
+              },
+              {
+                label: 'Economique brut',
+                action: () => copyDate(formValues?.brut, 'net')
+              }
+            ]}
+          />
+        </div>
       )}
 
       <h3>Indemnisation brute</h3>
@@ -297,9 +332,28 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(brutFields?.append, 'brut')}>
-          Ajouter durée
-        </button>
+        <div className="buttons-row">
+          <button type="button" onClick={() => addNext(brutFields?.append, 'brut')}>
+            Ajouter durée
+          </button>
+          <ActionMenuButton
+            label="Importer dates"
+            actions={[
+              {
+                label: 'Personnel',
+                action: () => copyDate('incapacite_temp_personnel.periods', 'brut')
+              },
+              {
+                label: 'Ménagère',
+                action: () => copyDate('incapacite_temp_menagere.periods', 'brut')
+              },
+              {
+                label: 'Economique net',
+                action: () => copyDate(formValues?.net, 'brut')
+              }
+            ]}
+          />
+        </div>
       )}
     </form>
   )
