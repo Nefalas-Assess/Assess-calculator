@@ -1,8 +1,10 @@
 import { useCallback } from 'react'
 import Money from './money'
 
-export const TotalBox = ({ name, label, documentRef, negative }) => {
+export const TotalBox = ({ name, label, value, documentRef, negative }) => {
   const getTotalDisplayedOnPage = useCallback(() => {
+    if (!documentRef && value) return value
+
     const list = documentRef?.current?.querySelectorAll(`.${name || 'money'}`)
     let total = 0
 
@@ -23,7 +25,7 @@ export const TotalBox = ({ name, label, documentRef, negative }) => {
     })
 
     return total // Retourner la somme totale
-  }, [documentRef, name])
+  }, [documentRef, name, value])
 
   return (
     <div className="total-box">

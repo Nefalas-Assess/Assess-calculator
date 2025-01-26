@@ -13,8 +13,9 @@ const Field = ({ editable, name, type, children, control, options }) => {
       }
 
       if (type === 'select') {
-        if (val && options) {
-          return (options || [])?.find((e) => e?.value === val)?.label
+        if (val?.toString() && options) {
+          return (options || [])?.find((e) => e?.value === val || e?.value?.toString() === val)
+            ?.label
         }
       }
 
@@ -28,6 +29,7 @@ const Field = ({ editable, name, type, children, control, options }) => {
       if (type === 'select' && options) {
         return (
           <select {...field}>
+            <option>Select</option>
             {(options || [])?.map((it, key) => (
               <option key={key} value={it?.value}>
                 {it?.label || it?.value}

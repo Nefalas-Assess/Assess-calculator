@@ -63,6 +63,10 @@ const Interest = ({ amount, start, end }) => {
     currency: 'EUR'
   })
 
+  if (!start) return 'Missing start date'
+  if (!end) return 'Missing end date'
+  if (!amount) return 'Missing amount'
+
   return <div className="interest">{formatter?.format(total - parseFloat(amount))}</div>
 }
 

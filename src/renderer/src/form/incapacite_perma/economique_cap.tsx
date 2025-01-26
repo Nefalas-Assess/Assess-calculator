@@ -14,7 +14,7 @@ import constants from '@renderer/constants'
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { register, handleSubmit, watch, control } = useForm({
+  const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers'
     }
@@ -161,9 +161,8 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <tbody>
           <tr>
             <td>
-              <Field control={control} type="date" name={`brut.conso_start`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
+              {data?.general_info?.date_consolidation &&
+                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
             </td>
             <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
             <td style={{ width: 50 }}>{days?.brut || 0}</td>
@@ -189,7 +188,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <Interest
                 amount={getConsoAmount(formValues?.brut, 'brut')}
                 start={getMedDate({
-                  start: formValues?.brut?.conso_start,
+                  start: data?.general_info?.date_consolidation,
                   end: formValues?.paiement
                 })}
                 end={formValues?.paiement}
@@ -214,9 +213,8 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <tbody>
           <tr>
             <td>
-              <Field control={control} type="date" name={`net.conso_start`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
+              {data?.general_info?.date_consolidation &&
+                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
             </td>
             <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
             <td style={{ width: 50 }}>{days?.net || 0}</td>
@@ -244,7 +242,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                   value={
                     getDays({
                       start: getMedDate({
-                        start: formValues?.net?.conso_start,
+                        start: data?.general_info?.date_consolidation,
                         end: formValues?.paiement
                       }),
                       end: formValues?.paiement

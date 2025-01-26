@@ -7,6 +7,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import get from 'lodash/get'
+import cloneDeep from 'lodash/cloneDeep'
 
 const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -104,11 +105,18 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
-  const copyDate = useCallback((name) => {
-    const initial = get(data, name)
-    const filteredData = initial.map(({ start, end }) => ({ start, end, amount: 30 }))
-    setValue('periods', filteredData)
-  }, [])
+  const copyDate = useCallback(
+    (name) => {
+      const initial = get(data, name)
+      let filteredData = initial.map(({ start, end }) => ({ start, end, amount: 30 }))
+      const currentData = cloneDeep(formValues?.periods)
+      if (formValues?.periods) {
+        filteredData = currentData.concat(filteredData)
+      }
+      setValue('periods', filteredData)
+    },
+    [formValues]
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -230,7 +238,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
             Ajouter durée
           </button>
           <ActionMenuButton
-            label="Copier dates"
+            label="Importer dates"
             actions={[
               { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods') }
             ]}

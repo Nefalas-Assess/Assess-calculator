@@ -279,6 +279,10 @@ button {
   flex-direction: row-reverse;
 }
 
+.hide{
+  display: none;
+}
+
 /* ToastContext.module.css */
 .toast {
   margin-bottom: 10px;

@@ -7,6 +7,7 @@ import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import TotalBox from '@renderer/generic/totalBox'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -274,6 +275,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   </button>
                 </td>
               )}
+              {/* // Utilisé pour la total box mais caché pour le user */}
+              <td className="hide">
+                <Money value={formValues?.prejudice_sexuels?.[index]?.amount} />
+              </td>
             </tr>
           ))}
         </tbody>
@@ -351,6 +356,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                   </button>
                 </td>
               )}
+              {/* // Utilisé pour la total box mais caché pour le user */}
+              <td className="hide">
+                <Money value={formValues?.prejudice_agrements?.[index]?.amount} />
+              </td>
             </tr>
           ))}
         </tbody>
