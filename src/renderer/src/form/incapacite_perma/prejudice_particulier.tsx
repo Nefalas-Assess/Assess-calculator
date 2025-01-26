@@ -133,15 +133,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
               </Field>
             </td>
             <td className="int">
-              <Money
-                value={
-                  getDays({
-                    start: data?.general_info?.date_consolidation,
-                    end: formValues?.date_paiement_quantum_doloris
-                  }) *
-                  getTotalWithCoef(formValues?.coefficient_quantum_doloris || 0) *
-                  (data?.computed_info?.rate / 365)
-                }
+              <Interest
+                start={data?.general_info?.date_consolidation}
+                end={formValues?.date_paiement_quantum_doloris}
+                amount={getTotalWithCoef(formValues?.coefficient_quantum_doloris || 0)}
               />
             </td>
           </tr>
