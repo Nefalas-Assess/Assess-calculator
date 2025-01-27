@@ -331,7 +331,6 @@ button {
 .tooltip-box {
   position: absolute;
   top: 0%; /* Aligne le tooltip au niveau de l'élément */
-  left: 100%; /* Centre horizontalement */
   transform: translateX(-50%); /* Ajuste pour centrer parfaitement */
   margin-top: 8px;
   background-color: #333;
