@@ -100,17 +100,11 @@ button:focus-visible {
     left: 0;
     width: 100vw; /* Adapte la largeur au viewport */
     height: 100vh; /* Adapte la hauteur au viewport */
-    transform: scale(0.85);
     transform-origin: top left;
   }
   
   table, form, div {
     page-break-inside: avoid;
-  }
-
-  .form-container {
-    page-break-before: always;
-    page-break-after: auto;
   }
 }
 
