@@ -98,7 +98,7 @@ button:focus-visible {
   #content {
     top: 0;
     left: 0;
-    width: 100vw; /* Adapte la largeur au viewport */
+    width: 98vw; /* Adapte la largeur au viewport */
     height: 100vh; /* Adapte la hauteur au viewport */
     transform-origin: top left;
   }
