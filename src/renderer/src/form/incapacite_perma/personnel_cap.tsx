@@ -70,7 +70,9 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
 
       const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
 
-      const index = constants.interet_amount?.findIndex((e) => e === parseFloat(interet || 0))
+      const index = constants.interet_amount?.findIndex(
+        (e) => e?.value === parseFloat(interet || 0)
+      )
 
       const coefficient = table?.[years]?.[index]
 

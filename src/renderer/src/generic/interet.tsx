@@ -1,5 +1,8 @@
 import rates from '@renderer/data/data_taux'
 import { startOfYear, endOfYear, differenceInCalendarDays, isWithinInterval } from 'date-fns'
+import Tooltip from './tooltip'
+import { useCallback, useEffect, useState } from 'react'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 
 const getDaysPerYearInRange = (startDate, endDate) => {
   const result = []
@@ -44,10 +47,12 @@ const getAmountForYear = (year) => {
   const found = rates.find((entry) => yearStr >= entry.start && yearStr <= entry.end)
 
   // Retourne l'amount ou null si non trouvé
-  return found ? parseFloat(found.amount) : null
+  return found ? parseFloat(found.amount) : parseFloat(rates[0]?.amount)
 }
 
 const Interest = ({ amount, start, end }) => {
+  const [info, setInfo] = useState([])
+
   const ranges = getDaysPerYearInRange(start, end)
 
   let total = parseFloat(amount)
@@ -55,6 +60,7 @@ const Interest = ({ amount, start, end }) => {
   for (let i = 0; i < ranges.length; i += 1) {
     const item = ranges[i]
     const taxe = getAmountForYear(item?.year) / 100
+    console.log(item, taxe)
     total += total * taxe * (item?.days / 365)
   }
 
@@ -63,11 +69,31 @@ const Interest = ({ amount, start, end }) => {
     currency: 'EUR'
   })
 
+  const renderToolTipContent = useCallback(() => {
+    return <div>ici</div>
+  }, [])
+
+  // useEffect(() => {
+
+  // },[])
+
   if (!start) return 'Missing start date'
   if (!end) return 'Missing end date'
   if (!amount) return 'Missing amount'
 
-  return <div className="interest">{formatter?.format(total - parseFloat(amount))}</div>
+  console.log(info)
+
+  return (
+    <div
+      className="interest"
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
+      {formatter?.format(total - parseFloat(amount))}
+      <Tooltip tooltipContent={renderToolTipContent()}>
+        <FaRegQuestionCircle />
+      </Tooltip>
+    </div>
+  )
 }
 
 export default Interest
