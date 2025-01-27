@@ -26,8 +26,6 @@ const Tooltip = ({ children, tooltipContent }) => {
     setIsHovered(false)
   }
 
-  console.log('is hover', isHovered)
-
   return (
     <div
       ref={containerRef}

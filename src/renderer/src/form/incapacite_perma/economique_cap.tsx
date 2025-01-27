@@ -59,15 +59,15 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const days = useMemo(() => {
     return {
       brut: getDays({
-        start: formValues?.brut?.conso_start,
+        start: data?.general_info?.date_consolidation,
         end: formValues?.paiement
       }),
       net: getDays({
-        start: formValues?.net?.conso_start,
+        start: data?.general_info?.date_consolidation,
         end: formValues?.paiement
       })
     }
-  }, [formValues])
+  }, [formValues, data])
 
   const getConsoAmount = useCallback(
     (values, name) => {
@@ -76,7 +76,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 
       return (
         parseInt(numDays || 0) *
-        parseFloat(conso_amount || 0) *
+        (parseFloat(conso_amount || 0) / 365) *
         (parseFloat(conso_pourcentage || 0) / 100)
       ).toFixed(2)
     },
