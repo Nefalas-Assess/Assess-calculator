@@ -341,4 +341,5 @@ button {
 .tooltip-trigger{
   display: flex;
   align-items: center;
+  cursor: help;
 }

@@ -26,16 +26,17 @@ const Tooltip = ({ children, tooltipContent }) => {
     setIsHovered(false)
   }
 
+  console.log('is hover', isHovered)
+
   return (
-    <div ref={containerRef} className="tooltip-container">
+    <div
+      ref={containerRef}
+      className="tooltip-container"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {/* L'élément déclencheur */}
-      <div
-        className="tooltip-trigger"
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {children}
-      </div>
+      <div className="tooltip-trigger">{children}</div>
       <div className="tooltip-box" style={{ zIndex: -100 }} ref={tooltipRef}>
         {tooltipContent}
       </div>
@@ -49,7 +50,7 @@ const Tooltip = ({ children, tooltipContent }) => {
             exit={{ opacity: 0, x: position === 'right' ? 10 : -10 }}
             className="tooltip-box"
             style={{
-              [position]: '100%' // Adjust position dynamically
+              [position]: 'calc(100% + 2px)' // Adjust position dynamically
             }}
           >
             {tooltipContent}
