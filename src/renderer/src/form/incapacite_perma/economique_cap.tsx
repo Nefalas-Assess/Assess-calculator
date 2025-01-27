@@ -15,9 +15,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { handleSubmit, watch, control } = useForm({
-    defaultValues: initialValues || {
-      reference: 'schryvers'
-    }
+    defaultValues: initialValues || {}
   })
 
   const formValues = watch()
@@ -237,21 +235,14 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <Money value={getConsoAmount(formValues?.net, 'net')} />
             </td>
             <td className="int">
-              {formValues?.paiement && (
-                <Money
-                  value={
-                    getDays({
-                      start: getMedDate({
-                        start: data?.general_info?.date_consolidation,
-                        end: formValues?.paiement
-                      }),
-                      end: formValues?.paiement
-                    }) *
-                    getConsoAmount(formValues?.net, 'net') *
-                    (data?.computed_info?.rate / 365)
-                  }
-                />
-              )}
+              <Interest
+                amount={getConsoAmount(formValues?.brut, 'net')}
+                start={getMedDate({
+                  start: data?.general_info?.date_consolidation,
+                  end: formValues?.paiement
+                })}
+                end={formValues?.paiement}
+              />
             </td>
           </tr>
         </tbody>

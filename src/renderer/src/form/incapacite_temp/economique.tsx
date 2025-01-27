@@ -309,15 +309,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td className="int">
-                  {values?.date_paiement && (
-                    <Money
-                      value={
-                        getDays({ start: getMedDate(values), end: values?.date_paiement }) *
-                        total *
-                        (data?.computed_info?.rate / 365)
-                      }
-                    />
-                  )}
+                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
                 </td>
                 {editable && (
                   <td>
