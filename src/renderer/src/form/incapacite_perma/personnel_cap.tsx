@@ -13,7 +13,7 @@ import constants from '@renderer/constants'
 export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { register, handleSubmit, watch, control } = useForm({
+  const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
       conso_amount: 32,
@@ -45,8 +45,11 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
   }, [formValues, submitForm, handleSubmit])
 
   const days = useMemo(() => {
-    return getDays(formValues, ['conso_start', 'paiement'])
-  }, [formValues])
+    return getDays({
+      start: data?.general_info?.date_consolidation,
+      end: formValues?.paiement
+    })
+  }, [formValues, data])
 
   const getConsoAmount = useCallback(
     (values) => {

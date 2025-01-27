@@ -45,8 +45,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   }, [formValues, submitForm, handleSubmit])
 
   const days = useMemo(() => {
-    return getDays(formValues, ['conso_start', 'paiement'])
-  }, [formValues])
+    return getDays({
+      start: data?.general_info?.date_consolidation,
+      end: formValues?.paiement
+    })
+  }, [formValues, data])
 
   const getConsoAmount = useCallback(
     (values) => {
