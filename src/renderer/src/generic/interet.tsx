@@ -122,7 +122,7 @@ const Interest = ({ amount, start, end }) => {
     >
       {formatter?.format(total - parseFloat(amount))}
       <Tooltip tooltipContent={renderToolTipContent()}>
-        <FaRegQuestionCircle />
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
       </Tooltip>
     </div>
   )

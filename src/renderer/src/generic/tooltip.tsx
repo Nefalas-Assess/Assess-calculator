@@ -49,7 +49,7 @@ const Tooltip = ({ children, tooltipContent }) => {
             exit={{ opacity: 0, x: position === 'right' ? 10 : -10 }}
             className="tooltip-box"
             style={{
-              [position]: 'calc(100% + 8px)' // Adjust position dynamically
+              [position]: '100%' // Adjust position dynamically
             }}
           >
             {tooltipContent}
