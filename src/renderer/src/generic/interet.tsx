@@ -95,7 +95,7 @@ const Interest = ({ amount, start, end }) => {
         <div>
           Intéret calculé pour la période:
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-            {format(start, 'dd/MM/yyyy')} <FaArrowRightLong /> {format(end, 'dd/MM/yyyy')}
+            {start && format(start, 'dd/MM/yyyy')} <FaArrowRightLong /> {format(end, 'dd/MM/yyyy')}
           </div>
         </div>
         {info?.map((it, key) => (
