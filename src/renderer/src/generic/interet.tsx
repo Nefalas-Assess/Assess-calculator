@@ -104,8 +104,18 @@ const Interest = ({ amount, start, end }) => {
           <div key={key}>
             <div>Pour {it?.year}:</div>
             <div>
-              <Money span value={it?.amount} /> x {it?.taxe} x ({it?.days} / 365) ={' '}
-              <Money span value={it?.amount * it?.taxe * (it?.days / 365)} />
+              <math>
+                <mn>{it?.amount}</mn>
+                <mo>x</mo>
+                <mn>{it?.taxe}</mn>
+                <mo>x</mo>
+                <mfrac>
+                  <mn>{it?.days}</mn>
+                  <mn>365</mn>
+                </mfrac>
+                <mo>=</mo>
+                <mn>{it?.amount * it?.taxe * (it?.days / 365)}</mn>
+              </math>
             </div>
           </div>
         ))}
