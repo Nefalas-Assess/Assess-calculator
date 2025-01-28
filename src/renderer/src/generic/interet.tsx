@@ -62,7 +62,7 @@ const getAmountForYear = (year) => {
 const Interest = ({ amount, start, end }) => {
   const [info, setInfo] = useState([])
 
-  const ranges = getDaysPerYearInRange(start, end)
+  const ranges = useMemo(() => getDaysPerYearInRange(start, end), [start, end])
 
   const total = useMemo(() => {
     let res = parseFloat(amount)
@@ -83,7 +83,7 @@ const Interest = ({ amount, start, end }) => {
     setInfo(updatedInfo)
 
     return res
-  }, [amount])
+  }, [amount, ranges])
 
   const formatter = new Intl.NumberFormat('fr-FR', {
     style: 'currency',
@@ -125,7 +125,7 @@ const Interest = ({ amount, start, end }) => {
         ))}
       </div>
     )
-  }, [info])
+  }, [info, start, end, amount])
 
   if (!start) return 'Missing start date'
   if (!end) return 'Missing end date'
