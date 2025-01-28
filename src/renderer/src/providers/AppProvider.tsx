@@ -1,4 +1,3 @@
-import { getChildrenUnder25 } from '@renderer/helpers/general'
 import { intervalToDuration } from 'date-fns'
 import React, { createContext, useCallback, useState } from 'react'
 
@@ -34,10 +33,6 @@ const AppProvider = ({ children }) => {
         end: res?.general_info?.date_consolidation
       })
       res.computed_info.age_consolidation = age_consolidation
-      const children = res?.general_info?.children
-      if (children) {
-        res.computed_info.enfant_charge = getChildrenUnder25(children)
-      }
       if (res?.general_info?.calcul_interets === 'true') {
         res.computed_info.rate = parseFloat(res?.general_info?.taux_int)
       }

@@ -13,7 +13,7 @@ import constants from '@renderer/constants'
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { register, handleSubmit, watch, control } = useForm({
+  const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
       conso_amount: 32,

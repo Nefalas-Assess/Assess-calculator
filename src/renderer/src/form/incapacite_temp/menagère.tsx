@@ -4,10 +4,65 @@ import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
 import { getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+import { format } from 'date-fns'
+
+function calculateDays(birthDate, dates) {
+  const parseDate = (date) => new Date(date)
+
+  // Convertir les dates en objets Date
+  const birth = parseDate(birthDate)
+  const start = parseDate(dates?.[0])
+  const end = parseDate(dates?.[1])
+
+  // Vérification des dates
+  if (start > end) {
+    throw new Error('La date de début doit être avant la date de fin.')
+  }
+
+  // Calcul de la date des 25 ans
+  const twentyFifthBirthday = new Date(birth.getFullYear() + 25, birth.getMonth(), birth.getDate())
+
+  // Calcul des jours entre deux dates
+  const calculateDaysBetween = (date1, date2) => {
+    const diffTime = Math.abs(date2 - date1)
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) // Convertir les millisecondes en jours
+  }
+
+  let before25 = 0
+  let after25 = 0
+
+  // Cas où la date de début est avant les 25 ans
+  if (start <= twentyFifthBirthday) {
+    // Calcul des jours avant les 25 ans
+    const actualEndBefore25 = end <= twentyFifthBirthday ? end : twentyFifthBirthday
+    before25 = calculateDaysBetween(start, actualEndBefore25)
+
+    // Calcul des jours après les 25 ans
+    if (end > twentyFifthBirthday) {
+      after25 = calculateDaysBetween(twentyFifthBirthday, end)
+    }
+  } else {
+    // Cas où la date de début est après les 25 ans
+    after25 = calculateDaysBetween(start, end)
+  }
+
+  const total = calculateDaysBetween(start, end)
+
+  const percentageBefore25 = total > 0 ? before25 / total : 0
+
+  return {
+    percentageBefore25,
+    before25,
+    after25,
+    total
+  }
+}
 
 const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -118,6 +173,63 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
+  const children = useMemo(() => data?.general_info?.children || [], [data])
+
+  const getChildOnPeriod = useCallback(
+    (values) => {
+      const res = []
+      for (let i = 0; i < children.length; i += 1) {
+        const item = children[i]
+        const result = calculateDays(item?.birthDate, [values?.start, values?.end])
+        res.push({ days: result, ...item })
+      }
+      return res
+    },
+    [children]
+  )
+
+  const renderToolTipContent = useCallback((res) => {
+    console.log(res)
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+        {res?.map((it, key) => (
+          <div key={key} style={{ padding: 10 }} className="border-item">
+            {it?.name}: {format(it?.birthDate, 'dd/MM/yyyy')}
+            <div>Nombres de jours entre le début et la fin: {it?.days?.total}</div>
+            <div>Nombres de jours avant l'age de 25 ans: {it?.days?.before25}</div>
+            <div>
+              <math>
+                <mfrac>
+                  <mn>{it?.days?.before25}</mn>
+                  <mn>{it?.days?.total}</mn>
+                </mfrac>
+                <mo>=</mo>
+                <mn>{it?.days?.before25 / it?.days?.total}</mn>
+              </math>
+            </div>
+          </div>
+        ))}
+        <div>
+          <math>
+            {res?.map((it, key) => (
+              <React.Fragment key={key}>
+                {key !== 0 && <mo>+</mo>}
+                <mn>{it?.days?.percentageBefore25}</mn>
+              </React.Fragment>
+            ))}
+            <mo>=</mo>
+            <mn>
+              {res?.reduce((acc, value) => {
+                const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                return acc + percentage
+              }, 0)}
+            </mn>
+          </math>
+        </div>
+      </div>
+    )
+  }, [])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Incapacités menagères temporaires</h1>
@@ -142,6 +254,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
             const values = formValues?.periods[index]
             const days = getDays(values)
             const total = getTotalAmount(values, days)
+            const children = getChildOnPeriod(values)
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
@@ -165,7 +278,15 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
-                <td style={{ width: 50 }}>{data?.computed_info?.enfant_charge || 0}</td>
+                <td style={{ width: 50 }}>
+                  {children?.reduce((acc, value) => {
+                    const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                    return acc + percentage
+                  }, 0)}
+                  <Tooltip tooltipContent={renderToolTipContent(children)}>
+                    <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+                  </Tooltip>
+                </td>
                 <td style={{ width: 200 }}>
                   <Field
                     control={control}
