@@ -23,7 +23,6 @@ const PrejudiceProche = ({ editable }) => {
           editable={editable}
           initialValues={data?.prejudice_proche}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
       </div>
     </div>
   )

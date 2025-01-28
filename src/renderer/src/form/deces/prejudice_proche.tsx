@@ -9,6 +9,7 @@ import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
+import TotalBox from '@renderer/generic/totalBox'
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -227,6 +228,16 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             </tr>
           </tbody>
         </table>
+        <TotalBox
+          label="Total général :"
+          value={
+            getTotalAmount() +
+            membersValues?.reduce((total, item) => {
+              const amount = parseFloat(item.amount) || 0
+              return total + amount
+            }, 0)
+          }
+        />
       </FadeIn>
     </form>
   )
