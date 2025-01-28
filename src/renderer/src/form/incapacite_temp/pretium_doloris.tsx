@@ -128,6 +128,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
                   >
                     {(props) => (
                       <select {...props}>
+                        <option>Select</option>
                         <option value="1.15">1/7</option>
                         <option value="3.50">2/7</option>
                         <option value="7">3/7</option>

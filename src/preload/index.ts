@@ -17,7 +17,9 @@ const api = {
   readFile: (filePath) => ipcRenderer.invoke('file:read', filePath),
 
   // Fonction pour imprimer un fichier
-  print: (content, styles) => ipcRenderer.invoke('print-content', { content, styles })
+  print: (content, styles, logo) => ipcRenderer.invoke('print-content', { content, styles, logo }),
+
+  resolvePath: (path) => ipcRenderer.invoke('resolve-path', path)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

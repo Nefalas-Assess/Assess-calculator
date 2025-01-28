@@ -10,6 +10,7 @@ import Interest from '@renderer/generic/interet'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import FadeIn from '@renderer/generic/fadeIn'
 
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -142,166 +143,177 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
           </tr>
         </tbody>
       </table>
+      <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
+        <h3>Période entre la consolidation et le paiement</h3>
+        <table id="ippcTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
+              <th>Salaire annuel brut (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total brut</th>
+              <th className="int">Intérêts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {data?.general_info?.date_consolidation &&
+                  format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
+              </td>
+              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+              <td style={{ width: 50 }}>{days?.brut || 0}</td>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`brut.conso_amount`}
+                  editable={editable}
+                >
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`brut.conso_pourcentage`}
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getConsoAmount(formValues?.brut, 'brut')} />
+              </td>
+              <td className="int">
+                <Interest
+                  amount={getConsoAmount(formValues?.brut, 'brut')}
+                  start={getMedDate({
+                    start: data?.general_info?.date_consolidation,
+                    end: formValues?.paiement
+                  })}
+                  end={formValues?.paiement}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <h3>Période entre la consolidation et le paiement</h3>
-      <table id="ippcTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Date de consolidation</th>
-            <th>Date du paiement</th>
-            <th>Jours</th>
-            <th>Salaire annuel brut (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total brut</th>
-            <th className="int">Intérêts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {data?.general_info?.date_consolidation &&
-                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
-            </td>
-            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
-            <td style={{ width: 50 }}>{days?.brut || 0}</td>
-            <td>
-              <Field control={control} type="number" name={`brut.conso_amount`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field
-                control={control}
-                type="number"
-                name={`brut.conso_pourcentage`}
-                editable={editable}
-              >
-                {(props) => <input style={{ width: 50 }} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getConsoAmount(formValues?.brut, 'brut')} />
-            </td>
-            <td className="int">
-              <Interest
-                amount={getConsoAmount(formValues?.brut, 'brut')}
-                start={getMedDate({
-                  start: data?.general_info?.date_consolidation,
-                  end: formValues?.paiement
-                })}
-                end={formValues?.paiement}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table id="ippcTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th>Jours</th>
+              <th>Salaire annuel net (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total net</th>
+              <th className="int">Intérêts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {data?.general_info?.date_consolidation &&
+                  format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
+              </td>
+              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+              <td style={{ width: 50 }}>{days?.net || 0}</td>
+              <td>
+                <Field control={control} name={`net.conso_amount`} editable={editable}>
+                  {(props) => <input type="number" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`net.conso_pourcentage`}
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getConsoAmount(formValues?.net, 'net')} />
+              </td>
+              <td className="int">
+                <Interest
+                  amount={getConsoAmount(formValues?.brut, 'net')}
+                  start={getMedDate({
+                    start: data?.general_info?.date_consolidation,
+                    end: formValues?.paiement
+                  })}
+                  end={formValues?.paiement}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <table id="ippcTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Date de consolidation</th>
-            <th>Date du paiement</th>
-            <th>Jours</th>
-            <th>Salaire annuel net (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total net</th>
-            <th className="int">Intérêts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {data?.general_info?.date_consolidation &&
-                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
-            </td>
-            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
-            <td style={{ width: 50 }}>{days?.net || 0}</td>
-            <td>
-              <Field control={control} name={`net.conso_amount`} editable={editable}>
-                {(props) => <input type="number" {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field
-                control={control}
-                type="number"
-                name={`net.conso_pourcentage`}
-                editable={editable}
-              >
-                {(props) => <input style={{ width: 50 }} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getConsoAmount(formValues?.net, 'net')} />
-            </td>
-            <td className="int">
-              <Interest
-                amount={getConsoAmount(formValues?.brut, 'net')}
-                start={getMedDate({
-                  start: data?.general_info?.date_consolidation,
-                  end: formValues?.paiement
-                })}
-                end={formValues?.paiement}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <h3>Incapacités économiques permanentes</h3>
+        <table id="itebTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Salaire annuel brut (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Field control={control} type="number" name={`brut.amount`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`brut.pourcentage`}
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getCapAmount(formValues?.brut)} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <h3>Incapacités économiques permanentes</h3>
-      <table id="itebTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Salaire annuel brut (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Field control={control} type="number" name={`brut.amount`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} type="number" name={`brut.pourcentage`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getCapAmount(formValues?.brut)} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table id="itebTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Salaire annuel net (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Field control={control} type="number" name={`net.amount`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} type="number" name={`net.pourcentage`} editable={editable}>
-                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getCapAmount(formValues?.net)} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table id="itebTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Salaire annuel net (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Field control={control} type="number" name={`net.amount`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} type="number" name={`net.pourcentage`} editable={editable}>
+                  {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getCapAmount(formValues?.net)} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </FadeIn>
     </form>
   )
 }

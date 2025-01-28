@@ -374,6 +374,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                   >
                     {(props) => (
                       <select {...props}>
+                        <option>Select</option>
                         <option value="0">0</option>
                         <option value="100">100</option>
                         <option value="65">65</option>

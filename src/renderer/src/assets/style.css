@@ -85,10 +85,39 @@ button:focus-visible {
   }
 
   body * {
-    visibility: hidden; /* Cache tout sauf la div ciblée */
     font-family: Arial, sans-serif;
     font-size: 12pt;
     color: #000;
+  }
+
+  .print-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .print-header img {
+    height: 50px; /* Définit la taille du logo */
+  }
+
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    border-top: 1px solid #ccc;
+  }
+
+  .print-content {
+    margin: 120px 20px 80px;
+   
   }
 
   #content, #content * {
@@ -104,7 +133,7 @@ button:focus-visible {
   }
   
   table, form, div {
-    page-break-inside: avoid;
+    page-break-inside: auto;
   }
 }
 

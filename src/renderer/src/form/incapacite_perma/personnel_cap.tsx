@@ -9,6 +9,7 @@ import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import FadeIn from '@renderer/generic/fadeIn'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -66,7 +67,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
   const getCapAmount = useCallback(
     (values) => {
       const { paiement = '', interet = 0, perso_amount = 0, perso_pourcentage = 0 } = values
-      const { years } = intervalToDuration({
+      const { years = 0 } = intervalToDuration({
         start: data?.general_info?.date_naissance,
         end: paiement
       })
@@ -130,84 +131,96 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
         </tbody>
       </table>
 
-      <h3>Période entre la consolidation et le paiement</h3>
-      <table id="ippcTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Date de consolidation</th>
-            <th>Date du paiement</th>
-            <th style={{ width: 50 }}>Jours</th>
-            <th>Indemnité journalière (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total (€)</th>
-            <th className="int">Intérêts</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              {data?.general_info?.date_consolidation &&
-                format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
-            </td>
-            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+      <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
+        <h3>Période entre la consolidation et le paiement</h3>
+        <table id="ippcTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Date de consolidation</th>
+              <th>Date du paiement</th>
+              <th style={{ width: 50 }}>Jours</th>
+              <th>Indemnité journalière (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total (€)</th>
+              <th className="int">Intérêts</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                {data?.general_info?.date_consolidation &&
+                  format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
+              </td>
+              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
 
-            <td style={{ width: 50 }}>{days || 0}</td>
-            <td>
-              <Field control={control} name={`conso_amount`} type="number" editable={editable}>
-                {(props) => <input style={{ width: 50 }} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} name={`conso_pourcentage`} type="number" editable={editable}>
-                {(props) => <input style={{ width: 50 }} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getConsoAmount(formValues)} />
-            </td>
-            <td className="int">
-              <Interest
-                amount={getConsoAmount(formValues)}
-                start={getMedDate({
-                  start: data?.general_info?.date_consolidation,
-                  end: formValues?.paiement
-                })}
-                end={formValues?.paiement}
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <td style={{ width: 50 }}>{days || 0}</td>
+              <td>
+                <Field control={control} name={`conso_amount`} type="number" editable={editable}>
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  name={`conso_pourcentage`}
+                  type="number"
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getConsoAmount(formValues)} />
+              </td>
+              <td className="int">
+                <Interest
+                  amount={getConsoAmount(formValues)}
+                  start={getMedDate({
+                    start: data?.general_info?.date_consolidation,
+                    end: formValues?.paiement
+                  })}
+                  end={formValues?.paiement}
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <h3>Incapacités personnelles permanentes</h3>
-      <table id="IPCAPTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Date du paiement</th>
-            <th>Indemnité journalière (€)</th>
-            <th style={{ width: 50 }}>%</th>
-            <th>Total (€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
-            <td>
-              <Field control={control} name={`perso_amount`} type="number" editable={editable}>
-                {(props) => <input style={{ width: 50 }} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} name={`perso_pourcentage`} type="number" editable={editable}>
-                {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={getCapAmount(formValues)} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <h3>Incapacités personnelles permanentes</h3>
+        <table id="IPCAPTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Date du paiement</th>
+              <th>Indemnité journalière (€)</th>
+              <th style={{ width: 50 }}>%</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+              <td>
+                <Field control={control} name={`perso_amount`} type="number" editable={editable}>
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  name={`perso_pourcentage`}
+                  type="number"
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={getCapAmount(formValues)} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </FadeIn>
     </form>
   )
 }

@@ -8,6 +8,7 @@ import Interest from '@renderer/generic/interet'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import FadeIn from '@renderer/generic/fadeIn'
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -132,99 +133,101 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           </tr>
         </tbody>
       </table>
-      <h3>Dommage moral des proches</h3>
-      <table style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Nom du membre de la famille</th>
-            <th>Lien de parenté</th>
-            <th>Indemnité (€)</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field control={control} name={`members.${index}.name`} editable={editable}>
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="select"
-                    options={constants.family_link}
-                    name={`members.${index}.link`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`members.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input style={{ width: 100 }} {...props} />}
-                  </Field>
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append)}>
-          Ajouter une ligne
-        </button>
-      )}
-      <h3>Perte du revenu du défunt</h3>
 
-      <table id="itebTable" style={{ width: 1000 }}>
-        <thead>
-          <tr>
-            <th>Revenu du défunt (€)</th>
-            <th>Revenu total du ménage (€)</th>
-            <th>Nombre de membres du ménage avant le décès</th>
-            <th>Total (€)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Field control={control} type="number" name={`revenue_defunt`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} type="number" name={`revenue_total`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Field control={control} type="number" name={`members_amount`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-            <td>
-              {!data?.general_info?.date_naissance ? (
-                <span>Date de naissance manquante</span>
-              ) : (
-                <Money value={getTotalAmount()} />
-              )}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <FadeIn show={formValues?.deces && formValues?.reference && formValues?.interet}>
+        <h3>Dommage moral des proches</h3>
+        <table style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Nom du membre de la famille</th>
+              <th>Lien de parenté</th>
+              <th>Indemnité (€)</th>
+              {editable && <th></th>}
+            </tr>
+          </thead>
+          <tbody>
+            {fields.map((child, index) => {
+              return (
+                <tr key={child.id}>
+                  <td>
+                    <Field control={control} name={`members.${index}.name`} editable={editable}>
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.family_link}
+                      name={`members.${index}.link`}
+                      editable={editable}
+                    ></Field>
+                  </td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="number"
+                      name={`members.${index}.amount`}
+                      editable={editable}
+                    >
+                      {(props) => <input style={{ width: 100 }} {...props} />}
+                    </Field>
+                  </td>
+                  {editable && (
+                    <td>
+                      <button type="button" onClick={() => remove(index)}>
+                        Supprimer
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        {editable && (
+          <button type="button" onClick={() => addNext(append)}>
+            Ajouter une ligne
+          </button>
+        )}
+        <h3>Perte du revenu du défunt</h3>
+        <table id="itebTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Revenu du défunt (€)</th>
+              <th>Revenu total du ménage (€)</th>
+              <th>Nombre de membres du ménage avant le décès</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Field control={control} type="number" name={`revenue_defunt`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} type="number" name={`revenue_total`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} type="number" name={`members_amount`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                {!data?.general_info?.date_naissance ? (
+                  <span>Date de naissance manquante</span>
+                ) : (
+                  <Money value={getTotalAmount()} />
+                )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </FadeIn>
     </form>
   )
 }

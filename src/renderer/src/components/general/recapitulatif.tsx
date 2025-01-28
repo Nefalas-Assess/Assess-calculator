@@ -16,12 +16,11 @@ import Particuliers from '../incapacite_permanente/particuliers'
 import FraisFun from '../deces/frais_deces'
 import PrejudiceEXH from '../deces/prejudice_exh'
 import PrejudiceProche from '../deces/prejudice_proche'
-import icon from '../../assets/icon.png'
 
 const Recapitulatif = () => {
   const contentRef = useRef()
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     const content = contentRef.current.outerHTML
 
     const styles = Array.from(document.styleSheets)
@@ -37,8 +36,14 @@ const Recapitulatif = () => {
       })
       .join('')
 
-    // Envoyez un message au main process via IPC pour imprimer
-    window.api.print(content, styles)
+    try {
+      const absoluteLogoPath = `${await window.api.resolvePath('src/renderer/src/assets/icon-plain.png')}`
+      window.api.print(content, styles, absoluteLogoPath)
+    } catch (error) {
+      console.error('Erreur lors de la résolution du chemin du logo:', error)
+    }
+
+    // window.api.print(content, styles, absolutePath)
   }
 
   return (
@@ -49,9 +54,6 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="content">
-        <div className="logo">
-          <img src={icon} style={{ width: '100px', height: '100px' }} />
-        </div>
         <InfoG editable={false} />
         <Frais editable={false} />
         <Personnel editable={false} />

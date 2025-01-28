@@ -1,5 +1,5 @@
 import { app, shell, BrowserWindow, ipcMain, dialog } from 'electron'
-import { join } from 'path'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 const fs = require('fs').promises
@@ -52,6 +52,15 @@ function createWindow(): void {
     return fs.readFile(filePath, 'utf8')
   })
 
+  ipcMain.handle('resolve-path', async (_, relativePath) => {
+    const appPath = app.getAppPath()
+    console.log('App path', appPath)
+    console.log('Chemin relatif reçu :', relativePath)
+    const resolvedPath = path.resolve(appPath, relativePath)
+    console.log('Chemin absolu résolu :', resolvedPath)
+    return resolvedPath
+  })
+
   ipcMain.handle('print-content', (event, doc) => {
     // Créez une nouvelle fenêtre invisible pour l'impression
     const printWindow = new BrowserWindow({
@@ -60,20 +69,39 @@ function createWindow(): void {
       show: false, // La fenêtre est invisible
       webPreferences: {
         nodeIntegration: true,
-        contextIsolation: false
+        contextIsolation: false,
+        webSecurity: false
       }
     })
 
     // Injectez le contenu HTML et les styles
     const html = `
-      <html>
-        <head>
-          <style>${doc?.styles}</style>
-        </head>
-        <body>
-          ${doc?.content}
-        </body>
-      </html>
+    <html>
+      <head>
+        <style>
+         ${doc?.styles || ''}
+        </style>
+      </head>
+      <body>
+        <div class="print-layout" id="printable">
+          <!-- Header -->
+          <div class="print-header">
+            <h2>Assess</h2>
+            <img src="file://${doc?.logo || ''}" alt="Logo"> <!-- Logo -->
+          </div>
+
+          <!-- Contenu principal -->
+          <div class="print-content">
+            ${doc?.content || ''}
+          </div>
+
+          <!-- Footer -->
+          <div class="print-footer">
+            <p>&copy; 2025 - Assess</p>
+          </div>
+        </div>
+      </body>
+    </html>
     `
 
     printWindow.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
