@@ -14,7 +14,7 @@ import TotalBox from '@renderer/generic/totalBox'
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       members: data?.general_info?.children?.map((it, key) => ({
         name: it?.name,

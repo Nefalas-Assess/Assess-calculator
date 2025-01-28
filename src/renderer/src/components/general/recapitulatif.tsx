@@ -16,6 +16,7 @@ import Particuliers from '../incapacite_permanente/particuliers'
 import FraisFun from '../deces/frais_deces'
 import PrejudiceEXH from '../deces/prejudice_exh'
 import PrejudiceProche from '../deces/prejudice_proche'
+import TotalBox from '@renderer/generic/totalBox'
 
 const Recapitulatif = () => {
   const contentRef = useRef()
@@ -72,6 +73,8 @@ const Recapitulatif = () => {
         <FraisFun editable={false} />
         <PrejudiceEXH editable={false} />
         <PrejudiceProche editable={false} />
+        <TotalBox name="total-interest" documentRef={contentRef} label={'Total interet global'} />
+        <TotalBox name="total" documentRef={contentRef} label={'Total global'} />
       </div>
     </>
   )

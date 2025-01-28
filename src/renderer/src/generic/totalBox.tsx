@@ -30,7 +30,11 @@ export const TotalBox = ({ name, label, value, documentRef, negative }) => {
   return (
     <div className="total-box">
       {label && <strong>{label}</strong>}
-      <Money value={negative ? -getTotalDisplayedOnPage() : getTotalDisplayedOnPage()} ignore />
+      <Money
+        className={`total${name ? '-' + name : ''}`}
+        value={negative ? -getTotalDisplayedOnPage() : getTotalDisplayedOnPage()}
+        ignore
+      />
     </div>
   )
 }
