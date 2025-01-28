@@ -15,8 +15,8 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {
-      net: [{}],
-      brut: [{}]
+      net: [],
+      brut: []
     }
   })
 
