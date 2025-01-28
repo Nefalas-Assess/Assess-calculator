@@ -109,10 +109,14 @@ const Interest = ({ amount, start, end }) => {
                 <mo>x</mo>
                 <mn>{it?.taxe}</mn>
                 <mo>x</mo>
+                <mo>(</mo>
                 <mfrac>
                   <mn>{it?.days}</mn>
                   <mn>365</mn>
                 </mfrac>
+                <mn>=</mn>
+                <mn>{it?.days / 365}</mn>
+                <mo>)</mo>
                 <mo>=</mo>
                 <mn>{it?.amount * it?.taxe * (it?.days / 365)}</mn>
               </math>
