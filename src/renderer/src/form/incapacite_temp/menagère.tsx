@@ -129,10 +129,14 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [])
 
   const getTotalAmount = useCallback(
-    (item, days) => {
+    (item, days, child) => {
       const { amount = 0, percentage = 0, contribution = 0 } = item
+      const childAmount = child?.reduce((acc, value) => {
+        const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+        return acc + percentage
+      }, 0)
 
-      const baseAmount = parseFloat(amount) + (data?.computed_info?.enfant_charge || 0) * 10
+      const baseAmount = parseFloat(amount) + childAmount * 10
       return (
         (parseInt(days) || 0) *
         (parseFloat(baseAmount) || 0) *
@@ -188,14 +192,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     [children]
   )
 
-  const renderToolTipContent = useCallback((res) => {
-    console.log(res)
+  const renderToolTipChildren = useCallback((res) => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         {res?.map((it, key) => (
           <div key={key} style={{ padding: 10 }} className="border-item">
-            {it?.name}: {format(it?.birthDate, 'dd/MM/yyyy')}
-            <div>Nombres de jours entre le début et la fin: {it?.days?.total}</div>
+            {it?.name} né le {format(it?.birthDate, 'dd/MM/yyyy')}
             <div>Nombres de jours avant l'age de 25 ans: {it?.days?.before25}</div>
             <div>
               <math>
@@ -230,6 +232,60 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     )
   }, [])
 
+  const renderTooltipTotal = useCallback((item, days, child) => {
+    const { amount = 0, percentage = 0, contribution = 0 } = item
+    const childAmount = child?.reduce((acc, value) => {
+      const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+      return acc + percentage
+    }, 0)
+
+    const baseAmount = parseFloat(amount) + childAmount * 10
+
+    const resultat =
+      (parseInt(days) || 0) *
+      (parseFloat(baseAmount) || 0) *
+      ((parseFloat(percentage) || 0) / 100) *
+      (parseFloat(contribution || 0) / 100)
+
+    return (
+      <div>
+        <div>
+          <math>
+            <mstyle style={{ marginRight: 5 }}>
+              <mo>(</mo>
+              <mi>A</mi>
+              <mo>)</mo>
+            </mstyle>
+            <mn>{amount}</mn>
+            <mo>x</mo>
+            <mn>{childAmount}</mn>
+            <mo>x</mo>
+            <mn>10</mn>
+            <mo>=</mo>
+            <mn>{baseAmount}</mn>
+          </math>
+        </div>
+        <math>
+          <mn>{days}</mn>
+          <mo>x</mo>
+          <mi>A</mi>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{percentage}</mn>
+            <mn>100</mn>
+          </mfrac>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{contribution}</mn>
+            <mn>100</mn>
+          </mfrac>
+          <mo>=</mo>
+          <mn>{resultat}</mn>
+        </math>
+      </div>
+    )
+  }, [])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Incapacités menagères temporaires</h1>
@@ -253,8 +309,8 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
           {fields.map((child, index) => {
             const values = formValues?.periods[index]
             const days = getDays(values)
-            const total = getTotalAmount(values, days)
             const children = getChildOnPeriod(values)
+            const total = getTotalAmount(values, days, children)
             return (
               <tr key={child.id}>
                 <td style={{ width: 140 }}>
@@ -279,13 +335,15 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                 </td>
                 <td style={{ width: 50 }}>{days}</td>
                 <td style={{ width: 50 }}>
-                  {children?.reduce((acc, value) => {
-                    const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
-                    return acc + percentage
-                  }, 0)}
-                  <Tooltip tooltipContent={renderToolTipContent(children)}>
-                    <FaRegQuestionCircle style={{ marginLeft: 5 }} />
-                  </Tooltip>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {children?.reduce((acc, value) => {
+                      const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                      return acc + percentage
+                    }, 0)}
+                    <Tooltip tooltipContent={renderToolTipChildren(children)}>
+                      <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+                    </Tooltip>
+                  </div>
                 </td>
                 <td style={{ width: 200 }}>
                   <Field
@@ -326,7 +384,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Money value={total} />
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Money value={total} />
+                    <Tooltip tooltipContent={renderTooltipTotal(values, days, children)}>
+                      <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+                    </Tooltip>
+                  </div>
                 </td>
                 <td className="int">
                   <Field
