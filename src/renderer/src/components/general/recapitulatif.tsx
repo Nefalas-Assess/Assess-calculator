@@ -73,8 +73,12 @@ const Recapitulatif = () => {
         <FraisFun editable={false} />
         <PrejudiceEXH editable={false} />
         <PrejudiceProche editable={false} />
-        <TotalBox name="total-interest" documentRef={contentRef} label={'Total interet global'} />
-        <TotalBox name="total" documentRef={contentRef} label={'Total global'} />
+        <TotalBox
+          selector="total-interest"
+          documentRef={contentRef}
+          label={'Total interet global'}
+        />
+        <TotalBox selector="total" documentRef={contentRef} label={'Total global'} />
       </div>
     </>
   )

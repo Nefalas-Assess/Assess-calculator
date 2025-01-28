@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import Money from './money'
 
-export const TotalBox = ({ name, label, value, documentRef, negative }) => {
+export const TotalBox = ({ name, label, selector, value, documentRef, negative }) => {
   const getTotalDisplayedOnPage = useCallback(() => {
     if (!documentRef && value) return value
 
-    const list = documentRef?.current?.querySelectorAll(`.${name || 'money'}`)
+    const list = documentRef?.current?.querySelectorAll(`.${selector || name || 'money'}`)
     let total = 0
 
     list?.forEach((e) => {

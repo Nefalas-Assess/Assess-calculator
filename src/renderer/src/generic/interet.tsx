@@ -132,11 +132,8 @@ const Interest = ({ amount, start, end }) => {
   if (!amount) return 'Missing amount'
 
   return (
-    <div
-      className="interest"
-      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-    >
-      {formatter?.format(total - parseFloat(amount))}
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="interest">{formatter?.format(total - parseFloat(amount))}</div>
       <Tooltip tooltipContent={renderToolTipContent()}>
         <FaRegQuestionCircle style={{ marginLeft: 5 }} />
       </Tooltip>

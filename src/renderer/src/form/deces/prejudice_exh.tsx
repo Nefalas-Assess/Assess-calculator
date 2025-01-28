@@ -126,7 +126,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
                     name={`periods.${index}.amount`}
                     editable={editable}
                   >
-                    {(props) => <input style={{ width: 50 }} defaultValue={75} {...props} />}
+                    {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                 </td>
                 <td>
@@ -145,7 +145,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(append)}>
+        <button type="button" onClick={() => addNext(append, { amount: 75 })}>
           Ajouter une ligne
         </button>
       )}

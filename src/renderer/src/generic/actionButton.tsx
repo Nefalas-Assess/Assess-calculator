@@ -16,7 +16,6 @@ const ActionMenuButton = ({ label, actions }) => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-      console.log('ici')
       setMenuOpen(false) // Ferme le menu si on clique en dehors
     }
   }
