@@ -69,7 +69,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { control, setValue, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      periods: [{ amount: 30 }]
+      periods: []
     }
   })
 

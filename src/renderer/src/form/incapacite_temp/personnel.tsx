@@ -14,7 +14,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
   const { control, setValue, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      periods: [{ amount: 32 }]
+      periods: []
     }
   })
 

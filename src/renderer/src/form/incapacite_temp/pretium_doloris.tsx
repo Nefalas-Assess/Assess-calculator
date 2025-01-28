@@ -9,9 +9,9 @@ import Field from '@renderer/generic/field'
 const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      periods: [{}]
+      periods: []
     }
   })
 
