@@ -22,7 +22,7 @@ function calculateDays(birthDate, dates) {
 
   // Vérification des dates
   if (start > end) {
-    throw new Error('La date de début doit être avant la date de fin.')
+    return 'La date de début doit être avant la date de fin.'
   }
 
   // Calcul de la date des 25 ans
