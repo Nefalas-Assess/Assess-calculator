@@ -43,8 +43,6 @@ const Recapitulatif = () => {
     } catch (error) {
       console.error('Erreur lors de la résolution du chemin du logo:', error)
     }
-
-    // window.api.print(content, styles, absolutePath)
   }
 
   return (
