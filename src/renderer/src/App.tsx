@@ -22,7 +22,7 @@ import Recapitulatif from '@renderer/components/general/recapitulatif'
 import FraisFun from '@renderer/components/deces/frais_deces'
 import PrejudiceEXH from '@renderer/components/deces/prejudice_exh'
 import PrejudiceProche from '@renderer/components/deces/prejudice_proche'
-import { useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useState } from 'react'
 import ToastProvider from './providers/ToastProvider'
 
 const IncapaciteTemp = () => {
@@ -98,6 +98,10 @@ function App(): JSX.Element {
     })
   }, [])
 
+  const handleRestart = useCallback(() => {
+    window.api.restartApp()
+  }, [])
+
   return (
     <ToastProvider>
       <AppProvider>
@@ -108,7 +112,7 @@ function App(): JSX.Element {
             <button onClick={handleRestart}>Redémarrer pour appliquer la mise à jour</button>
           </div>
         )}
-        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 6 }}>
+        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 9 }}>
           {import.meta.env.VITE_APP_VERSION}
         </div>
         <Main />
