@@ -40,7 +40,9 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  owner: Nefalas-Assess
+  repo: Assess-calculator
+  token: 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
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/

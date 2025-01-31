@@ -19,7 +19,11 @@ const api = {
   // Fonction pour imprimer un fichier
   print: (content, styles, logo) => ipcRenderer.invoke('print-content', { content, styles, logo }),
 
-  resolvePath: (path) => ipcRenderer.invoke('resolve-path', path)
+  resolvePath: (path) => ipcRenderer.invoke('resolve-path', path),
+
+  onUpdateAvailable: (callback) => ipcRenderer.on('update_available', callback),
+  onUpdateDownloaded: (callback) => ipcRenderer.on('update_downloaded', callback),
+  restartApp: () => ipcRenderer.send('restart_app')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -22,8 +22,7 @@ import Recapitulatif from '@renderer/components/general/recapitulatif'
 import FraisFun from '@renderer/components/deces/frais_deces'
 import PrejudiceEXH from '@renderer/components/deces/prejudice_exh'
 import PrejudiceProche from '@renderer/components/deces/prejudice_proche'
-import { useContext } from 'react'
-import Toasts from './components/Toasts'
+import { useContext, useEffect, useState } from 'react'
 import ToastProvider from './providers/ToastProvider'
 
 const IncapaciteTemp = () => {
@@ -86,9 +85,30 @@ const Main = () => {
 }
 
 function App(): JSX.Element {
+  const [updateAvailable, setUpdateAvailable] = useState(false)
+  const [updateDownloaded, setUpdateDownloaded] = useState(false)
+
+  useEffect(() => {
+    window.api.onUpdateAvailable(() => {
+      setUpdateAvailable(true)
+    })
+
+    window.api.onUpdateDownloaded(() => {
+      setUpdateDownloaded(true)
+    })
+  }, [])
+
   return (
     <ToastProvider>
       <AppProvider>
+        {updateAvailable && <p>Une mise à jour est disponible. Téléchargement en cours...</p>}
+        {updateDownloaded && (
+          <div>
+            <p>La mise à jour est prête à être installée.</p>
+            <button onClick={handleRestart}>Redémarrer pour appliquer la mise à jour</button>
+          </div>
+        )}
+        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 6 }}>{__APP_VERSION__}</div>
         <Main />
       </AppProvider>
     </ToastProvider>
