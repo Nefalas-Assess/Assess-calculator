@@ -108,7 +108,9 @@ function App(): JSX.Element {
             <button onClick={handleRestart}>Redémarrer pour appliquer la mise à jour</button>
           </div>
         )}
-        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 6 }}>{__APP_VERSION__}</div>
+        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 6 }}>
+          {import.meta.env.VITE_APP_VERSION}
+        </div>
         <Main />
       </AppProvider>
     </ToastProvider>
