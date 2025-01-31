@@ -4,4 +4,4 @@ out
 .DS_Store
 *.log*
 .env
-electron-builder.yml
+electron-builder
