@@ -36,7 +36,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
       if (!noTimeout) {
         setTimeout(() => {
-          setToasts((prev) => prev.filter((toast) => toast.id !== id))
+          setToasts((prev) => prev.filter((toast) => toast.id !== generatedId))
         }, 2000)
       }
     },
