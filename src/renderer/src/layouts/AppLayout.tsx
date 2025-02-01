@@ -5,6 +5,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import logo from '@renderer/assets/icon.png'
 import get from 'lodash/get'
 import Tooltip from '@renderer/generic/tooltip'
+import Loader from '@renderer/generic/loader'
 
 const LinkItem = ({ to, children }) => {
   return (
@@ -68,6 +69,8 @@ export const AppLayout = () => {
   const [incTemp, setIncTemp] = useState(false)
   const [dead, setDead] = useState(false)
 
+  const [updateCheck, setUpdateCheck] = useState(false)
+
   const navigate = useNavigate()
   const location = useLocation() // Utilisé pour détecter l'URL actuelle
 
@@ -88,10 +91,12 @@ export const AppLayout = () => {
   useEffect(() => {
     window.api.onUpdateAvailable(() => {
       addToast('Mise à jour trouvé. Téléchargement en cours ...', true, 'update-available')
+      setUpdateCheck(false)
     })
 
     window.api.onUpdateNotAvailable(() => {
       addToast("L'application est à jour")
+      setUpdateCheck(false)
     })
 
     window.api.onUpdateDownloaded(() => {
@@ -228,9 +233,25 @@ export const AppLayout = () => {
             <div className="menu-bottom">
               <button
                 style={{ fontSize: 10, margin: 0 }}
-                onClick={() => window.api.checkForUpdates()}
+                onClick={() => {
+                  setUpdateCheck(true)
+                  window.api.checkForUpdates()
+                }}
               >
-                Recherche de mise a jour
+                <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+                  Recherche de mise a jour
+                  {updateCheck && (
+                    <Loader
+                      style={{
+                        width: 20,
+                        height: 20,
+                        marginTop: -10,
+                        marginBottom: -10,
+                        marginRight: -5
+                      }}
+                    />
+                  )}
+                </div>
               </button>
               <div style={{ padding: 5 }}>{import.meta.env.VITE_APP_VERSION}</div>
             </div>
