@@ -15,7 +15,8 @@
   flex-direction: column;
 
   .menu{
-    overflow: scroll;
+    overflow: auto;
+    height: 100%;
   }
 
 

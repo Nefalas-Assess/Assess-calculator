@@ -101,11 +101,11 @@ body {
   }
   .content {
     flex: 1;
-    overflow: scroll;
+    overflow: auto;
   }
 
   .scroll{
-    overflow: scroll;
+    overflow: auto;
     height: 100%;
   }
 
