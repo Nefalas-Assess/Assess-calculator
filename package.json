@@ -1,6 +1,6 @@
 {
   "name": "Assess",
-  "version": "0.0.17",
+  "version": "0.0.19",
   "description": "Calculateur Assess",
   "main": "./out/main/index.js",
   "author": "JVTP SRL",
