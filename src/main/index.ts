@@ -159,6 +159,11 @@ autoUpdater.on('update-not-available', () => {
   mainWindow.webContents.send('update_not_available')
 })
 
+// Événement pour suivre la progression du téléchargement
+autoUpdater.on('download-progress', (progress) => {
+  mainWindow.webContents.send('download-progress', progress)
+})
+
 autoUpdater.on('error', (error) => {
   mainWindow.webContents.send('update_error', error)
 })

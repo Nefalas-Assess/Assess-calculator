@@ -26,7 +26,8 @@ const api = {
   onUpdateAvailable: (callback) => ipcRenderer.on('update_available', callback),
   onUpdateNotAvailable: (callback) => ipcRenderer.on('update_not_available', callback),
   onUpdateDownloaded: (callback) => ipcRenderer.on('update_downloaded', callback),
-  onUpdateError: (callback) => ipcRenderer.on('update_error', callback)
+  onUpdateError: (callback) => ipcRenderer.on('update_error', callback),
+  onDownloadProgress: (callback) => ipcRenderer.on('download-progress', callback)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

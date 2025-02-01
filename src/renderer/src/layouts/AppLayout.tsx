@@ -90,7 +90,7 @@ export const AppLayout = () => {
 
   useEffect(() => {
     window.api.onUpdateAvailable(() => {
-      addToast('Mise à jour trouvé. Téléchargement en cours ...', true, 'update-available')
+      addToast('Mise à jour trouvé. Téléchargement en cours', true, 'update-available')
       setUpdateCheck(false)
     })
 

@@ -1,6 +1,7 @@
 // ToastContext.tsx
-import React, { createContext, useState, useContext, useCallback } from 'react'
+import React, { createContext, useState, useContext, useCallback, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import Loader from '@renderer/generic/loader'
 
 interface Toast {
   id: string
@@ -13,12 +14,77 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined)
 
+const UpdateProgress = () => {
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    // Écouter l'événement 'download-progress'
+    window.api.onDownloadProgress((event, progress) => {
+      setProgress(progress.percent) // Mettre à jour la progression
+    })
+
+    // Nettoyer l'écouteur lors du démontage du composant
+    return () => {
+      window.api.onDownloadProgress(() => { }) // Supprimer l'écouteur
+    }
+  }, [])
+
+  return (
+    <div style={{ marginLeft: 10 }}>
+      <progress value={progress} max="100" />
+    </div>
+  )
+}
+
 export const useToast = () => {
   const context = useContext(ToastContext)
   if (!context) {
     throw new Error('useToast must be used within a ToastProvider')
   }
   return context
+}
+
+const ToastContent = ({ item }) => {
+  const [clicked, setClicked] = useState(false)
+
+  return (
+    <>
+      {item.message}
+      {item.action && (
+        <button
+          onClick={() => {
+            setClicked(true)
+            item.action.action()
+          }}
+          style={{
+            margin: 0,
+            marginLeft: '10px',
+            background: 'black',
+            color: 'white',
+            border: 'none',
+            padding: '6px 10px',
+            cursor: 'pointer',
+            borderRadius: '5px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+            {item.action.text}
+            {clicked && (
+              <Loader
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginTop: -15,
+                  marginBottom: -15,
+                  marginRight: -5
+                }}
+              />
+            )}
+          </div>
+        </button>
+      )}
+    </>
+  )
 }
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -83,24 +149,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 right: '-100%'
               }}
             >
-              {toast.message}
-              {toast.action && (
-                <button
-                  onClick={toast.action.action}
-                  style={{
-                    margin: 0,
-                    marginLeft: '10px',
-                    background: 'black',
-                    color: 'white',
-                    border: 'none',
-                    padding: '6px 10px',
-                    cursor: 'pointer',
-                    borderRadius: '5px'
-                  }}
-                >
-                  {toast.action.text}
-                </button>
-              )}
+              <ToastContent item={toast} />
+              {toast?.id === 'update-available' && <UpdateProgress />}
             </motion.div>
           ))}
         </AnimatePresence>
