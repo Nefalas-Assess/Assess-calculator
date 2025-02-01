@@ -31,6 +31,7 @@ const Home = () => {
       }
 
       addToast('Fichier créé')
+      navigate('/infog')
     } catch (err) {
       setError('Erreur lors de la création du fichier')
     }

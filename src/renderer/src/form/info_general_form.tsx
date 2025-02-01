@@ -109,6 +109,14 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
+            <td>Date de décès</td>
+            <td>
+              <Field control={control} type="date" name="date_naissance" editable={editable}>
+                {(props) => <input {...props} />}
+              </Field>
+            </td>
+          </tr>
+          <tr>
             <td>Date de consolidation</td>
             <td>
               <Field control={control} type="date" name="date_consolidation" editable={editable}>

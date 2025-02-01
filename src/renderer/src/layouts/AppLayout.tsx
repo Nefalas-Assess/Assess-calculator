@@ -1,14 +1,45 @@
 import { AppContext } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
-import { useCallback, useContext, useEffect, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import logo from '@renderer/assets/icon.png'
+import get from 'lodash/get'
+import Tooltip from '@renderer/generic/tooltip'
 
 const LinkItem = ({ to, children }) => {
   return (
     <NavLink className={({ isActive }) => (isActive ? 'active' : '')} to={to}>
       {children}
     </NavLink>
+  )
+}
+
+const DetectMissingData = ({ children, data, required }) => {
+  const missingData = useMemo(() => {
+    const res = []
+    for (let i = 0; i < (required || []).length; i += 1) {
+      const item = required[i]
+      if (!item?.value) return
+
+      if (!get(data, item?.value)) {
+        res.push(item)
+      }
+    }
+    return res
+  }, [data, required])
+
+  const renderToolTipContent = useCallback(() => {
+    console.log('iic')
+    return <div>ici</div>
+  }, [missingData])
+
+  return (
+    <div>
+      <Tooltip tooltipContent={renderToolTipContent()}>
+        {children}
+        {/* <FaRegQuestionCircle style={{ marginLeft: 5 }} /> */}
+      </Tooltip>
+    </div>
   )
 }
 
@@ -77,6 +108,7 @@ export const AppLayout = () => {
         </div>
         <div className="core">
           <div className="layout-menu">
+            {console.log(data)}
             {filePath && (
               <div className="menu">
                 <LinkItem to="/infog">Informations générales</LinkItem>
@@ -97,9 +129,16 @@ export const AppLayout = () => {
                   )}
                 </div>
                 <div className="sub-nav">
-                  <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
-                    Incapacités Permanentes
-                  </div>
+                  <DetectMissingData
+                    data={data}
+                    required={[
+                      { value: 'general_info.date_naissance', label: 'Date de naissance requise' }
+                    ]}
+                  >
+                    <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
+                      Incapacités Permanentes
+                    </div>
+                  </DetectMissingData>
                   {incPerma && (
                     <div>
                       <LinkItem to="/ip/forfait">Forfaitaires</LinkItem>
