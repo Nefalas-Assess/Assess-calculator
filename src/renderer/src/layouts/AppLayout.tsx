@@ -127,14 +127,7 @@ export const AppLayout = () => {
             {filePath && (
               <div className="menu">
                 <LinkItem to="/infog">Informations générales</LinkItem>
-                <DetectMissingData
-                  data={data}
-                  required={[
-                    { value: 'general_info.date_naissance', label: 'Date de naissance' },
-                    { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
-                    { value: 'general_info.sexe', label: 'Sexe' }
-                  ]}
-                >
+                <DetectMissingData data={data} required={[]}>
                   <LinkItem to="/frais">Frais</LinkItem>
                 </DetectMissingData>
                 <div className="sub-nav">
