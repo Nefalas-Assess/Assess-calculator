@@ -62,10 +62,11 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const getTotalAnticipated = useCallback(
     (index) => {
       const amount = parseFloat(formValues?.charges?.[index]?.amount, 10)
-      const { years: age } = intervalToDuration({
+      const { years: age = 0 } = intervalToDuration({
         start: data?.general_info?.date_naissance,
-        end: formValues?.date
+        end: data?.general_info?.date_death
       })
+
       const rate = constants?.interet_amount?.findIndex(
         (e) => e?.value === parseFloat(formValues?.rate)
       )
@@ -105,14 +106,6 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
               name={`rate`}
               editable={editable}
             ></Field>
-          </td>
-        </tr>
-        <tr>
-          <td>Date du décès</td>
-          <td>
-            <Field control={control} type="date" name={`date`} editable={editable}>
-              {(props) => <input {...props} />}
-            </Field>
           </td>
         </tr>
       </table>

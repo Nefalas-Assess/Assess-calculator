@@ -85,14 +85,14 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     const personnel = revenue / (parseInt(formValues?.members_amount) + 1)
 
     const coef = useCapitalization({
-      end: formValues?.deces,
+      end: data?.general_info?.date_death,
       index: constants.interet_amount?.findIndex(
         (e) => e?.value === parseFloat(formValues?.interet)
       ),
       ref: formValues?.reference
     })
     return (revenue - personnel) * coef
-  }, [formValues])
+  }, [formValues, data])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -124,18 +124,10 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               ></Field>
             </td>
           </tr>
-          <tr>
-            <td>Date du décès</td>
-            <td>
-              <Field control={control} type="date" name={`deces`} editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-          </tr>
         </tbody>
       </table>
 
-      <FadeIn show={formValues?.deces && formValues?.reference && formValues?.interet}>
+      <FadeIn show={formValues?.reference && formValues?.interet}>
         <h3>Dommage moral des proches</h3>
         <table style={{ width: 1000 }}>
           <thead>

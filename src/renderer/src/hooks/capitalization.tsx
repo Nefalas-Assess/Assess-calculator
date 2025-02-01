@@ -61,7 +61,7 @@ export const useCapitalization = (props = {}) => {
 
   const sexe = data?.general_info?.sexe
 
-  const { years: age } = intervalToDuration({
+  const { years: age = 0 } = intervalToDuration({
     start: start || new Date(data?.general_info?.date_naissance),
     end
   })

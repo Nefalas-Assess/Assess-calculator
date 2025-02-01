@@ -28,7 +28,7 @@ const AppProvider = ({ children }) => {
     }
 
     if (res?.general_info) {
-      const { years: age_consolidation } = intervalToDuration({
+      const { years: age_consolidation = 0 } = intervalToDuration({
         start: res?.general_info?.date_naissance,
         end: res?.general_info?.date_consolidation
       })

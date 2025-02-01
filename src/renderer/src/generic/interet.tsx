@@ -96,8 +96,8 @@ const Interest = ({ amount, start, end }) => {
         <div>
           Intéret calculé pour la période:
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-            {start && isValid(start) && format(start, 'dd/MM/yyyy')} <FaArrowRightLong />{' '}
-            {end && isValid(end) && format(end, 'dd/MM/yyyy')}
+            {start && isValid(new Date(start)) && format(start, 'dd/MM/yyyy')} <FaArrowRightLong />{' '}
+            {end && isValid(new Date(end)) && format(end, 'dd/MM/yyyy')}
           </div>
         </div>
         {info?.map((it, key) => (
