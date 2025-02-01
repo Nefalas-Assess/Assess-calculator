@@ -155,6 +155,10 @@ autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('update_downloaded')
 })
 
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('update_not_available')
+})
+
 autoUpdater.on('error', (error) => {
   mainWindow.webContents.send('update_error', error)
 })

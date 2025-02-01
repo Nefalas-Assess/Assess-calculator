@@ -62,7 +62,7 @@ const DetectMissingData = ({ children, data, required }) => {
 export const AppLayout = () => {
   const { data, save, back, toggleDarkMode, mode, filePath } = useContext(AppContext)
 
-  const { addToast } = useToast()
+  const { addToast, removeToast } = useToast()
 
   const [incPerma, setIncPerma] = useState(false)
   const [incTemp, setIncTemp] = useState(false)
@@ -84,6 +84,24 @@ export const AppLayout = () => {
       setDead(true)
     }
   }, [location.pathname]) // Réagir uniquement si le chemin change
+
+  useEffect(() => {
+    window.api.onUpdateAvailable(() => {
+      addToast('Mise à jour trouvé. Téléchargement en cours ...', true, 'update-available')
+    })
+
+    window.api.onUpdateNotAvailable(() => {
+      addToast("L'application est à jour")
+    })
+
+    window.api.onUpdateDownloaded(() => {
+      removeToast('update-available')
+      addToast('Mise à jour téléchargé', true, 'update-downloaded', {
+        text: 'Redémarrer',
+        action: () => window.api.restartApp()
+      })
+    })
+  }, [addToast])
 
   const handleSave = useCallback(() => {
     save()

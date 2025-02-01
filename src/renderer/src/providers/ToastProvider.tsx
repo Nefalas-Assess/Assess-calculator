@@ -1,5 +1,5 @@
 // ToastContext.tsx
-import React, { createContext, useState, useContext, useCallback, useEffect } from 'react'
+import React, { createContext, useState, useContext, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface Toast {
@@ -47,22 +47,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setToasts((prev) => prev.filter((toast) => toast.id !== id))
   }, [])
 
-  useEffect(() => {
-    window.api.onUpdateAvailable(() => {
-      addToast('Mise à jour trouvé. Téléchargement en cours ...', true, 'update-available')
-    })
-
-    window.api.onUpdateDownloaded(() => {
-      removeToast('update-available')
-      addToast('Mise à jour téléchargé', true, 'update-downloaded', {
-        text: 'Redémarrer',
-        action: () => window.api.restartApp()
-      })
-    })
-  }, [addToast])
-
   return (
-    <ToastContext.Provider value={{ addToast }}>
+    <ToastContext.Provider value={{ addToast, removeToast }}>
       {children}
       <div
         style={{

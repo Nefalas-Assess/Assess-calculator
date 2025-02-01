@@ -24,6 +24,7 @@ const api = {
   checkForUpdates: () => ipcRenderer.send('check_for_updates'),
   restartApp: () => ipcRenderer.send('restart_app'),
   onUpdateAvailable: (callback) => ipcRenderer.on('update_available', callback),
+  onUpdateNotAvailable: (callback) => ipcRenderer.on('update_not_available', callback),
   onUpdateDownloaded: (callback) => ipcRenderer.on('update_downloaded', callback),
   onUpdateError: (callback) => ipcRenderer.on('update_error', callback)
 }
