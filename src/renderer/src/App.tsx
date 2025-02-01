@@ -81,33 +81,9 @@ const Main = () => {
 }
 
 function App(): JSX.Element {
-  const [updateAvailable, setUpdateAvailable] = useState(false)
-  const [updateDownloaded, setUpdateDownloaded] = useState(false)
-
-  useEffect(() => {
-    window.api.onUpdateAvailable(() => {
-      setUpdateAvailable(true)
-    })
-
-    window.api.onUpdateDownloaded(() => {
-      setUpdateDownloaded(true)
-    })
-  }, [])
-
-  const handleRestart = useCallback(() => {
-    window.api.restartApp()
-  }, [])
-
   return (
     <ToastProvider>
       <AppProvider>
-        {updateAvailable && <p>Une mise à jour est disponible. Téléchargement en cours...</p>}
-        {updateDownloaded && (
-          <div>
-            <p>La mise à jour est prête à être installée.</p>
-            <button onClick={handleRestart}>Redémarrer pour appliquer la mise à jour</button>
-          </div>
-        )}
         <Main />
       </AppProvider>
     </ToastProvider>
