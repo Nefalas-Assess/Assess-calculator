@@ -148,13 +148,23 @@ app.on('window-all-closed', () => {
 
 // Événements de l'autoUpdater
 autoUpdater.on('update-available', () => {
-  mainWindow?.webContents.send('update_available')
+  mainWindow.webContents.send('update_available')
 })
 
 autoUpdater.on('update-downloaded', () => {
-  mainWindow?.webContents.send('update_downloaded')
+  mainWindow.webContents.send('update_downloaded')
 })
 
+autoUpdater.on('error', (error) => {
+  mainWindow.webContents.send('update_error', error)
+})
+
+// Gérer la demande de vérification manuelle des mises à jour
+ipcMain.on('check_for_updates', () => {
+  autoUpdater.checkForUpdates()
+})
+
+// Gérer la demande de redémarrage pour appliquer la mise à jour
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall()
 })

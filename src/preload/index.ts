@@ -21,9 +21,11 @@ const api = {
 
   resolvePath: (path) => ipcRenderer.invoke('resolve-path', path),
 
+  checkForUpdates: () => ipcRenderer.send('check_for_updates'),
+  restartApp: () => ipcRenderer.send('restart_app'),
   onUpdateAvailable: (callback) => ipcRenderer.on('update_available', callback),
   onUpdateDownloaded: (callback) => ipcRenderer.on('update_downloaded', callback),
-  restartApp: () => ipcRenderer.send('restart_app')
+  onUpdateError: (callback) => ipcRenderer.on('update_error', callback)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

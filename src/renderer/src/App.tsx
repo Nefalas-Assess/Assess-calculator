@@ -62,15 +62,11 @@ const Deces = () => {
 }
 
 const Main = () => {
-  const { filePath } = useContext(AppContext)
-
-  if (!filePath) return <Home />
-
   return (
     <HashRouter>
       <Routes>
         <Route element={<AppLayout />}>
-          <Route index element={<INFOG />} />
+          <Route index element={<Home />} />
           <Route path="infog" element={<INFOG />} />
           <Route path="ip/*" element={<IncapacitePerma />} />
           <Route path="it/*" element={<IncapaciteTemp />} />
@@ -112,9 +108,6 @@ function App(): JSX.Element {
             <button onClick={handleRestart}>Redémarrer pour appliquer la mise à jour</button>
           </div>
         )}
-        <div style={{ position: 'fixed', bottom: 5, right: 5, fontSize: 9 }}>
-          {import.meta.env.VITE_APP_VERSION}
-        </div>
         <Main />
       </AppProvider>
     </ToastProvider>

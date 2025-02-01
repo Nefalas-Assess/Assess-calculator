@@ -1,9 +1,12 @@
 import { AppContext } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
 import { useContext, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 const Home = () => {
   const { setFilePath, setData } = useContext(AppContext)
+
+  const navigate = useNavigate()
 
   const { addToast } = useToast()
 
@@ -30,7 +33,6 @@ const Home = () => {
       addToast('Fichier créé')
     } catch (err) {
       setError('Erreur lors de la création du fichier')
-      console.error(err)
     }
   }
 
@@ -46,13 +48,13 @@ const Home = () => {
         const filePath = filePaths[0]
         const fileData = await window.api.readFile(filePath)
         setFilePath(filePath)
+        navigate('/infog')
         setData(JSON.parse(fileData))
       }
 
       addToast('Fichier importé')
     } catch (err) {
       setError("Erreur lors de l'importation du fichier")
-      console.error(err)
     }
   }
 
