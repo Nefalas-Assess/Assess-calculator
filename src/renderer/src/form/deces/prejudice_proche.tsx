@@ -10,6 +10,7 @@ import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import TotalBox from '@renderer/generic/totalBox'
+import { addYears, intervalToDuration } from 'date-fns'
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -91,7 +92,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       ),
       ref: formValues?.reference
     })
-    return (revenue - personnel) * coef
+
+    return ((parseFloat(formValues?.revenue_defunt) || 0) - personnel) * coef
   }, [formValues, data])
 
   return (
@@ -122,6 +124,14 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 name={`interet`}
                 editable={editable}
               ></Field>
+            </td>
+          </tr>
+          <tr>
+            <td>Age de retraite</td>
+            <td>
+              <Field control={control} type="number" name={`retrait`} editable={editable}>
+                {(props) => <input style={{ width: 100 }} {...props} />}
+              </Field>
             </td>
           </tr>
         </tbody>
