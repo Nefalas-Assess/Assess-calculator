@@ -29,17 +29,33 @@ const DetectMissingData = ({ children, data, required }) => {
   }, [data, required])
 
   const renderToolTipContent = useCallback(() => {
-    console.log('iic')
-    return <div>ici</div>
+    return (
+      <div>
+        Certaines valeurs sont manquantes pour accéder a cette partie:
+        <ul>
+          {missingData?.map((it, key) => (
+            <li key={key} style={{ listStyle: 'inside' }}>
+              {it?.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }, [missingData])
 
+  if ((missingData || [])?.length === 0) return children
+
   return (
-    <div>
-      <Tooltip tooltipContent={renderToolTipContent()}>
+    <Tooltip
+      tooltipContent={renderToolTipContent()}
+      contentStyle={{ backgroundColor: 'red' }}
+      style={{ width: '100%' }}
+    >
+      <div style={{ position: 'relative', marginTop: -5, marginBottom: -5, opacity: 0.6 }}>
         {children}
-        {/* <FaRegQuestionCircle style={{ marginLeft: 5 }} /> */}
-      </Tooltip>
-    </div>
+        <div style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0 }} />
+      </div>
+    </Tooltip>
   )
 }
 
@@ -108,59 +124,87 @@ export const AppLayout = () => {
         </div>
         <div className="core">
           <div className="layout-menu">
-            {console.log(data)}
             {filePath && (
               <div className="menu">
                 <LinkItem to="/infog">Informations générales</LinkItem>
-                <LinkItem to="/frais">Frais</LinkItem>
+                <DetectMissingData
+                  data={data}
+                  required={[
+                    { value: 'general_info.date_naissance', label: 'Date de naissance' },
+                    { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
+                    { value: 'general_info.sexe', label: 'Sexe' }
+                  ]}
+                >
+                  <LinkItem to="/frais">Frais</LinkItem>
+                </DetectMissingData>
                 <div className="sub-nav">
-                  <div className="sub-nav-title" onClick={() => setIncTemp(!incTemp)}>
-                    Incapacités Temporaires
-                  </div>
-                  {incTemp && (
-                    <div>
-                      <LinkItem to="/it/personnel">Personnelle</LinkItem>
-                      <LinkItem to="/it/menagère">Ménagère</LinkItem>
-                      <LinkItem to="/it/economique">Economique</LinkItem>
-                      <LinkItem to="/it/effa">Efforts Accrus</LinkItem>
-                      <LinkItem to="/it/hosp">Hospitalisation</LinkItem>
-                      <LinkItem to="/it/pretium">Pretium Doloris</LinkItem>
+                  <DetectMissingData
+                    data={data}
+                    required={[
+                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
+                      { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
+                      { value: 'general_info.sexe', label: 'Sexe' }
+                    ]}
+                  >
+                    <div className="sub-nav-title" onClick={() => setIncTemp(!incTemp)}>
+                      Incapacités Temporaires
                     </div>
-                  )}
+                    {incTemp && (
+                      <div>
+                        <LinkItem to="/it/personnel">Personnelle</LinkItem>
+                        <LinkItem to="/it/menagère">Ménagère</LinkItem>
+                        <LinkItem to="/it/economique">Economique</LinkItem>
+                        <LinkItem to="/it/effa">Efforts Accrus</LinkItem>
+                        <LinkItem to="/it/hosp">Hospitalisation</LinkItem>
+                        <LinkItem to="/it/pretium">Pretium Doloris</LinkItem>
+                      </div>
+                    )}
+                  </DetectMissingData>
                 </div>
                 <div className="sub-nav">
                   <DetectMissingData
                     data={data}
                     required={[
-                      { value: 'general_info.date_naissance', label: 'Date de naissance requise' }
+                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
+                      { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
+                      { value: 'general_info.sexe', label: 'Sexe' }
                     ]}
                   >
                     <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
                       Incapacités Permanentes
                     </div>
+                    {incPerma && (
+                      <div>
+                        <LinkItem to="/ip/forfait">Forfaitaires</LinkItem>
+                        <LinkItem to="/ip/personnel">Personnelles capitalisées</LinkItem>
+                        <LinkItem to="/ip/menagère">Ménagères capitalisées</LinkItem>
+                        <LinkItem to="/ip/economique">Économiques capitalisées</LinkItem>
+                        <LinkItem to="/ip/frais">Frais capitalisés</LinkItem>
+                        <LinkItem to="/ip/particuliers">Préjudices Particuliers</LinkItem>
+                      </div>
+                    )}
                   </DetectMissingData>
-                  {incPerma && (
-                    <div>
-                      <LinkItem to="/ip/forfait">Forfaitaires</LinkItem>
-                      <LinkItem to="/ip/personnel">Personnelles capitalisées</LinkItem>
-                      <LinkItem to="/ip/menagère">Ménagères capitalisées</LinkItem>
-                      <LinkItem to="/ip/economique">Économiques capitalisées</LinkItem>
-                      <LinkItem to="/ip/frais">Frais capitalisés</LinkItem>
-                      <LinkItem to="/ip/particuliers">Préjudices Particuliers</LinkItem>
-                    </div>
-                  )}
                 </div>
                 <div className="sub-nav">
-                  <div className="sub-nav-title" onClick={() => setDead(!dead)}>
-                    Décès
-                  </div>
-                  {dead && (
-                    <div>
-                      <LinkItem to="/deces/frais">Frais funéraires</LinkItem>
-                      <LinkItem to="/deces/prejudice_exh">Préjudice ex haerede</LinkItem>
-                      <LinkItem to="/deces/prejudice_proche">Préjudice des proches</LinkItem>
+                  <DetectMissingData
+                    data={data}
+                    required={[
+                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
+                      { value: 'general_info.date_death', label: 'Date de décès' },
+                      { value: 'general_info.sexe', label: 'Sexe' }
+                    ]}
+                  >
+                    <div className="sub-nav-title" onClick={() => setDead(!dead)}>
+                      Décès
                     </div>
-                  )}
+                    {dead && (
+                      <div>
+                        <LinkItem to="/deces/frais">Frais funéraires</LinkItem>
+                        <LinkItem to="/deces/prejudice_exh">Préjudice ex haerede</LinkItem>
+                        <LinkItem to="/deces/prejudice_proche">Préjudice des proches</LinkItem>
+                      </div>
+                    )}
+                  </DetectMissingData>
                 </div>
                 <div>
                   <LinkItem to="/provisions">Provisions</LinkItem>

@@ -11,9 +11,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { control, register, handleSubmit, watch } = useForm({
-    defaultValues: initialValues || {
-      efforts: [{ coefficient: 5, amount: 30 }]
-    }
+    defaultValues: initialValues || {}
   })
 
   const { fields, remove, append } = useFieldArray({
