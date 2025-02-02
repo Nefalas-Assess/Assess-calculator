@@ -3,6 +3,15 @@ import { useToast } from '@renderer/providers/ToastProvider'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+const getFileNameWithoutExtension = (filePath: string): string => {
+  return (
+    filePath
+      .split('/')
+      .pop()
+      ?.replace(/\.[^/.]+$/, '') || ''
+  )
+}
+
 export const useRecentFiles = () => {
   const [recentFiles, setRecentFiles] = useState<string[]>([])
 
@@ -26,11 +35,12 @@ export const useRecentFiles = () => {
         navigate('/infog')
         const parsedData = JSON.parse(fileData)
         setData(parsedData)
-        addFile({ path: filePath, name: parsedData?.general_info?.nom_victime })
+        const res = getFileNameWithoutExtension(filePath)
+        addFile({ path: filePath, name: res })
         addToast('Fichier importé')
       }
     } catch (err) {
-      addToast(err)
+      addToast(err?.toString())
     }
   }
 
@@ -49,16 +59,18 @@ export const useRecentFiles = () => {
         navigate('/infog')
         const parsedData = JSON.parse(fileData)
         setData(parsedData)
-        addFile({ path: filePath, name: parsedData?.general_info?.nom_victime })
+
+        const res = getFileNameWithoutExtension(filePath)
+        addFile({ path: filePath, name: res })
       }
 
       addToast('Fichier importé')
     } catch (err) {
-      addToast("Erreur lors de l'importation du fichier")
+      addToast(err?.toString())
     }
   }
 
-  const createFile = async () => {
+  const createFile = async (fileName) => {
     try {
       // Données initiales pour le fichier
       const defaultData = {}
@@ -73,27 +85,14 @@ export const useRecentFiles = () => {
       if (!canceled && filePath) {
         await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
         setFilePath(filePath)
+        addFile({ path: filePath, name: fileName })
+        addToast('Fichier créé')
+        navigate('/infog')
       }
-
-      addToast('Fichier créé')
-      navigate('/infog')
     } catch (err) {
-      setError('Erreur lors de la création du fichier')
+      addToast('Erreur lors de la création du fichier')
     }
   }
-
-  // // Supprimer un fichier de l'historique
-  // const removeFile = (filePath) => {
-  //   const updatedFiles = recentFiles.filter((file) => file !== filePath)
-  //   // store.set('recentFiles', updatedFiles)
-  //   setRecentFiles(updatedFiles)
-  // }
-  // // Vider l'historique
-  // const clearHistory = () => {
-  //   // store.set('recentFiles', [])
-  //   setRecentFiles([])
-  // }
-  // return { recentFiles, addFile, removeFile, clearHistory }
 
   useEffect(() => {
     async function fetchRecentFiles() {
@@ -103,8 +102,6 @@ export const useRecentFiles = () => {
 
     fetchRecentFiles()
   }, [])
-
-  console.log('RECENT FILES', recentFiles)
 
   return { addFile, importFile, createFile, selectFile, recentFiles }
 }

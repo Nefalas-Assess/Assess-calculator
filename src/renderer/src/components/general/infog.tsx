@@ -9,7 +9,7 @@ const InfoG = ({ editable }) => {
     (values) => {
       setData({ general_info: values })
     },
-    [setData]
+    [setData, data]
   )
 
   return (

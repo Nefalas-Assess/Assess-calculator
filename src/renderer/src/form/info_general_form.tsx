@@ -12,11 +12,6 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     formState: { errors }
   } = useForm({
     defaultValues: initialValues || {
-      nom_victime: '',
-      sexe: '',
-      date_accident: '',
-      date_naissance: '',
-      date_consolidation: '',
       statut: 'marié', // Valeur par défaut
       profession: 'employe', // Valeur par défaut
       calcul_interets: 'non',

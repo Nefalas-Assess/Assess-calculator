@@ -146,7 +146,8 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                right: '-100%'
+                right: '-100%',
+                maxWidth: 500
               }}
             >
               <ToastContent item={toast} />

@@ -18,7 +18,7 @@ const Home = () => {
         />
         <button
           className="create-file"
-          onClick={createFile}
+          onClick={() => createFile(fileName)}
           disabled={!fileName}
           style={{ marginRight: '10px', opacity: !fileName ? 0.5 : 1 }}
         >

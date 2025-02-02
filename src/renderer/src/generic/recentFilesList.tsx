@@ -3,18 +3,30 @@ import { useEffect, useState } from 'react'
 import { useRecentFiles } from '@renderer/hooks/recentFiles'
 
 export const RecentFilesList = () => {
-  const { recentFiles, selectFile } = useRecentFiles()
+  const { recentFiles, selectFile, importFile } = useRecentFiles()
 
   return (
-    <div style={{ padding: 10 }}>
-      <div style={{ textTransform: 'uppercase', fontSize: 12, fontWeight: 'bold', opacity: 0.8 }}>
+    <div className="recent-files-list">
+      <div
+        style={{
+          textTransform: 'uppercase',
+          padding: 10,
+          paddingBottom: 5,
+          fontSize: 10,
+          fontWeight: 'bold',
+          opacity: 0.5
+        }}
+      >
         Dossier recents
       </div>
       {(recentFiles || [])?.map((it, key) => (
-        <div key={key} onClick={() => selectFile(it?.path)}>
+        <div className="recent-file-item" key={key} onClick={() => selectFile(it?.path)}>
           {it?.name || it?.path}
         </div>
       ))}
+      <div className="recent-file-item" onClick={importFile}>
+        ...
+      </div>
     </div>
   )
 }

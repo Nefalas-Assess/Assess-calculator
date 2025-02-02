@@ -292,6 +292,22 @@ button {
   color: #8bbdff;
 }
 
+.recent-files-list{
+  color: white;
+  overflow: auto;
+  .recent-file-item {
+    background-color: #242424;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 5px;
+    font-size: 14px;
+    &:hover{
+      background-color: gray;
+    }
+  }
+}
+
 .custom-size {
   min-width: 400px;
 }

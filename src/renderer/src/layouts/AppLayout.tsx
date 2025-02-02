@@ -7,6 +7,7 @@ import get from 'lodash/get'
 import Tooltip from '@renderer/generic/tooltip'
 import Loader from '@renderer/generic/loader'
 import { RecentFilesList } from '@renderer/generic/recentFilesList'
+import { useRecentFiles } from '@renderer/hooks/recentFiles'
 
 const LinkItem = ({ to, children }) => {
   return (
@@ -112,7 +113,7 @@ export const AppLayout = () => {
   const handleSave = useCallback(() => {
     save()
     addToast('Fichier sauvegardé')
-  }, [save])
+  }, [save, data])
 
   useEffect(() => {
     if (filePath === null) {
