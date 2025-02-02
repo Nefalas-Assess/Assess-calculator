@@ -8,6 +8,16 @@ import { promises as fs } from 'fs'
 let mainWindow: BrowserWindow | null = null
 let ipcHandlersRegistered = false // Variable pour vérifier si les gestionnaires IPC sont déjà enregistrés
 
+let Store: any
+let store: any
+
+// Import dynamique de `electron-store`
+async function initStore() {
+  const module = await import('electron-store')
+  Store = module.default
+  store = new Store()
+}
+
 function createWindow(): void {
   // Créez la fenêtre principale
   mainWindow = new BrowserWindow({
@@ -119,6 +129,30 @@ function registerIpcHandlers(): void {
         printWindow.close()
       })
     })
+  })
+
+  // Vérifier que `electron-store` est bien initialisé avant d'exécuter les commandes
+  ipcMain.handle('store:get', async (_event, key) => {
+    if (!store) await initStore()
+    return store.get(key)
+  })
+
+  ipcMain.handle('store:set', async (_event, key, value) => {
+    if (!store) await initStore()
+    store.set(key, value)
+    return { success: true }
+  })
+
+  ipcMain.handle('store:delete', async (_event, key) => {
+    if (!store) await initStore()
+    store.delete(key)
+    return { success: true }
+  })
+
+  ipcMain.handle('store:clear', async () => {
+    if (!store) await initStore()
+    store.clear()
+    return { success: true }
   })
 }
 

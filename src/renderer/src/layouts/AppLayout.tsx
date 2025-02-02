@@ -6,6 +6,7 @@ import logo from '@renderer/assets/icon.png'
 import get from 'lodash/get'
 import Tooltip from '@renderer/generic/tooltip'
 import Loader from '@renderer/generic/loader'
+import { RecentFilesList } from '@renderer/generic/recentFilesList'
 
 const LinkItem = ({ to, children }) => {
   return (
@@ -147,7 +148,7 @@ export const AppLayout = () => {
         </div>
         <div className="core">
           <div className="layout-menu">
-            {filePath && (
+            {filePath ? (
               <div className="menu">
                 <LinkItem to="/infog">Informations générales</LinkItem>
                 <DetectMissingData data={data} required={[]}>
@@ -229,6 +230,8 @@ export const AppLayout = () => {
                   <LinkItem to="/recap">Récapitulatif</LinkItem>
                 </div>
               </div>
+            ) : (
+              <RecentFilesList />
             )}
             <div className="menu-bottom">
               <button

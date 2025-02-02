@@ -1,67 +1,13 @@
-import { AppContext } from '@renderer/providers/AppProvider'
-import { useToast } from '@renderer/providers/ToastProvider'
-import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useRecentFiles } from '@renderer/hooks/recentFiles'
+import { useState } from 'react'
 
 const Home = () => {
-  const { setFilePath, setData } = useContext(AppContext)
+  const { importFile, createFile } = useRecentFiles()
 
-  const navigate = useNavigate()
-
-  const { addToast } = useToast()
-
-  const [error, setError] = useState(null)
   const [fileName, setFileName] = useState(null)
-
-  const createNewFile = async () => {
-    try {
-      // Données initiales pour le fichier
-      const defaultData = {}
-
-      // Appel pour sauvegarder un nouveau fichier
-      const { canceled, filePath } = await window.api.showSaveDialog({
-        title: 'Créer un nouveau fichier',
-        defaultPath: `${fileName}.json`,
-        filters: [{ name: 'JSON Files', extensions: ['json'] }]
-      })
-
-      if (!canceled && filePath) {
-        await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
-        setFilePath(filePath)
-      }
-
-      addToast('Fichier créé')
-      navigate('/infog')
-    } catch (err) {
-      setError('Erreur lors de la création du fichier')
-    }
-  }
-
-  const importFile = async () => {
-    try {
-      const { canceled, filePaths } = await window.api.showOpenDialog({
-        title: 'Importer un fichier',
-        filters: [{ name: 'JSON Files', extensions: ['json'] }],
-        properties: ['openFile']
-      })
-
-      if (!canceled && filePaths.length > 0) {
-        const filePath = filePaths[0]
-        const fileData = await window.api.readFile(filePath)
-        setFilePath(filePath)
-        navigate('/infog')
-        setData(JSON.parse(fileData))
-      }
-
-      addToast('Fichier importé')
-    } catch (err) {
-      setError("Erreur lors de l'importation du fichier")
-    }
-  }
 
   return (
     <div className="home">
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <div className="home-container">
         <span>Référence du dossier: </span>
         <input
@@ -72,7 +18,7 @@ const Home = () => {
         />
         <button
           className="create-file"
-          onClick={createNewFile}
+          onClick={createFile}
           disabled={!fileName}
           style={{ marginRight: '10px', opacity: !fileName ? 0.5 : 1 }}
         >
