@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+const machineId = require('node-machine-id').machineId()
 
-// Custom APIs for renderer
 // Custom APIs for renderer
 const api = {
   // Fonction pour montrer une boîte de dialogue "Ouvrir"
@@ -33,7 +33,10 @@ const api = {
   getStore: (key) => ipcRenderer.invoke('store:get', key),
   clearStore: () => ipcRenderer.invoke('store:clear'),
   deleteStore: (key) => ipcRenderer.invoke('store:delete', key),
-  setStore: (key, value) => ipcRenderer.invoke('store:set', key, value)
+  setStore: (key, value) => ipcRenderer.invoke('store:set', key, value),
+
+  // Machine ID
+  getMachineId: () => machineId
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

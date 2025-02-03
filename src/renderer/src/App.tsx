@@ -24,6 +24,7 @@ import PrejudiceEXH from '@renderer/components/deces/prejudice_exh'
 import PrejudiceProche from '@renderer/components/deces/prejudice_proche'
 import { useCallback, useContext, useEffect, useState } from 'react'
 import ToastProvider from './providers/ToastProvider'
+import License from './License'
 
 const IncapaciteTemp = () => {
   return (
@@ -82,11 +83,13 @@ const Main = () => {
 
 function App(): JSX.Element {
   return (
-    <ToastProvider>
-      <AppProvider>
-        <Main />
-      </AppProvider>
-    </ToastProvider>
+    <License>
+      <ToastProvider>
+        <AppProvider>
+          <Main />
+        </AppProvider>
+      </ToastProvider>
+    </License>
   )
 }
 
