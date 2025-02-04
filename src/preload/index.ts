@@ -1,6 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-const machineId = require('node-machine-id').machineId()
 
 // Custom APIs for renderer
 const api = {
@@ -35,8 +34,8 @@ const api = {
   deleteStore: (key) => ipcRenderer.invoke('store:delete', key),
   setStore: (key, value) => ipcRenderer.invoke('store:set', key, value),
 
-  // Machine ID
-  getMachineId: () => machineId
+  // License
+  checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

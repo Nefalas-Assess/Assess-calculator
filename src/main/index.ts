@@ -4,6 +4,8 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { autoUpdater } from 'electron-updater'
 import { promises as fs } from 'fs'
+import supabase from '../renderer/src/utils/supabase'
+import { machineIdSync } from 'node-machine-id'
 
 let mainWindow: BrowserWindow | null = null
 let ipcHandlersRegistered = false // Variable pour vérifier si les gestionnaires IPC sont déjà enregistrés
@@ -17,6 +19,8 @@ async function initStore() {
   Store = module.default
   store = new Store()
 }
+
+const machineId = machineIdSync()
 
 function createWindow(): void {
   // Créez la fenêtre principale
@@ -210,4 +214,61 @@ ipcMain.on('check_for_updates', () => {
 // Gérer la demande de redémarrage pour appliquer la mise à jour
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall()
+})
+
+// 📌 Fonction pour valider la licence
+async function validateLicense(licenseKey) {
+  const { data, error } = await supabase
+    .from('licenses')
+    .select('*')
+    .eq('licenseKey', licenseKey)
+    .single()
+
+  if (error || !data) return { valid: false, error: 'invalid_key' }
+
+  // 📌 Vérifier si la machine est déjà enregistrée
+  const deviceList = data.devices || []
+
+  if (deviceList.includes(machineId)) {
+    return { valid: true, cached: true }
+  }
+
+  // 📌 Vérifier si le nombre maximum d’appareils est atteint
+  if (deviceList.length >= data.maxDevices) {
+    return { valid: false, error: 'cap_devices' }
+  }
+
+  // 📌 Ajouter la machine à la base de données
+  deviceList.push(machineId)
+  const { error: updateError } = await supabase
+    .from('licenses')
+    .update({ devices: deviceList })
+    .eq('licenseKey', licenseKey)
+
+  if (updateError) return { valid: false, error: 'error_update' }
+
+  return { valid: true, license: data }
+}
+
+// 📌 Vérifier le cache ou demander validation
+ipcMain.handle('check-license', async (event, licenseKey) => {
+  if (!store) await initStore()
+  const cachedLicense = store.get('license')
+
+  if (cachedLicense) {
+    const expiration = cachedLicense.expiration
+    const now = Date.now()
+
+    if (now < expiration) {
+      return { valid: true, cached: true } // 🔥 Licence encore valide
+    }
+  }
+
+  // 🔥 Vérifier la licence et l'association avec l’appareil
+  const result = await validateLicense(licenseKey)
+  if (result.valid) {
+    store.set('license', { key: licenseKey, expiration: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+  }
+
+  return result
 })
