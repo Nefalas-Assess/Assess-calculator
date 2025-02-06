@@ -271,7 +271,7 @@ async function validateLicense(licenseKey) {
   const { error: updateError } = await supabase
     .from('licenses')
     .update({ devices: deviceList })
-    .eq('licenseKey', licenseKey)
+    .eq('key', licenseKey)
 
   if (updateError) return { valid: false, error: 'error_update' }
 
