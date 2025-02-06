@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import Loader from './generic/loader'
 
 const LicenseInput = ({ onChange }) => {
   const [licenseKey, setLicenseKey] = useState('')
@@ -31,10 +32,11 @@ const LicenseInput = ({ onChange }) => {
 
   // Valider le format lors de la perte de focus
   const handleBlur = () => {
-    // const regex = /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/
-    // if (!regex.test(licenseKey)) {
-    //   alert('Le code de licence doit être au format XXXX-XXXX-XXXX-XXXX-XXXX.')
-    // }
+    if (!licenseKey) return
+    const regex = /^[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}$/
+    if (!regex.test(licenseKey)) {
+      alert('Le code de licence doit être au format XXXX-XXXX-XXXX-XXXX-XXXX.')
+    }
   }
 
   return (
@@ -60,37 +62,52 @@ const LicenseInput = ({ onChange }) => {
 
 export const License = ({ children }) => {
   const [licenseKey, setLicenseKey] = useState('')
+  const [error, setError] = useState(null)
   const [valid, setValid] = useState(localStorage.getItem('licenseKey') ? true : false)
+  const [loading, setLoading] = useState(null)
 
   const checkLicense = useCallback(async () => {
     const storedKey = localStorage.getItem('licenseKey')
     if (storedKey) {
       const result = await window.api.checkLicense(storedKey)
-
       if (result.valid) {
         setValid(result.valid)
       } else {
+        localStorage.removeItem('licenseKey')
         setValid(false)
       }
     }
   }, [])
 
   const handleSubmit = async () => {
-    console.log(licenseKey)
+    setLoading(true)
+    setError(null)
+    // Simuler un délai de 2 secondes
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const result = await window.api.checkLicense(licenseKey)
     if (result.valid) {
       localStorage.setItem('licenseKey', licenseKey)
-      console.log('✅ Licence validée et stockée')
+      setValid(true)
     } else {
-      console.log('❌ Clé invalide')
+      localStorage.removeItem('licenseKey')
+      setError(result?.error)
     }
+    setLoading(false)
   }
+
+  const renderError = useCallback((code) => {
+    if (code === 'cap_devices') return 'Nombre de devices maximum atteint pour cette license'
+    if (code === 'invalid_key') return 'Clé invalide'
+    if (code === 'error_update') return 'Oups! Une erreur est survenue'
+    if (code === 'too_many_attempts') return 'Trop de tentative!'
+  }, [])
 
   useEffect(() => {
     checkLicense()
   }, [])
 
-  // if (valid) return children
+  if (valid) return children
 
   return (
     <div style={{ width: '100%' }}>
@@ -105,7 +122,25 @@ export const License = ({ children }) => {
       >
         <h1>Validation de Licence</h1>
         <LicenseInput onChange={(e) => setLicenseKey(e)} />
-        <button onClick={() => handleSubmit(licenseKey)}>Valider</button>
+        {error && (
+          <div style={{ fontSize: 14, color: 'red', marginTop: 5 }}>{renderError(error)}</div>
+        )}
+        <button onClick={() => handleSubmit(licenseKey)}>
+          <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+            Valider
+            {loading && (
+              <Loader
+                style={{
+                  width: 30,
+                  height: 30,
+                  marginTop: -15,
+                  marginBottom: -15,
+                  marginRight: -5
+                }}
+              />
+            )}
+          </div>
+        </button>
       </div>
     </div>
   )

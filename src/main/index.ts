@@ -82,10 +82,7 @@ function registerIpcHandlers(): void {
 
   ipcMain.handle('resolve-path', async (_, relativePath) => {
     const appPath = app.getAppPath()
-    console.log('App path', appPath)
-    console.log('Chemin relatif reçu :', relativePath)
     const resolvedPath = path.resolve(appPath, relativePath)
-    console.log('Chemin absolu résolu :', resolvedPath)
     return resolvedPath
   })
 
@@ -216,8 +213,39 @@ ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall()
 })
 
+const attemptCache = {}
+
+// Rate limiting
+function checkAttempts(ip) {
+  const now = Date.now()
+  const windowMs = 60 * 1000 // 1 minute
+  const maxAttempts = 5
+
+  if (!attemptCache[ip]) {
+    attemptCache[ip] = { attempts: 1, lastAttempt: now }
+  } else {
+    const { attempts, lastAttempt } = attemptCache[ip]
+
+    if (now - lastAttempt > windowMs) {
+      attemptCache[ip] = { attempts: 1, lastAttempt: now }
+    } else if (attempts >= maxAttempts) {
+      return false
+    } else {
+      attemptCache[ip].attempts += 1
+      attemptCache[ip].lastAttempt = now
+    }
+  }
+
+  return true
+}
+
 // 📌 Fonction pour valider la licence
 async function validateLicense(licenseKey) {
+  // Vérifier les tentatives
+  if (!checkAttempts(machineId)) {
+    return { valid: false, error: 'too_many_attempts' }
+  }
+
   const { data, error } = await supabase
     .from('licenses')
     .select('*')
@@ -267,7 +295,10 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
   // 🔥 Vérifier la licence et l'association avec l’appareil
   const result = await validateLicense(licenseKey)
   if (result.valid) {
+    attemptCache[machineId] = {}
     store.set('license', { key: licenseKey, expiration: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+  } else {
+    store.delete('license')
   }
 
   return result
