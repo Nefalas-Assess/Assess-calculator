@@ -70,6 +70,7 @@ export const License = ({ children }) => {
     const storedKey = localStorage.getItem('licenseKey')
     if (storedKey) {
       const result = await window.api.checkLicense(storedKey)
+
       if (result.valid) {
         setValid(result.valid)
       } else {

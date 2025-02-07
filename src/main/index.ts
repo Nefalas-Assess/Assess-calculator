@@ -241,41 +241,11 @@ function checkAttempts(ip) {
 
 // 📌 Fonction pour valider la licence
 async function validateLicense(licenseKey) {
-  // Vérifier les tentatives
-  if (!checkAttempts(machineId)) {
-    return { valid: false, error: 'too_many_attempts' }
-  }
+  const response = await supabase.functions.invoke('checkLicense', {
+    body: { licenseKey, machineId }
+  })
 
-  const { data, error } = await supabase
-    .from('licenses')
-    .select('*')
-    .eq('licenseKey', licenseKey)
-    .single()
-
-  if (error || !data) return { valid: false, error: 'invalid_key' }
-
-  // 📌 Vérifier si la machine est déjà enregistrée
-  const deviceList = data.devices || []
-
-  if (deviceList.includes(machineId)) {
-    return { valid: true, cached: true }
-  }
-
-  // 📌 Vérifier si le nombre maximum d’appareils est atteint
-  if (deviceList.length >= data.maxDevices) {
-    return { valid: false, error: 'cap_devices' }
-  }
-
-  // 📌 Ajouter la machine à la base de données
-  deviceList.push(machineId)
-  const { error: updateError } = await supabase
-    .from('licenses')
-    .update({ devices: deviceList })
-    .eq('key', licenseKey)
-
-  if (updateError) return { valid: false, error: 'error_update' }
-
-  return { valid: true, license: data }
+  return response?.data && JSON.parse(response?.data)
 }
 
 // 📌 Vérifier le cache ou demander validation
