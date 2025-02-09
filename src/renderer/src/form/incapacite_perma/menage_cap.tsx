@@ -67,7 +67,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   const getCapAmount = useCallback(
     (values) => {
-      const { paiement = '', interet = 0, perso_amount = 0, perso_pourcentage = 0 } = values
+      const {
+        paiement = '',
+        interet = 0,
+        perso_amount = 0,
+        perso_pourcentage = 0,
+        perso_contribution = 0
+      } = values
       const { years = 0 } = intervalToDuration({
         start: data?.general_info?.date_naissance,
         end: paiement
@@ -84,6 +90,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       return (
         parseFloat(perso_amount) *
         (parseFloat(perso_pourcentage) / 100) *
+        (parseFloat(perso_contribution) / 100) *
         365 *
         parseFloat(coefficient)
       ).toFixed(2)
@@ -201,13 +208,14 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           </tbody>
         </table>
 
-        <h3>Incapacités personnelles permanentes</h3>
+        <h3>Incapacités ménagères permanentes</h3>
         <table id="IPCAPTable" style={{ width: 1000 }}>
           <thead>
             <tr>
               <th>Date du paiement</th>
               <th>Indemnité journalière (€)</th>
               <th style={{ width: 50 }}>%</th>
+              <th>Contribution (%)</th>
               <th>Total (€)</th>
             </tr>
           </thead>
@@ -228,6 +236,20 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   editable={editable}
                 >
                   {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} name={`perso_contribution`} editable={editable}>
+                  {(props) => (
+                    <select {...props}>
+                      <option>Select</option>
+                      <option value="0">0</option>
+                      <option value="100">100</option>
+                      <option value="65">65</option>
+                      <option value="50">50</option>
+                      <option value="35">35</option>
+                    </select>
+                  )}
                 </Field>
               </td>
               <td>
