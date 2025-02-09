@@ -32,6 +32,11 @@ export default {
   ],
   reference: [
     { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },
+    { value: 'schryvers_60', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (60 ans)' },
+    { value: 'schryvers_61', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (61 ans)' },
+    { value: 'schryvers_62', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (62 ans)' },
+    { value: 'schryvers_63', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (63 ans)' },
+    { value: 'schryvers_64', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (64 ans)' },
     { value: 'schryvers_65', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (65 ans)' },
     { value: 'schryvers_66', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (66 ans)' },
     { value: 'schryvers_67', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (67 ans)' },

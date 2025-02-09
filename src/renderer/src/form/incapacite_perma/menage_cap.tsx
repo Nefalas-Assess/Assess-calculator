@@ -17,8 +17,8 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       reference: 'schryvers',
-      conso_amount: 32,
-      perso_amount: 32
+      conso_amount: 30,
+      perso_amount: 30
     }
   })
 

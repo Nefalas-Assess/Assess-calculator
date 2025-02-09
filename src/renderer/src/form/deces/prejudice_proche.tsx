@@ -11,6 +11,8 @@ import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import TotalBox from '@renderer/generic/totalBox'
 import { addYears, intervalToDuration } from 'date-fns'
+import menTable from '@renderer/data/data_cap_h'
+import womenTable from '@renderer/data/data_cap_f'
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -95,6 +97,38 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
     return ((parseFloat(formValues?.revenue_defunt) || 0) - personnel) * coef
   }, [formValues, data])
+
+  const getMenageAmount = useCallback(
+    (values) => {
+      const {
+        interet = 0,
+        menage_amount = 0,
+        menage_pourcentage = 100,
+        menage_contribution = 0
+      } = values
+      const { years = 0 } = intervalToDuration({
+        start: data?.general_info?.date_naissance,
+        end: data?.general_info?.date_death
+      })
+
+      const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
+
+      const index = constants.interet_amount?.findIndex(
+        (e) => e?.value === parseFloat(interet || 0)
+      )
+
+      const coefficient = table?.[years]?.[index]
+
+      return (
+        parseFloat(menage_amount) *
+        (parseFloat(menage_pourcentage) / 100) *
+        (parseFloat(menage_contribution) / 100) *
+        365 *
+        parseFloat(coefficient)
+      ).toFixed(2)
+    },
+    [data]
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -226,6 +260,42 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 ) : (
                   <Money value={getTotalAmount()} />
                 )}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Contribution ménagères du défunt</h3>
+        <table id="IPCAPTable" style={{ width: 1000 }}>
+          <thead>
+            <tr>
+              <th>Indemnité journalière (€)</th>
+              <th>Contribution (%)</th>
+              <th>Total (€)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Field control={control} name={`menage_amount`} type="number" editable={editable}>
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} name={`menage_contribution`} editable={editable}>
+                  {(props) => (
+                    <select {...props}>
+                      <option>Select</option>
+                      <option value="0">0</option>
+                      <option value="100">100</option>
+                      <option value="65">65</option>
+                      <option value="50">50</option>
+                      <option value="35">35</option>
+                    </select>
+                  )}
+                </Field>
+              </td>
+              <td>
+                <Money value={getMenageAmount(formValues)} />
               </td>
             </tr>
           </tbody>
