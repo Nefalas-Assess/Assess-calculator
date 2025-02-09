@@ -64,7 +64,6 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h3>General</h3>
       <table id="infogTable">
         <tbody>
           <tr>
