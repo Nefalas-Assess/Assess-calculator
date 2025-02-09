@@ -99,6 +99,61 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Préjudices des proches</h1>
+      <h3>Dommage moral des proches</h3>
+      <table style={{ width: 1000 }}>
+        <thead>
+          <tr>
+            <th>Nom du membre de la famille</th>
+            <th>Lien de parenté</th>
+            <th>Indemnité (€)</th>
+            {editable && <th></th>}
+          </tr>
+        </thead>
+        <tbody>
+          {fields.map((child, index) => {
+            return (
+              <tr key={child.id}>
+                <td>
+                  <Field control={control} name={`members.${index}.name`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="select"
+                    options={constants.family_link}
+                    name={`members.${index}.link`}
+                    editable={editable}
+                  ></Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`members.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input style={{ width: 100 }} {...props} />}
+                  </Field>
+                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+      {editable && (
+        <button type="button" onClick={() => addNext(append)}>
+          Ajouter une ligne
+        </button>
+      )}
       <h3>Variables du calcul de capitalisation</h3>
       <table id="IPVariables">
         <tbody>
@@ -138,61 +193,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </table>
 
       <FadeIn show={formValues?.reference && formValues?.interet}>
-        <h3>Dommage moral des proches</h3>
-        <table style={{ width: 1000 }}>
-          <thead>
-            <tr>
-              <th>Nom du membre de la famille</th>
-              <th>Lien de parenté</th>
-              <th>Indemnité (€)</th>
-              {editable && <th></th>}
-            </tr>
-          </thead>
-          <tbody>
-            {fields.map((child, index) => {
-              return (
-                <tr key={child.id}>
-                  <td>
-                    <Field control={control} name={`members.${index}.name`} editable={editable}>
-                      {(props) => <input {...props} />}
-                    </Field>
-                  </td>
-                  <td>
-                    <Field
-                      control={control}
-                      type="select"
-                      options={constants.family_link}
-                      name={`members.${index}.link`}
-                      editable={editable}
-                    ></Field>
-                  </td>
-                  <td>
-                    <Field
-                      control={control}
-                      type="number"
-                      name={`members.${index}.amount`}
-                      editable={editable}
-                    >
-                      {(props) => <input style={{ width: 100 }} {...props} />}
-                    </Field>
-                  </td>
-                  {editable && (
-                    <td>
-                      <button type="button" onClick={() => remove(index)}>
-                        Supprimer
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        {editable && (
-          <button type="button" onClick={() => addNext(append)}>
-            Ajouter une ligne
-          </button>
-        )}
         <h3>Perte du revenu du défunt</h3>
         <table id="itebTable" style={{ width: 1000 }}>
           <thead>

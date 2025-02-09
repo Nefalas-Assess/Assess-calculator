@@ -54,11 +54,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   const getConsoAmount = useCallback(
     (values) => {
-      const { conso_amount, conso_pourcentage } = values || {}
+      const { conso_amount, conso_pourcentage, conso_contribution } = values || {}
       return (
         parseInt(days || 0) *
         parseFloat(conso_amount || 0) *
-        (parseFloat(conso_pourcentage || 0) / 100)
+        (parseFloat(conso_pourcentage || 0) / 100) *
+        (parseFloat(conso_contribution || 0) / 100)
       ).toFixed(2)
     },
     [days]
@@ -140,6 +141,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <th>Jours</th>
               <th>Indemnité journalière (€)</th>
               <th style={{ width: 50 }}>%</th>
+              <th>Contribution (%)</th>
               <th>Total (€)</th>
               <th className="int">Intérêts</th>
             </tr>
@@ -166,6 +168,20 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   editable={editable}
                 >
                   {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} name={`conso_contribution`} editable={editable}>
+                  {(props) => (
+                    <select {...props}>
+                      <option>Select</option>
+                      <option value="0">0</option>
+                      <option value="100">100</option>
+                      <option value="65">65</option>
+                      <option value="50">50</option>
+                      <option value="35">35</option>
+                    </select>
+                  )}
                 </Field>
               </td>
               <td>
