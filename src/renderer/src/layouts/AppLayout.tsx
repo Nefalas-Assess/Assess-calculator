@@ -169,9 +169,9 @@ export const AppLayout = () => {
                     </div>
                     {incTemp && (
                       <div>
-                        <LinkItem to="/it/personnel">Personnelle</LinkItem>
-                        <LinkItem to="/it/menagère">Ménagère</LinkItem>
-                        <LinkItem to="/it/economique">Economique</LinkItem>
+                        <LinkItem to="/it/personnel">Personnelles</LinkItem>
+                        <LinkItem to="/it/menagère">Ménagères</LinkItem>
+                        <LinkItem to="/it/economique">Économiques</LinkItem>
                         <LinkItem to="/it/effa">Efforts Accrus</LinkItem>
                         <LinkItem to="/it/hosp">Hospitalisation</LinkItem>
                         <LinkItem to="/it/pretium">Pretium Doloris</LinkItem>

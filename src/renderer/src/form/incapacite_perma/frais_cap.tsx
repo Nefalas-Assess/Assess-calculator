@@ -77,8 +77,8 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
             <th>Date du paiement</th>
             <th className="custom-size">Table de référence</th>
             <th>Taux d'intérêt de la capitalisation</th>
-            <th>Montant annualisé(€)</th>
-            <th>Total</th>
+            <th>Montant annualisé (€)</th>
+            <th>Total capitalisé</th>
             {editable && <th></th>}
           </tr>
         </thead>

@@ -110,7 +110,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Tables de référence</td>
+            <td>Table de référence</td>
             <td>
               <Field
                 control={control}
@@ -254,7 +254,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
           </tbody>
         </table>
 
-        <h3>Incapacités économiques permanentes</h3>
+        <h3>Incapacités permanentes économiques</h3>
         <table id="itebTable" style={{ width: 1000 }}>
           <thead>
             <tr>

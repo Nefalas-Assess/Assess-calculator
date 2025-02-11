@@ -91,7 +91,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       <table style={{ width: 1000 }}>
         <thead>
           <tr>
-            <th>Indemintés/Frais</th>
+            <th>Indemnité/Frais</th>
             <th>Numéro de facture </th>
             <th>Payé</th>
             <th>Montant (€)</th>

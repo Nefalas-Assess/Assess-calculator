@@ -97,7 +97,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Tables de référence</td>
+            <td>Table de référence</td>
             <td>
               <Field
                 control={control}
@@ -186,7 +186,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
           </tbody>
         </table>
 
-        <h3>Incapacités personnelles permanentes</h3>
+        <h3>Incapacités permanentes personnelles</h3>
         <table id="IPCAPTable" style={{ width: 1000 }}>
           <thead>
             <tr>

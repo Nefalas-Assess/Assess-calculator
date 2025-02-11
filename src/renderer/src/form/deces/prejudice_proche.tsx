@@ -192,7 +192,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Tables de référence</td>
+            <td>Table de référence</td>
             <td>
               <Field
                 control={control}
