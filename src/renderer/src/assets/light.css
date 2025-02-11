@@ -77,7 +77,6 @@
     justify-content: flex-start; /* Commencer en haut de la page */
     flex: 1;
     background-color: white;
-    min-height: 100vh;
   }
 
   #top-menu {
