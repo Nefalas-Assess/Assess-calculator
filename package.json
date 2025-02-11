@@ -3,7 +3,7 @@
   "version": "0.0.22",
   "description": "Calculateur Assess",
   "main": "./out/main/index.js",
-  "author": "JVTP SRL",
+  "author": "JVTP SNC",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
