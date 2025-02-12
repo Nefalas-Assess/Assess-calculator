@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import FraisForm from '@renderer/form/frais_form'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const Frais = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
@@ -20,7 +21,7 @@ const Frais = ({ editable }) => {
       <div id="main" ref={ref}>
         <FraisForm onSubmit={saveData} editable={editable} initialValues={data?.frais} />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

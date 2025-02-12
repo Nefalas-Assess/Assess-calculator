@@ -47,6 +47,19 @@ function calculateDays(birthDate, dates) {
     if (end > twentyFifthBirthday) {
       after25 = calculateDaysBetween(twentyFifthBirthday, end)
     }
+
+    // Cas où la date de naissance est après la date de début
+    if (birth > start) {
+      // Si il n'est pas née pendant la période
+      if (birth > end) {
+        before25 = 0
+        after25 = 0
+      }
+      // Si il est née durant la période
+      else {
+        before25 = calculateDaysBetween(birth, end)
+      }
+    }
   } else {
     // Cas où la date de début est après les 25 ans
     after25 = calculateDaysBetween(start, end)
@@ -354,7 +367,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                   >
                     {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
-                  ( + {(data?.computed_info?.enfant_charge || 0) * 10}€ )
+                  ( +
+                  {children?.reduce((acc, value) => {
+                    const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                    return acc + percentage
+                  }, 0) * 10}
+                  € )
                 </td>
                 <td>
                   <Field

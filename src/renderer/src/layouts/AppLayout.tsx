@@ -160,7 +160,6 @@ export const AppLayout = () => {
                     data={data}
                     required={[
                       { value: 'general_info.date_naissance', label: 'Date de naissance' },
-                      { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
                       { value: 'general_info.sexe', label: 'Sexe' }
                     ]}
                   >
