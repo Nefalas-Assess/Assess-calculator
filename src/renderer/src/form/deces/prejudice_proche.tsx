@@ -184,7 +184,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => addNext(append)}>
+        <button type="button" onClick={() => addNext(append({ amount: 30 }))}>
           Ajouter une ligne
         </button>
       )}

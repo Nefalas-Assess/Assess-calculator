@@ -148,7 +148,7 @@ export const AppLayout = () => {
                 </button>
               </>
             )}
-            <select onChange={(e) => setLg(e?.target?.value)}>
+            <select className="select-lang" onChange={(e) => setLg(e?.target?.value)}>
               <option value="fr">FR</option>
               <option value="nl">NL</option>
               <option value="en">EN</option>

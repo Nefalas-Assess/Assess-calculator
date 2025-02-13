@@ -116,3 +116,12 @@ body {
   }
 }
 
+.select-lang{
+  appearance: none;
+  color: white;
+  padding: 5px;
+  border-radius: 6px;
+  user-select: none;
+  background-color: #1a1a1a;
+  border: none;
+}
