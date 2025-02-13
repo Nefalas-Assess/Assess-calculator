@@ -58,6 +58,8 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, chargesValues, submitForm, handleSubmit])
 
   const getTotalAmount = useCallback((values) => {
+    if (!values?.date_payment) return 0
+
     const coef = useCapitalization({
       end: values?.date_payment,
       ref: values?.reference,

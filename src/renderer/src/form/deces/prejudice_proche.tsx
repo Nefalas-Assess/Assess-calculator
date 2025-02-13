@@ -215,14 +215,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               ></Field>
             </td>
           </tr>
-          <tr>
-            <td>Age de retraite</td>
-            <td>
-              <Field control={control} type="number" name={`retrait`} editable={editable}>
-                {(props) => <input style={{ width: 100 }} {...props} />}
-              </Field>
-            </td>
-          </tr>
         </tbody>
       </table>
 
