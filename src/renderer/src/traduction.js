@@ -13,7 +13,7 @@ export default {
     import: {
       fr: 'Importer un fichier existant',
       en: 'Import existing file',
-      nl: 'Bestaand bestand importeren'
+      nl: 'Bestand importeren'
     }
   },
   layout: {
