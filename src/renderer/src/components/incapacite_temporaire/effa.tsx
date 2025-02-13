@@ -1,5 +1,6 @@
 import EffortAccruForm from '@renderer/form/incapacite_temp/effort_accru'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 
@@ -24,7 +25,7 @@ const EFFA = ({ editable }) => {
           initialValues={data?.efforts_accrus}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

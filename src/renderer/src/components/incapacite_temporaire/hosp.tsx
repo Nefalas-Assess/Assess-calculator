@@ -1,5 +1,6 @@
 import HospitalisationForm from '@renderer/form/incapacite_temp/hospitalisation'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 
@@ -24,7 +25,7 @@ const Hospitalisation = ({ editable }) => {
           initialValues={data?.hospitalisation}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

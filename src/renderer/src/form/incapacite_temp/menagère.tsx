@@ -349,10 +349,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                 <td style={{ width: 50 }}>{days}</td>
                 <td style={{ width: 50 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {children?.reduce((acc, value) => {
-                      const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
-                      return acc + percentage
-                    }, 0)}
+                    {children
+                      ?.reduce((acc, value) => {
+                        const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                        return acc + percentage
+                      }, 0)
+                      ?.toFixed(2)}
                     <Tooltip tooltipContent={renderToolTipChildren(children)}>
                       <FaRegQuestionCircle style={{ marginLeft: 5 }} />
                     </Tooltip>
@@ -368,10 +370,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                     {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                   ( +
-                  {children?.reduce((acc, value) => {
-                    const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
-                    return acc + percentage
-                  }, 0) * 10}
+                  {(
+                    children?.reduce((acc, value) => {
+                      const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                      return acc + percentage
+                    }, 0) * 10
+                  )?.toFixed(2)}
                   € )
                 </td>
                 <td>

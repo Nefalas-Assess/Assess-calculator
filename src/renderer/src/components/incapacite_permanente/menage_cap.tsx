@@ -3,6 +3,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import Money from '@renderer/generic/money'
 import IPMenageCapForm from '@renderer/form/incapacite_perma/menage_cap'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const MenageCap = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
@@ -25,7 +26,7 @@ const MenageCap = ({ editable }) => {
           initialValues={data?.incapacite_perma_menage_cap}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

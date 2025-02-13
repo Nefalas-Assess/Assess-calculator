@@ -1,5 +1,6 @@
 import PretiumDolorisForm from '@renderer/form/incapacite_temp/pretium_doloris'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 
@@ -24,7 +25,7 @@ const PretiumDoloris = ({ editable }) => {
           initialValues={data?.pretium_doloris}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

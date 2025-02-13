@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import ITEconomiqueForm from '@renderer/form/incapacite_temp/economique'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const Economique = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
@@ -24,7 +25,7 @@ const Economique = ({ editable }) => {
           initialValues={data?.incapacite_temp_economique}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )

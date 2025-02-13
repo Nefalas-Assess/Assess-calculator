@@ -1,5 +1,6 @@
 import IPPersonnelCapForm from '@renderer/form/incapacite_perma/personnel_cap'
 import TotalBox from '@renderer/generic/totalBox'
+import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { AppContext } from '@renderer/providers/AppProvider'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 
@@ -24,7 +25,7 @@ const PersonnelCap = ({ editable }) => {
           initialValues={data?.incapacite_perma_personnel_cap}
         />
         <TotalBox label="Total général :" documentRef={ref} />
-        <TotalBox label="Total intérêts :" name="interest" documentRef={ref} />
+        <TotalBoxInterest documentRef={ref} />
       </div>
     </div>
   )
