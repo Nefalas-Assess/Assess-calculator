@@ -1,3 +1,4 @@
+import TextItem from '@renderer/generic/textItem'
 import { useRecentFiles } from '@renderer/hooks/recentFiles'
 import { useState } from 'react'
 
@@ -9,7 +10,7 @@ const Home = () => {
   return (
     <div className="home">
       <div className="home-container">
-        <span>Référence du dossier: </span>
+        <TextItem path="home.reference" />
         <input
           type="text"
           name="reference_dossier"
@@ -22,10 +23,12 @@ const Home = () => {
           disabled={!fileName}
           style={{ marginRight: '10px', opacity: !fileName ? 0.5 : 1 }}
         >
-          Créer un nouveau fichier
+          <TextItem path="home.create" />
         </button>
         <div className="separator"></div>
-        <button onClick={importFile}>Importer un fichier existant</button>
+        <button onClick={importFile}>
+          <TextItem path="home.import" />
+        </button>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ export const AppContext = createContext()
 
 const AppProvider = ({ children }) => {
   const [data, setData] = useState(null)
+  const [lg, setLg] = useState('fr')
   const [darkMode, setDarkMode] = useState(true)
   const [filePath, setFilePath] = useState(null)
 
@@ -68,7 +69,9 @@ const AppProvider = ({ children }) => {
         save: handleSave,
         back: handleBackHome,
         toggleDarkMode,
-        mode: darkMode ? 'dark' : 'light'
+        mode: darkMode ? 'dark' : 'light',
+        lg,
+        setLg
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { useRecentFiles } from '@renderer/hooks/recentFiles'
+import TextItem from './textItem'
 
 export const RecentFilesList = () => {
   const { recentFiles, selectFile, importFile } = useRecentFiles()
@@ -17,7 +18,7 @@ export const RecentFilesList = () => {
           opacity: 0.5
         }}
       >
-        Dossier recents
+        <TextItem path={'layout.recentFile'} />
       </div>
       {(recentFiles || [])?.map((it, key) => (
         <div className="recent-file-item" key={key} onClick={() => selectFile(it?.path)}>

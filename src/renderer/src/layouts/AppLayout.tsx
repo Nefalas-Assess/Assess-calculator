@@ -8,6 +8,7 @@ import Tooltip from '@renderer/generic/tooltip'
 import Loader from '@renderer/generic/loader'
 import { RecentFilesList } from '@renderer/generic/recentFilesList'
 import { useRecentFiles } from '@renderer/hooks/recentFiles'
+import TextItem from '@renderer/generic/textItem'
 
 const LinkItem = ({ to, children }) => {
   return (
@@ -63,7 +64,7 @@ const DetectMissingData = ({ children, data, required }) => {
 }
 
 export const AppLayout = () => {
-  const { data, save, back, toggleDarkMode, mode, filePath } = useContext(AppContext)
+  const { data, save, back, toggleDarkMode, mode, filePath, setLg } = useContext(AppContext)
 
   const { addToast, removeToast } = useToast()
 
@@ -135,16 +136,23 @@ export const AppLayout = () => {
             <button onClick={toggleDarkMode}>Mode</button>
             {filePath && (
               <>
-                <button onClick={handleSave}>Sauvegarder</button>
+                <button onClick={handleSave}>
+                  <TextItem path={'layout.save'} />
+                </button>
                 <button
                   onClick={() => {
                     back()
                   }}
                 >
-                  Accueil
+                  <TextItem path={'layout.home'} />
                 </button>
               </>
             )}
+            <select onChange={(e) => setLg(e?.target?.value)}>
+              <option value="fr">FR</option>
+              <option value="nl">NL</option>
+              <option value="en">EN</option>
+            </select>
           </div>
         </div>
         <div className="core">
@@ -242,7 +250,7 @@ export const AppLayout = () => {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-                  Recherche de mise a jour
+                  <TextItem path={'layout.maj'} />
                   {updateCheck && (
                     <Loader
                       style={{
