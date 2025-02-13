@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
@@ -13,6 +13,98 @@ import TotalBox from '@renderer/generic/totalBox'
 import { addYears, intervalToDuration } from 'date-fns'
 import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+
+const TotalRevenue = ({ values, data }) => {
+  const revenue = parseFloat(values?.revenue_total)
+  const personnel = revenue / (parseInt(values?.members_amount) + 1)
+
+  const coef = useCapitalization({
+    end: data?.general_info?.date_death,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.interet)),
+    ref: values?.reference
+  })
+
+  const variables = useMemo(
+    () => ({
+      revenue,
+      personnel,
+      coef
+    }),
+    [revenue, personnel, coef]
+  )
+
+  const totalAmount = useMemo(() => {
+    return ((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) * variables.coef
+  }, [values?.revenue_defunt, variables])
+
+  const renderToolTipAmount = useCallback(() => {
+    return (
+      <>
+        <div>
+          <math>
+            <mrow>
+              <mstyle style={{ marginRight: 5 }}>
+                <mo>(</mo>
+                <mi>R</mi>
+                <mo>)</mo>
+              </mstyle>
+              <mn>{variables?.revenue}</mn>
+            </mrow>
+          </math>
+        </div>
+        <div>
+          <math>
+            <mrow>
+              <mstyle style={{ marginRight: 5 }}>
+                <mo>(</mo>
+                <mi>P</mi>
+                <mo>)</mo>
+              </mstyle>
+              <mfrac>
+                <mrow>
+                  <mi>Revenue</mi>
+                </mrow>
+                <mrow>
+                  <mo>(</mo>
+                  <mn>{values?.members_amount}</mn>
+                  <mo>+</mo>
+                  <mn>1</mn>
+                  <mo>)</mo>
+                </mrow>
+              </mfrac>
+              <mo>=</mo>
+              <mn>{variables?.personnel}</mn>
+            </mrow>
+          </math>
+        </div>
+        <div>
+          <math>
+            <mo>(</mo>
+            <mn>{values?.revenue_defunt}</mn>
+            <mo>-</mo>
+            <mn>{variables?.personnel}</mn>
+            <mo>)</mo>
+            <mo>x</mo>
+            <mn>{variables?.coef}</mn>
+            <mo>=</mo>
+            <mn>{totalAmount}</mn>
+          </math>
+        </div>
+      </>
+    )
+  }, [variables, values, totalAmount])
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Money value={totalAmount} />
+      <Tooltip tooltipContent={renderToolTipAmount()}>
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+      </Tooltip>
+    </div>
+  )
+}
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -82,21 +174,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     },
     [formValues]
   )
-
-  const getTotalAmount = useCallback(() => {
-    const revenue = parseFloat(formValues?.revenue_total)
-    const personnel = revenue / (parseInt(formValues?.members_amount) + 1)
-
-    const coef = useCapitalization({
-      end: data?.general_info?.date_death,
-      index: constants.interet_amount?.findIndex(
-        (e) => e?.value === parseFloat(formValues?.interet)
-      ),
-      ref: formValues?.reference
-    })
-
-    return ((parseFloat(formValues?.revenue_defunt) || 0) - personnel) * coef
-  }, [formValues, data])
 
   const getMenageAmount = useCallback(
     (values) => {
@@ -250,7 +327,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 {!data?.general_info?.date_naissance ? (
                   <span>Date de naissance manquante</span>
                 ) : (
-                  <Money value={getTotalAmount()} />
+                  <TotalRevenue values={formValues} data={data} />
                 )}
               </td>
             </tr>
@@ -294,13 +371,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </table>
         <TotalBox
           label="Total général :"
-          value={
-            getTotalAmount() +
+          value={// Fix ca en trouvant le moyen de récupérer le total ici aussi
+            // getTotalAmount() +
             membersValues?.reduce((total, item) => {
               const amount = parseFloat(item.amount) || 0
               return total + amount
-            }, 0)
-          }
+            }, 0)}
         />
       </FadeIn>
     </form>
