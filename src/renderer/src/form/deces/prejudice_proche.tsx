@@ -106,8 +106,86 @@ const TotalRevenue = ({ values, data }) => {
   )
 }
 
+const TotalMenage = ({ values = {}, data }) => {
+  const {
+    interet = 0,
+    menage_amount = 0,
+    menage_pourcentage = 100,
+    menage_contribution = 0
+  } = values
+
+  // Vérification des dates
+  const startDate = data?.general_info?.date_naissance
+    ? new Date(data.general_info.date_naissance)
+    : null
+  const endDate = data?.general_info?.date_death ? new Date(data.general_info.date_death) : null
+
+  const { years = 0 } =
+    startDate && endDate ? intervalToDuration({ start: startDate, end: endDate }) : { years: 0 }
+
+  // Choisir la bonne table en fonction du sexe
+  const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
+
+  // Trouver l'index du coefficient d'intérêt
+  const index = constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0))
+
+  // Récupérer le coefficient selon l'âge et l'intérêt
+  const coefficient = table?.[years]?.[index] || 1 // Sécurisation pour éviter les erreurs
+
+  // Calcul du montant total avec useMemo
+  const totalAmount = useMemo(() => {
+    return (
+      parseFloat(menage_amount) *
+      (parseFloat(menage_pourcentage) / 100) *
+      (parseFloat(menage_contribution) / 100) *
+      365 *
+      parseFloat(coefficient)
+    ).toFixed(2)
+  }, [menage_amount, menage_pourcentage, menage_contribution, coefficient])
+
+  // Fonction pour rendre le tooltip
+  const renderToolTipAmount = useCallback(() => {
+    return (
+      <>
+        <div>
+          <math>
+            <mn>{menage_amount}</mn>
+            <mo>x</mo>
+            <mo>(</mo>
+            <mfrac>
+              <mn>{menage_contribution}</mn>
+              <mn>100</mn>
+            </mfrac>
+            <mo>)</mo>
+            <mo>x</mo>
+            <mn>1</mn>
+            <mo>x</mo>
+            <mn>365</mn>
+            <mo>x</mo>
+            <mn>{coefficient}</mn>
+            <mo>=</mo>
+            <mn>{totalAmount}</mn>
+          </math>
+        </div>
+      </>
+    )
+  }, [menage_amount, menage_pourcentage, totalAmount, coefficient, totalAmount])
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Money value={totalAmount} />
+      <Tooltip tooltipContent={renderToolTipAmount()}>
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+      </Tooltip>
+      <div className="hide">{totalAmount}</div>
+    </div>
+  )
+}
+
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
+
+  const ref = useRef(null)
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
@@ -175,40 +253,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
-  const getMenageAmount = useCallback(
-    (values) => {
-      const {
-        interet = 0,
-        menage_amount = 0,
-        menage_pourcentage = 100,
-        menage_contribution = 0
-      } = values
-      const { years = 0 } = intervalToDuration({
-        start: data?.general_info?.date_naissance,
-        end: data?.general_info?.date_death
-      })
-
-      const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
-
-      const index = constants.interet_amount?.findIndex(
-        (e) => e?.value === parseFloat(interet || 0)
-      )
-
-      const coefficient = table?.[years]?.[index]
-
-      return (
-        parseFloat(menage_amount) *
-        (parseFloat(menage_pourcentage) / 100) *
-        (parseFloat(menage_contribution) / 100) *
-        365 *
-        parseFloat(coefficient)
-      ).toFixed(2)
-    },
-    [data]
-  )
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} ref={ref}>
       <h1>Préjudices des proches</h1>
       <h3>Dommage moral des proches</h3>
       <table style={{ width: 1000 }}>
@@ -364,19 +410,21 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Money value={getMenageAmount(formValues)} />
+                <TotalMenage values={formValues} data={data} />
               </td>
             </tr>
           </tbody>
         </table>
         <TotalBox
           label="Total général :"
-          value={// Fix ca en trouvant le moyen de récupérer le total ici aussi
-            // getTotalAmount() +
+          documentRef={ref}
+          calc={(res) =>
+            res +
             membersValues?.reduce((total, item) => {
               const amount = parseFloat(item.amount) || 0
               return total + amount
-            }, 0)}
+            }, 0)
+          }
         />
       </FadeIn>
     </form>
