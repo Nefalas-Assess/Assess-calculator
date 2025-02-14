@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
@@ -8,6 +8,54 @@ import data_f from '@renderer/data/data_ff_f'
 import data_h from '@renderer/data/data_ff_h'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+
+const Total = ({ values = {}, index, data }) => {
+  // Calcul du montant total avec useMemo
+
+  const amount = parseFloat(values?.charges?.[index]?.amount, 10)
+  const { years: age = 0 } = intervalToDuration({
+    start: data?.general_info?.date_naissance,
+    end: data?.general_info?.date_death
+  })
+
+  const rate = constants?.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
+  const table = data?.general_info?.sexe === 'homme' ? data_h : data_f
+
+  const coef = table?.[age]?.[rate]
+
+  const totalAmount = useMemo(() => {
+    return amount * coef
+  }, [amount, coef])
+
+  // Fonction pour rendre le tooltip
+  const renderToolTipAmount = useCallback(() => {
+    return (
+      <>
+        <div>
+          <math>
+            <mn>{amount}</mn>
+            <mo>x</mo>
+            <mn>{coef}</mn>
+            <mo>=</mo>
+            <mn>{totalAmount}</mn>
+          </math>
+        </div>
+      </>
+    )
+  }, [totalAmount, values])
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Money value={totalAmount} />
+      <Tooltip tooltipContent={renderToolTipAmount()}>
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+      </Tooltip>
+      <div className="hide">{totalAmount}</div>
+    </div>
+  )
+}
 
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -140,7 +188,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Money value={getTotalAnticipated(index)} />
+                  <Total values={formValues} index={index} data={data} />
                 </td>
                 {editable && (
                   <td>

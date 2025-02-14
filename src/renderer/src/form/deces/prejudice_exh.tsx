@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
@@ -6,6 +6,42 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+
+const Total = ({ values = {}, days }) => {
+  // Calcul du montant total avec useMemo
+  const totalAmount = useMemo(() => {
+    return (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2)
+  }, [days, values])
+
+  // Fonction pour rendre le tooltip
+  const renderToolTipAmount = useCallback(() => {
+    return (
+      <>
+        <div>
+          <math>
+            <mn>{days}</mn>
+            <mo>x</mo>
+            <mn>{values?.amount}</mn>
+            <mo>=</mo>
+            <mn>{totalAmount}</mn>
+          </math>
+        </div>
+      </>
+    )
+  }, [totalAmount, values, days])
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Money value={totalAmount} />
+      <Tooltip tooltipContent={renderToolTipAmount()}>
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+      </Tooltip>
+      <div className="hide">{totalAmount}</div>
+    </div>
+  )
+}
 
 const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -56,10 +92,6 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, periodsValues, submitForm, handleSubmit])
 
-  const getTotalAmount = useCallback((values, days) => {
-    return (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2)
-  }, [])
-
   const addNext = useCallback(
     (append, initial = {}) => {
       const lastRowEnd = formValues?.periods?.[formValues?.periods?.length - 1]?.end
@@ -95,7 +127,6 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
           {fields.map((child, index) => {
             const values = formValues?.periods[index]
             const days = getDays(values)
-            const total = getTotalAmount(values, days)
             return (
               <tr key={child.id}>
                 <td>
@@ -130,7 +161,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Money value={total} />
+                  <Total values={values} days={days} />
                 </td>
                 {editable && (
                   <td>
