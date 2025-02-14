@@ -10,6 +10,7 @@ import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 const Total = ({ values = {}, index, data }) => {
   // Calcul du montant total avec useMemo
@@ -37,7 +38,9 @@ const Total = ({ values = {}, index, data }) => {
           <math>
             <mn>{amount}</mn>
             <mo>x</mo>
-            <mn>{coef}</mn>
+            <CoefficientInfo table={table} index={[age, rate]} headers={constants.interet_amount}>
+              <mn>{coef}</mn>
+            </CoefficientInfo>
             <mo>=</mo>
             <mn>{totalAmount}</mn>
           </math>

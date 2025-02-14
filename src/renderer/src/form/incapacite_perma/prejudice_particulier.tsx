@@ -7,7 +7,6 @@ import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
-import TotalBox from '@renderer/generic/totalBox'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)

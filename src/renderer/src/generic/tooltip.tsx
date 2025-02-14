@@ -50,7 +50,7 @@ const Tooltip = ({ children, tooltipContent, contentStyle = {}, style = {} }) =>
         top: containerRect.top + window.scrollY,
         left:
           position === 'right' ? containerRect.right + 5 : containerRect.left - tooltipRect.width,
-        zIndex: 9999
+        zIndex: 998
       }
     }
     return contentStyle

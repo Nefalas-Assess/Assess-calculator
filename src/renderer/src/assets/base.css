@@ -125,3 +125,22 @@ body {
   background-color: #1a1a1a;
   border: none;
 }
+
+.coefficient-table{
+  font-size: 10px;
+  background-color: #1a1a1a;
+  margin: 0;
+  th, td{
+    padding: 5px;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .highlight{
+    background-color: rgba(9, 110, 242, 0.1);
+  }
+  .selected{
+    background-color: rgba(9, 110, 242, 0.5);
+    font-weight: bold;
+  }
+}
