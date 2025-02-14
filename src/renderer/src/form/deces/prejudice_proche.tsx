@@ -15,24 +15,26 @@ import menTable from '@renderer/data/data_cap_h'
 import womenTable from '@renderer/data/data_cap_f'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 const TotalRevenue = ({ values, data }) => {
   const revenue = parseFloat(values?.revenue_total)
   const personnel = revenue / (parseInt(values?.members_amount) + 1)
 
-  const coef = useCapitalization({
+  const capitalization = useCapitalization({
     end: data?.general_info?.date_death,
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.interet)),
-    ref: values?.reference
+    ref: values?.reference,
+    asObject: true
   })
 
   const variables = useMemo(
     () => ({
       revenue,
       personnel,
-      coef
+      coef: capitalization?.value
     }),
-    [revenue, personnel, coef]
+    [revenue, personnel, capitalization]
   )
 
   const totalAmount = useMemo(() => {
@@ -87,7 +89,13 @@ const TotalRevenue = ({ values, data }) => {
             <mn>{variables?.personnel}</mn>
             <mo>)</mo>
             <mo>x</mo>
-            <mn>{variables?.coef}</mn>
+            <CoefficientInfo
+              table={capitalization?.table}
+              index={capitalization?.index}
+              headers={constants.interet_amount}
+            >
+              <mn>{variables?.coef}</mn>
+            </CoefficientInfo>
             <mo>=</mo>
             <mn>{totalAmount}</mn>
           </math>
@@ -162,7 +170,13 @@ const TotalMenage = ({ values = {}, data }) => {
             <mo>x</mo>
             <mn>365</mn>
             <mo>x</mo>
-            <mn>{coefficient}</mn>
+            <CoefficientInfo
+              table={table}
+              headers={constants.interet_amount}
+              index={[years, index]}
+            >
+              <mn>{coefficient}</mn>
+            </CoefficientInfo>
             <mo>=</mo>
             <mn>{totalAmount}</mn>
           </math>

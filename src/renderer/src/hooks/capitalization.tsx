@@ -76,7 +76,7 @@ const getCapitalizationTable = (ref, sexe) => {
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, amount, ref, index } = props
+  const { end, start, amount, ref, index, asObject } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
@@ -91,6 +91,11 @@ export const useCapitalization = (props = {}) => {
   const rowIndex = Object?.keys(table)?.findIndex((e) => parseInt(e) === (age || 0))
   const row = Object?.values(table)?.[rowIndex]
 
-  if (amount) return amount * row[index]
-  return row?.[index]
+  let value = row?.[index]
+  if (amount) value = amount * row[index]
+  if (!asObject) {
+    return value
+  } else {
+    return { table, value, index: [rowIndex, index] }
+  }
 }
