@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import Money from './money'
+import { withDelay } from './delayContent'
 
 export const TotalBox = ({ name, label, selector, value, documentRef, negative, calc }) => {
   const getTotalDisplayedOnPage = useCallback(() => {
@@ -41,4 +42,4 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
   )
 }
 
-export default TotalBox
+export default withDelay(TotalBox)

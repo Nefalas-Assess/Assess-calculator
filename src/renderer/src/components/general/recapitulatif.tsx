@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import InfoG from './infog'
 import Frais from './frais'
 import Personnel from '../incapacite_temporaire/personnel'
@@ -18,6 +18,7 @@ import PrejudiceEXH from '../deces/prejudice_exh'
 import PrejudiceProche from '../deces/prejudice_proche'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
+import DelayedContent from '@renderer/generic/delayContent'
 
 const Recapitulatif = () => {
   const contentRef = useRef()
@@ -53,7 +54,7 @@ const Recapitulatif = () => {
           Imprimer
         </button>
       </div>
-      <div ref={contentRef} id="content">
+      <div ref={contentRef} id="recap">
         <InfoG editable={false} />
         <Frais editable={false} />
         <Personnel editable={false} />
@@ -72,12 +73,17 @@ const Recapitulatif = () => {
         <FraisFun editable={false} />
         <PrejudiceEXH editable={false} />
         <PrejudiceProche editable={false} />
-        <TotalBoxInterest
-          selector="total-interest"
-          documentRef={contentRef}
-          label={'Total interet global'}
-        />
-        <TotalBox selector="total" documentRef={contentRef} label={'Total global'} />
+
+        <DelayedContent delay={1000}>
+          <div style={{ padding: '0 20px 20px' }}>
+            <TotalBoxInterest
+              selector="total-interest"
+              documentRef={contentRef}
+              label="Total intérêt global"
+            />
+            <TotalBox selector="total" documentRef={contentRef} label="Total global" />
+          </div>
+        </DelayedContent>
       </div>
     </>
   )

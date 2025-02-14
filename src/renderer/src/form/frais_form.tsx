@@ -11,7 +11,10 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     defaultValues: initialValues || {
       frais: [{}],
       administratif_value: '100',
-      vestimentaire_value: '400'
+      vestimentaire_value: '400',
+      deplacement_value: 0,
+      // By default véhicule automobile
+      deplacement_type: 0.42
     }
   })
 
