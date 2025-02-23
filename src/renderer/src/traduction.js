@@ -2,7 +2,7 @@ export default {
   home: {
     reference: {
       en: 'File reference:',
-      nl: 'Dossierreferentie:',
+      nl: 'Dossierrefertes:',
       fr: 'Référence du dossier:'
     },
     create: {
