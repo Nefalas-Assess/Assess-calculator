@@ -313,8 +313,8 @@ button {
   }
 }
 
-.custom-size {
-  min-width: 400px;
+#modifier {
+  color:red
 }
 
 #taux_it_Table{
@@ -323,14 +323,6 @@ button {
 
 #IPVariables{
   max-width: 800px;
-}
-
-#ipTable {
-  max-width: 1000px;
-}
-
-#hospTable {
-  max-width: 1000px;
 }
 
 .logo{

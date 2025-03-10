@@ -269,8 +269,16 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               <Money value={totalDeplacementFrais} ignore />
             </td>
           </tr>
+          <tr id="modifier">
+            <td>Forfait</td>
+            <td></td>
+            <td></td>
+            <td>Select</td>
+            <td>Input montant</td>
+          </tr>
         </tbody>
       </table>
+
       <div className="total-box">
         <strong>Total : </strong> <Money value={totalSumRest} />
       </div>

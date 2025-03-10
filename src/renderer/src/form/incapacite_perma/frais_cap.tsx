@@ -153,6 +153,13 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
           Ajouter une ligne
         </button>
       )}
+      <table id="modifier" style={{ maxWidth: 1200 }}>
+        <tr>
+          <td>Forfait</td>
+          <td>Input montant</td>
+          <td>Bouton Supprimer</td>
+        </tr>
+      </table>
     </form>
   )
 }
