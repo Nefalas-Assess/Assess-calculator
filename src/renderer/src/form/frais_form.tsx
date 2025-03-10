@@ -91,7 +91,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(submitForm)}>
       <h1>Frais (médicaux)</h1>
-      <table style={{ width: 1000 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Indemnité/Frais</th>
@@ -177,7 +177,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         <strong>Total frais médicaux : </strong> <Money value={totalSumFrais} />
       </div>
 
-      <table id="ipTable">
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Indemnité/Frais</th>
@@ -276,7 +276,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       </div>
 
       <h1>Aide de tiers (non-qualifiés)</h1>
-      <table id="hospTable">
+      <table id="hospTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Nombre d'heures</th>

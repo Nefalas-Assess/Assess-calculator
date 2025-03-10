@@ -94,7 +94,7 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1>Provisions</h1>
-        <table style={{ width: 700 }}>
+        <table style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Date de provision</th>

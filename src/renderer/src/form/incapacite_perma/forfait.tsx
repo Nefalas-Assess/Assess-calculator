@@ -67,7 +67,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
     <form onSubmit={handleSubmit(submitForm)}>
       <h1>Incapacités personnelles permanentes</h1>
 
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -108,7 +108,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
       <h1>Incapacités ménagères permanentes</h1>
 
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -178,7 +178,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
       <h1>Incapacités économiques permanentes</h1>
 
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>

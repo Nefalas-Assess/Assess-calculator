@@ -186,7 +186,9 @@ h1 {
   margin-top: 10;
   font-size: 24px;
   text-align: left;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #8bbdff;
 }
 
 table {
@@ -218,13 +220,14 @@ button {
 
 .total-box {
   margin-top: 20px;
+  margin-bottom: 20px;
   padding: 10px;
   background-color: #242424;
   border: 2px solid black;
   font-size: 18px;
   text-align: center;
   font-weight: bold;
-  max-width: 1000px;
+  max-width: 1200px;
 }
 
 .home {
@@ -312,10 +315,6 @@ button {
 
 .custom-size {
   min-width: 400px;
-}
-
-#infogTable {
-  max-width: 600px;
 }
 
 #taux_it_Table{

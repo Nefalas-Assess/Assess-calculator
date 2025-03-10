@@ -302,7 +302,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Incapacités temporaires menagères</h1>
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Début</th>

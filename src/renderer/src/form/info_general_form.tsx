@@ -64,7 +64,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <table id="infogTable">
+      <table id="infogTable" style={{ width: 600 }}>
         <tbody>
           <tr>
             <td>Nom de la victime</td>
@@ -146,7 +146,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
       </table>
 
       <h3>Enfants</h3>
-      <table style={{ maxWidth: 1000 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Nom</th>

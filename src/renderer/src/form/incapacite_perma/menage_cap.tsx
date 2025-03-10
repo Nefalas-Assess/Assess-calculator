@@ -140,7 +140,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       </table>
       <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
         <h3>Période entre la consolidation et le paiement</h3>
-        <table id="ippcTable" style={{ width: 1000 }}>
+        <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Date de consolidation</th>
@@ -209,7 +209,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         </table>
 
         <h3>Incapacités permanentes ménagères</h3>
-        <table id="IPCAPTable" style={{ width: 1000 }}>
+        <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Date du paiement</th>

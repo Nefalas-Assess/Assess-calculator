@@ -116,7 +116,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Incapacités temporaires économiques</h1>
       <h3>Indemnisation nette</h3>
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Début</th>
@@ -233,7 +233,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       )}
 
       <h3>Indemnisation brute</h3>
-      <table id="ipTable" style={{ width: 1000 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Début</th>

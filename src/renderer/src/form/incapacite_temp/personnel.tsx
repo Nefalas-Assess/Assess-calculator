@@ -116,7 +116,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Incapacités temporaires personnelles</h1>
-      <table id="ipTable">
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Début</th>

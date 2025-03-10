@@ -162,7 +162,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
       </table>
 
       <h3>Frais</h3>
-      <table id="itebTable" style={{ width: 1000 }}>
+      <table id="itebTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Frais</th>

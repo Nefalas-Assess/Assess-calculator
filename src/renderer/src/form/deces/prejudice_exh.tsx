@@ -112,7 +112,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Préjudice ex haerede</h1>
-      <table style={{ width: 1000 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Début</th>

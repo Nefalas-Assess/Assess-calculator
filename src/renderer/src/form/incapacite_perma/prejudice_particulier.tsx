@@ -87,7 +87,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Préjudices particuliers</h1>
       <h3>Quantum Doloris</h3>
-      <table id="ipTable" style={{ width: 800 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -143,7 +143,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       </table>
 
       <h3>Préjudice Esthétique</h3>
-      <table id="ipTable" style={{ width: 800 }}>
+      <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Âge consolidation</th>
@@ -203,7 +203,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       </table>
 
       <h3>Préjudice Sexuel</h3>
-      <table style={{ width: 800 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Indemnités/Frais</th>
@@ -284,7 +284,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       )}
 
       <h3>Préjudice d'Agrément</h3>
-      <table style={{ width: 800 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Indemnités/Frais</th>

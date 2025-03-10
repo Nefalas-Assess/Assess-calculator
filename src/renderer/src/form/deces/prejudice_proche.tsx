@@ -271,7 +271,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     <form onSubmit={handleSubmit(onSubmit)} ref={ref}>
       <h1>Préjudices des proches</h1>
       <h3>Dommage moral des proches</h3>
-      <table style={{ width: 1000 }}>
+      <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Nom du membre de la famille</th>
@@ -357,7 +357,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
       <FadeIn show={formValues?.reference && formValues?.interet}>
         <h3>Perte du revenu du défunt</h3>
-        <table id="itebTable" style={{ width: 1000 }}>
+        <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Revenu du défunt (€)</th>
@@ -394,7 +394,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           </tbody>
         </table>
         <h3>Contribution ménagères du défunt</h3>
-        <table id="IPCAPTable" style={{ width: 1000 }}>
+        <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Indemnité journalière (€)</th>

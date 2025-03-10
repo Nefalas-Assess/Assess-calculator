@@ -145,7 +145,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
       </table>
       <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
         <h3>Période entre la consolidation et le paiement</h3>
-        <table id="ippcTable" style={{ width: 1000 }}>
+        <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Date de consolidation</th>
@@ -202,7 +202,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
           </tbody>
         </table>
 
-        <table id="ippcTable" style={{ width: 1000 }}>
+        <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Date de consolidation</th>
@@ -255,7 +255,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         </table>
 
         <h3>Incapacités permanentes économiques</h3>
-        <table id="itebTable" style={{ width: 1000 }}>
+        <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Salaire annuel brut (€)</th>
@@ -287,7 +287,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
           </tbody>
         </table>
 
-        <table id="itebTable" style={{ width: 1000 }}>
+        <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
               <th>Salaire annuel net (€)</th>
