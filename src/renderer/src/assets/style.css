@@ -191,6 +191,11 @@ h1 {
   color: #8bbdff;
 }
 
+h3 {
+  font-weight: bold;
+  font-style: italic;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
