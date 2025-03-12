@@ -318,6 +318,10 @@ button {
   }
 }
 
+.custom-size{
+  min-width: 400px;
+}
+
 #modifier {
   color:red
 }

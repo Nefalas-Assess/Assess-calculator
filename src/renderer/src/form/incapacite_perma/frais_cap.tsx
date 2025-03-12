@@ -71,7 +71,8 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Capitalisation des frais</h1>
+      <h1>Frais futurs</h1>
+      <h3>Frais capitalisés</h3>
       <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
@@ -80,7 +81,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
             <th className="custom-size">Table de référence</th>
             <th>Taux d'intérêt de la capitalisation</th>
             <th>Montant annualisé (€)</th>
-            <th>Total capitalisé</th>
+            <th>Total</th>
             {editable && <th></th>}
           </tr>
         </thead>
@@ -153,13 +154,44 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
           Ajouter une ligne
         </button>
       )}
+      
+      <h3>Frais payés dans N années</h3>
       <table id="modifier" style={{ maxWidth: 1200 }}>
         <tr>
-          <td>Forfait</td>
+          <td>Frais</td>
+          <td>Montant</td>
+          <td>Nombre d'années</td>
+          <td>Taux d'intérêt de la capitalisation</td>
+          <td>Total</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Input lettres</td>
           <td>Input montant</td>
+          <td>Input/scroll [1-50]</td>
+          <td>Scroll avec les % de capi comme tableau au dessus</td>
+          <td>Total = montant * coeff trouvé dans data_va_eur_annees_2025.tsx
+            Ex : Si le nombre d'années est 10 et le % d'int de la capi est 1% ; coeff = 0.9053
+          </td>
           <td>Bouton Supprimer</td>
         </tr>
       </table>
+      Ajouter une ligne
+
+      <h3>Forfait</h3>
+      <table id="modifier" style={{ maxWidth: 1200 }}>
+        <tr>
+          <td>Frais</td>
+          <td>Montant</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>Input lettres</td>
+          <td>Input montant (il n'y pas de calcul à effectuer c'est une zone pour mettre des trucs libres)</td>
+          <td>Bouton Supprimer</td>
+        </tr>
+      </table>
+      Ajouter une ligne
     </form>
   )
 }

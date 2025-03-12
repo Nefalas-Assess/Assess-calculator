@@ -204,7 +204,7 @@ export const AppLayout = () => {
                         <LinkItem to="/ip/personnel">Personnelles capitalisées</LinkItem>
                         <LinkItem to="/ip/menagère">Ménagères capitalisées</LinkItem>
                         <LinkItem to="/ip/economique">Économiques capitalisées</LinkItem>
-                        <LinkItem to="/ip/frais">Frais capitalisés</LinkItem>
+                        <LinkItem to="/ip/frais">Frais futurs</LinkItem>
                         <LinkItem to="/ip/particuliers">Préjudices Particuliers</LinkItem>
                       </div>
                     )}

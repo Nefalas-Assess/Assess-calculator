@@ -146,6 +146,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <th>Date de consolidation</th>
               <th>Date du paiement</th>
               <th>Jours</th>
+              <th id="modifier">Enfants</th>
               <th>Indemnité journalière (€)</th>
               <th style={{ width: 50 }}>%</th>
               <th>Contribution (%)</th>
@@ -162,6 +163,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
 
               <td style={{ width: 50 }}>{days || 0}</td>
+              <td id="modifier">Nombre d'enfants calculé jusqu'à 25 ans comme pour le temporaire (avec addition des +X.00€ à indemnité journalière & ajout dans le calcul; en fait tu pourrais peut-être juste recopier ce que tu avais fait dans les IT Ména)</td>
               <td>
                 <Field control={control} name={`conso_amount`} type="number" editable={editable}>
                   {(props) => <input style={{ width: 50 }} {...props} />}
