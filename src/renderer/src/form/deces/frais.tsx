@@ -132,7 +132,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Frais funéraires anticipés</h1>
+      <h1>Frais funéraires</h1>
       <h3>Variables</h3>
       <table id="IPVariables">
         <tr>
@@ -161,13 +161,13 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         </tr>
       </table>
 
-      <h3>Frais</h3>
+      <h3>Frais anticipés</h3>
       <table id="itebTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Frais</th>
             <th>Montant (€)</th>
-            <th>Total anticipé</th>
+            <th>Montant anticipé</th>
             {editable && <th></th>}
           </tr>
         </thead>
@@ -210,6 +210,25 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
           Ajouter une ligne
         </button>
       )}
+
+      <h3>Frais non-anticipés</h3>
+      <table id="modifier" style={{ maxWidth: 1200 }}>
+        <thead>
+          <tr>
+            <th>Frais</th>
+            <th>Montant (€)</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Input lettres</td>
+            <td>Input, pas de calcul nécessaire</td>
+            <td>Bouton supprimer</td>
+          </tr>
+        </tbody>
+      </table> 
+      Ajouter une ligne
     </form>
   )
 }
