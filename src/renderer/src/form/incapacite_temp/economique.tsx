@@ -107,7 +107,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       if (currentData) {
         filteredData = currentData.concat(filteredData)
       }
-      setValue(fieldName, filteredData)
+      fieldName, filteredData
     },
     [formValues]
   )
@@ -347,11 +347,21 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
           />
         </div>
       )}
-      <table id="modifier" style={{ maxWidth: 1200 }}>
+      <table style={{ maxWidth: 1200 }}>
         <tr>
           <td>Estimation/Réclamation</td>
-          <td>Input montant</td>
-          <td>Bouton Supprimer</td>
+          <td>
+            <Field control={control} type="number" name={`estimate`} editable={editable}>
+              {(props) => <input {...props} />}
+            </Field>
+          </td>
+          {editable && (
+            <td>
+              <button type="button" onClick={() => setValue('estimate', '')}>
+                Supprimer
+              </button>
+            </td>
+          )}
         </tr>
       </table>
     </form>

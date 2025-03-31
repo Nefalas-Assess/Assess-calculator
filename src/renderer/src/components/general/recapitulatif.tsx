@@ -50,8 +50,6 @@ const Recapitulatif = () => {
     }
   }
 
-  console.log(data)
-
   return (
     <>
       <div id="top-menu">
