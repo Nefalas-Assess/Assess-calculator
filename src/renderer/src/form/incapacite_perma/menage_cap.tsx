@@ -1,4 +1,9 @@
-import { getDays, getMedDate } from '@renderer/helpers/general'
+import {
+  calculateDaysBeforeAfter25,
+  getChildOnPeriod,
+  getDays,
+  getMedDate
+} from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { format, intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -10,6 +15,8 @@ import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -54,17 +61,83 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     })
   }, [formValues, data])
 
+  const renderToolTipChildren = useCallback((res) => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+        {res?.map((it, key) => (
+          <div key={key} style={{ padding: 10 }} className="border-item">
+            {it?.name} né le {format(it?.birthDate, 'dd/MM/yyyy')}
+            <div>Nombres de jours avant l'age de 25 ans: {it?.days?.before25}</div>
+            <div>
+              <math>
+                <mfrac>
+                  <mn>{it?.days?.before25}</mn>
+                  <mn>{it?.days?.total}</mn>
+                </mfrac>
+                <mo>=</mo>
+                <mn>{it?.days?.before25 / it?.days?.total}</mn>
+              </math>
+            </div>
+          </div>
+        ))}
+        <div>
+          <math>
+            {res?.map((it, key) => (
+              <React.Fragment key={key}>
+                {key !== 0 && <mo>+</mo>}
+                <mn>{it?.days?.percentageBefore25}</mn>
+              </React.Fragment>
+            ))}
+            <mo>=</mo>
+            <mn>
+              {res?.reduce((acc, value) => {
+                const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                return acc + percentage
+              }, 0)}
+            </mn>
+          </math>
+        </div>
+      </div>
+    )
+  }, [])
+
+  const childrenOnPeriod = useMemo(() => {
+    const children = data?.general_info?.children || []
+    const res = []
+    for (let i = 0; i < children.length; i += 1) {
+      const item = children[i]
+      // Skip children without birthdate
+      if (!item?.birthDate) continue
+      const result = calculateDaysBeforeAfter25(item?.birthDate, [
+        data?.general_info?.date_consolidation,
+        formValues?.paiement
+      ])
+      res.push({ days: result, ...item })
+    }
+
+    return res
+  }, [formValues, data])
+
   const getConsoAmount = useCallback(
     (values) => {
       const { conso_amount, conso_pourcentage, conso_contribution } = values || {}
+
+      const real_conso_amount =
+        parseFloat(conso_amount || 0) +
+        childrenOnPeriod?.reduce((acc, value) => {
+          const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+          return acc + percentage
+        }, 0) *
+          10
+
       return (
         parseInt(days || 0) *
-        parseFloat(conso_amount || 0) *
+        real_conso_amount *
         (parseFloat(conso_pourcentage || 0) / 100) *
         (parseFloat(conso_contribution || 0) / 100)
       ).toFixed(2)
     },
-    [days]
+    [days, childrenOnPeriod]
   )
 
   const getCapAmount = useCallback(
@@ -148,7 +221,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <th>Date de consolidation</th>
               <th>Date du paiement</th>
               <th>Jours</th>
-              <th id="modifier">Enfants</th>
+              <th>Enfants</th>
               <th>Indemnité journalière (€)</th>
               <th style={{ width: 50 }}>%</th>
               <th>Contribution (%)</th>
@@ -165,10 +238,18 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
 
               <td style={{ width: 50 }}>{days || 0}</td>
-              <td id="modifier">
-                Nombre d'enfants calculé jusqu'à 25 ans comme pour le temporaire (avec addition des
-                +X.00€ à indemnité journalière & ajout dans le calcul; en fait tu pourrais peut-être
-                juste recopier ce que tu avais fait dans les IT Ména)
+              <td>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {childrenOnPeriod
+                    ?.reduce((acc, value) => {
+                      const percentage = parseFloat(value?.days?.percentageBefore25 || 0)
+                      return acc + percentage
+                    }, 0)
+                    ?.toFixed(2)}
+                  <Tooltip tooltipContent={renderToolTipChildren(childrenOnPeriod)}>
+                    <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+                  </Tooltip>
+                </div>
               </td>
               <td>
                 <Field control={control} name={`conso_amount`} type="number" editable={editable}>

@@ -68,3 +68,68 @@ export const getMedDate = (item, varName) => {
 
   return addDays(start, diffInDays / 2)
 }
+// Calculate the number of days before and after 25 years old for a given period
+export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
+  const parseDate = (date) => new Date(date)
+
+  // Convertir les dates en objets Date
+  const birth = parseDate(birthDate)
+  const start = parseDate(dates?.[0])
+  const end = parseDate(dates?.[1])
+
+  // Vérification des dates
+  if (start > end) {
+    return 'La date de début doit être avant la date de fin.'
+  }
+
+  // Calcul de la date des 25 ans
+  const twentyFifthBirthday = new Date(birth.getFullYear() + 25, birth.getMonth(), birth.getDate())
+
+  // Calcul des jours entre deux dates
+  const calculateDaysBetween = (date1, date2) => {
+    const diffTime = Math.abs(date2 - date1)
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) // Convertir les millisecondes en jours
+  }
+
+  let before25 = 0
+  let after25 = 0
+
+  // Cas où la date de début est avant les 25 ans
+  if (start <= twentyFifthBirthday) {
+    // Calcul des jours avant les 25 ans
+    const actualEndBefore25 = end <= twentyFifthBirthday ? end : twentyFifthBirthday
+    before25 = calculateDaysBetween(start, actualEndBefore25)
+
+    // Calcul des jours après les 25 ans
+    if (end > twentyFifthBirthday) {
+      after25 = calculateDaysBetween(twentyFifthBirthday, end)
+    }
+
+    // Cas où la date de naissance est après la date de début
+    if (birth > start) {
+      // Si il n'est pas née pendant la période
+      if (birth > end) {
+        before25 = 0
+        after25 = 0
+      }
+      // Si il est née durant la période
+      else {
+        before25 = calculateDaysBetween(birth, end)
+      }
+    }
+  } else {
+    // Cas où la date de début est après les 25 ans
+    after25 = calculateDaysBetween(start, end)
+  }
+
+  const total = calculateDaysBetween(start, end)
+
+  const percentageBefore25 = total > 0 ? before25 / total : 0
+
+  return {
+    percentageBefore25,
+    before25,
+    after25,
+    total
+  }
+}
