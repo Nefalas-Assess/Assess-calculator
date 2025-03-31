@@ -63,16 +63,21 @@ const Total = ({ values = {}, index, data }) => {
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       ref: 'schryvers',
       charges: [{}]
     }
   })
 
-  const { fields, remove, append } = useFieldArray({
+  const fraisFields = useFieldArray({
     control,
     name: 'charges' // Champs dynamiques pour les enfants
+  })
+
+  const notAnticipatedFields = useFieldArray({
+    control,
+    name: 'not_anticipated_charges' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -81,6 +86,11 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const chargesValues = useWatch({
     control,
     name: 'charges'
+  })
+
+  const notAnticipatedValues = useWatch({
+    control,
+    name: 'not_anticipated_charges'
   })
 
   // Référence pour suivre les anciennes valeurs
@@ -96,14 +106,17 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(chargesValues) !== JSON.stringify(previousValuesRef.current?.charges)
+      JSON.stringify(chargesValues) !== JSON.stringify(previousValuesRef.current?.charges) ||
+      JSON.stringify(notAnticipatedValues) !==
+        JSON.stringify(previousValuesRef.current?.not_anticipated_charges)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
       // Éviter de soumettre si aucune modification réelle
       previousValuesRef.current = {
         formValues,
-        charges: chargesValues
+        charges: chargesValues,
+        not_anticipated_charges: notAnticipatedValues
       }
 
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
@@ -160,7 +173,6 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
           </td>
         </tr>
       </table>
-
       <h3>Frais anticipés</h3>
       <table id="itebTable" style={{ maxWidth: 1200 }}>
         <thead>
@@ -172,7 +184,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
           </tr>
         </thead>
         <tbody>
-          {fields.map((child, index) => {
+          {fraisFields.fields.map((child, index) => {
             return (
               <tr key={child.id}>
                 <td>
@@ -195,7 +207,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
                 </td>
                 {editable && (
                   <td>
-                    <button type="button" onClick={() => remove(index)}>
+                    <button type="button" onClick={() => fraisFields.remove(index)}>
                       Supprimer
                     </button>
                   </td>
@@ -206,29 +218,64 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => append({})}>
+        <button type="button" onClick={() => fraisFields.append({})}>
           Ajouter une ligne
         </button>
       )}
-
       <h3>Frais non-anticipés</h3>
-      <table id="modifier" style={{ maxWidth: 1200 }}>
+      <table id="itebTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <th>Frais</th>
             <th>Montant (€)</th>
-            <th></th>
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Input lettres</td>
-            <td>Input, pas de calcul nécessaire</td>
-            <td>Bouton supprimer</td>
-          </tr>
+          {notAnticipatedFields.fields.map((child, index) => {
+            const values = formValues?.not_anticipated_charges?.[index]
+            return (
+              <tr key={child.id}>
+                <td>
+                  <Field
+                    control={control}
+                    name={`not_anticipated_charges.${index}.name`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`not_anticipated_charges.${index}.amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                  {/* Used for the total box calculation  */}
+                  <div className="money" style={{ display: 'none' }}>
+                    {values?.amount}
+                  </div>
+                </td>
+                {editable && (
+                  <td>
+                    <button type="button" onClick={() => notAnticipatedFields.remove(index)}>
+                      Supprimer
+                    </button>
+                  </td>
+                )}
+              </tr>
+            )
+          })}
         </tbody>
-      </table> 
-      Ajouter une ligne
+      </table>
+      {editable && (
+        <button type="button" onClick={() => notAnticipatedFields.append({})}>
+          Ajouter une ligne
+        </button>
+      )}
     </form>
   )
 }
