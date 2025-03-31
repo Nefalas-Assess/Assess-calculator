@@ -16,6 +16,13 @@ export default {
     { value: 'fonctionnaire', label: 'Fonctionnaire' },
     { value: 'invalide', label: 'Invalide' }
   ],
+  contribution: [
+    { value: 0, label: '0%' },
+    { value: 35, label: '35%' },
+    { value: 50, label: '50%' },
+    { value: 65, label: '65%' },
+    { value: 100, label: '100%' }
+  ],
   boolean: [
     { label: 'Oui', value: true },
     { label: 'Non', value: false }

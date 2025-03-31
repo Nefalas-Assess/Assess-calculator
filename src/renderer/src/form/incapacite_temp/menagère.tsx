@@ -11,6 +11,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { format } from 'date-fns'
+import constants from '@renderer/constants'
 
 function calculateDays(birthDate, dates) {
   const parseDate = (date) => new Date(date)
@@ -394,19 +395,10 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
                   <Field
                     control={control}
                     name={`periods.${index}.contribution`}
+                    type="select"
+                    options={constants.contribution}
                     editable={editable}
-                  >
-                    {(props) => (
-                      <select {...props}>
-                        <option>Select</option>
-                        <option value="0">0</option>
-                        <option value="100">100</option>
-                        <option value="65">65</option>
-                        <option value="50">50</option>
-                        <option value="35">35</option>
-                      </select>
-                    )}
-                  </Field>
+                  ></Field>
                 </td>
                 <td>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -443,7 +435,15 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
       </table>
       {editable && (
         <div className="buttons-row">
-          <button type="button" onClick={() => addNext(append, { amount: 30 })}>
+          <button
+            type="button"
+            onClick={() =>
+              addNext(append, {
+                amount: 30,
+                contribution: data?.general_info?.config?.default_contribution
+              })
+            }
+          >
             Ajouter durée
           </button>
           <ActionMenuButton

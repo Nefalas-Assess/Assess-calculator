@@ -32,6 +32,11 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     name: 'children'
   })
 
+  const configValues = useWatch({
+    control,
+    name: 'config'
+  })
+
   const submitForm = useCallback(
     (data) => {
       onSubmit(data) // Soumettre avec l'onSubmit passé en prop
@@ -44,19 +49,21 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children)
+      JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children) ||
+      JSON.stringify(configValues) !== JSON.stringify(previousValuesRef.current?.config)
 
     // Si des valeurs ont changé, soumettre le formulaire
     if (valuesChanged) {
       // Éviter de soumettre si aucune modification réelle
       previousValuesRef.current = {
         formValues,
-        children: childrenValues
+        children: childrenValues,
+        config: configValues
       }
 
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
-  }, [formValues, childrenValues, submitForm, handleSubmit])
+  }, [formValues, childrenValues, configValues, submitForm, handleSubmit])
 
   const addChild = () => {
     childrenFields.append({ name: '', birthDate: '' }) // Nouveau champ enfant
@@ -143,6 +150,27 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 ></Field>
               </td>
             </tr>
+            {editable && (
+              <>
+                <tr>
+                  <td colSpan={2} style={{ fontWeight: 'bold' }}>
+                    Configuration
+                  </td>
+                </tr>
+                <tr>
+                  <td>Contribution par défaut</td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.contribution}
+                      name="config.default_contribution"
+                      editable={editable}
+                    ></Field>
+                  </td>
+                </tr>
+              </>
+            )}
           </tbody>
         </table>
         <Field

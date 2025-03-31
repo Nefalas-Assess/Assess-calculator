@@ -5,13 +5,16 @@ import { isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import Field from '@renderer/generic/field'
+import constants from '@renderer/constants'
 
 export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
-  const { register, handleSubmit, watch, control } = useForm({
-    defaultValues: initialValues || {}
-  })
-
   const { data } = useContext(AppContext)
+
+  const { register, handleSubmit, watch, control } = useForm({
+    defaultValues: initialValues || {
+      contribution_imp: data?.general_info?.config?.default_contribution
+    }
+  })
 
   const formValues = watch()
 
@@ -35,8 +38,6 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
   }, [formValues, submitForm, handleSubmit])
-
-  const contributionOptions = [0, 100, 65, 50, 35]
 
   const getPoint = useCallback((age) => {
     if (age <= 15) return 3660
@@ -130,17 +131,14 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Field control={control} name={`contribution_imp`} editable={editable}>
-                {(props) => (
-                  <select style={{ width: 120 }} {...props}>
-                    {contributionOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}%
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </Field>
+              <Field
+                control={control}
+                style={{ width: 120 }}
+                type="select"
+                options={constants.contribution}
+                name={`contribution_imp`}
+                editable={editable}
+              ></Field>
             </td>
             <td>
               <Money

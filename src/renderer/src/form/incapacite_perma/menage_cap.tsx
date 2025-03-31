@@ -18,7 +18,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     defaultValues: initialValues || {
       reference: 'schryvers',
       conso_amount: 30,
-      perso_amount: 30
+      perso_amount: 30,
+      perso_contribution: data?.general_info?.config?.default_contribution,
+      conso_contribution: data?.general_info?.config?.default_contribution
     }
   })
 
@@ -163,7 +165,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
 
               <td style={{ width: 50 }}>{days || 0}</td>
-              <td id="modifier">Nombre d'enfants calculé jusqu'à 25 ans comme pour le temporaire (avec addition des +X.00€ à indemnité journalière & ajout dans le calcul; en fait tu pourrais peut-être juste recopier ce que tu avais fait dans les IT Ména)</td>
+              <td id="modifier">
+                Nombre d'enfants calculé jusqu'à 25 ans comme pour le temporaire (avec addition des
+                +X.00€ à indemnité journalière & ajout dans le calcul; en fait tu pourrais peut-être
+                juste recopier ce que tu avais fait dans les IT Ména)
+              </td>
               <td>
                 <Field control={control} name={`conso_amount`} type="number" editable={editable}>
                   {(props) => <input style={{ width: 50 }} {...props} />}
@@ -180,18 +186,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`conso_contribution`} editable={editable}>
-                  {(props) => (
-                    <select {...props}>
-                      <option>Select</option>
-                      <option value="0">0</option>
-                      <option value="100">100</option>
-                      <option value="65">65</option>
-                      <option value="50">50</option>
-                      <option value="35">35</option>
-                    </select>
-                  )}
-                </Field>
+                <Field
+                  control={control}
+                  name={`conso_contribution`}
+                  type="select"
+                  options={constants.contribution}
+                  editable={editable}
+                ></Field>
               </td>
               <td>
                 <Money value={getConsoAmount(formValues)} />
@@ -241,18 +242,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`perso_contribution`} editable={editable}>
-                  {(props) => (
-                    <select {...props}>
-                      <option>Select</option>
-                      <option value="0">0</option>
-                      <option value="100">100</option>
-                      <option value="65">65</option>
-                      <option value="50">50</option>
-                      <option value="35">35</option>
-                    </select>
-                  )}
-                </Field>
+                <Field
+                  control={control}
+                  name={`perso_contribution`}
+                  type="select"
+                  options={constants.contribution}
+                  editable={editable}
+                ></Field>
               </td>
               <td>
                 <Money value={getCapAmount(formValues)} />

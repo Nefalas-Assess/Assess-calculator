@@ -203,6 +203,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
+      menage_contribution: data?.general_info?.config?.default_contribution,
       members: data?.general_info?.children?.map((it, key) => ({
         name: it?.name,
         link: 'parent/enfant'
@@ -410,18 +411,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Field control={control} name={`menage_contribution`} editable={editable}>
-                  {(props) => (
-                    <select {...props}>
-                      <option>Select</option>
-                      <option value="0">0</option>
-                      <option value="100">100</option>
-                      <option value="65">65</option>
-                      <option value="50">50</option>
-                      <option value="35">35</option>
-                    </select>
-                  )}
-                </Field>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.contribution}
+                  name={`menage_contribution`}
+                  editable={editable}
+                ></Field>
               </td>
               <td>
                 <TotalMenage values={formValues} data={data} />

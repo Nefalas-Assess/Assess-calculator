@@ -33,7 +33,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
       if (type === 'select' && options) {
         return (
           <select {...field}>
-            <option>Select</option>
+            <option value={''}>Select</option>
             {(options || [])?.map((it, key) => (
               <option key={key} value={it?.value}>
                 {it?.label || it?.value}

@@ -3,6 +3,45 @@ import React, { createContext, useCallback, useState } from 'react'
 
 export const AppContext = createContext()
 
+const setDefaultValues = (obj: any, defaultValues: any): any => {
+  // Create a deep copy to avoid mutating the original object
+  const result = structuredClone(obj)
+
+  // Recursively traverse object and set default values
+  const setDefaults = (current: any, defaults: any): any => {
+    // Skip if current is null/undefined or not an object
+    if (!current || typeof current !== 'object') return current
+
+    // Handle arrays by recursively checking each item
+    if (Array.isArray(current)) {
+      return current.map((item) => {
+        const newItem = { ...item }
+        Object.entries(defaults).forEach(([key, value]) => {
+          if ((newItem[key] === undefined || newItem[key] === '') && key in defaults) {
+            newItem[key] = value
+          }
+        })
+        return newItem
+      })
+    }
+
+    // Handle objects
+    Object.entries(defaults).forEach(([key, value]) => {
+      if (current[key] === undefined || current[key] === '') {
+        // Set default if value doesn't exist or is empty string
+        current[key] = value
+      } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        // Recursively set defaults for nested objects
+        current[key] = setDefaults(current[key], value)
+      }
+    })
+
+    return current
+  }
+
+  return setDefaults(result, defaultValues)
+}
+
 const AppProvider = ({ children }) => {
   const [data, setData] = useState(null)
   const [lg, setLg] = useState('fr')
@@ -37,7 +76,31 @@ const AppProvider = ({ children }) => {
       if (res?.general_info?.calcul_interets === 'true') {
         res.computed_info.rate = parseFloat(res?.general_info?.taux_int)
       }
+
+      if (res?.general_info?.config?.default_contribution) {
+        res.prejudice_proche = setDefaultValues(res?.prejudice_proche, {
+          menage_contribution: res?.general_info?.config?.default_contribution
+        })
+        res.forfait_ip = setDefaultValues(res?.forfait_ip, {
+          contribution_imp: res?.general_info?.config?.default_contribution
+        })
+        res.incapacite_perma_menage_cap = setDefaultValues(res?.incapacite_perma_menage_cap, {
+          conso_contribution: res?.general_info?.config?.default_contribution,
+          perso_contribution: res?.general_info?.config?.default_contribution
+        })
+        if (res.incapacite_temp_menagere?.periods?.length !== 0) {
+          res.incapacite_temp_menagere.periods = setDefaultValues(
+            res?.incapacite_temp_menagere.periods,
+            {
+              contribution: res?.general_info?.config?.default_contribution
+            }
+          )
+        }
+      }
     }
+
+    console.log('res', res)
+
     return res
   }, [])
 
