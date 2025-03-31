@@ -19,8 +19,11 @@ import PrejudiceProche from '../deces/prejudice_proche'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import DelayedContent from '@renderer/generic/delayContent'
+import { AppContext } from '@renderer/providers/AppProvider'
 
 const Recapitulatif = () => {
+  const { data } = useContext(AppContext)
+
   const contentRef = useRef()
 
   const handlePrint = async () => {
@@ -47,6 +50,8 @@ const Recapitulatif = () => {
     }
   }
 
+  console.log(data)
+
   return (
     <>
       <div id="top-menu">
@@ -55,24 +60,24 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="recap">
-        <InfoG editable={false} />
-        <Frais editable={false} />
-        <Personnel editable={false} />
-        <Menagere editable={false} />
-        <Economique editable={false} />
-        <EFFA editable={false} />
-        <Hospitalisation editable={false} />
-        <PretiumDoloris editable={false} />
-        <Forfait editable={false} />
-        <PersonnelCap editable={false} />
-        <MenageCap editable={false} />
-        <EconomiqueCap editable={false} />
-        <FraisCap editable={false} />
-        <Particuliers editable={false} />
+        {data?.general_info && <InfoG editable={false} />}
+        {data?.frais && <Frais editable={false} />}
+        {data?.incapacite_temp_personnel && <Personnel editable={false} />}
+        {data?.incapacite_temp_menagere && <Menagere editable={false} />}
+        {data?.incapacite_temp_economique && <Economique editable={false} />}
+        {data?.efforts_accrus && <EFFA editable={false} />}
+        {data?.hospitalisation && <Hospitalisation editable={false} />}
+        {data?.pretium_doloris && <PretiumDoloris editable={false} />}
+        {data?.forfait_ip && <Forfait editable={false} />}
+        {data?.incapacite_perma_personnel_cap && <PersonnelCap editable={false} />}
+        {data?.incapacite_perma_menage_cap && <MenageCap editable={false} />}
+        {data?.incapacite_perma_economique_cap && <EconomiqueCap editable={false} />}
+        {data?.incapacite_perma_charges && <FraisCap editable={false} />}
+        {data?.prejudice_particulier && <Particuliers editable={false} />}
 
-        <FraisFun editable={false} />
-        <PrejudiceEXH editable={false} />
-        <PrejudiceProche editable={false} />
+        {data?.frais_funeraire && <FraisFun editable={false} />}
+        {data?.prejudice_exh && <PrejudiceEXH editable={false} />}
+        {data?.prejudice_proche && <PrejudiceProche editable={false} />}
 
         <DelayedContent delay={1000}>
           <div style={{ padding: '0 20px 20px' }}>
