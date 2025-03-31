@@ -99,8 +99,6 @@ const AppProvider = ({ children }) => {
       }
     }
 
-    console.log('res', res)
-
     return res
   }, [])
 

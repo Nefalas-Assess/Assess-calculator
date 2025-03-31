@@ -38,7 +38,184 @@ export default {
     { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' }
   ],
   reference: [
+    // Default
     { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },
+    // 2025 par année
+    {
+      value: 'schryvers_55_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (55 ans)'
+    },
+    {
+      value: 'schryvers_56_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (56 ans)'
+    },
+    {
+      value: 'schryvers_57_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (57 ans)'
+    },
+    {
+      value: 'schryvers_58_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (58 ans)'
+    },
+    {
+      value: 'schryvers_59_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (59 ans)'
+    },
+    {
+      value: 'schryvers_60_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (60 ans)'
+    },
+    {
+      value: 'schryvers_61_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (61 ans)'
+    },
+    {
+      value: 'schryvers_62_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (62 ans)'
+    },
+    {
+      value: 'schryvers_63_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (63 ans)'
+    },
+    {
+      value: 'schryvers_64_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (64 ans)'
+    },
+    {
+      value: 'schryvers_65_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (65 ans)'
+    },
+    {
+      value: 'schryvers_66_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (66 ans)'
+    },
+    {
+      value: 'schryvers_67_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (67 ans)'
+    },
+    {
+      value: 'schryvers_68_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (68 ans)'
+    },
+    {
+      value: 'schryvers_69_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (69 ans)'
+    },
+    {
+      value: 'schryvers_70_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (70 ans)'
+    },
+    {
+      value: 'schryvers_71_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (71 ans)'
+    },
+    {
+      value: 'schryvers_72_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (72 ans)'
+    },
+    {
+      value: 'schryvers_73_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (73 ans)'
+    },
+    {
+      value: 'schryvers_74_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (74 ans)'
+    },
+    {
+      value: 'schryvers_75_y',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable annuellement (75 ans)'
+    },
+    // 2025 par mois
+    {
+      value: 'schryvers_55_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (55 ans)'
+    },
+    {
+      value: 'schryvers_56_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (56 ans)'
+    },
+    {
+      value: 'schryvers_57_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (57 ans)'
+    },
+    {
+      value: 'schryvers_58_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (58 ans)'
+    },
+    {
+      value: 'schryvers_59_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (59 ans)'
+    },
+    {
+      value: 'schryvers_60_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (60 ans)'
+    },
+    {
+      value: 'schryvers_61_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (61 ans)'
+    },
+    {
+      value: 'schryvers_62_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (62 ans)'
+    },
+    {
+      value: 'schryvers_63_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (63 ans)'
+    },
+    {
+      value: 'schryvers_64_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (64 ans)'
+    },
+    {
+      value: 'schryvers_65_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (65 ans)'
+    },
+    {
+      value: 'schryvers_66_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (66 ans)'
+    },
+    {
+      value: 'schryvers_67_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (67 ans)'
+    },
+    {
+      value: 'schryvers_68_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (68 ans)'
+    },
+    {
+      value: 'schryvers_69_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (69 ans)'
+    },
+    {
+      value: 'schryvers_70_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (70 ans)'
+    },
+    {
+      value: 'schryvers_71_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (71 ans)'
+    },
+    {
+      value: 'schryvers_72_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (72 ans)'
+    },
+    {
+      value: 'schryvers_73_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (73 ans)'
+    },
+    {
+      value: 'schryvers_74_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (74 ans)'
+    },
+    {
+      value: 'schryvers_75_m',
+      label: 'Schryvers 2025 VA rente viagère temporaire 1€/an payable mensuellement (75 ans)'
+    },
+    // 2024
+    { value: 'schryvers_55', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (55 ans)' },
+    { value: 'schryvers_56', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (56 ans)' },
+    { value: 'schryvers_57', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (57 ans)' },
+    { value: 'schryvers_58', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (58 ans)' },
+    { value: 'schryvers_59', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (59 ans)' },
     { value: 'schryvers_60', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (60 ans)' },
     { value: 'schryvers_61', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (61 ans)' },
     { value: 'schryvers_62', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle (62 ans)' },

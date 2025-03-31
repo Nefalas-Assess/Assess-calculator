@@ -1,77 +1,45 @@
-import data_cap_f from '@renderer/data/data_cap_f'
-import data_cap_f60 from '@renderer/data/data_cap_f60'
-import data_cap_f61 from '@renderer/data/data_cap_f61'
-import data_cap_f62 from '@renderer/data/data_cap_f62'
-import data_cap_f63 from '@renderer/data/data_cap_f63'
-import data_cap_f64 from '@renderer/data/data_cap_f64'
-import data_cap_f65 from '@renderer/data/data_cap_f65'
-import data_cap_f66 from '@renderer/data/data_cap_f66'
-import data_cap_f67 from '@renderer/data/data_cap_f67'
-import data_cap_f68 from '@renderer/data/data_cap_f68'
-import data_cap_f69 from '@renderer/data/data_cap_f69'
-import data_cap_f70 from '@renderer/data/data_cap_f70'
-import data_cap_f71 from '@renderer/data/data_cap_f71'
-import data_cap_f72 from '@renderer/data/data_cap_f72'
-import data_cap_f73 from '@renderer/data/data_cap_f73'
-import data_cap_f74 from '@renderer/data/data_cap_f74'
-import data_cap_f75 from '@renderer/data/data_cap_f75'
-import data_cap_h from '@renderer/data/data_cap_h'
-import data_cap_h60 from '@renderer/data/data_cap_h60'
-import data_cap_h61 from '@renderer/data/data_cap_h61'
-import data_cap_h62 from '@renderer/data/data_cap_h62'
-import data_cap_h63 from '@renderer/data/data_cap_h63'
-import data_cap_h64 from '@renderer/data/data_cap_h64'
-import data_cap_h65 from '@renderer/data/data_cap_h65'
-import data_cap_h66 from '@renderer/data/data_cap_h66'
-import data_cap_h67 from '@renderer/data/data_cap_h67'
-import data_cap_h68 from '@renderer/data/data_cap_h68'
-import data_cap_h69 from '@renderer/data/data_cap_h69'
-import data_cap_h70 from '@renderer/data/data_cap_h70'
-import data_cap_h71 from '@renderer/data/data_cap_h71'
-import data_cap_h72 from '@renderer/data/data_cap_h72'
-import data_cap_h73 from '@renderer/data/data_cap_h73'
-import data_cap_h74 from '@renderer/data/data_cap_h74'
-import data_cap_h75 from '@renderer/data/data_cap_h75'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { intervalToDuration } from 'date-fns'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
-const getCapitalizationTable = (ref, sexe) => {
-  switch (ref) {
-    case 'schryvers_60':
-      return sexe === 'homme' ? data_cap_h60 : data_cap_f60
-    case 'schryvers_61':
-      return sexe === 'homme' ? data_cap_h61 : data_cap_f61
-    case 'schryvers_62':
-      return sexe === 'homme' ? data_cap_h62 : data_cap_f62
-    case 'schryvers_63':
-      return sexe === 'homme' ? data_cap_h63 : data_cap_f63
-    case 'schryvers_64':
-      return sexe === 'homme' ? data_cap_h64 : data_cap_f64
-    case 'schryvers_65':
-      return sexe === 'homme' ? data_cap_h65 : data_cap_f65
-    case 'schryvers_66':
-      return sexe === 'homme' ? data_cap_h66 : data_cap_f66
-    case 'schryvers_67':
-      return sexe === 'homme' ? data_cap_h67 : data_cap_f67
-    case 'schryvers_68':
-      return sexe === 'homme' ? data_cap_h68 : data_cap_f68
-    case 'schryvers_69':
-      return sexe === 'homme' ? data_cap_h69 : data_cap_f69
-    case 'schryvers_70':
-      return sexe === 'homme' ? data_cap_h70 : data_cap_f70
-    case 'schryvers_71':
-      return sexe === 'homme' ? data_cap_h71 : data_cap_f71
-    case 'schryvers_72':
-      return sexe === 'homme' ? data_cap_h72 : data_cap_f72
-    case 'schryvers_73':
-      return sexe === 'homme' ? data_cap_h73 : data_cap_f73
-    case 'schryvers_74':
-      return sexe === 'homme' ? data_cap_h74 : data_cap_f74
-    case 'schryvers_75':
-      return sexe === 'homme' ? data_cap_h75 : data_cap_f75
-    default:
-      return sexe === 'homme' ? data_cap_h : data_cap_f
+const getCapitalizationTable = async (
+  ref: string,
+  sexe: string
+): Promise<Record<string, number[]> | null> => {
+  // Import dynamique des tables de capitalisation
+  const getTableModule = async (
+    gender: string,
+    suffix = ''
+  ): Promise<Record<string, number[]> | null> => {
+    try {
+      console.log(`@renderer/data/data_cap_${gender}${suffix}.tsx`)
+      const module = await import(`@renderer/data/data_cap_${gender}${suffix}.tsx`)
+      return module.default
+    } catch (e) {
+      return null
+    }
+  }
+
+  // Extraction du suffixe de la référence (ex: schryvers_55 -> _55)
+  const suffix = ref?.includes('schryvers_') ? ref?.replace('schryvers_', '') : ''
+  let treatedSuffix
+  if (suffix?.includes('_y')) {
+    treatedSuffix = suffix?.replace('_y', '_an_2025')
+  } else if (suffix?.includes('_m')) {
+    treatedSuffix = suffix?.replace('_m', '_mois_2025')
+  } else {
+    treatedSuffix = suffix
+  }
+
+  try {
+    if (sexe === 'homme') {
+      return await getTableModule('h', treatedSuffix)
+    } else {
+      return await getTableModule('f', treatedSuffix)
+    }
+  } catch (error) {
+    console.error('Error loading capitalization table:', error)
+    return null
   }
 }
 
@@ -86,13 +54,24 @@ export const useCapitalization = (props = {}) => {
     end
   })
 
-  const table = getCapitalizationTable(ref, sexe)
+  const [table, setTable] = useState(null)
 
-  const rowIndex = Object?.keys(table)?.findIndex((e) => parseInt(e) === (age || 0))
-  const row = Object?.values(table)?.[rowIndex]
+  useEffect(() => {
+    const loadTable = async () => {
+      const loadedTable = await getCapitalizationTable(ref, sexe)
+      setTable(loadedTable)
+    }
+    loadTable()
+  }, [ref, sexe])
+
+  if (!table) return null
+
+  const rowIndex = Object.keys(table).findIndex((e) => parseInt(e) === (age || 0))
+  const row = Object.values(table)[rowIndex]
 
   let value = row?.[index]
   if (amount) value = amount * row[index]
+
   if (!asObject) {
     return value
   } else {
