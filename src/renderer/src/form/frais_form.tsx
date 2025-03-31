@@ -35,7 +35,8 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     return (
       parseFloat(totalDeplacementFrais || 0) +
       parseFloat(formValues?.administratif_value || 0) +
-      parseFloat(formValues?.vestimentaire_value || 0)
+      parseFloat(formValues?.vestimentaire_value || 0) +
+      parseFloat(formValues?.package_value || 0)
     ).toFixed(2)
   }, [formValues, totalDeplacementFrais])
 
@@ -269,12 +270,28 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               <Money value={totalDeplacementFrais} ignore />
             </td>
           </tr>
-          <tr id="modifier">
+          <tr>
             <td>Forfait</td>
             <td></td>
             <td></td>
-            <td>Select</td>
-            <td>Input montant</td>
+            <td>
+              <Field
+                control={control}
+                type="select"
+                options={constants.boolean}
+                name={`package_paid`}
+                editable={editable}
+              ></Field>
+            </td>
+            <td>
+              <Field control={control} type="number" name={`package_value`} editable={editable}>
+                {(props) => (
+                  <>
+                    <input {...props} />
+                  </>
+                )}
+              </Field>
+            </td>
           </tr>
         </tbody>
       </table>
