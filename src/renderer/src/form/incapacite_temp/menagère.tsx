@@ -197,6 +197,8 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
       const res = []
       for (let i = 0; i < children.length; i += 1) {
         const item = children[i]
+        // Skip children without birthdate
+        if (!item?.birthDate) continue
         const result = calculateDays(item?.birthDate, [values?.start, values?.end])
         res.push({ days: result, ...item })
       }
