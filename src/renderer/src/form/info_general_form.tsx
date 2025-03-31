@@ -64,86 +64,95 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <table id="infogTable" style={{ width: 600 }}>
-        <tbody>
-          <tr>
-            <td>Nom de la victime</td>
-            <td>
-              <Field control={control} name="nom_victime" editable={editable}>
-                {(props) => <input style={{ width: 200 }} {...props} />}
-              </Field>
-            </td>
-          </tr>
-          <tr>
-            <td>Sexe</td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.sexe}
-                name="sexe"
-                editable={editable}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Date de l'accident</td>
-            <td>
-              <Field control={control} type="date" name="date_accident" editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-          </tr>
-          <tr>
-            <td>Date de naissance</td>
-            <td>
-              <Field control={control} type="date" name="date_naissance" editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-          </tr>
-          <tr>
-            <td>Date de décès</td>
-            <td>
-              <Field control={control} type="date" name="date_death" editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-          </tr>
-          <tr>
-            <td>Date de consolidation</td>
-            <td>
-              <Field control={control} type="date" name="date_consolidation" editable={editable}>
-                {(props) => <input {...props} />}
-              </Field>
-            </td>
-          </tr>
-          <tr>
-            <td>Situation conjugale</td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.marital_status}
-                name="statut"
-                editable={editable}
-              />
-            </td>
-          </tr>
-          <tr>
-            <td>Statut professionnel</td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.profession}
-                name="profession"
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div style={{ display: 'flex' }}>
+        <table id="infogTable" style={{ width: 600 }}>
+          <tbody>
+            <tr>
+              <td>Nom de la victime</td>
+              <td>
+                <Field control={control} name="nom_victime" editable={editable}>
+                  {(props) => <input style={{ width: 200 }} {...props} />}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <td>Sexe</td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.sexe}
+                  name="sexe"
+                  editable={editable}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Date de l'accident</td>
+              <td>
+                <Field control={control} type="date" name="date_accident" editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <td>Date de naissance</td>
+              <td>
+                <Field control={control} type="date" name="date_naissance" editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <td>Date de décès</td>
+              <td>
+                <Field control={control} type="date" name="date_death" editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <td>Date de consolidation</td>
+              <td>
+                <Field control={control} type="date" name="date_consolidation" editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <td>Situation conjugale</td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.marital_status}
+                  name="statut"
+                  editable={editable}
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>Statut professionnel</td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.profession}
+                  name="profession"
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <Field
+          control={control}
+          type="textarea"
+          style={{ flex: 1, margin: 10 }}
+          name="note"
+          editable={editable}
+        ></Field>
+      </div>
 
       <h3>Enfants</h3>
       <table style={{ maxWidth: 1200 }}>

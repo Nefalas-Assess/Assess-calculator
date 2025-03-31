@@ -2,7 +2,7 @@ import { format, isValid } from 'date-fns'
 import { useCallback } from 'react'
 import { Controller } from 'react-hook-form'
 
-const Field = ({ editable, name, type, children, control, options }) => {
+const Field = ({ editable, name, type, children, control, options, style }) => {
   const renderValue = useCallback(
     (val) => {
       if (type === 'date') {
@@ -17,6 +17,10 @@ const Field = ({ editable, name, type, children, control, options }) => {
           return (options || [])?.find((e) => e?.value === val || e?.value?.toString() === val)
             ?.label
         }
+      }
+
+      if (type === 'textarea') {
+        return <div style={style}>{val}</div>
       }
 
       return val
@@ -37,6 +41,10 @@ const Field = ({ editable, name, type, children, control, options }) => {
             ))}
           </select>
         )
+      }
+
+      if (type === 'textarea') {
+        return <textarea style={style} {...field} />
       }
 
       return children({ ...field, type })
