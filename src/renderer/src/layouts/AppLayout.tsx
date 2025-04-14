@@ -93,7 +93,7 @@ export const AppLayout = () => {
 
   useEffect(() => {
     window.api.onUpdateAvailable(() => {
-      addToast('Mise à jour trouvé. Téléchargement en cours', true, 'update-available')
+      addToast('Mise à jour trouvée. Téléchargement en cours', true, 'update-available')
       setUpdateCheck(false)
     })
 
@@ -104,7 +104,7 @@ export const AppLayout = () => {
 
     window.api.onUpdateDownloaded(() => {
       removeToast('update-available')
-      addToast('Mise à jour téléchargé', true, 'update-downloaded', {
+      addToast('Mise à jour téléchargée', true, 'update-downloaded', {
         text: 'Redémarrer',
         action: () => window.api.restartApp()
       })

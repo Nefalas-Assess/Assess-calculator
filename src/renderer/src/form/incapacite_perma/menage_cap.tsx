@@ -18,6 +18,7 @@ import FadeIn from '@renderer/generic/fadeIn'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import renteCertaineMois2025 from '@renderer/data/data_rente_certaine_mois_2025'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -141,6 +142,30 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     [days, childrenOnPeriod]
   )
 
+  const renderToolTipIPTotal = useCallback((values) => {
+    return (
+      <div>
+        <math>
+          <mn>{values?.perso_amount}</mn>
+          <mo>x</mo>
+          <mn>{values?.perso_pourcentage / 100}</mn>
+          <mo>x</mo>
+          <mn>{values?.perso_contribution / 100}</mn>
+          <mo>x</mo>
+          <mn>365</mn>
+          <mo>x</mo>
+          <CoefficientInfo
+            table={values?.refTable}
+            index={[values?.years, values?.index]}
+            headers={constants.interet_amount}
+          >
+            <mn>{values?.coefficient}</mn>
+          </CoefficientInfo>
+        </math>
+      </div>
+    )
+  }, [])
+
   const getCapAmount = useCallback(
     (values, start, end, table) => {
       const {
@@ -165,12 +190,17 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       const coefficient = refTable?.[years]?.[index]
 
       return (
-        parseFloat(perso_amount) *
-        (parseFloat(perso_pourcentage) / 100) *
-        (parseFloat(perso_contribution) / 100) *
-        365 *
-        parseFloat(coefficient)
-      ).toFixed(2)
+        <Money
+          value={(
+            parseFloat(perso_amount) *
+            (parseFloat(perso_pourcentage) / 100) *
+            (parseFloat(perso_contribution) / 100) *
+            365 *
+            parseFloat(coefficient)
+          ).toFixed(2)}
+          tooltip={renderToolTipIPTotal({ ...values, coefficient, refTable, years, index })}
+        />
+      )
     },
     [data, childrenOnPeriod]
   )
@@ -375,8 +405,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                 {sortedChildren?.map((item, key) => {
                   const start =
                     key === 0
-                      ? addDays(formValues?.paiement, 1)
+                      ? addDays(formValues?.paiement || new Date(), 1)
                       : get25thBirthday(sortedChildren[key - 1]?.birthDate, true)
+
                   const end = get25thBirthday(item?.birthDate)
                   const perso_amount =
                     parseFloat(formValues?.perso_amount || 0) + 10 * (sortedChildren?.length - key)
@@ -385,21 +416,18 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                       <td>
                         {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
                       </td>
-
                       <td>
                         <Money value={perso_amount} />
                       </td>
                       <td>{formValues?.perso_pourcentage} %</td>
                       <td>{formValues?.perso_contribution} %</td>
                       <td>
-                        <Money
-                          value={getCapAmount(
-                            { ...formValues, perso_amount: perso_amount },
-                            start,
-                            end,
-                            renteCertaineMois2025
-                          )}
-                        />
+                        {getCapAmount(
+                          { ...formValues, perso_amount: perso_amount },
+                          start,
+                          end,
+                          renteCertaineMois2025
+                        )}
                       </td>
                     </tr>
                   )
@@ -417,13 +445,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   <td>{formValues?.perso_pourcentage} %</td>
                   <td>{formValues?.perso_contribution} %</td>
                   <td>
-                    <Money
-                      value={getCapAmount(
-                        formValues,
-                        null,
-                        get25thBirthday(sortedChildren[sortedChildren?.length - 1]?.birthDate, true)
-                      )}
-                    />
+                    {getCapAmount(
+                      formValues,
+                      null,
+                      get25thBirthday(sortedChildren[sortedChildren?.length - 1]?.birthDate, true)
+                    )}
                   </td>
                 </tr>
               </tbody>
@@ -467,9 +493,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     editable={editable}
                   ></Field>
                 </td>
-                <td>
-                  <Money value={getCapAmount(formValues)} />
-                </td>
+                <td>{getCapAmount(formValues)}</td>
               </tr>
             </tbody>
           </table>
