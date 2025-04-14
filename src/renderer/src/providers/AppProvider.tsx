@@ -88,9 +88,9 @@ const AppProvider = ({ children }) => {
           conso_contribution: res?.general_info?.config?.default_contribution,
           perso_contribution: res?.general_info?.config?.default_contribution
         })
-        if (res.incapacite_temp_menagere?.periods?.length !== 0) {
+        if ((res?.incapacite_temp_menagere?.periods || [])?.length !== 0) {
           res.incapacite_temp_menagere.periods = setDefaultValues(
-            res?.incapacite_temp_menagere.periods,
+            res?.incapacite_temp_menagere?.periods,
             {
               contribution: res?.general_info?.config?.default_contribution
             }

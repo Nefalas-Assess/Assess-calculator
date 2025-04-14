@@ -224,7 +224,18 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   }, [])
 
   const sortedChildren = useMemo(() => {
-    return childrenOnPeriod?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
+    return childrenOnPeriod
+      ?.filter((e) => {
+        // Filter out children without birthdate
+        if (!e?.birthDate) return false
+        // Get the 25th birthday
+        const date25 = get25thBirthday(e.birthDate)
+        // Get consolidation date from general info
+        const consolidationDate = new Date(formValues?.paiement)
+        // Keep child only if their 25th birthday is after consolidation date
+        return date25 > consolidationDate
+      })
+      ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
   }, [childrenOnPeriod])
 
   return (
