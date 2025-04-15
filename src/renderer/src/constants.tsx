@@ -35,6 +35,24 @@ export default {
     { value: 'schryvers_2024', label: 'Schryvers 2024 | Paiement anticipé frais funéraires' },
     { value: 'schryvers_2025', label: 'Schryvers 2025 | Paiement anticipé frais funéraires' }
   ],
+  reference_menage_children: [
+    {
+      value: 'schryvers_rente_certaine_an_2025',
+      label: 'Schryvers 2025 VA rente certaine 1€/an paiements MENSUELS'
+    },
+    {
+      value: 'schryvers_rente_certaine_mois_2025',
+      label: 'Schryvers 2025 VA rente certaine 1€/an paiements ANNUELS'
+    },
+    {
+      value: 'schryvers_an_2025',
+      label: 'Schryvers 2025 VA rente viagère 1€/an payable mensuellement'
+    },
+    {
+      value: 'schryvers_mois_2025',
+      label: 'Schryvers 2025 VA rente viagère 1€/an payable annuellement'
+    }
+  ],
   reference_light: [
     { value: 'schryvers_2024', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },
     {

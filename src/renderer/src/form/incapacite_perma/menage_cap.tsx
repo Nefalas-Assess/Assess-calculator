@@ -19,6 +19,7 @@ import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import renteCertaineMois2025 from '@renderer/data/data_rente_certaine_mois_2025'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
+import { useCapitalization } from '@renderer/hooks/capitalization'
 
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -155,11 +156,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           <mn>365</mn>
           <mo>x</mo>
           <CoefficientInfo
-            table={values?.refTable}
-            index={[values?.years, values?.index]}
+            table={values?.capitalization?.table}
+            index={values?.capitalization?.index}
             headers={constants.interet_amount}
           >
-            <mn>{values?.coefficient}</mn>
+            <mn>{values?.capitalization?.value}</mn>
           </CoefficientInfo>
         </math>
       </div>
@@ -167,7 +168,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   }, [])
 
   const getCapAmount = useCallback(
-    (values, start, end, table) => {
+    (values, start, end, usePersoReference = false) => {
       const {
         paiement = '',
         interet = 0,
@@ -176,18 +177,18 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         perso_contribution = 0
       } = values
 
-      const { years = 0 } = intervalToDuration({
+      const reference = usePersoReference ? values?.perso_reference : values?.reference
+
+      const capitalization = useCapitalization({
         start: start || data?.general_info?.date_naissance,
-        end: end || paiement
+        end: end || paiement,
+        ref: reference,
+        index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
+        asObject: true,
+        noGender: usePersoReference && reference?.includes('rente_certaine')
       })
 
-      const refTable = table || (data?.general_info?.sexe === 'homme' ? menTable : womenTable)
-
-      const index = constants.interet_amount?.findIndex(
-        (e) => e?.value === parseFloat(interet || 0)
-      )
-
-      const coefficient = refTable?.[years]?.[index]
+      const coefficient = capitalization?.value
 
       return (
         <Money
@@ -198,7 +199,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             365 *
             parseFloat(coefficient)
           ).toFixed(2)}
-          tooltip={renderToolTipIPTotal({ ...values, coefficient, refTable, years, index })}
+          tooltip={renderToolTipIPTotal({ ...values, capitalization })}
         />
       )
     },
@@ -363,6 +364,18 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPPCTableInfo" style={{ maxWidth: 600 }}>
               <tbody>
                 <tr>
+                  <td>Reférence</td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.reference_menage_children}
+                      name="perso_reference"
+                      editable={editable}
+                    ></Field>
+                  </td>
+                </tr>
+                <tr>
                   <td>Indemnité journalière (€)</td>
                   <td>
                     <Field
@@ -437,7 +450,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                           { ...formValues, perso_amount: perso_amount },
                           start,
                           end,
-                          renteCertaineMois2025
+                          true
                         )}
                       </td>
                     </tr>

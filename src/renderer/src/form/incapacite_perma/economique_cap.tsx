@@ -240,7 +240,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
               <td className="int">
                 <Interest
-                  amount={getConsoAmount(formValues?.brut, 'net')}
+                  amount={getConsoAmount(formValues?.net, 'net')}
                   start={getMedDate({
                     start: data?.general_info?.date_consolidation,
                     end: formValues?.paiement

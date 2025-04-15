@@ -33,12 +33,14 @@ export const getCapitalizationTable = async (
     treatedSuffix = suffix
   }
 
-  if (!treatedSuffix?.startsWith('_')) {
+  if (!treatedSuffix?.startsWith('_') && sexe) {
     treatedSuffix = `_${treatedSuffix}`
   }
 
   try {
-    if (sexe === 'homme') {
+    if (!sexe) {
+      return await getTableModule('', treatedSuffix, base)
+    } else if (sexe === 'homme') {
       return await getTableModule('h', treatedSuffix, base)
     } else {
       return await getTableModule('f', treatedSuffix, base)
@@ -50,7 +52,7 @@ export const getCapitalizationTable = async (
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, amount, ref, index, asObject, base } = props
+  const { end, start, amount, ref, index, asObject, base, noGender = false } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
@@ -64,11 +66,11 @@ export const useCapitalization = (props = {}) => {
 
   useEffect(() => {
     const loadTable = async () => {
-      const loadedTable = await getCapitalizationTable(ref, sexe, base)
+      const loadedTable = await getCapitalizationTable(ref, noGender ? null : sexe, base)
       setTable(loadedTable)
     }
     loadTable()
-  }, [ref, sexe])
+  }, [ref, sexe, base, noGender])
 
   if (!table) return null
 
