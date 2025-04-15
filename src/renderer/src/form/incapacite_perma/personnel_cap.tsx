@@ -2,21 +2,20 @@ import { getDays, getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
 import { format, intervalToDuration, isValid } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
-import menTable from '@renderer/data/data_cap_h'
-import womenTable from '@renderer/data/data_cap_f'
+import { useForm } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
+import { useCapitalization } from '@renderer/hooks/capitalization'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
-      reference: 'schryvers',
+      reference: 'schryvers_2024',
       conso_amount: 32,
       perso_amount: 32
     }
@@ -67,24 +66,22 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
   const getCapAmount = useCallback(
     (values) => {
       const { paiement = '', interet = 0, perso_amount = 0, perso_pourcentage = 0 } = values
-      const { years = 0 } = intervalToDuration({
-        start: data?.general_info?.date_naissance,
-        end: paiement
-      })
-
-      const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
 
       const index = constants.interet_amount?.findIndex(
         (e) => e?.value === parseFloat(interet || 0)
       )
 
-      const coefficient = table?.[years]?.[index]
+      const coef = useCapitalization({
+        end: paiement,
+        ref: formValues?.reference,
+        index
+      })
 
       return (
         parseFloat(perso_amount) *
         (parseFloat(perso_pourcentage) / 100) *
         365 *
-        parseFloat(coefficient)
+        parseFloat(coef)
       ).toFixed(2)
     },
     [data]

@@ -8,8 +8,8 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import { format, intervalToDuration, isValid, addDays } from 'date-fns'
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
-import menTable from '@renderer/data/data_cap_h'
-import womenTable from '@renderer/data/data_cap_f'
+import menTable from '@renderer/data/data_cap_h_2024'
+import womenTable from '@renderer/data/data_cap_f_2024'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
@@ -25,7 +25,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
-      reference: 'schryvers',
+      reference: 'schryvers_2024',
       conso_amount: 30,
       perso_amount: 30,
       perso_contribution: data?.general_info?.config?.default_contribution,

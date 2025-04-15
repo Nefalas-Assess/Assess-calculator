@@ -32,7 +32,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
     (field) => {
       if (type === 'select' && options) {
         return (
-          <select {...field}>
+          <select {...field} style={{ maxWidth: '100%' }}>
             <option value={''}>Select</option>
             {(options || [])?.map((it, key) => (
               <option key={key} value={it?.value}>

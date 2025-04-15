@@ -1,30 +1,29 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { intervalToDuration } from 'date-fns'
-import data_f from '@renderer/data/data_ff_f'
-import data_h from '@renderer/data/data_ff_h'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
+import { useCapitalization } from '@renderer/hooks/capitalization'
 
 const Total = ({ values = {}, index, data }) => {
   // Calcul du montant total avec useMemo
 
   const amount = parseFloat(values?.charges?.[index]?.amount, 10)
-  const { years: age = 0 } = intervalToDuration({
-    start: data?.general_info?.date_naissance,
-    end: data?.general_info?.date_death
+
+  const capitalization = useCapitalization({
+    end: data?.general_info?.date_death,
+    ref: values?.ref,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate)),
+    base: 'data_ff',
+    asObject: true
   })
 
-  const rate = constants?.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
-  const table = data?.general_info?.sexe === 'homme' ? data_h : data_f
-
-  const coef = table?.[age]?.[rate]
+  const coef = useMemo(() => capitalization?.value, [capitalization])
 
   const totalAmount = useMemo(() => {
     return amount * coef
@@ -38,7 +37,11 @@ const Total = ({ values = {}, index, data }) => {
           <math>
             <mn>{amount}</mn>
             <mo>x</mo>
-            <CoefficientInfo table={table} index={[age, rate]} headers={constants.interet_amount}>
+            <CoefficientInfo
+              table={capitalization?.table}
+              index={capitalization?.index}
+              headers={constants.interet_amount}
+            >
               <mn>{coef}</mn>
             </CoefficientInfo>
             <mo>=</mo>
@@ -65,7 +68,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      ref: 'schryvers',
+      ref: 'schryvers_2025',
       charges: [{}]
     }
   })
@@ -122,26 +125,6 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
   }, [formValues, chargesValues, submitForm, handleSubmit])
-
-  const getTotalAnticipated = useCallback(
-    (index) => {
-      const amount = parseFloat(formValues?.charges?.[index]?.amount, 10)
-      const { years: age = 0 } = intervalToDuration({
-        start: data?.general_info?.date_naissance,
-        end: data?.general_info?.date_death
-      })
-
-      const rate = constants?.interet_amount?.findIndex(
-        (e) => e?.value === parseFloat(formValues?.rate)
-      )
-      const table = data?.general_info?.sexe === 'homme' ? data_h : data_f
-
-      const coef = table?.[age]?.[rate]
-
-      return amount * coef
-    },
-    [formValues, data]
-  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

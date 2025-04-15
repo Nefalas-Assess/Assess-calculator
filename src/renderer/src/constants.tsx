@@ -32,14 +32,41 @@ export default {
     { value: 0.28, label: 'Autre' }
   ],
   reference_funeraire: [
-    { value: 'schryvers', label: 'Schryvers 2024 | Paiement anticipé frais funéraires' }
+    { value: 'schryvers_2024', label: 'Schryvers 2024 | Paiement anticipé frais funéraires' },
+    { value: 'schryvers_2025', label: 'Schryvers 2025 | Paiement anticipé frais funéraires' }
   ],
   reference_light: [
-    { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' }
+    { value: 'schryvers_2024', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },
+    {
+      value: 'schryvers_an_2025',
+      label: 'Schryvers 2025 VA rente viagère 1€/an payable mensuellement'
+    },
+    {
+      value: 'schryvers_mois_2025',
+      label: 'Schryvers 2025 VA rente viagère 1€/an payable annuellement'
+    },
+    {
+      value: 'schryvers_esp_vie_mois_2025',
+      label:
+        "Schryvers 2025 VA rente certaine 1€/an durée égale à l'espérance de vie prospective paiements MENSUELS"
+    },
+    {
+      value: 'schryvers_esp_vie_an_2025',
+      label:
+        "Schryvers 2025 VA rente certaine 1€/an durée égale à l'espérance de vie prospective paiements ANNUELS"
+    },
+    {
+      value: 'schryvers_vie_med_mois_2025',
+      label:
+        'Schryvers 2025 VA rente certaine 1€/an durée égale à la durée de vie médiane prospective paiements MENSUELS'
+    },
+    {
+      value: 'schryvers_vie_med_an_2025',
+      label:
+        'Schryvers 2025 VA rente certaine 1€/an durée égale à la durée de vie médiane prospective paiements ANNUELS'
+    }
   ],
   reference: [
-    // Default
-    { value: 'schryvers', label: 'Schryvers 2024 rente viagère de 1€/an mensuelle' },
     // 2025 par année
     {
       value: 'schryvers_55_y',

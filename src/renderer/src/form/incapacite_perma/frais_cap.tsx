@@ -141,7 +141,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                   <Field
                     control={control}
                     type="select"
-                    options={constants.reference}
+                    options={constants.reference_light.concat(constants.reference)}
                     name={`charges.${index}.reference`}
                     editable={editable}
                   ></Field>
@@ -181,7 +181,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => chargesFields.append({ ref: 'schryvers' })}>
+        <button type="button" onClick={() => chargesFields.append({ reference: 'schryvers_2024' })}>
           Ajouter une ligne
         </button>
       )}

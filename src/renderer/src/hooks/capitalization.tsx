@@ -2,18 +2,20 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import { intervalToDuration } from 'date-fns'
 import { useContext, useEffect, useState } from 'react'
 
-const getCapitalizationTable = async (
+export const getCapitalizationTable = async (
   ref: string,
-  sexe: string
+  sexe: string,
+  base?: string
 ): Promise<Record<string, number[]> | null> => {
   // Import dynamique des tables de capitalisation
   const getTableModule = async (
     gender: string,
-    suffix = ''
+    suffix = '',
+    base = 'data_cap'
   ): Promise<Record<string, number[]> | null> => {
     try {
-      console.log(`@renderer/data/data_cap_${gender}${suffix}.tsx`)
-      const module = await import(`@renderer/data/data_cap_${gender}${suffix}.tsx`)
+      console.log(`@renderer/data/${base}_${gender}${suffix}.tsx`)
+      const module = await import(`@renderer/data/${base}_${gender}${suffix}.tsx`)
       return module.default
     } catch (e) {
       return null
@@ -23,19 +25,23 @@ const getCapitalizationTable = async (
   // Extraction du suffixe de la référence (ex: schryvers_55 -> _55)
   const suffix = ref?.includes('schryvers_') ? ref?.replace('schryvers_', '') : ''
   let treatedSuffix
-  if (suffix?.includes('_y')) {
+  if (suffix?.endsWith('_y')) {
     treatedSuffix = suffix?.replace('_y', '_an_2025')
-  } else if (suffix?.includes('_m')) {
+  } else if (suffix?.endsWith('_m')) {
     treatedSuffix = suffix?.replace('_m', '_mois_2025')
   } else {
     treatedSuffix = suffix
   }
 
+  if (!treatedSuffix?.startsWith('_')) {
+    treatedSuffix = `_${treatedSuffix}`
+  }
+
   try {
     if (sexe === 'homme') {
-      return await getTableModule('h', treatedSuffix)
+      return await getTableModule('h', treatedSuffix, base)
     } else {
-      return await getTableModule('f', treatedSuffix)
+      return await getTableModule('f', treatedSuffix, base)
     }
   } catch (error) {
     console.error('Error loading capitalization table:', error)
@@ -44,7 +50,7 @@ const getCapitalizationTable = async (
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, amount, ref, index, asObject } = props
+  const { end, start, amount, ref, index, asObject, base } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
@@ -58,7 +64,7 @@ export const useCapitalization = (props = {}) => {
 
   useEffect(() => {
     const loadTable = async () => {
-      const loadedTable = await getCapitalizationTable(ref, sexe)
+      const loadedTable = await getCapitalizationTable(ref, sexe, base)
       setTable(loadedTable)
     }
     loadTable()
