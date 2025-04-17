@@ -11,8 +11,8 @@ import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import TotalBox from '@renderer/generic/totalBox'
 import { addYears, intervalToDuration } from 'date-fns'
-import menTable from '@renderer/data/data_cap_h_mois_2024'
-import womenTable from '@renderer/data/data_cap_f_mois_2024'
+import menTable from '@renderer/data/schryvers/2024/data_cap_h_mois'
+import womenTable from '@renderer/data/schryvers/2024/data_cap_f_mois'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
@@ -128,17 +128,13 @@ const TotalMenage = ({ values = {}, data }) => {
     : null
   const endDate = data?.general_info?.date_death ? new Date(data.general_info.date_death) : null
 
-  const { years = 0 } =
-    startDate && endDate ? intervalToDuration({ start: startDate, end: endDate }) : { years: 0 }
-
-  // Choisir la bonne table en fonction du sexe
-  const table = data?.general_info?.sexe === 'homme' ? menTable : womenTable
-
-  // Trouver l'index du coefficient d'intérêt
-  const index = constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0))
-
-  // Récupérer le coefficient selon l'âge et l'intérêt
-  const coefficient = table?.[years]?.[index] || 1 // Sécurisation pour éviter les erreurs
+  const coef = useCapitalization({
+    end: endDate,
+    start: startDate,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.interet)),
+    ref: values?.reference,
+    asObject: true
+  })
 
   // Calcul du montant total avec useMemo
   const totalAmount = useMemo(() => {
@@ -147,9 +143,9 @@ const TotalMenage = ({ values = {}, data }) => {
       (parseFloat(menage_pourcentage) / 100) *
       (parseFloat(menage_contribution) / 100) *
       365 *
-      parseFloat(coefficient)
+      parseFloat(coef?.value)
     ).toFixed(2)
-  }, [menage_amount, menage_pourcentage, menage_contribution, coefficient])
+  }, [menage_amount, menage_pourcentage, menage_contribution, coef])
 
   // Fonction pour rendre le tooltip
   const renderToolTipAmount = useCallback(() => {
@@ -171,11 +167,11 @@ const TotalMenage = ({ values = {}, data }) => {
             <mn>365</mn>
             <mo>x</mo>
             <CoefficientInfo
-              table={table}
+              table={coef?.table}
               headers={constants.interet_amount}
-              index={[years, index]}
+              index={coef?.index}
             >
-              <mn>{coefficient}</mn>
+              <mn>{coef?.value}</mn>
             </CoefficientInfo>
             <mo>=</mo>
             <mn>{totalAmount}</mn>
@@ -183,7 +179,7 @@ const TotalMenage = ({ values = {}, data }) => {
         </div>
       </>
     )
-  }, [menage_amount, menage_pourcentage, totalAmount, coefficient, totalAmount])
+  }, [menage_amount, menage_pourcentage, totalAmount, coef, totalAmount])
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -334,7 +330,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             <td>
               <Field
                 control={control}
-                type="select"
+                type="reference"
                 options={constants.reference}
                 name={`reference`}
                 editable={editable}

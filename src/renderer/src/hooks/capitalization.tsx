@@ -9,41 +9,45 @@ export const getCapitalizationTable = async (
 ): Promise<Record<string, number[]> | null> => {
   // Import dynamique des tables de capitalisation
   const getTableModule = async (
+    path: string[],
     gender: string,
     suffix = '',
     base = 'data_cap'
   ): Promise<Record<string, number[]> | null> => {
     try {
-      console.log(`@renderer/data/${base}_${gender}${suffix}.tsx`)
-      const module = await import(`@renderer/data/${base}_${gender}${suffix}.tsx`)
+      let endPath = `${base}_${gender}${suffix}`
+      if (!gender && !suffix) endPath = base
+      const module = await import(`@renderer/data/${path[0]}/${path[1]}/${endPath}.tsx`)
       return module.default
     } catch (e) {
+      console.error('Error loading capitalization table:', e)
       return null
     }
   }
 
-  // Extraction du suffixe de la référence (ex: schryvers_55 -> _55)
-  const suffix = ref?.includes('schryvers_') ? ref?.replace('schryvers_', '') : ''
-  let treatedSuffix
-  if (suffix?.endsWith('_y')) {
-    treatedSuffix = suffix?.replace('_y', '_an_2025')
-  } else if (suffix?.endsWith('_m')) {
-    treatedSuffix = suffix?.replace('_m', '_mois_2025')
-  } else {
-    treatedSuffix = suffix
+  const splittedRef = ref?.split('_')
+  const baseDist = splittedRef?.[0]
+  const year = splittedRef?.[1]
+  const sheet = splittedRef?.slice(2).join('_')
+
+  const path = [baseDist, year]
+  let treatedSuffix = sheet
+
+  if (treatedSuffix && !treatedSuffix?.startsWith('_') && sexe) {
+    treatedSuffix = `_${treatedSuffix}`
   }
 
-  if (!treatedSuffix?.startsWith('_') && sexe) {
-    treatedSuffix = `_${treatedSuffix}`
+  if (!path[0] || !path[1]) {
+    return null
   }
 
   try {
     if (!sexe) {
-      return await getTableModule('', treatedSuffix, base)
+      return await getTableModule(path, '', treatedSuffix, base)
     } else if (sexe === 'homme') {
-      return await getTableModule('h', treatedSuffix, base)
+      return await getTableModule(path, 'h', treatedSuffix, base)
     } else {
-      return await getTableModule('f', treatedSuffix, base)
+      return await getTableModule(path, 'f', treatedSuffix, base)
     }
   } catch (error) {
     console.error('Error loading capitalization table:', error)

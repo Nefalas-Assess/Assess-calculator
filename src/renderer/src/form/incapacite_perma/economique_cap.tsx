@@ -112,7 +112,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Field
                 control={control}
-                type="select"
+                type="reference"
                 options={constants.reference}
                 name={`reference`}
                 editable={editable}

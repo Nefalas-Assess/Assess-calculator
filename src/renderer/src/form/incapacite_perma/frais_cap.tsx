@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
@@ -7,7 +7,29 @@ import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
-import paid_table from '@renderer/data/data_va_eur_annees_2025'
+
+const TotalPaid = ({ values }) => {
+  const coef = useCapitalization({
+    end: values?.date_payment,
+    ref: values?.reference,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
+  })
+
+  return <Money value={(parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)} />
+}
+
+const TotalCharge = ({ values }) => {
+  const coef = useCapitalization({
+    start: new Date(),
+    end: new Date(new Date().setFullYear(new Date().getFullYear() + parseInt(values?.year || 0))),
+    ref: values?.reference,
+    base: 'data_va_eur_annees',
+    noGender: true,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
+  })
+
+  return <Money value={(parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)} />
+}
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -83,22 +105,12 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, chargesValues, paidValues, packageValues, submitForm, handleSubmit])
 
-  const getTotalChargeAmount = useCallback((values) => {
-    if (!values?.date_payment) return 0
-
-    const coef = useCapitalization({
-      end: values?.date_payment,
-      ref: values?.reference,
-      index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
-    })
-
-    return (parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)
-  }, [])
-
-  const getTotalPaidAmount = useCallback((values) => {
-    const coef = paid_table?.[values?.year]?.[values?.rate]
-    return (parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)
-  })
+  const handleRemovePaid = useCallback(
+    (index) => {
+      paidFields.remove(index)
+    },
+    [paidFields]
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -119,7 +131,6 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         <tbody>
           {chargesFields.fields.map((child, index) => {
             const values = formValues?.charges[index]
-            const total = getTotalChargeAmount(values)
             return (
               <tr key={child.id}>
                 <td>
@@ -140,7 +151,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                 <td>
                   <Field
                     control={control}
-                    type="select"
+                    type="reference"
                     options={constants.reference_light.concat(constants.reference)}
                     name={`charges.${index}.reference`}
                     editable={editable}
@@ -166,7 +177,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>
-                  <Money value={total} />
+                  <TotalPaid values={values} />
                 </td>
                 {editable && (
                   <td>
@@ -181,7 +192,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={() => chargesFields.append({ reference: 'schryvers_2024' })}>
+        <button type="button" onClick={() => chargesFields.append({})}>
           Ajouter une ligne
         </button>
       )}
@@ -192,6 +203,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
             <th>Frais</th>
             <th>Montant</th>
             <th>Nombre d'années</th>
+            <th>Table de référence</th>
             <th>Taux d'intérêt de la capitalisation</th>
             <th>Total</th>
             {editable && <th></th>}
@@ -200,7 +212,6 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         <tbody>
           {paidFields.fields.map((child, index) => {
             const values = formValues?.paid?.[index]
-            const total = getTotalPaidAmount(values)
             return (
               <tr key={child.id}>
                 <td>
@@ -227,6 +238,14 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                     editable={editable}
                   ></Field>
                 </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="reference"
+                    name={`paid.${index}.reference`}
+                    editable={editable}
+                  ></Field>
+                </td>
                 <td style={{ maxWidth: 120 }}>
                   <Field
                     control={control}
@@ -237,11 +256,11 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
                   ></Field>
                 </td>
                 <td>
-                  <Money value={total} />
+                  <TotalCharge values={values} />
                 </td>
                 {editable && (
                   <td>
-                    <button type="button" onClick={() => paidFields.remove(index)}>
+                    <button type="button" onClick={() => handleRemovePaid(index)}>
                       Supprimer
                     </button>
                   </td>

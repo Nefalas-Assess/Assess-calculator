@@ -1,15 +1,8 @@
-import {
-  calculateDaysBeforeAfter25,
-  getChildOnPeriod,
-  getDays,
-  getMedDate
-} from '@renderer/helpers/general'
+import { calculateDaysBeforeAfter25, getDays, getMedDate } from '@renderer/helpers/general'
 import { AppContext } from '@renderer/providers/AppProvider'
-import { format, intervalToDuration, isValid, addDays } from 'date-fns'
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
-import menTable from '@renderer/data/data_cap_h_mois_2024'
-import womenTable from '@renderer/data/data_cap_f_mois_2024'
+import { format, addDays } from 'date-fns'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useForm } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
@@ -17,7 +10,6 @@ import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
-import renteCertaineMois2025 from '@renderer/data/data_rente_certaine_mois_2025'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 
@@ -26,7 +18,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
-      reference: 'schryvers_2024',
       conso_amount: 30,
       perso_amount: 30,
       perso_contribution: data?.general_info?.config?.default_contribution,
@@ -250,7 +241,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <td>
               <Field
                 control={control}
-                type="select"
+                type="reference"
                 options={constants.reference_light}
                 name="reference"
                 editable={editable}
@@ -368,7 +359,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   <td>
                     <Field
                       control={control}
-                      type="select"
+                      type="reference"
                       options={constants.reference_menage_children}
                       name="perso_reference"
                       editable={editable}

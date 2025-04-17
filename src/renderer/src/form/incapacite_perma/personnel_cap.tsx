@@ -15,7 +15,6 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
 
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
-      reference: 'schryvers_2024',
       conso_amount: 32,
       perso_amount: 32
     }
@@ -98,7 +97,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
             <td>
               <Field
                 control={control}
-                type="select"
+                type="reference"
                 options={constants.reference_light}
                 name={`reference`}
                 editable={editable}

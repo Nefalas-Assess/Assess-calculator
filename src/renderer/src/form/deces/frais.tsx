@@ -68,7 +68,6 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      ref: 'schryvers_2025',
       charges: [{}]
     }
   })
@@ -134,13 +133,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         <tr>
           <td>Tables de référence</td>
           <td>
-            <Field
-              control={control}
-              type="select"
-              options={constants.reference_funeraire}
-              name={`ref`}
-              editable={editable}
-            ></Field>
+            <Field control={control} type="reference" name={`ref`} editable={editable}></Field>
           </td>
         </tr>
         <tr>
