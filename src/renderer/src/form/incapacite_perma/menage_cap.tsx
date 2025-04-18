@@ -13,6 +13,66 @@ import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 
+const CapAmount = ({ values, start, end, usePersoReference = false }) => {
+  const {
+    paiement = '',
+    interet = 0,
+    perso_amount = 0,
+    perso_pourcentage = 0,
+    perso_contribution = 0
+  } = values
+
+  const reference = usePersoReference ? values?.perso_reference : values?.reference
+
+  const capitalization = useCapitalization({
+    start: start,
+    end: end || paiement,
+    ref: reference,
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
+    asObject: true,
+    noGender: usePersoReference && reference?.includes('rente_certaine')
+  })
+
+  const coefficient = capitalization?.value
+
+  const renderToolTipIPTotal = useCallback((values) => {
+    return (
+      <div>
+        <math>
+          <mn>{values?.perso_amount}</mn>
+          <mo>x</mo>
+          <mn>{values?.perso_pourcentage / 100}</mn>
+          <mo>x</mo>
+          <mn>{values?.perso_contribution / 100}</mn>
+          <mo>x</mo>
+          <mn>365</mn>
+          <mo>x</mo>
+          <CoefficientInfo
+            table={values?.capitalization?.table}
+            index={values?.capitalization?.index}
+            headers={constants.interet_amount}
+          >
+            <mn>{values?.capitalization?.value}</mn>
+          </CoefficientInfo>
+        </math>
+      </div>
+    )
+  }, [])
+
+  return (
+    <Money
+      value={(
+        parseFloat(perso_amount) *
+        (parseFloat(perso_pourcentage) / 100) *
+        (parseFloat(perso_contribution) / 100) *
+        365 *
+        parseFloat(coefficient)
+      ).toFixed(2)}
+      tooltip={renderToolTipIPTotal({ ...values, capitalization })}
+    />
+  )
+}
+
 export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
 
@@ -137,68 +197,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     [days, childrenOnPeriod]
   )
 
-  const renderToolTipIPTotal = useCallback((values) => {
-    return (
-      <div>
-        <math>
-          <mn>{values?.perso_amount}</mn>
-          <mo>x</mo>
-          <mn>{values?.perso_pourcentage / 100}</mn>
-          <mo>x</mo>
-          <mn>{values?.perso_contribution / 100}</mn>
-          <mo>x</mo>
-          <mn>365</mn>
-          <mo>x</mo>
-          <CoefficientInfo
-            table={values?.capitalization?.table}
-            index={values?.capitalization?.index}
-            headers={constants.interet_amount}
-          >
-            <mn>{values?.capitalization?.value}</mn>
-          </CoefficientInfo>
-        </math>
-      </div>
-    )
-  }, [])
-
-  const getCapAmount = useCallback(
-    (values, start, end, usePersoReference = false) => {
-      const {
-        paiement = '',
-        interet = 0,
-        perso_amount = 0,
-        perso_pourcentage = 0,
-        perso_contribution = 0
-      } = values
-
-      const reference = usePersoReference ? values?.perso_reference : values?.reference
-
-      const capitalization = useCapitalization({
-        start: start || data?.general_info?.date_naissance,
-        end: end || paiement,
-        ref: reference,
-        index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
-        asObject: true,
-        noGender: usePersoReference && reference?.includes('rente_certaine')
-      })
-
-      const coefficient = capitalization?.value
-
-      return (
-        <Money
-          value={(
-            parseFloat(perso_amount) *
-            (parseFloat(perso_pourcentage) / 100) *
-            (parseFloat(perso_contribution) / 100) *
-            365 *
-            parseFloat(coefficient)
-          ).toFixed(2)}
-          tooltip={renderToolTipIPTotal({ ...values, capitalization })}
-        />
-      )
-    },
-    [data, childrenOnPeriod]
-  )
   const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
     // Return null if no birth date provided
     if (!birthDate) return null
@@ -440,12 +438,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                       <td>{formValues?.perso_pourcentage} %</td>
                       <td>{formValues?.perso_contribution} %</td>
                       <td>
-                        {getCapAmount(
-                          { ...formValues, perso_amount: perso_amount },
-                          start,
-                          end,
-                          true
-                        )}
+                        <CapAmount
+                          values={{ ...formValues, perso_amount: perso_amount }}
+                          start={start}
+                          end={end}
+                          usePersoReference={true}
+                        />
                       </td>
                     </tr>
                   )
@@ -463,11 +461,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   <td>{formValues?.perso_pourcentage} %</td>
                   <td>{formValues?.perso_contribution} %</td>
                   <td>
-                    {getCapAmount(
-                      formValues,
-                      null,
-                      get25thBirthday(sortedChildren[sortedChildren?.length - 1]?.birthDate, true)
-                    )}
+                    <CapAmount
+                      values={formValues}
+                      end={get25thBirthday(
+                        sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                        true
+                      )}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -511,7 +511,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     editable={editable}
                   ></Field>
                 </td>
-                <td>{getCapAmount(formValues)}</td>
+                <td>
+                  <CapAmount values={formValues} />
+                </td>
               </tr>
             </tbody>
           </table>
