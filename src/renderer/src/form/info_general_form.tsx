@@ -173,13 +173,15 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
             )}
           </tbody>
         </table>
-        <Field
-          control={control}
-          type="textarea"
-          style={{ flex: 1, margin: 10 }}
-          name="note"
-          editable={editable}
-        ></Field>
+        {editable && (
+          <Field
+            control={control}
+            type="textarea"
+            style={{ flex: 1, margin: 10 }}
+            name="note"
+            editable={true}
+          ></Field>
+        )}
       </div>
 
       <h3>Enfants</h3>

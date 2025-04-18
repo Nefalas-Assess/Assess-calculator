@@ -106,7 +106,10 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         data?.general_info?.date_consolidation,
         formValues?.paiement
       ])
-      res.push({ days: result, ...item })
+
+      if (result?.before25 !== 0) {
+        res.push({ days: result, ...item })
+      }
     }
 
     return res
