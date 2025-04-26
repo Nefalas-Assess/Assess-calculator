@@ -352,7 +352,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         </table>
 
         <h3>Incapacités permanentes ménagères</h3>
-        {childrenOnPeriod?.length > 0 ? (
+        {sortedChildren?.length > 0 ? (
           <>
             <table id="IPPCTableInfo" style={{ maxWidth: 600 }}>
               <tbody>

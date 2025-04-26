@@ -208,10 +208,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
               <mo>)</mo>
             </mstyle>
             <mn>{amount}</mn>
-            <mo>x</mo>
+            <mo>+</mo>
+            <mo>(</mo>
             <mn>{childAmount}</mn>
             <mo>x</mo>
             <mn>10</mn>
+            <mo>)</mo>
             <mo>=</mo>
             <mn>{baseAmount}</mn>
           </math>

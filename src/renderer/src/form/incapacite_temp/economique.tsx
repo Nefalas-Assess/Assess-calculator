@@ -107,7 +107,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       if (currentData) {
         filteredData = currentData.concat(filteredData)
       }
-      fieldName, filteredData
+      setValue(fieldName, filteredData)
     },
     [formValues]
   )
