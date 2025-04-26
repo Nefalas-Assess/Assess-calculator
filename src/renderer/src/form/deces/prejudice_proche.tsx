@@ -322,7 +322,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           Ajouter une ligne
         </button>
       )}
-      <h3>Variables du calcul de capitalisation</h3>
+      <h3>Perte de la contribution du défunt</h3>
       <table id="IPVariables">
         <tbody>
           <tr>
