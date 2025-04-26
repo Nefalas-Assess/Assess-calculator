@@ -31,15 +31,11 @@ export default {
     { value: 0.42, label: 'Véhicule automobile' },
     { value: 0.28, label: 'Autre' }
   ],
-  // reference_funeraire: [
-  //   { value: '2024', label: 'Schryvers 2024 | Paiement anticipé frais funéraires' },
-  //   { value: '2025', label: 'Schryvers 2025 | Paiement anticipé frais funéraires' }
-  // ],
   reference_menage_children: [
     { value: 'rente_certaine_an', label: 'VA rente certaine 1€/an paiements MENSUELS' },
-    { value: 'rente_certaine_mois', label: 'VA rente certaine 1€/an paiements ANNUELS' },
-    { value: 'an', label: 'VA rente viagère 1€/an payable mensuellement' },
-    { value: 'mois', label: 'VA rente viagère 1€/an payable annuellement' }
+    { value: 'rente_certaine_mois', label: 'VA rente certaine 1€/an paiements ANNUELS' }
+    // { value: 'an', label: 'VA rente viagère 1€/an payable mensuellement' },
+    // { value: 'mois', label: 'VA rente viagère 1€/an payable annuellement' }
   ],
   reference_light: [
     { value: 'an', label: 'VA rente viagère 1€/an payable mensuellement' },
