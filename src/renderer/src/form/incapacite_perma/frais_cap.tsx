@@ -22,7 +22,6 @@ const TotalPaid = ({ values }) => {
 }
 
 const TotalCharge = ({ values }) => {
-  console.log(values)
   const capitalization = useCapitalization({
     start: new Date(),
     end: new Date(

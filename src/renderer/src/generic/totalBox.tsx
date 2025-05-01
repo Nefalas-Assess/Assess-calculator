@@ -19,6 +19,7 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
         .replace(/[^0-9.-]/g, '') // Supprime tout ce qui n'est pas chiffre, point, ou tiret
 
       const value = parseFloat(cleanedText)
+
       if (!isNaN(value)) {
         // Vérifier que c'est un nombre valide
         total += value
