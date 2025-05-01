@@ -421,18 +421,18 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             </tr>
           </tbody>
         </table>
-        <TotalBox
-          label="Total général :"
-          documentRef={ref}
-          calc={(res) =>
-            res +
-            membersValues?.reduce((total, item) => {
-              const amount = parseFloat(item.amount) || 0
-              return total + amount
-            }, 0)
-          }
-        />
       </FadeIn>
+      <TotalBox
+        label="Total général - Préjudice des proches :"
+        documentRef={ref}
+        calc={(res) =>
+          res +
+          membersValues?.reduce((total, item) => {
+            const amount = parseFloat(item.amount) || 0
+            return total + amount
+          }, 0)
+        }
+      />
     </form>
   )
 }
