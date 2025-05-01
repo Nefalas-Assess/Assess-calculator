@@ -31,6 +31,10 @@ export default {
     { value: 0.42, label: 'Véhicule automobile' },
     { value: 0.28, label: 'Autre' }
   ],
+  reference_type: [
+    { value: 'schryvers_2024', label: 'Schryvers 2024' },
+    { value: 'schryvers_2025', label: 'Schryvers 2025' }
+  ],
   reference_menage_children: [
     { value: 'rente_certaine_an', label: 'VA rente certaine 1€/an paiements MENSUELS' },
     { value: 'rente_certaine_mois', label: 'VA rente certaine 1€/an paiements ANNUELS' }

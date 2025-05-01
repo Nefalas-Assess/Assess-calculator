@@ -1,3 +1,4 @@
+import constants from '@renderer/constants'
 import { format, isValid } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
@@ -28,8 +29,11 @@ const ReferenceInput = ({ options, onChange, value }) => {
     <>
       <select value={value1} onChange={(e) => setValue1(e.target.value)}>
         <option value={''}>Select</option>
-        <option value={'schryvers_2024'}>Schryvers 2024</option>
-        <option value={'schryvers_2025'}>Schryvers 2025</option>
+        {(constants.reference_type || [])?.map((it, key) => (
+          <option key={key} value={it?.value}>
+            {it?.label || it?.value}
+          </option>
+        ))}
       </select>
       {options && (
         <select
@@ -68,6 +72,15 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
 
       if (type === 'textarea') {
         return <div style={style}>{val}</div>
+      }
+
+      if (type === 'reference') {
+        const ref = (constants.reference_type || [])?.find((e) => val?.includes(e?.value))
+        const ref2 = (options || [])?.find((e) => e?.value === val?.split(ref?.value + '_')?.[1])
+
+        if (!ref) return '-'
+
+        return `${ref?.label || ref?.value} ${ref2?.label || ref2?.value || ''}`
       }
 
       return val
