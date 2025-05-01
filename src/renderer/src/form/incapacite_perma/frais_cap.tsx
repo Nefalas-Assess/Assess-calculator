@@ -7,6 +7,9 @@ import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 const TotalPaid = ({ values }) => {
   const coef = useCapitalization({
@@ -19,16 +22,46 @@ const TotalPaid = ({ values }) => {
 }
 
 const TotalCharge = ({ values }) => {
-  const coef = useCapitalization({
+  console.log(values)
+  const capitalization = useCapitalization({
     start: new Date(),
-    end: new Date(new Date().setFullYear(new Date().getFullYear() + parseInt(values?.year || 0))),
+    end: new Date(
+      new Date().setFullYear(new Date().getFullYear() + parseInt(values?.year || 0) - 1)
+    ),
     ref: values?.reference,
     base: 'data_va_eur_annees',
     noGender: true,
-    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
+    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate)),
+    asObject: true
   })
 
-  return <Money value={(parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)} />
+  const renderToolTipAmount = useCallback(() => {
+    return (
+      <div>
+        <math>
+          <mn>{values?.amount}</mn>
+          <mo>x</mo>
+          <CoefficientInfo
+            table={capitalization?.table}
+            index={capitalization?.index}
+            headers={constants.interet_amount}
+            startIndex={1}
+          >
+            <mn>{capitalization?.value}</mn>
+          </CoefficientInfo>
+        </math>
+      </div>
+    )
+  }, [values, capitalization])
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Money value={(parseFloat(values?.amount || 0) * (capitalization?.value || 0)).toFixed(2)} />
+      <Tooltip tooltipContent={renderToolTipAmount()}>
+        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+      </Tooltip>
+    </div>
+  )
 }
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
