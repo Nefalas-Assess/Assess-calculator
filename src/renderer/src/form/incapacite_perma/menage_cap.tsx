@@ -434,7 +434,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                         {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
                       </td>
                       <td>
-                        <Money value={perso_amount} />
+                        <Money value={perso_amount} ignore />
                       </td>
                       <td>{formValues?.perso_pourcentage} %</td>
                       <td>{formValues?.perso_contribution} %</td>
@@ -457,7 +457,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     )}
                   </td>
                   <td>
-                    <Money value={formValues?.perso_amount} />
+                    <Money value={formValues?.perso_amount} ignore />
                   </td>
                   <td>{formValues?.perso_pourcentage} %</td>
                   <td>{formValues?.perso_contribution} %</td>
