@@ -23,7 +23,7 @@ const FraisFun = ({ editable }) => {
           editable={editable}
           initialValues={data?.frais_funeraire}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="deces.frais.total" documentRef={ref} />
       </div>
     </div>
   )

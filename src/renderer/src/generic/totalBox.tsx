@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import Money from './money'
 import { withDelay } from './delayContent'
+import TextItem from './textItem'
 
 export const TotalBox = ({ name, label, selector, value, documentRef, negative, calc }) => {
   const getTotalDisplayedOnPage = useCallback(() => {
@@ -33,7 +34,11 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
 
   return (
     <div className="total-box">
-      {label && <strong>{label}</strong>}
+      {label && (
+        <strong>
+          <TextItem path={label} />
+        </strong>
+      )}
       <Money
         className={`total${name ? '-' + name : ''}`}
         value={negative ? -getTotalDisplayedOnPage() : getTotalDisplayedOnPage()}

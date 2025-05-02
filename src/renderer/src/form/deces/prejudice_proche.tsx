@@ -17,6 +17,7 @@ import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const TotalRevenue = ({ values, data }) => {
   const revenue = parseFloat(values?.revenue_total)
@@ -244,27 +245,32 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, membersValues, submitForm, handleSubmit])
 
   const columns = [
-    { header: 'Nom du membre de la famille', key: 'name', type: 'text' },
-    { header: 'Lien de parenté', key: 'link', type: 'select', options: constants.family_link },
-    { header: 'Indemnité (€)', key: 'amount', type: 'number' }
+    { header: 'deces.prejudice_proche.name_membre', key: 'name', type: 'text' },
+    {
+      header: 'deces.prejudice_proche.lien_parente',
+      key: 'link',
+      type: 'select',
+      options: constants.family_link
+    },
+    { header: 'common.indemnite', key: 'amount', type: 'number' }
   ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} ref={ref}>
       <DynamicTable
-        title="Préjudices des proches"
-        subtitle="Dommage moral des proches"
+        title="nav.deces.prejudice_proche"
+        subtitle="deces.prejudice_proche.subtitle"
         columns={columns}
         control={control}
         name="members"
         formValues={formValues}
         editable={editable}
       />
-      <h3>Perte de la contribution du défunt</h3>
+      <TextItem path="deces.prejudice_proche.perte_contribution" tag="h3" />
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Table de référence</td>
+            <TextItem path="common.ref_table" tag="td" />
             <td>
               <Field
                 control={control}
@@ -276,7 +282,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Taux d'intérêt de la capitalisation</td>
+            <TextItem path="common.taux_interet_capitalisation" tag="td" />
             <td>
               <Field
                 control={control}
@@ -291,14 +297,14 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </table>
 
       <FadeIn show={formValues?.reference && formValues?.interet}>
-        <h3>Perte du revenu du défunt</h3>
+        <TextItem path="deces.prejudice_proche.perte_revenu" tag="h3" />
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Revenu du défunt (€)</th>
-              <th>Revenu total du ménage (€)</th>
-              <th>Nombre de membres du ménage avant le décès</th>
-              <th>Total (€)</th>
+              <TextItem path="deces.prejudice_proche.revenu_defunt" tag="th" />
+              <TextItem path="deces.prejudice_proche.revenu_total_menage" tag="th" />
+              <TextItem path="deces.prejudice_proche.number_menage" tag="th" />
+              <TextItem path="common.total" tag="th" />
             </tr>
           </thead>
           <tbody>
@@ -320,7 +326,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               </td>
               <td>
                 {!data?.general_info?.date_naissance ? (
-                  <span>Date de naissance manquante</span>
+                  <TextItem path="errors.missing_date_naissance" />
                 ) : (
                   <TotalRevenue values={formValues} data={data} />
                 )}
@@ -328,13 +334,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             </tr>
           </tbody>
         </table>
-        <h3>Contribution ménagères du défunt</h3>
+        <TextItem path="deces.prejudice_proche.contribution_menage" tag="h3" />
         <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Indemnité journalière (€)</th>
-              <th>Contribution (%)</th>
-              <th>Total (€)</th>
+              <TextItem path="common.indemnite_journaliere" tag="th" />
+              <TextItem path="common.contribution" tag="th" />
+              <TextItem path="common.total" tag="th" />
             </tr>
           </thead>
           <tbody>
@@ -361,7 +367,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </table>
       </FadeIn>
       <TotalBox
-        label="Total général - Préjudice des proches :"
+        label="deces.prejudice_proche.total"
         documentRef={ref}
         calc={(res) =>
           res +

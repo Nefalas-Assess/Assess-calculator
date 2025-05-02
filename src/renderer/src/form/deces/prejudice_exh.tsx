@@ -65,12 +65,12 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [])
 
   const columns = [
-    { header: 'Début', key: 'start', type: 'date' },
-    { header: 'Fin', key: 'end', type: 'date' },
-    { header: 'Jours', key: 'days', type: 'calculated' },
-    { header: 'Indemnité journalière (€)', key: 'amount', type: 'number', width: 100 },
+    { header: 'common.start', key: 'start', type: 'date' },
+    { header: 'common.end', key: 'end', type: 'date' },
+    { header: 'common.days', key: 'days', type: 'calculated' },
+    { header: 'common.indemnite_journaliere', key: 'amount', type: 'number', width: 100 },
     {
-      header: 'Total (€)',
+      header: 'common.total',
       key: 'total',
       type: 'calculated',
       tooltipContent: (rowData, days) => renderToolTipAmount(rowData, days)
@@ -80,7 +80,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Préjudice ex haerede"
+        title="nav.deces.prejudice_exh"
         columns={columns}
         control={control}
         name="periods"

@@ -24,7 +24,7 @@ const PrejudiceEXH = ({ editable }) => {
           editable={editable}
           initialValues={data?.prejudice_exh}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="deces.prejudice_exh.total" documentRef={ref} />
       </div>
     </div>
   )

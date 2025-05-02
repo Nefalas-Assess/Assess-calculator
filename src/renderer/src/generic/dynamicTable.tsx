@@ -9,6 +9,7 @@ import Tooltip from './tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import CoefficientInfo from './coefficientInfo'
+import TextItem from './textItem'
 
 // Define column types
 type ColumnType = {
@@ -135,7 +136,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   formValues,
   editable = true,
   onAddRow,
-  addRowLabel = 'Ajouter une ligne',
+  addRowLabel = 'common.add_row',
   addRowDefaults = {},
   calculateTotal,
   customActions
@@ -173,14 +174,14 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 
   return (
     <div>
-      {title && <h1>{title}</h1>}
-      {subtitle && <h3>{subtitle}</h3>}
+      {title && <TextItem tag="h1" path={title} />}
+      {subtitle && <TextItem tag="h3" path={subtitle} />}
       <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             {columns.map((column, idx) => (
               <th key={idx} className={column.className}>
-                {column.header}
+                <TextItem path={column.header} />
               </th>
             ))}
             {editable && <th></th>}
@@ -322,7 +323,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                 {editable && (
                   <td>
                     <button type="button" onClick={() => remove(rowIndex)}>
-                      Supprimer
+                      <TextItem path="common.delete" />
                     </button>
                   </td>
                 )}
@@ -334,7 +335,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
       {editable && (
         <div className="buttons-row">
           <button type="button" onClick={handleAddRow}>
-            {addRowLabel}
+            <TextItem path={addRowLabel} />
           </button>
           {customActions && (
             <ActionMenuButton label={customActions?.label} actions={customActions?.actions} />

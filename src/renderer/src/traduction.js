@@ -180,6 +180,171 @@ export default {
       fr: 'Sexe',
       en: 'Gender',
       nl: 'Geslacht'
+    },
+    montant: {
+      fr: 'Montant',
+      en: 'Amount',
+      nl: 'Bedrag'
+    },
+    frais: {
+      fr: 'Frais',
+      en: 'Fees',
+      nl: 'Kosten'
+    },
+    variables: {
+      fr: 'Variables',
+      en: 'Variables',
+      nl: 'Variabelen'
+    },
+    ref_table: {
+      fr: 'Tables de référence',
+      en: 'Reference tables',
+      nl: 'Referentietabellen'
+    },
+    taux_interet: {
+      fr: "Taux d'intérêt",
+      en: 'Interest rate',
+      nl: 'Rente'
+    },
+    taux_interet_capitalisation: {
+      fr: "Taux d'intérêt de la capitalisation",
+      en: 'Interest rate of capitalization',
+      nl: 'Rente van kapitalisatie'
+    },
+    add_row: {
+      fr: 'Ajouter une ligne',
+      en: 'Add a row',
+      nl: 'Een rij toevoegen'
+    },
+    delete: {
+      fr: 'Supprimer',
+      en: 'Delete',
+      nl: 'Verwijderen'
+    },
+    indemnite_journaliere: {
+      fr: 'Indemnité journalière (€)',
+      en: 'Daily indemnity (€)',
+      nl: 'Dagelijkse indemniteit (€)'
+    },
+    indemnite: {
+      fr: 'Indemnité (€)',
+      en: 'Indemnity (€)',
+      nl: 'Indemniteit (€)'
+    },
+    start: {
+      fr: 'Début',
+      en: 'Start',
+      nl: 'Start'
+    },
+    end: {
+      fr: 'Fin',
+      en: 'End',
+      nl: 'Einde'
+    },
+    days: {
+      fr: 'Jours',
+      en: 'Days',
+      nl: 'Dagen'
+    },
+    total: {
+      fr: 'Total (€)',
+      en: 'Total (€)',
+      nl: 'Totaal (€)'
+    },
+    contribution: {
+      fr: 'Contribution (%)',
+      en: 'Contribution (%)',
+      nl: 'Contribution (%)'
+    }
+  },
+  errors: {
+    missing_date_naissance: {
+      fr: 'Date de naissance manquante',
+      en: 'Missing date of birth',
+      nl: 'Geboortedatum ontbrekend'
+    }
+  },
+  deces: {
+    frais: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Totaal algemeen :'
+      },
+      montant_ant: {
+        fr: 'Montant anticipé',
+        en: 'Anticipated amount',
+        nl: 'Voorschotbedrag'
+      },
+      frais_ant: {
+        fr: 'Frais anticipés',
+        en: 'Anticipated fees',
+        nl: 'Voorschotkosten'
+      },
+      frais_non_ant: {
+        fr: 'Frais non-anticipés',
+        en: 'Non-anticipative fees',
+        nl: 'Niet-vorschotkosten'
+      }
+    },
+    prejudice_exh: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Totaal algemeen :'
+      }
+    },
+    prejudice_proche: {
+      subtitle: {
+        fr: 'Dommage moral des proches',
+        en: 'Moral damage of relatives',
+        nl: 'Moral damage of relatives'
+      },
+      perte_contribution: {
+        fr: 'Perte de la contribution du défunt',
+        en: 'Loss of the deceased contribution',
+        nl: 'Verlies van de bijdrage van de overleden'
+      },
+      lien_parente: {
+        fr: 'Lien de parenté',
+        en: 'Family link',
+        nl: 'Familielink'
+      },
+      name_membre: {
+        fr: 'Nom du membre de la famille',
+        en: 'Name of the family member',
+        nl: 'Naam van de familielid'
+      },
+      perte_revenu: {
+        fr: 'Perte de revenu',
+        en: 'Loss of income',
+        nl: 'Verlies van inkomen'
+      },
+      revenu_defunt: {
+        fr: 'Revenu du défunt (€)',
+        en: 'Revenue of the deceased (€)',
+        nl: 'Inkomen van de overleden (€)'
+      },
+      revenu_total_menage: {
+        fr: 'Revenu total du ménage (€)',
+        en: 'Total revenue of the household (€)',
+        nl: 'Totaal inkomen van het gezin (€)'
+      },
+      number_menage: {
+        fr: 'Nombre de membres du ménage avant le décès',
+        en: 'Number of members of the household before the death',
+        nl: 'Aantal leden van het gezin voor het overlijden'
+      },
+      contribution_menage: {
+        fr: 'Contribution ménagères du défunt',
+        en: 'Contribution of the deceased',
+        nl: 'Contribution van de overleden'
+      },
+      total: {
+        fr: 'Total général préjudice des proches :',
+        en: 'Total general prejudice of relatives :',
+        nl: 'Totaal algemeen prejudice van familie :'
+      }
     }
   }
 }

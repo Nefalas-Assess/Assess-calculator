@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -58,10 +59,10 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, chargesValues, submitForm, handleSubmit])
 
   const fraisColumns = [
-    { header: 'Frais', key: 'name', type: 'text' },
-    { header: 'Montant', key: 'amount', type: 'number' },
+    { header: 'common.frais', key: 'name', type: 'text' },
+    { header: 'common.montant', key: 'amount', type: 'number' },
     {
-      header: 'Montant anticipé',
+      header: 'deces.frais.montant_ant',
       key: 'total',
       type: 'capitalization',
       props: {
@@ -75,9 +76,9 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   ]
 
   const notAnticipatedColumns = [
-    { header: 'Frais', key: 'name', type: 'text' },
+    { header: 'common.frais', key: 'name', type: 'text' },
     {
-      header: 'Montant',
+      header: 'common.montant',
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
@@ -90,17 +91,19 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Frais funéraires</h1>
-      <h3>Variables</h3>
+      <TextItem tag="h1" path="nav.deces.frais" />
+      <TextItem tag="h3" path="common.variables" />
       <table id="IPVariables">
         <tr>
-          <td>Tables de référence</td>
+          <TextItem tag="td" path="common.ref_table" />
           <td>
             <Field control={control} type="reference" name={`ref`} editable={editable}></Field>
           </td>
         </tr>
         <tr>
-          <td>Taux d'intérêt</td>
+          <td>
+            <TextItem path="common.taux_interet" />
+          </td>
           <td>
             <Field
               control={control}
@@ -113,7 +116,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         </tr>
       </table>
       <DynamicTable
-        subtitle="Frais anticipés"
+        subtitle="deces.frais.frais_ant"
         columns={fraisColumns}
         control={control}
         name="charges"
@@ -122,7 +125,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
         calculateTotal={(e) => e?.amount}
       />
       <DynamicTable
-        subtitle="Frais non-anticipés"
+        subtitle="deces.frais.frais_non_ant"
         columns={notAnticipatedColumns}
         control={control}
         name="not_anticipated_charges"
