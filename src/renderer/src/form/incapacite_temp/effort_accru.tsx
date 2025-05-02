@@ -1,22 +1,13 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
-import Field from '@renderer/generic/field'
+import { useForm, useWatch } from 'react-hook-form'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {}
-  })
-
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'efforts' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -63,143 +54,55 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
     ).toFixed(2)
   }, [])
 
-  const addNext = useCallback(
-    (append, initial = {}) => {
-      const lastRowEnd = formValues?.efforts?.[formValues?.efforts?.length - 1]?.end
-
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
+  const columns = [
+    { header: 'Début', key: 'start', type: 'date', width: 140 },
+    { header: 'Fin', key: 'end', type: 'date', width: 140 },
+    { header: 'Jours', key: 'days', type: 'calculated' },
+    {
+      header: 'Indemnité journalière (€)',
+      key: 'amount',
+      type: 'number',
+      props: { step: '0.01' }
     },
-    [formValues]
-  )
+    {
+      header: '%',
+      key: 'pourcentage',
+      type: 'number',
+      width: 50,
+      props: { style: { width: 50 } }
+    },
+    {
+      header: 'Coefficient',
+      key: 'coefficient',
+      type: 'select',
+      width: 50,
+      options: [
+        { value: 1, label: '1' },
+        { value: 2, label: '2' },
+        { value: 3, label: '3' },
+        { value: 4, label: '4' },
+        { value: 5, label: '5' },
+        { value: 6, label: '6' },
+        { value: 7, label: '7' }
+      ]
+    },
+    { header: 'Total', key: 'total', type: 'calculated' },
+    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+  ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Efforts accrus</h1>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Indemnité journalière (€)</th>
-            <th>%</th>
-            <th>Coefficient</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            const values = formValues?.efforts[index]
-            const days = getDays(values)
-            const total = getTotalAmount(values, days)
-            return (
-              <tr key={child.id}>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`efforts.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`efforts.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`efforts.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`efforts.${index}.pourcentage`}
-                    editable={editable}
-                    type="number"
-                  >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 50 }}>
-                  <Field
-                    control={control}
-                    name={`efforts.${index}.coefficient`}
-                    editable={editable}
-                  >
-                    {(props) => (
-                      <select {...props}>
-                        <option>Select</option>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                        <option value={6}>6</option>
-                        <option value={7}>7</option>
-                      </select>
-                    )}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={total} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    name={`efforts.${index}.date_paiement`}
-                    editable={editable}
-                    type="date"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
-                </td>
-
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append, { coefficient: 5, amount: 30 })}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Efforts accrus"
+        columns={columns}
+        control={control}
+        name="efforts"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ coefficient: 5, amount: 30 }}
+        calculateTotal={getTotalAmount}
+      />
     </form>
   )
 }

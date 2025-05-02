@@ -1,90 +1,13 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import { useCapitalization } from '@renderer/hooks/capitalization'
-import Field from '@renderer/generic/field'
+import { useForm, useWatch } from 'react-hook-form'
 import constants from '@renderer/constants'
-import Tooltip from '@renderer/generic/tooltip'
-import { FaRegQuestionCircle } from 'react-icons/fa'
-import CoefficientInfo from '@renderer/generic/coefficientInfo'
-
-const TotalPaid = ({ values }) => {
-  const coef = useCapitalization({
-    end: values?.date_payment,
-    ref: values?.reference,
-    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate))
-  })
-
-  return <Money value={(parseFloat(values?.amount || 0) * (coef || 0)).toFixed(2)} />
-}
-
-const TotalCharge = ({ values }) => {
-  const capitalization = useCapitalization({
-    start: new Date(),
-    end: new Date(
-      new Date().setFullYear(new Date().getFullYear() + parseInt(values?.year || 0) - 1)
-    ),
-    ref: values?.reference,
-    base: 'data_va_eur_annees',
-    noGender: true,
-    index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.rate)),
-    asObject: true
-  })
-
-  const renderToolTipAmount = useCallback(() => {
-    return (
-      <div>
-        <math>
-          <mn>{values?.amount}</mn>
-          <mo>x</mo>
-          <CoefficientInfo
-            table={capitalization?.table}
-            index={capitalization?.index}
-            headers={constants.interet_amount}
-            startIndex={1}
-          >
-            <mn>{capitalization?.value}</mn>
-          </CoefficientInfo>
-        </math>
-      </div>
-    )
-  }, [values, capitalization])
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Money value={(parseFloat(values?.amount || 0) * (capitalization?.value || 0)).toFixed(2)} />
-      <Tooltip tooltipContent={renderToolTipAmount()}>
-        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
-      </Tooltip>
-    </div>
-  )
-}
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
-
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       charges: [{}]
     }
-  })
-
-  const chargesFields = useFieldArray({
-    control,
-    name: 'charges' // Champs dynamiques pour les enfants
-  })
-
-  const paidFields = useFieldArray({
-    control,
-    name: 'paid' // Champs dynamiques pour les enfants
-  })
-
-  const packageFields = useFieldArray({
-    control,
-    name: 'package' // Dynamic fields for children
   })
 
   const formValues = watch()
@@ -137,226 +60,92 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, chargesValues, paidValues, packageValues, submitForm, handleSubmit])
 
-  const handleRemovePaid = useCallback(
-    (index) => {
-      paidFields.remove(index)
+  const frais_futurs_columns = [
+    { header: 'Frais', key: 'name', type: 'text' },
+    { header: 'Date du paiement', key: 'date_payment', type: 'date' },
+    {
+      header: 'Table de référence',
+      key: 'reference',
+      type: 'reference',
+      options: constants.reference_light.concat(constants.reference)
     },
-    [paidFields]
-  )
+    {
+      header: "Taux d'intérêt de la capitalisation",
+      key: 'rate',
+      type: 'select',
+      options: constants.interet_amount
+    },
+    { header: 'Montant', key: 'amount', type: 'number' },
+    {
+      header: 'Total',
+      key: 'total',
+      type: 'capitalization',
+      props: { end: 'date_payment', ref: 'reference', index: 'rate', amount: 'amount' }
+    }
+  ]
+
+  const frais_payes_columns = [
+    { header: 'Frais', key: 'name', type: 'text' },
+    { header: 'Montant', key: 'amount', type: 'number' },
+    { header: "Nombre d'années", key: 'year', type: 'select', options: constants.zeroToFifty },
+    {
+      header: 'Table de référence',
+      key: 'reference',
+      type: 'reference'
+    },
+    {
+      header: "Taux d'intérêt de la capitalisation",
+      key: 'rate',
+      type: 'select',
+      options: constants.interet_amount
+    },
+    {
+      header: 'Total',
+      key: 'total',
+      type: 'capitalization',
+      props: {
+        duration: 'year',
+        ref: 'reference',
+        index: 'rate',
+        amount: 'amount',
+        noGender: true,
+        base: 'data_va_eur_annees'
+      }
+    }
+  ]
+
+  const forfait_columns = [
+    { header: 'Frais', key: 'name', type: 'text' },
+    { header: 'Montant', key: 'amount', type: 'number' }
+  ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Frais futurs</h1>
-      <h3>Frais capitalisés</h3>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Frais</th>
-            <th>Date du paiement</th>
-            <th className="custom-size">Table de référence</th>
-            <th>Taux d'intérêt de la capitalisation</th>
-            <th>Montant annualisé (€)</th>
-            <th>Total</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {chargesFields.fields.map((child, index) => {
-            const values = formValues?.charges[index]
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field control={control} name={`charges.${index}.name`} editable={editable}>
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`charges.${index}.date_payment`}
-                    editable={editable}
-                    type="date"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="reference"
-                    options={constants.reference_light.concat(constants.reference)}
-                    name={`charges.${index}.reference`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td style={{ maxWidth: 120 }}>
-                  <Field
-                    control={control}
-                    type="select"
-                    options={constants.interet_amount}
-                    name={`charges.${index}.rate`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`charges.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <TotalPaid values={values} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => chargesFields.remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => chargesFields.append({})}>
-          Ajouter une ligne
-        </button>
-      )}
-      <h3>Frais payés dans N années</h3>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Frais</th>
-            <th>Montant</th>
-            <th>Nombre d'années</th>
-            <th>Table de référence</th>
-            <th>Taux d'intérêt de la capitalisation</th>
-            <th>Total</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {paidFields.fields.map((child, index) => {
-            const values = formValues?.paid?.[index]
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field control={control} name={`paid.${index}.name`} editable={editable}>
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`paid.${index}.amount`}
-                    editable={editable}
-                    type="number"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="select"
-                    options={constants.zeroToFifty}
-                    name={`paid.${index}.year`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="reference"
-                    name={`paid.${index}.reference`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td style={{ maxWidth: 120 }}>
-                  <Field
-                    control={control}
-                    type="select"
-                    options={constants.interet_amount}
-                    name={`paid.${index}.rate`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td>
-                  <TotalCharge values={values} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => handleRemovePaid(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => paidFields.append({})}>
-          Ajouter une ligne
-        </button>
-      )}
-      <h3>Forfait</h3>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Frais</th>
-            <th>Montant</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {packageFields.fields.map((child, index) => {
-            const values = formValues?.package?.[index]
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field control={control} name={`package.${index}.name`} editable={editable}>
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`package.${index}.amount`}
-                    editable={editable}
-                    type="number"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                  {/* Used for the total box calculation  */}
-                  <div className="money" style={{ display: 'none' }}>
-                    {values?.amount}
-                  </div>
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => packageFields.remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => packageFields.append({})}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Frais futurs"
+        columns={frais_futurs_columns}
+        control={control}
+        name="charges"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ amount: 30 }}
+      />
+      <DynamicTable
+        subtitle="Frais payés dans N années"
+        columns={frais_payes_columns}
+        control={control}
+        name="paid"
+        formValues={formValues}
+        editable={editable}
+      />
+      <DynamicTable
+        subtitle="Forfait"
+        columns={forfait_columns}
+        control={control}
+        name="package"
+        formValues={formValues}
+        editable={editable}
+      />
     </form>
   )
 }

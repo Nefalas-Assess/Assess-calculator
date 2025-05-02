@@ -6,6 +6,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -77,93 +78,28 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
+  const columns = [
+    { header: 'Début', key: 'start', type: 'start' },
+    { header: 'Fin', key: 'end', type: 'end' },
+    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'Indemnité journalière (€)', key: 'amount', type: 'number' },
+    { header: 'Total (€)', key: 'total', type: 'calculated' },
+    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'Intérêts (€)', key: 'interest', type: 'interest', median: true, className: 'int' }
+  ]
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Hospitalisation</h1>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Indemnité journalière (€)</th>
-            <th>Total (€)</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            const values = formValues?.periods[index]
-            const days = getDays(values)
-            const total = getTotalAmount(values, days)
-            return (
-              <tr key={child.id}>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 50 }}>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`periods.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={total} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    name={`periods.${index}.date_paiement`}
-                    editable={editable}
-                    type="date"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append, { amount: 7 })}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Hospitalisation"
+        columns={columns}
+        control={control}
+        name="periods"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ amount: 7 }}
+        calculateTotal={getTotalAmount}
+      />
     </form>
   )
 }

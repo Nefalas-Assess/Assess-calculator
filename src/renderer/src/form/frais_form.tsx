@@ -5,6 +5,7 @@ import Interest from '@renderer/generic/interet'
 import TotalBox from '@renderer/generic/totalBox'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -89,91 +90,43 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   }, [formValues, fraisValues, submitForm, handleSubmit])
 
+  const columns = [
+    { header: 'Indemnité/Frais', key: 'indemnite', type: 'text' },
+    { header: 'Numéro de facture', key: 'facture', type: 'text' },
+    { header: 'Payé', key: 'paid', type: 'select', options: constants.boolean },
+    {
+      header: 'Montant (€)',
+      key: 'amount',
+      type: 'number',
+      props: { step: '0.01' }
+    },
+    {
+      header: 'Date frais',
+      key: 'date_frais',
+      type: 'start',
+      className: 'int'
+    },
+    {
+      header: 'Date du paiement',
+      key: 'date_paiement',
+      type: 'end',
+      className: 'int'
+    },
+    { header: 'Intérêts', key: 'interest', type: 'interest', className: 'int' }
+  ]
+
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Frais (médicaux)</h1>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Indemnité/Frais</th>
-            <th>Numéro de facture </th>
-            <th>Payé</th>
-            <th>Montant (€)</th>
-            <th className="int">Date frais</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts (€)</th>
-            {editable && <th>Action</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fraisFields?.fields.map((child, index) => (
-            <tr key={child.id}>
-              <td>
-                <Field control={control} name={`frais.${index}.indemnite`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field control={control} name={`frais.${index}.facture`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="select"
-                  options={constants.boolean}
-                  name={`frais.${index}.paid`}
-                  editable={editable}
-                ></Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="number"
-                  name={`frais.${index}.amount`}
-                  editable={editable}
-                >
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td className="int">
-                <Field
-                  control={control}
-                  type="date"
-                  name={`frais.${index}.date_frais`}
-                  editable={editable}
-                >
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td className="int">
-                <Field
-                  control={control}
-                  type="date"
-                  name={`frais.${index}.date_paiement`}
-                  editable={editable}
-                >
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td className="int">
-                <Interest
-                  amount={formValues?.frais[index]?.amount}
-                  start={formValues?.frais[index]?.date_frais}
-                  end={formValues?.frais[index]?.date_paiement}
-                />
-              </td>
-              {editable && (
-                <td>
-                  <button onClick={() => fraisFields?.remove(index)}>Supprimer</button>
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {editable && <button onClick={() => fraisFields?.append({})}>Ajouter frais</button>}
+      <DynamicTable
+        title="Frais (médicaux)"
+        columns={columns}
+        control={control}
+        name="frais"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ coefficient: 5, amount: 30 }}
+        calculateTotal={(e) => e.amount}
+      />
       <div className="total-box">
         <strong>Total frais médicaux : </strong> <Money value={totalSumFrais} />
       </div>

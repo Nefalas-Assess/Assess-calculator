@@ -1,20 +1,14 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Field from '@renderer/generic/field'
+import { useForm, useWatch } from 'react-hook-form'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       provisions: [{}]
     }
-  })
-
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'provisions'
   })
 
   const formValues = watch()
@@ -47,29 +41,13 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, provisionsValues, submitForm, handleSubmit])
 
-  const addNext = useCallback(
-    (append, initial = {}) => {
-      const lastRowEnd = formValues?.provisions?.[formValues?.provisions?.length - 1]?.end
-
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1)
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
-    },
-    [formValues]
-  )
-
   // Calcul des totaux pour Montant et Intérêts
   const totals = useMemo(() => {
     const totalAmount = provisionsValues.reduce(
       (acc, curr) => acc + (parseFloat(curr.amount) || 0),
       0
     )
+
     const totalInterest = provisionsValues.reduce((acc, curr) => {
       const interest =
         curr.date_provision && curr.date_paiement ? (
@@ -90,80 +68,25 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [provisionsValues])
 
+  const columns = [
+    { header: 'Date de provision', key: 'date_provision', type: 'start' },
+    { header: 'Montant', key: 'amount', type: 'number' },
+    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'Intérêts (€)', key: 'interest', type: 'interest', className: 'int' }
+  ]
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Provisions</h1>
-        <table style={{ maxWidth: 1200 }}>
-          <thead>
-            <tr>
-              <th>Date de provision</th>
-              <th>Montant</th>
-              <th className="int">Date du paiement</th>
-              <th className="int">Intérêts (€)</th>
-              {editable && <th></th>}
-            </tr>
-          </thead>
-          <tbody>
-            {fields.map((child, index) => {
-              const values = formValues?.provisions[index]
-              return (
-                <tr key={child.id}>
-                  <td>
-                    <Field
-                      control={control}
-                      type="date"
-                      name={`provisions.${index}.date_provision`}
-                      editable={editable}
-                    >
-                      {(props) => <input {...props} />}
-                    </Field>
-                  </td>
-                  <td>
-                    <Field
-                      control={control}
-                      type="number"
-                      name={`provisions.${index}.amount`}
-                      editable={editable}
-                    >
-                      {(props) => <input {...props} />}
-                    </Field>
-                  </td>
-                  <td className="int">
-                    <Field
-                      control={control}
-                      type="date"
-                      name={`provisions.${index}.date_paiement`}
-                      editable={editable}
-                    >
-                      {(props) => <input {...props} />}
-                    </Field>
-                  </td>
-                  <td className="int">
-                    <Interest
-                      amount={values?.amount || 0}
-                      start={values?.date_provision}
-                      end={values?.date_paiement}
-                    />
-                  </td>
-                  {editable && (
-                    <td>
-                      <button type="button" onClick={() => remove(index)}>
-                        Supprimer
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-
-        {editable && (
-          <button type="button" onClick={() => addNext(append, {})}>
-            Ajouter provisions
-          </button>
-        )}
+        <DynamicTable
+          title="Provisions"
+          columns={columns}
+          control={control}
+          name="provisions"
+          formValues={formValues}
+          editable={editable}
+          calculateTotal={(e) => e?.amount}
+        />
       </form>
       <div className="total-box">
         <strong>Total des provisions : </strong> <Money value={totals.totalAmount.toFixed(2)} />
