@@ -35,11 +35,11 @@ const DetectMissingData = ({ children, data, required }) => {
   const renderToolTipContent = useCallback(() => {
     return (
       <div>
-        Certaines valeurs sont manquantes pour accéder a cette partie:
+        <TextItem path={'nav.missing_data'} />
         <ul>
           {missingData?.map((it, key) => (
             <li key={key} style={{ listStyle: 'inside' }}>
-              {it?.label}
+              <TextItem path={it?.label} />
             </li>
           ))}
         </ul>
@@ -133,7 +133,9 @@ export const AppLayout = () => {
             </div>
           </div>
           <div className="right">
-            <button onClick={toggleDarkMode}>Mode</button>
+            <button onClick={toggleDarkMode}>
+              <TextItem path={'layout.mode'} />
+            </button>
             {filePath && (
               <>
                 <button onClick={handleSave}>
@@ -159,29 +161,45 @@ export const AppLayout = () => {
           <div className="layout-menu">
             {filePath ? (
               <div className="menu">
-                <LinkItem to="/infog">Informations générales</LinkItem>
+                <LinkItem to="/infog">
+                  <TextItem path={'nav.info_general'} />
+                </LinkItem>
                 <DetectMissingData data={data} required={[]}>
-                  <LinkItem to="/frais">Frais</LinkItem>
+                  <LinkItem to="/frais">
+                    <TextItem path={'nav.frais'} />
+                  </LinkItem>
                 </DetectMissingData>
                 <div className="sub-nav">
                   <DetectMissingData
                     data={data}
                     required={[
-                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
-                      { value: 'general_info.sexe', label: 'Sexe' }
+                      { value: 'general_info.date_naissance', label: 'common.date_naissance' },
+                      { value: 'general_info.sexe', label: 'common.sexe' }
                     ]}
                   >
                     <div className="sub-nav-title" onClick={() => setIncTemp(!incTemp)}>
-                      Incapacités Temporaires
+                      <TextItem path={'nav.incapacite_temp'} />
                     </div>
                     {incTemp && (
                       <div>
-                        <LinkItem to="/it/personnel">Personnelles</LinkItem>
-                        <LinkItem to="/it/menagère">Ménagères</LinkItem>
-                        <LinkItem to="/it/economique">Économiques</LinkItem>
-                        <LinkItem to="/it/effa">Efforts Accrus</LinkItem>
-                        <LinkItem to="/it/hosp">Hospitalisation</LinkItem>
-                        <LinkItem to="/it/pretium">Pretium Doloris</LinkItem>
+                        <LinkItem to="/it/personnel">
+                          <TextItem path={'nav.incapacite_temp.personnel'} />
+                        </LinkItem>
+                        <LinkItem to="/it/menagère">
+                          <TextItem path={'nav.incapacite_temp.menagère'} />
+                        </LinkItem>
+                        <LinkItem to="/it/economique">
+                          <TextItem path={'nav.incapacite_temp.economique'} />
+                        </LinkItem>
+                        <LinkItem to="/it/effa">
+                          <TextItem path={'nav.incapacite_temp.effa'} />
+                        </LinkItem>
+                        <LinkItem to="/it/hosp">
+                          <TextItem path={'nav.incapacite_temp.hospitalisation'} />
+                        </LinkItem>
+                        <LinkItem to="/it/pretium">
+                          <TextItem path={'nav.incapacite_temp.pretium'} />
+                        </LinkItem>
                       </div>
                     )}
                   </DetectMissingData>
@@ -190,22 +208,37 @@ export const AppLayout = () => {
                   <DetectMissingData
                     data={data}
                     required={[
-                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
-                      { value: 'general_info.date_consolidation', label: 'Date de consolidation' },
-                      { value: 'general_info.sexe', label: 'Sexe' }
+                      { value: 'general_info.date_naissance', label: 'common.date_naissance' },
+                      {
+                        value: 'general_info.date_consolidation',
+                        label: 'common.date_consolidation'
+                      },
+                      { value: 'general_info.sexe', label: 'common.sexe' }
                     ]}
                   >
                     <div className="sub-nav-title" onClick={() => setIncPerma(!incPerma)}>
-                      Incapacités Permanentes
+                      <TextItem path={'nav.incapacite_perma'} />
                     </div>
                     {incPerma && (
                       <div>
-                        <LinkItem to="/ip/forfait">Forfaitaires</LinkItem>
-                        <LinkItem to="/ip/personnel">Personnelles capitalisées</LinkItem>
-                        <LinkItem to="/ip/menagère">Ménagères capitalisées</LinkItem>
-                        <LinkItem to="/ip/economique">Économiques capitalisées</LinkItem>
-                        <LinkItem to="/ip/frais">Frais futurs</LinkItem>
-                        <LinkItem to="/ip/particuliers">Préjudices Particuliers</LinkItem>
+                        <LinkItem to="/ip/forfait">
+                          <TextItem path={'nav.incapacite_perma.forfait'} />
+                        </LinkItem>
+                        <LinkItem to="/ip/personnel">
+                          <TextItem path={'nav.incapacite_perma.personnel_cap'} />
+                        </LinkItem>
+                        <LinkItem to="/ip/menagère">
+                          <TextItem path={'nav.incapacite_perma.menagère_cap'} />
+                        </LinkItem>
+                        <LinkItem to="/ip/economique">
+                          <TextItem path={'nav.incapacite_perma.economique_cap'} />
+                        </LinkItem>
+                        <LinkItem to="/ip/frais">
+                          <TextItem path={'nav.incapacite_perma.frais_futurs'} />
+                        </LinkItem>
+                        <LinkItem to="/ip/particuliers">
+                          <TextItem path={'nav.incapacite_perma.préjudices_part'} />
+                        </LinkItem>
                       </div>
                     )}
                   </DetectMissingData>
@@ -214,28 +247,38 @@ export const AppLayout = () => {
                   <DetectMissingData
                     data={data}
                     required={[
-                      { value: 'general_info.date_naissance', label: 'Date de naissance' },
-                      { value: 'general_info.date_death', label: 'Date de décès' },
-                      { value: 'general_info.sexe', label: 'Sexe' }
+                      { value: 'general_info.date_naissance', label: 'common.date_naissance' },
+                      { value: 'general_info.date_death', label: 'common.date_death' },
+                      { value: 'general_info.sexe', label: 'common.sexe' }
                     ]}
                   >
                     <div className="sub-nav-title" onClick={() => setDead(!dead)}>
-                      Décès
+                      <TextItem path={'nav.deces'} />
                     </div>
                     {dead && (
                       <div>
-                        <LinkItem to="/deces/frais">Frais funéraires</LinkItem>
-                        <LinkItem to="/deces/prejudice_exh">Préjudice ex haerede</LinkItem>
-                        <LinkItem to="/deces/prejudice_proche">Préjudice des proches</LinkItem>
+                        <LinkItem to="/deces/frais">
+                          <TextItem path={'nav.deces.frais'} />
+                        </LinkItem>
+                        <LinkItem to="/deces/prejudice_exh">
+                          <TextItem path={'nav.deces.prejudice_exh'} />
+                        </LinkItem>
+                        <LinkItem to="/deces/prejudice_proche">
+                          <TextItem path={'nav.deces.prejudice_proche'} />
+                        </LinkItem>
                       </div>
                     )}
                   </DetectMissingData>
                 </div>
                 <div>
-                  <LinkItem to="/provisions">Provisions</LinkItem>
+                  <LinkItem to="/provisions">
+                    <TextItem path={'nav.provisions'} />
+                  </LinkItem>
                 </div>
                 <div>
-                  <LinkItem to="/recap">Récapitulatif</LinkItem>
+                  <LinkItem to="/recap">
+                    <TextItem path={'nav.recap'} />
+                  </LinkItem>
                 </div>
               </div>
             ) : (
