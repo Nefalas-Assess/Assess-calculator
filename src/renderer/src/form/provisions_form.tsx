@@ -3,6 +3,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -69,17 +70,17 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [provisionsValues])
 
   const columns = [
-    { header: 'Date de provision', key: 'date_provision', type: 'start' },
-    { header: 'Montant', key: 'amount', type: 'number' },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts (€)', key: 'interest', type: 'interest', className: 'int' }
+    { header: 'provisions.provision_date', key: 'date_provision', type: 'start' },
+    { header: 'common.amount', key: 'amount', type: 'number' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', className: 'int' }
   ]
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DynamicTable
-          title="Provisions"
+          title="nav.provisions"
           columns={columns}
           control={control}
           name="provisions"
@@ -89,7 +90,8 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
         />
       </form>
       <div className="total-box">
-        <strong>Total des provisions : </strong> <Money value={totals.totalAmount.toFixed(2)} />
+        <TextItem path="provisions.total" tag="strong" />
+        <Money value={totals.totalAmount.toFixed(2)} />
       </div>
     </>
   )

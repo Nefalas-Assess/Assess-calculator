@@ -176,6 +176,11 @@ export default {
       en: 'Date of death',
       nl: 'Datum van overlijden'
     },
+    date_accident: {
+      fr: "Date de l'accident",
+      en: 'Date of accident',
+      nl: 'Datum van het ongeval'
+    },
     sexe: {
       fr: 'Sexe',
       en: 'Gender',
@@ -255,6 +260,36 @@ export default {
       fr: 'Contribution (%)',
       en: 'Contribution (%)',
       nl: 'Contribution (%)'
+    },
+    total_interets: {
+      fr: 'Total intérêts :',
+      en: 'Total interests :',
+      nl: 'Totaal intresten :'
+    },
+    paid: {
+      fr: 'Payé',
+      en: 'Paid',
+      nl: 'Betaald'
+    },
+    amount: {
+      fr: 'Montant (€)',
+      en: 'Amount (€)',
+      nl: 'Bedrag (€)'
+    },
+    date_paiement: {
+      fr: 'Date du paiement',
+      en: 'Date of payment',
+      nl: 'Datum van betaling'
+    },
+    interest: {
+      fr: 'Intérêts',
+      en: 'Interests',
+      nl: 'Intresten'
+    },
+    name: {
+      fr: 'Nom',
+      en: 'Name',
+      nl: 'Naam'
     }
   },
   errors: {
@@ -345,6 +380,144 @@ export default {
         en: 'Total general prejudice of relatives :',
         nl: 'Totaal algemeen prejudice van familie :'
       }
+    }
+  },
+  frais: {
+    frais_medicaux: {
+      fr: 'Frais médicaux',
+      en: 'Medical fees',
+      nl: 'Medische kosten'
+    },
+    indemnite_frais: {
+      fr: 'Indemnité/Frais',
+      en: 'Indemnity/Fees',
+      nl: 'Indemniteit/Kosten'
+    },
+    facture_number: {
+      fr: 'Numéro de facture',
+      en: 'Invoice number',
+      nl: 'Factuurnummer'
+    },
+    date_frais: {
+      fr: 'Date frais',
+      en: 'Date of fees',
+      nl: 'Datum van kosten'
+    },
+    total_frais_medicaux: {
+      fr: 'Total frais médicaux :',
+      en: 'Total medical fees :',
+      nl: 'Totaal medische kosten :'
+    },
+    administratif_value: {
+      fr: 'Administratif [€ 50 - € 150]',
+      en: 'Administrative [€ 50 - € 150]',
+      nl: 'Administratief [€ 50 - € 150]'
+    },
+    vestimentaire_value: {
+      fr: 'Vestimentaires [€ 50 - € 150]',
+      en: 'Clothing [€ 50 - € 150]',
+      nl: 'Kleding [€ 50 - € 150]'
+    },
+    deplacement_value: {
+      fr: 'Déplacement',
+      en: 'Travel',
+      nl: 'Reizen'
+    },
+    package_value: {
+      fr: 'Forfait',
+      en: 'Package',
+      nl: 'Pakket'
+    },
+    total_aides: {
+      fr: 'Total aides :',
+      en: 'Total aides :',
+      nl: 'Totaal aides :'
+    },
+    aides_non_qualifies: {
+      fr: 'Aide de tiers (non-qualifiés)',
+      en: 'Third party aid (non-qualified)',
+      nl: 'Tussenpartij hulp (niet-gekwalificeerd)'
+    },
+    number_hours: {
+      fr: "Nombre d'heures",
+      en: 'Number of hours',
+      nl: 'Aantal uren'
+    },
+    total: {
+      fr: 'Total général :',
+      en: 'Total general :',
+      nl: 'Totaal algemeen :'
+    }
+  },
+  info_general: {
+    name_victime: {
+      fr: 'Nom de la victime',
+      en: 'Name of the victim',
+      nl: 'Naam van de slachtoffers'
+    },
+    situation_conjugale: {
+      fr: 'Situation conjugale',
+      en: 'Marital status',
+      nl: 'Gezinsstatus'
+    },
+    statut_professionnel: {
+      fr: 'Statut professionnel',
+      en: 'Professional status',
+      nl: 'Beroepsstatuut'
+    },
+    configuration: {
+      fr: 'Configuration',
+      en: 'Configuration',
+      nl: 'Configuratie'
+    },
+    default_contribution: {
+      fr: 'Contribution par défaut',
+      en: 'Default contribution',
+      nl: 'Standaard bijdrage'
+    },
+    children: {
+      fr: 'Enfants',
+      en: 'Children',
+      nl: 'Kinderen'
+    },
+    add_child: {
+      fr: 'Ajouter un enfant',
+      en: 'Add a child',
+      nl: 'Een kind toevoegen'
+    },
+    calculate_interests: {
+      fr: 'Voulez-vous calculer les intérêts ?',
+      en: 'Do you want to calculate the interests ?',
+      nl: 'Wil je de intresten berekenen ?'
+    }
+  },
+  provisions: {
+    provision_date: {
+      fr: 'Date de provision',
+      en: 'Provision date',
+      nl: 'Datum van provision'
+    },
+    total: {
+      fr: 'Total des provisions :',
+      en: 'Total provisions :',
+      nl: 'Totaal van de provisions :'
+    }
+  },
+  recapitulatif: {
+    print: {
+      fr: 'Imprimer',
+      en: 'Print',
+      nl: 'Afdrukken'
+    },
+    total_interest: {
+      fr: 'Total intérêt global',
+      en: 'Total interest global',
+      nl: 'Totaal intrest global'
+    },
+    total: {
+      fr: 'Total global',
+      en: 'Total global',
+      nl: 'Totaal algemeen'
     }
   }
 }

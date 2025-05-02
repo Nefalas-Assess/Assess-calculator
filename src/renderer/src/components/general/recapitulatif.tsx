@@ -20,6 +20,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import DelayedContent from '@renderer/generic/delayContent'
 import { AppContext } from '@renderer/providers/AppProvider'
+import TextItem from '@renderer/generic/textItem'
 
 const Recapitulatif = () => {
   const { data } = useContext(AppContext)
@@ -54,7 +55,7 @@ const Recapitulatif = () => {
     <>
       <div id="top-menu">
         <button onClick={handlePrint} style={{ marginTop: '20px' }}>
-          Imprimer
+          <TextItem path="recapitulatif.print" />
         </button>
       </div>
       <div ref={contentRef} id="recap">
@@ -82,9 +83,9 @@ const Recapitulatif = () => {
             <TotalBoxInterest
               selector="total-interest"
               documentRef={contentRef}
-              label="Total intérêt global"
+              label="recapitulatif.total_interest"
             />
-            <TotalBox selector="total" documentRef={contentRef} label="Total global" />
+            <TotalBox selector="total" documentRef={contentRef} label="recapitulatif.total" />
           </div>
         </DelayedContent>
       </div>

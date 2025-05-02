@@ -20,7 +20,7 @@ const Frais = ({ editable }) => {
     <div id="content">
       <div id="main" ref={ref}>
         <FraisForm onSubmit={saveData} editable={editable} initialValues={data?.frais} />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="frais.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

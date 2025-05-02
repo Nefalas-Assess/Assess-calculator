@@ -1,5 +1,6 @@
 import constants from '@renderer/constants'
 import Field from '@renderer/generic/field'
+import TextItem from '@renderer/generic/textItem'
 import { isValid } from 'date-fns'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
@@ -75,7 +76,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="infogTable" style={{ width: 600 }}>
           <tbody>
             <tr>
-              <td>Nom de la victime</td>
+              <TextItem path="info_general.name_victime" tag="td" />
               <td>
                 <Field control={control} name="nom_victime" editable={editable}>
                   {(props) => <input style={{ width: 200 }} {...props} />}
@@ -83,7 +84,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Sexe</td>
+              <TextItem path="common.sexe" tag="td" />
               <td>
                 <Field
                   control={control}
@@ -95,7 +96,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Date de l'accident</td>
+              <TextItem path="common.date_accident" tag="td" />
               <td>
                 <Field control={control} type="date" name="date_accident" editable={editable}>
                   {(props) => <input {...props} />}
@@ -103,7 +104,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Date de naissance</td>
+              <TextItem path="common.date_naissance" tag="td" />
               <td>
                 <Field control={control} type="date" name="date_naissance" editable={editable}>
                   {(props) => <input {...props} />}
@@ -111,7 +112,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Date de décès</td>
+              <TextItem path="common.date_death" tag="td" />
               <td>
                 <Field control={control} type="date" name="date_death" editable={editable}>
                   {(props) => <input {...props} />}
@@ -119,7 +120,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Date de consolidation</td>
+              <TextItem path="common.date_consolidation" tag="td" />
               <td>
                 <Field control={control} type="date" name="date_consolidation" editable={editable}>
                   {(props) => <input {...props} />}
@@ -127,7 +128,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Situation conjugale</td>
+              <TextItem path="info_general.situation_conjugale" tag="td" />
               <td>
                 <Field
                   control={control}
@@ -139,7 +140,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               </td>
             </tr>
             <tr>
-              <td>Statut professionnel</td>
+              <TextItem path="info_general.statut_professionnel" tag="td" />
               <td>
                 <Field
                   control={control}
@@ -153,12 +154,15 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
             {editable && (
               <>
                 <tr>
-                  <td colSpan={2} style={{ fontWeight: 'bold' }}>
-                    Configuration
-                  </td>
+                  <TextItem
+                    path="info_general.configuration"
+                    colspan={2}
+                    style={{ fontWeight: 'bold' }}
+                    tag="td"
+                  />
                 </tr>
                 <tr>
-                  <td>Contribution par défaut</td>
+                  <TextItem path="info_general.default_contribution" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -184,13 +188,13 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         )}
       </div>
 
-      <h3>Enfants</h3>
+      <TextItem path="info_general.children" tag="h3" />
       <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Nom</th>
-            <th>Date de naissance</th>
-            {editable && <th>Action</th>}
+            <TextItem path="common.name" tag="th" />
+            <TextItem path="common.date_naissance" tag="th" />
+            {editable && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -214,7 +218,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               {editable && (
                 <td>
                   <button type="button" onClick={() => childrenFields?.remove(index)}>
-                    Supprimer
+                    <TextItem path="common.delete" />
                   </button>
                 </td>
               )}
@@ -224,7 +228,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
       </table>
       {editable && (
         <button type="button" onClick={addChild}>
-          Ajouter un enfant
+          <TextItem path="info_general.add_child" />
         </button>
       )}
 
@@ -232,7 +236,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
       {editable && (
         <div>
           <label>
-            <h3>Voulez-vous calculer les intérêts ? </h3>
+            <TextItem path="info_general.calculate_interests" tag="h3" />
             <Field
               control={control}
               type="select"

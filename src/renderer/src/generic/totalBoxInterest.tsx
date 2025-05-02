@@ -7,7 +7,7 @@ export const TotalBoxInterest = (props) => {
 
   if (data?.general_info?.calcul_interets !== 'true') return
 
-  return <TotalBox label="Total intérêts :" name="interest" {...props} />
+  return <TotalBox label="common.total_interets" name="interest" {...props} />
 }
 
 export default TotalBoxInterest

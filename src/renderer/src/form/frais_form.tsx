@@ -6,6 +6,7 @@ import TotalBox from '@renderer/generic/totalBox'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const { control, register, handleSubmit, watch } = useForm({
@@ -45,19 +46,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     return (parseFloat(formValues?.aides || 0) * 11.5).toFixed(2)
   }, [formValues])
 
-  const totalSumAll = useMemo(() => {
-    return (
-      parseFloat(totalSumFrais || 0) +
-      parseFloat(totalSumRest || 0) +
-      parseFloat(totalAides || 0)
-    ).toFixed(2)
-  }, [totalSumFrais, totalSumRest, totalAides])
-
-  const fraisFields = useFieldArray({
-    control,
-    name: 'frais' // Champs dynamiques pour les enfants
-  })
-
   const fraisValues = useWatch({
     control,
     name: 'frais'
@@ -91,34 +79,34 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   }, [formValues, fraisValues, submitForm, handleSubmit])
 
   const columns = [
-    { header: 'Indemnité/Frais', key: 'indemnite', type: 'text' },
-    { header: 'Numéro de facture', key: 'facture', type: 'text' },
-    { header: 'Payé', key: 'paid', type: 'select', options: constants.boolean },
+    { header: 'frais.indemnite_frais', key: 'indemnite', type: 'text' },
+    { header: 'frais.facture_number', key: 'facture', type: 'text' },
+    { header: 'common.paid', key: 'paid', type: 'select', options: constants.boolean },
     {
-      header: 'Montant (€)',
+      header: 'common.amount',
       key: 'amount',
       type: 'number',
       props: { step: '0.01' }
     },
     {
-      header: 'Date frais',
+      header: 'frais.date_frais',
       key: 'date_frais',
       type: 'start',
       className: 'int'
     },
     {
-      header: 'Date du paiement',
+      header: 'common.date_paiement',
       key: 'date_paiement',
       type: 'end',
       className: 'int'
     },
-    { header: 'Intérêts', key: 'interest', type: 'interest', className: 'int' }
+    { header: 'common.interest', key: 'interest', type: 'interest', className: 'int' }
   ]
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
       <DynamicTable
-        title="Frais (médicaux)"
+        title="frais.frais_medicaux"
         columns={columns}
         control={control}
         name="frais"
@@ -128,22 +116,22 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         calculateTotal={(e) => e.amount}
       />
       <div className="total-box">
-        <strong>Total frais médicaux : </strong> <Money value={totalSumFrais} />
+        <TextItem path="frais.total_frais_medicaux" tag="strong" /> <Money value={totalSumFrais} />
       </div>
 
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Indemnité/Frais</th>
+            <TextItem path="frais.indemnite_frais" tag="th" />
             <th></th>
             <th></th>
-            <th>Payé</th>
-            <th>Total (€)</th>
+            <TextItem path="common.paid" tag="th" />
+            <TextItem path="common.total" tag="th" />
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Administratif [€ 50 - € 150]</td>
+            <TextItem path="frais.administratif_value" tag="td" />
             <td></td>
             <td></td>
             <td>
@@ -167,7 +155,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Vestimentaires</td>
+            <TextItem path="frais.vestimentaire_value" tag="td" />
             <td></td>
             <td></td>
             <td>
@@ -191,7 +179,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Déplacement</td>
+            <TextItem path="frais.deplacement_value" tag="td" />
             <td>
               <Field control={control} type="number" name={`deplacement_value`} editable={editable}>
                 {(props) => (
@@ -224,7 +212,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Forfait</td>
+            <TextItem path="frais.package_value" tag="td" />
             <td></td>
             <td></td>
             <td>
@@ -250,15 +238,15 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       </table>
 
       <div className="total-box">
-        <strong>Total : </strong> <Money value={totalSumRest} />
+        <TextItem path="frais.total_aides" tag="strong" /> <Money value={totalSumRest} />
       </div>
 
-      <h1>Aide de tiers (non-qualifiés)</h1>
+      <TextItem path="frais.aides_non_qualifies" tag="h1" />
       <table id="hospTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Nombre d'heures</th>
-            <th>Total (€)</th>
+            <TextItem path="frais.number_hours" tag="th" />
+            <TextItem path="common.total" tag="th" />
           </tr>
         </thead>
         <tbody>
