@@ -9,6 +9,7 @@ import Field from '@renderer/generic/field'
 import ActionMenuButton from '@renderer/generic/actionButton'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -112,241 +113,53 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
+  const columns = [
+    { header: 'Début', key: 'start', type: 'start' },
+    { header: 'Fin', key: 'end', type: 'end' },
+    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'Salaire annuel net', key: 'amount', type: 'number' },
+    { header: '%', key: 'percentage', type: 'number', width: 50 },
+    { header: 'Total net', key: 'total', type: 'calculated' },
+    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+  ]
+
+  const customActions = (name) => ({
+    label: 'Importer dates',
+    actions: [
+      { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods', name) },
+      { label: 'Ménagère', action: () => copyDate('incapacite_temp_menagere.periods', name) },
+      {
+        label: `Economique ${name === 'net' ? 'brut' : 'net'}`,
+        action: () => copyDate(name === 'net' ? formValues?.brut : formValues?.net, name)
+      }
+    ]
+  })
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Incapacités temporaires économiques</h1>
-      <h3>Indemnisation nette</h3>
-      <table id="ipTable" style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Salaire annuel net</th>
-            <th>%</th>
-            <th>Total net</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {netFields?.fields.map((child, index) => {
-            const values = formValues?.net[index]
-            const days = getDays(values)
-            const total = getSalaryTotalAmount(values, days)
-            return (
-              <tr key={child.id}>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`net.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`net.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`net.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`net.${index}.percentage`}
-                    editable={editable}
-                  >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={total} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`net.${index}.date_paiement`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
-                </td>
+      <DynamicTable
+        title="Incapacités temporaires économiques"
+        subtitle="Indemnisation nette"
+        columns={columns}
+        control={control}
+        name="net"
+        formValues={formValues}
+        editable={editable}
+        calculateTotal={getSalaryTotalAmount}
+        customActions={customActions('net')}
+      />
 
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => netFields.remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <div className="buttons-row">
-          <button type="button" onClick={() => addNext(netFields?.append, 'net')}>
-            Ajouter durée
-          </button>
-          <ActionMenuButton
-            label="Importer dates"
-            actions={[
-              {
-                label: 'Personnel',
-                action: () => copyDate('incapacite_temp_personnel.periods', 'net')
-              },
-              {
-                label: 'Ménagère',
-                action: () => copyDate('incapacite_temp_menagere.periods', 'net')
-              },
-              {
-                label: 'Economique brut',
-                action: () => copyDate(formValues?.brut, 'net')
-              }
-            ]}
-          />
-        </div>
-      )}
-
-      <h3>Indemnisation brute</h3>
-      <table id="ipTable" style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Salaire annuel brut</th>
-            <th>%</th>
-            <th>Total brut</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {brutFields?.fields.map((child, index) => {
-            const values = formValues?.brut[index]
-            const days = getDays(values)
-            const total = getSalaryTotalAmount(values, days)
-            return (
-              <tr key={child.id}>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`brut.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`brut.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`brut.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`brut.${index}.percentage`}
-                    editable={editable}
-                  >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={total} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`brut.${index}.date_paiement`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => brutFields.remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <div className="buttons-row">
-          <button type="button" onClick={() => addNext(brutFields?.append, 'brut')}>
-            Ajouter durée
-          </button>
-          <ActionMenuButton
-            label="Importer dates"
-            actions={[
-              {
-                label: 'Personnel',
-                action: () => copyDate('incapacite_temp_personnel.periods', 'brut')
-              },
-              {
-                label: 'Ménagère',
-                action: () => copyDate('incapacite_temp_menagere.periods', 'brut')
-              },
-              {
-                label: 'Economique net',
-                action: () => copyDate(formValues?.net, 'brut')
-              }
-            ]}
-          />
-        </div>
-      )}
+      <DynamicTable
+        subtitle="Indemnisation brute"
+        columns={columns}
+        control={control}
+        name="brut"
+        formValues={formValues}
+        editable={editable}
+        calculateTotal={getSalaryTotalAmount}
+        customActions={customActions('brut')}
+      />
       <table style={{ maxWidth: 1200 }}>
         <tr>
           <td>Estimation/Réclamation</td>

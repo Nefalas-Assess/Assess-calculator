@@ -5,6 +5,17 @@ import Money from '@renderer/generic/money'
 import { AppContext } from '@renderer/providers/AppProvider'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
+import DynamicTable from '@renderer/generic/dynamicTable'
+
+const coefficients = [
+  { value: 1.15, label: '1/7' },
+  { value: 3.5, label: '2/7' },
+  { value: 7, label: '3/7' },
+  { value: 11.5, label: '4/7' },
+  { value: 17, label: '5/7' },
+  { value: 24, label: '6/7' },
+  { value: 32, label: '7/7' }
+]
 
 const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -76,103 +87,28 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
+  const columns = [
+    { header: 'Début', key: 'start', type: 'start' },
+    { header: 'Fin', key: 'end', type: 'end' },
+    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'Coefficient', key: 'coefficient', type: 'select', options: coefficients },
+    { header: 'Total (€)', key: 'total', type: 'calculated' },
+    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'Intérêts (€)', key: 'interest', type: 'interest', median: true, className: 'int' }
+  ]
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Pretium Doloris Temporaire</h1>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Coefficient</th>
-            <th>Total (€)</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            const values = formValues?.periods[index]
-            const days = getDays(values)
-            const total = getAmount(values, days)
-            return (
-              <tr key={child.id}>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 140 }}>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`periods.${index}.coefficient`}
-                    editable={editable}
-                  >
-                    {(props) => (
-                      <select {...props}>
-                        <option>Select</option>
-                        <option value="1.15">1/7</option>
-                        <option value="3.50">2/7</option>
-                        <option value="7">3/7</option>
-                        <option value="11.50">4/7</option>
-                        <option value="17">5/7</option>
-                        <option value="24">6/7</option>
-                        <option value="32">7/7</option>
-                      </select>
-                    )}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={total} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    name={`periods.${index}.date_paiement`}
-                    editable={editable}
-                    type="date"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest amount={total} start={getMedDate(values)} end={values?.date_paiement} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append, {})}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Pretium Doloris Temporaire"
+        columns={columns}
+        control={control}
+        name="periods"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ amount: 30 }}
+        calculateTotal={getAmount}
+      />
     </form>
   )
 }

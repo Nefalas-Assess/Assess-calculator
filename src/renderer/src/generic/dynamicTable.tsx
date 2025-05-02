@@ -4,34 +4,131 @@ import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import { getDays, getMedDate } from '@renderer/helpers/general'
+import ActionMenuButton from './actionButton'
+import Tooltip from './tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
+import { useCapitalization } from '@renderer/hooks/capitalization'
+import CoefficientInfo from './coefficientInfo'
 
 // Define column types
 type ColumnType = {
   header: string
   key: string
-  type?: 'date' | 'number' | 'select' | 'text' | 'calculated' | 'interest'
+  type?:
+    | 'date'
+    | 'number'
+    | 'select'
+    | 'text'
+    | 'calculated'
+    | 'interest'
+    | 'capitalization'
+    | 'reference'
   width?: number
   className?: string
   options?: { value: string | number; label: string }[]
-  render?: (value: any, rowData: any, index: number) => React.ReactNode
-  props?: Record<string, any>
+  render?: (
+    value: Record<string, unknown>,
+    rowData: Record<string, unknown>,
+    index: number
+  ) => React.ReactNode
+  props?: Record<string, unknown>
+  tooltipContent?: (values: Record<string, unknown>, days: number) => React.ReactNode
+  additionalContent?: (values: Record<string, unknown>) => React.ReactNode
 }
 
 type DynamicTableProps = {
-  title: string
+  title?: string
+  subtitle?: string
   columns: ColumnType[]
   control: Control<any>
   name: string
-  formValues: any
+  formValues: Record<string, unknown>
   editable?: boolean
   onAddRow?: (append: Function) => void
   addRowLabel?: string
   addRowDefaults?: Record<string, any>
-  calculateTotal?: (values: any, days: number) => string
+  calculateTotal?: (values: Record<string, unknown>, days: number) => string
+  customActions?: {
+    label: string
+    actions: { label: string; action: () => void }[]
+  }
+}
+
+const Capitalization = ({
+  values,
+  columns,
+  columnProps,
+  formValues
+}: {
+  values: Record<string, unknown>
+  columns: ColumnType[]
+  columnProps: Record<string, unknown>
+  formValues: Record<string, unknown>
+}): React.ReactNode => {
+  const constantsArray =
+    columnProps?.refArray || columns?.find((c) => c?.key === columnProps?.index)?.options
+
+  const end =
+    (columnProps?.duration
+      ? new Date(
+          new Date().setFullYear(
+            new Date().getFullYear() + parseInt(values?.[columnProps?.duration] || 0) - 1
+          )
+        )
+      : values?.[columnProps?.end]) || columnProps?.end
+
+  const start =
+    (columnProps?.duration ? new Date() : values?.[columnProps?.start]) || columnProps?.start
+
+  const index = constantsArray?.findIndex(
+    (e) => e?.value === parseFloat(values?.[columnProps?.index] || formValues?.[columnProps?.index])
+  )
+
+  const coef = useCapitalization({
+    start,
+    end,
+    ref: values?.[columnProps?.ref] || formValues?.[columnProps?.ref],
+    index,
+    asObject: true,
+    base: columnProps?.base,
+    noGender: columnProps?.noGender
+  })
+
+  const renderToolTip = useCallback(
+    (values) => {
+      return (
+        <div>
+          <math>
+            <mn>{values?.[columnProps?.amount] || values?.amount}</mn>
+            <mo>x</mo>
+            <CoefficientInfo
+              table={coef?.table}
+              index={coef?.index}
+              headers={constantsArray}
+              startIndex={1}
+            >
+              <mn>{coef?.value}</mn>
+            </CoefficientInfo>
+          </math>
+        </div>
+      )
+    },
+    [coef]
+  )
+
+  return (
+    <Money
+      value={(
+        parseFloat(values?.[columnProps?.amount] || values?.amount || 0) * (coef?.value || 0)
+      ).toFixed(2)}
+      tooltip={renderToolTip(values)}
+    />
+  )
 }
 
 const DynamicTable: React.FC<DynamicTableProps> = ({
   title,
+  subtitle,
   columns,
   control,
   name,
@@ -40,7 +137,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   onAddRow,
   addRowLabel = 'Ajouter une ligne',
   addRowDefaults = {},
-  calculateTotal
+  calculateTotal,
+  customActions
 }) => {
   const { fields, remove, append } = useFieldArray({
     control,
@@ -75,7 +173,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 
   return (
     <div>
-      <h1>{title}</h1>
+      {title && <h1>{title}</h1>}
+      {subtitle && <h3>{subtitle}</h3>}
       <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
@@ -112,19 +211,60 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   if (column.type === 'calculated' && column.key === 'total') {
                     return (
                       <td key={colIndex}>
-                        <Money value={total} />
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          <Money value={total} />
+                          {column?.tooltipContent && (
+                            <Tooltip tooltipContent={column?.tooltipContent(rowData, days)}>
+                              <FaRegQuestionCircle style={{ marginLeft: 5 }} />
+                            </Tooltip>
+                          )}
+                        </div>
                       </td>
                     )
                   }
 
                   if (column.type === 'interest') {
+                    let start = column.median && rowData ? getMedDate(rowData) : rowData[daysVar1]
+                    if (column.props?.start) {
+                      start = column.props?.start
+                    }
+
                     return (
                       <td key={colIndex} className={column.className}>
-                        <Interest
-                          amount={total}
-                          start={column.median ? getMedDate(rowData) : rowData[daysVar1]}
-                          end={rowData?.date_paiement}
+                        <Interest amount={total} start={start} end={rowData?.date_paiement} />
+                      </td>
+                    )
+                  }
+
+                  if (column?.type === 'capitalization') {
+                    return (
+                      <td key={colIndex}>
+                        <Capitalization
+                          values={rowData}
+                          columns={columns}
+                          columnProps={column.props}
+                          formValues={formValues}
                         />
+                      </td>
+                    )
+                  }
+
+                  if (column.type === 'reference') {
+                    return (
+                      <td key={colIndex}>
+                        <Field
+                          control={control}
+                          type={column.type}
+                          name={fieldName}
+                          editable={editable}
+                          options={column.options}
+                        ></Field>
                       </td>
                     )
                   }
@@ -165,9 +305,12 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                               </select>
                             )
                           }
-                          return <input {...props} {...column.props} />
+                          return (
+                            <input {...props} style={{ width: column.width }} {...column.props} />
+                          )
                         }}
                       </Field>
+                      {column?.additionalContent && column?.additionalContent(rowData)}
                     </td>
                   )
                 })}
@@ -185,9 +328,14 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         </tbody>
       </table>
       {editable && (
-        <button type="button" onClick={handleAddRow}>
-          {addRowLabel}
-        </button>
+        <div className="buttons-row">
+          <button type="button" onClick={handleAddRow}>
+            {addRowLabel}
+          </button>
+          {customActions && (
+            <ActionMenuButton label={customActions?.label} actions={customActions?.actions} />
+          )}
+        </div>
       )}
     </div>
   )

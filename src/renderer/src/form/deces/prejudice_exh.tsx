@@ -1,60 +1,12 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
-import Field from '@renderer/generic/field'
-import Tooltip from '@renderer/generic/tooltip'
-import { FaRegQuestionCircle } from 'react-icons/fa'
-
-const Total = ({ values = {}, days }) => {
-  // Calcul du montant total avec useMemo
-  const totalAmount = useMemo(() => {
-    return (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2)
-  }, [days, values])
-
-  // Fonction pour rendre le tooltip
-  const renderToolTipAmount = useCallback(() => {
-    return (
-      <>
-        <div>
-          <math>
-            <mn>{days}</mn>
-            <mo>x</mo>
-            <mn>{values?.amount}</mn>
-            <mo>=</mo>
-            <mn>{totalAmount}</mn>
-          </math>
-        </div>
-      </>
-    )
-  }, [totalAmount, values, days])
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Money value={totalAmount} />
-      <Tooltip tooltipContent={renderToolTipAmount()}>
-        <FaRegQuestionCircle style={{ marginLeft: 5 }} />
-      </Tooltip>
-      <div className="hide">{totalAmount}</div>
-    </div>
-  )
-}
+import { useForm, useWatch } from 'react-hook-form'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
-
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
-  })
-
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'periods' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -92,94 +44,51 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, periodsValues, submitForm, handleSubmit])
 
-  const addNext = useCallback(
-    (append, initial = {}) => {
-      const lastRowEnd = formValues?.periods?.[formValues?.periods?.length - 1]?.end
+  const getTotalAmount = useCallback((item, days) => {
+    const { amount = 0 } = item
 
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
-    },
-    [formValues]
-  )
+    return ((parseInt(days) || 0) * (parseFloat(amount) || 0)).toFixed(2)
+  })
+
+  const renderToolTipAmount = useCallback((rowData, days) => {
+    return (
+      <>
+        <div>
+          <math>
+            <mn>{days}</mn>
+            <mo>x</mo>
+            <mn>{rowData?.amount}</mn>
+          </math>
+        </div>
+      </>
+    )
+  }, [])
+
+  const columns = [
+    { header: 'Début', key: 'start', type: 'date' },
+    { header: 'Fin', key: 'end', type: 'date' },
+    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'Indemnité journalière (€)', key: 'amount', type: 'number', width: 100 },
+    {
+      header: 'Total (€)',
+      key: 'total',
+      type: 'calculated',
+      tooltipContent: (rowData, days) => renderToolTipAmount(rowData, days)
+    }
+  ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Préjudice ex haerede</h1>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Début</th>
-            <th>Fin</th>
-            <th>Jours</th>
-            <th>Indemnité journalière (€)</th>
-            <th>Total (€)</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            const values = formValues?.periods[index]
-            const days = getDays(values)
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.start`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`periods.${index}.end`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td style={{ width: 50 }}>{days}</td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`periods.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input style={{ width: 50 }} {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Total values={values} days={days} />
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append, { amount: 75 })}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Préjudice ex haerede"
+        columns={columns}
+        control={control}
+        name="periods"
+        formValues={formValues}
+        editable={editable}
+        addRowDefaults={{ amount: 75 }}
+        calculateTotal={getTotalAmount}
+      />
     </form>
   )
 }
