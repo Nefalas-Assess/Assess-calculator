@@ -16,6 +16,7 @@ import womenTable from '@renderer/data/schryvers/2024/data_cap_f_mois'
 import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
+import DynamicTable from '@renderer/generic/dynamicTable'
 
 const TotalRevenue = ({ values, data }) => {
   const revenue = parseFloat(values?.revenue_total)
@@ -207,11 +208,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   })
 
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'members' // Champs dynamiques pour les enfants
-  })
-
   const formValues = watch()
 
   // Utiliser useWatch pour surveiller les FieldArrays
@@ -247,81 +243,23 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, membersValues, submitForm, handleSubmit])
 
-  const addNext = useCallback(
-    (append, initial = {}) => {
-      const lastRowEnd = formValues?.members?.[formValues?.members?.length - 1]?.end
-
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
-    },
-    [formValues]
-  )
+  const columns = [
+    { header: 'Nom du membre de la famille', key: 'name', type: 'text' },
+    { header: 'Lien de parenté', key: 'link', type: 'select', options: constants.family_link },
+    { header: 'Indemnité (€)', key: 'amount', type: 'number' }
+  ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} ref={ref}>
-      <h1>Préjudices des proches</h1>
-      <h3>Dommage moral des proches</h3>
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <th>Nom du membre de la famille</th>
-            <th>Lien de parenté</th>
-            <th>Indemnité (€)</th>
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {fields.map((child, index) => {
-            return (
-              <tr key={child.id}>
-                <td>
-                  <Field control={control} name={`members.${index}.name`} editable={editable}>
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="select"
-                    options={constants.family_link}
-                    name={`members.${index}.link`}
-                    editable={editable}
-                  ></Field>
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name={`members.${index}.amount`}
-                    editable={editable}
-                  >
-                    {(props) => <input style={{ width: 100 }} {...props} />}
-                  </Field>
-                </td>
-                {editable && (
-                  <td>
-                    <button type="button" onClick={() => remove(index)}>
-                      Supprimer
-                    </button>
-                  </td>
-                )}
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      {editable && (
-        <button type="button" onClick={() => addNext(append({ amount: 30 }))}>
-          Ajouter une ligne
-        </button>
-      )}
+      <DynamicTable
+        title="Préjudices des proches"
+        subtitle="Dommage moral des proches"
+        columns={columns}
+        control={control}
+        name="members"
+        formValues={formValues}
+        editable={editable}
+      />
       <h3>Perte de la contribution du défunt</h3>
       <table id="IPVariables">
         <tbody>

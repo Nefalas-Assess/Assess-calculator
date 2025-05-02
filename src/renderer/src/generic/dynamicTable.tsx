@@ -295,7 +295,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                         {(props) => {
                           if (typeInput === 'select') {
                             return (
-                              <select {...props} {...column.props}>
+                              <select
+                                {...props}
+                                style={{ width: column.width || '100%' }}
+                                {...column.props}
+                              >
                                 <option>Select</option>
                                 {column.options?.map((option) => (
                                   <option key={option.value} value={option.value}>
