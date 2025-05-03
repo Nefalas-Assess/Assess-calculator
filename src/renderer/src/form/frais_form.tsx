@@ -238,7 +238,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       </table>
 
       <div className="total-box">
-        <TextItem path="frais.total_aides" tag="strong" /> <Money value={totalSumRest} />
+        <TextItem path="frais.total_frais" tag="strong" /> <Money value={totalSumRest} />
       </div>
 
       <TextItem path="frais.aides_non_qualifies" tag="h1" />

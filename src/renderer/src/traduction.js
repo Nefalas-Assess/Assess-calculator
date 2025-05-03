@@ -23,7 +23,7 @@ export default {
       nl: 'Recente bestanden'
     },
     maj: {
-      fr: 'Recherche de mise à jour',
+      fr: 'Recherche de mises à jour',
       en: 'Checking for updates',
       nl: 'Zoeken naar updates'
     },
@@ -45,7 +45,7 @@ export default {
   },
   nav: {
     missing_data: {
-      fr: 'Certaines valeurs sont manquantes pour accéder a cette partie:',
+      fr: 'Certaines valeurs sont manquantes pour accéder à cette partie:',
       en: 'Some values are missing to access this part:',
       nl: 'Sommige waarden ontbreken om deze sectie te bereiken:'
     },
@@ -56,27 +56,27 @@ export default {
     },
     frais: {
       fr: 'Frais',
-      en: 'Fees',
+      en: 'Costs',
       nl: 'Kosten'
     },
     incapacite_temp: {
       fr: 'Incapacité temporaire',
-      en: 'Temporary incapacity',
-      nl: 'Tijdelijke incapaciteit',
+      en: 'Temporary disability',
+      nl: 'Tijdelijke ongeschiktheid',
       personnel: {
         fr: 'Personnelles',
-        en: 'Staff',
-        nl: 'Personeel'
+        en: 'Personal',
+        nl: 'Persoonlijke'
       },
       menagère: {
         fr: 'Menagères',
-        en: 'Nanny',
-        nl: 'Babysitter'
+        en: 'Household',
+        nl: 'Huishoudelijke'
       },
       economique: {
         fr: 'Economiques',
         en: 'Economic',
-        nl: 'Economisch'
+        nl: 'Economische'
       },
       effa: {
         fr: 'Efforts Accrus',
@@ -86,7 +86,7 @@ export default {
       hospitalisation: {
         fr: 'Hospitalisation',
         en: 'Hospitalization',
-        nl: 'Ziekenhuisopname'
+        nl: 'Hospitalisatie'
       },
       pretium: {
         fr: 'Pretium Doloris',
@@ -96,46 +96,46 @@ export default {
     },
     incapacite_perma: {
       fr: 'Incapacités Permanentes',
-      en: 'Permanent incapacities',
-      nl: 'Permanenten incapaciteiten',
+      en: 'Permanent Disabilities',
+      nl: 'Blijvende Ongeschiktheden',
       forfait: {
         fr: 'Forfaitaires',
-        en: 'Forfaitaires',
-        nl: 'Forfaitaires'
+        en: 'Lump sums',
+        nl: 'Forfaitair'
       },
       personnel_cap: {
         fr: 'Personnelles capitalisées',
-        en: 'Staff capitalised',
-        nl: 'Personeel gecapitaliseerd'
+        en: 'Personal capitalised',
+        nl: 'Persoonlijke gekapitaliseerde'
       },
       menagère_cap: {
         fr: 'Ménagères capitalisées',
-        en: 'Nanny capitalised',
-        nl: 'Babysitter gecapitaliseerd'
+        en: 'Household capitalised',
+        nl: 'Huishoudelijke gekapitaliseerde'
       },
       economique_cap: {
         fr: 'Économiques capitalisées',
         en: 'Economic capitalised',
-        nl: 'Economisch gecapitaliseerd'
+        nl: 'Economische gekapitaliseerde'
       },
       frais_futurs: {
         fr: 'Frais futurs',
-        en: 'Future fees',
+        en: 'Future costs',
         nl: 'Toekomstige kosten'
       },
       préjudices_part: {
         fr: 'Préjudices Particuliers',
-        en: 'Personal injuries',
-        nl: 'Persoonlijke letsels'
+        en: 'Specific damage',
+        nl: 'Specifieke schade'
       }
     },
     deces: {
       fr: 'Décès',
-      en: 'Death',
-      nl: 'Dood',
+      en: 'Passing',
+      nl: 'Overlijden',
       frais: {
         fr: 'Frais funéraires',
-        en: 'Funeral fees',
+        en: 'Funeral costs',
         nl: 'Begrafenis kosten'
       },
       prejudice_exh: {
@@ -145,14 +145,14 @@ export default {
       },
       prejudice_proche: {
         fr: 'Préjudice des proches',
-        en: 'Prejudice of relatives',
-        nl: 'Prejudice van familie'
+        en: 'Damage suffered by the relatives',
+        nl: 'Schade geleden door de naastbestaanden'
       }
     },
     provisions: {
       fr: 'Provisions',
       en: 'Provisions',
-      nl: 'Provisions'
+      nl: 'Provisies'
     },
     recap: {
       fr: 'Récapitulatif',
@@ -172,14 +172,14 @@ export default {
       nl: 'Consolidatiedatum'
     },
     date_death: {
-      fr: 'Date de décès',
+      fr: 'Date du décès',
       en: 'Date of death',
-      nl: 'Datum van overlijden'
+      nl: 'Overlijdensdatum'
     },
     date_accident: {
       fr: "Date de l'accident",
       en: 'Date of accident',
-      nl: 'Datum van het ongeval'
+      nl: 'Ongevalsdatum'
     },
     sexe: {
       fr: 'Sexe',
@@ -209,7 +209,7 @@ export default {
     taux_interet: {
       fr: "Taux d'intérêt",
       en: 'Interest rate',
-      nl: 'Rente'
+      nl: 'Rentevoet'
     },
     taux_interet_capitalisation: {
       fr: "Taux d'intérêt de la capitalisation",
@@ -219,7 +219,7 @@ export default {
     add_row: {
       fr: 'Ajouter une ligne',
       en: 'Add a row',
-      nl: 'Een rij toevoegen'
+      nl: 'Rij toevoegen'
     },
     delete: {
       fr: 'Supprimer',
@@ -237,14 +237,14 @@ export default {
       nl: 'Indemniteit (€)'
     },
     start: {
-      fr: 'Début',
-      en: 'Start',
-      nl: 'Start'
+      fr: 'Date de début',
+      en: 'Start date',
+      nl: 'Startdatum'
     },
     end: {
-      fr: 'Fin',
-      en: 'End',
-      nl: 'Einde'
+      fr: 'Date de fin',
+      en: 'End date',
+      nl: 'Einddatum'
     },
     days: {
       fr: 'Jours',
@@ -259,12 +259,12 @@ export default {
     contribution: {
       fr: 'Contribution (%)',
       en: 'Contribution (%)',
-      nl: 'Contribution (%)'
+      nl: 'Bijdrage (%)'
     },
     total_interets: {
       fr: 'Total intérêts :',
       en: 'Total interests :',
-      nl: 'Totaal intresten :'
+      nl: 'Totaal interesten :'
     },
     paid: {
       fr: 'Payé',
@@ -304,7 +304,7 @@ export default {
       total: {
         fr: 'Total général :',
         en: 'Total general :',
-        nl: 'Totaal algemeen :'
+        nl: 'Algemeen totaal :'
       },
       montant_ant: {
         fr: 'Montant anticipé',
@@ -326,14 +326,14 @@ export default {
       total: {
         fr: 'Total général :',
         en: 'Total general :',
-        nl: 'Totaal algemeen :'
+        nl: 'Algemeen totaal :'
       }
     },
     prejudice_proche: {
       subtitle: {
         fr: 'Dommage moral des proches',
         en: 'Moral damage of relatives',
-        nl: 'Moral damage of relatives'
+        nl: 'Morele schade van naastbestaanden'
       },
       perte_contribution: {
         fr: 'Perte de la contribution du défunt',
@@ -343,7 +343,7 @@ export default {
       lien_parente: {
         fr: 'Lien de parenté',
         en: 'Family link',
-        nl: 'Familielink'
+        nl: 'Verwantschap'
       },
       name_membre: {
         fr: 'Nom du membre de la famille',
@@ -353,12 +353,12 @@ export default {
       perte_revenu: {
         fr: 'Perte de revenu',
         en: 'Loss of income',
-        nl: 'Verlies van inkomen'
+        nl: 'Inkomstenverlies'
       },
       revenu_defunt: {
         fr: 'Revenu du défunt (€)',
         en: 'Revenue of the deceased (€)',
-        nl: 'Inkomen van de overleden (€)'
+        nl: 'Inkomen van de overledene (€)'
       },
       revenu_total_menage: {
         fr: 'Revenu total du ménage (€)',
@@ -373,12 +373,12 @@ export default {
       contribution_menage: {
         fr: 'Contribution ménagères du défunt',
         en: 'Contribution of the deceased',
-        nl: 'Contribution van de overleden'
+        nl: 'Bijdrage van de overledene'
       },
       total: {
         fr: 'Total général préjudice des proches :',
         en: 'Total general prejudice of relatives :',
-        nl: 'Totaal algemeen prejudice van familie :'
+        nl: 'Algemeen totaal schade van het gezin :'
       }
     }
   },
@@ -391,7 +391,7 @@ export default {
     indemnite_frais: {
       fr: 'Indemnité/Frais',
       en: 'Indemnity/Fees',
-      nl: 'Indemniteit/Kosten'
+      nl: 'Vergoeding/Kosten'
     },
     facture_number: {
       fr: 'Numéro de facture',
@@ -400,7 +400,7 @@ export default {
     },
     date_frais: {
       fr: 'Date frais',
-      en: 'Date of fees',
+      en: 'Date of costs',
       nl: 'Datum van kosten'
     },
     total_frais_medicaux: {
@@ -421,22 +421,22 @@ export default {
     deplacement_value: {
       fr: 'Déplacement',
       en: 'Travel',
-      nl: 'Reizen'
+      nl: 'Verplaatsing'
     },
     package_value: {
       fr: 'Forfait',
-      en: 'Package',
-      nl: 'Pakket'
+      en: 'Lump sum',
+      nl: 'Forfaitair bedrag'
     },
-    total_aides: {
-      fr: 'Total aides :',
-      en: 'Total aides :',
-      nl: 'Totaal aides :'
+    total_frais: {
+      fr: 'Total des frais :',
+      en: 'Total of costs :',
+      nl: 'Totale kosten :'
     },
     aides_non_qualifies: {
       fr: 'Aide de tiers (non-qualifiés)',
       en: 'Third party aid (non-qualified)',
-      nl: 'Tussenpartij hulp (niet-gekwalificeerd)'
+      nl: 'Hulp van derden (niet-gekwalificeerd)'
     },
     number_hours: {
       fr: "Nombre d'heures",
@@ -446,28 +446,28 @@ export default {
     total: {
       fr: 'Total général :',
       en: 'Total general :',
-      nl: 'Totaal algemeen :'
+      nl: 'Algemeen totaal :'
     }
   },
   info_general: {
     name_victime: {
       fr: 'Nom de la victime',
       en: 'Name of the victim',
-      nl: 'Naam van de slachtoffers'
+      nl: 'Naam van het slachtoffer'
     },
     situation_conjugale: {
       fr: 'Situation conjugale',
       en: 'Marital status',
-      nl: 'Gezinsstatus'
+      nl: 'Gezinssituatie'
     },
     statut_professionnel: {
       fr: 'Statut professionnel',
       en: 'Professional status',
-      nl: 'Beroepsstatuut'
+      nl: 'Beroepsstatus'
     },
     configuration: {
       fr: 'Configuration',
-      en: 'Configuration',
+      en: 'Setup',
       nl: 'Configuratie'
     },
     default_contribution: {
@@ -483,41 +483,41 @@ export default {
     add_child: {
       fr: 'Ajouter un enfant',
       en: 'Add a child',
-      nl: 'Een kind toevoegen'
+      nl: 'Kind toevoegen'
     },
     calculate_interests: {
       fr: 'Voulez-vous calculer les intérêts ?',
       en: 'Do you want to calculate the interests ?',
-      nl: 'Wil je de intresten berekenen ?'
+      nl: 'Wilt u de intresten berekenen ?'
     }
   },
   provisions: {
     provision_date: {
       fr: 'Date de provision',
       en: 'Provision date',
-      nl: 'Datum van provision'
+      nl: 'Datum van provisie'
     },
     total: {
       fr: 'Total des provisions :',
       en: 'Total provisions :',
-      nl: 'Totaal van de provisions :'
+      nl: 'Totaal van de provisies :'
     }
   },
   recapitulatif: {
     print: {
       fr: 'Imprimer',
       en: 'Print',
-      nl: 'Afdrukken'
+      nl: 'Print'
     },
     total_interest: {
       fr: 'Total intérêt global',
       en: 'Total interest global',
-      nl: 'Totaal intrest global'
+      nl: 'Global intrestentotaal'
     },
     total: {
       fr: 'Total global',
       en: 'Total global',
-      nl: 'Totaal algemeen'
+      nl: 'Algemeen totaal'
     }
   }
 }
