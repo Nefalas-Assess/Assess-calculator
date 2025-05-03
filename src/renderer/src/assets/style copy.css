@@ -1,0 +1,415 @@
+/* Styles pour le menu */
+
+.app {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.layout-menu {
+  width: 220px;
+  min-width: 210px;
+  border-right: 2px solid black;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .menu{
+    overflow: auto;
+    height: 100%;
+  }
+
+
+
+  a {
+    display: block;
+    text-align: left;
+    font-size: 13px;
+    margin: 10px;
+    padding: 5px;
+    background-color: #242424;
+    color: white;
+    border-radius: 5px;
+    &:hover{
+      background-color: gray;
+    }
+
+    &.active {
+      color: #8bbdff;
+    }
+  }
+}
+
+.menu-bottom {
+  font-size: 9px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  border-top: 1px solid black;
+  padding-top: 10px;
+  margin-top: auto;
+}
+
+a {
+  font-weight: 500;
+  color: #8bbdff;
+  text-decoration: inherit;
+}
+a:hover {
+  border-color: #8bbdff;
+  color: #8bbdff;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  color: white;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  margin-bottom: 10px
+}
+button:hover {
+  border-color: #8bbdff;
+  color: #8bbdff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+
+#menu button:hover {
+  background-color: gray;
+}
+
+/* Contenu */
+#content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Commencer en haut de la page */
+  flex: 1;
+}
+
+@media print {
+  @page {
+    size: auto; /* Laisse le navigateur décider de la taille */
+    margin: 0; /* Réduit les marges au minimum */
+  }
+
+  body * {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+    color: #000;
+  }
+
+  .print-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .print-header img {
+    height: 50px; /* Définit la taille du logo */
+  }
+
+  .print-footer {
+    position: fixed;
+    bottom: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    height: 50px;
+    border-top: 1px solid #ccc;
+  }
+
+  .print-content {
+    margin: 120px 20px 80px;
+   
+  }
+
+  #content, #content * {
+    visibility: visible; /* Montre uniquement la div ciblée */
+  }
+
+  #content {
+    top: 0;
+    left: 0;
+    width: 98vw; /* Adapte la largeur au viewport */
+    height: 100vh; /* Adapte la hauteur au viewport */
+    transform-origin: top left;
+  }
+  
+  table, form, div {
+    page-break-inside: auto;
+  }
+}
+
+
+#top-menu {
+  top: 0;
+  background-color: #242424;
+  padding: 10px;
+  /* border-bottom: 2px solid black;*/
+  display: flex;
+  justify-content: space-between;
+  left: 0; /* Fixe le top-menu à gauche de l'écran */
+  width: 100%; /* Prendre toute la largeur de l'écran */
+  z-index: 10; /* Placer le top-menu au-dessus des autres éléments */
+  justify-content: right; /* Centre les éléments horizontalement */
+}
+
+#top-menu button,
+#loadFileInput {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  /* background-color: #242424; */
+}
+
+#top-menu button:hover {
+  background-color: gray;
+}
+
+h1 {
+  margin-top: 10;
+  font-size: 24px;
+  text-align: left;
+  margin-bottom: 10px;
+  font-weight: 700;
+  color: #8bbdff;
+}
+
+h3 {
+  font-weight: bold;
+  font-style: italic;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  margin-bottom: 20px
+}
+
+table, th, td {
+  border: 2px solid black;
+  /* max-width: 1200px; */
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  max-width: 200px;
+}
+
+/* Style des boutons */
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.total-box {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #242424;
+  border: 2px solid black;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+  max-width: 1200px;
+}
+
+.home {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .create-file {
+    margin-top: 10px;
+  }
+  button {
+    margin: 0;
+  }
+}
+
+.separator {
+  width: 200px;
+  border-top: 1px solid black;
+  margin: 20px;
+}
+
+.total-td {
+  background-color: #2b3b4f;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 10px;
+}
+
+.sub-nav {
+  padding: 0 10px;
+  color: white;
+  .sub-nav-title {
+    cursor: pointer;
+    user-select: none; 
+    font-size: 13px;
+    padding: 5px;
+    margin: 10px 0;
+    background-color: #242424;
+    color: white;
+    border-radius: 5px;
+    &:hover{
+      background-color: gray;
+    }
+
+    &.active {
+      color: #8bbdff;
+    }
+  } 
+}
+
+.sub-nav-title {
+  font-weight: 500;
+  color: #8bbdff;
+  text-decoration: inherit;
+}
+.sub-nav-title:hover {
+  border-color: #8bbdff;
+  color: #8bbdff;
+}
+
+.recent-files-list{
+  color: white;
+  overflow: auto;
+  .recent-file-item {
+    background-color: #242424;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 0 5px;
+    font-size: 14px;
+    &:hover{
+      background-color: gray;
+    }
+  }
+}
+
+.custom-size{
+  min-width: 400px;
+}
+
+#modifier {
+  color:red
+}
+
+#taux_it_Table{
+  max-width: 300px;
+}
+
+#IPVariables{
+  max-width: 1200px;
+}
+
+.logo{
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.hide{
+  display: none;
+}
+
+/* ToastContext.module.css */
+.toast {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%); /* Start outside of view */
+  animation: slide-in 0.5s forwards, slide-out 0.5s forwards 1.5s;
+}
+
+/* Animation d'entrée */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de sortie */
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+
+/* Tooltip container */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip box */
+.tooltip-box {
+  position: absolute;
+  top: 0%; /* Aligne le tooltip au niveau de l'élément */
+  transform: translateX(-50%); /* Ajuste pour centrer parfaitement */
+  margin-top: 8px;
+  background-color: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  font-size: 14px;
+  opacity: 0; /* Animation de début */
+}
+
+.tooltip-trigger{
+  display: flex;
+  align-items: center;
+  cursor: help;
+}
+
+.border-item{
+  border: 1px solid black;
+  border-radius: 5px;
+}

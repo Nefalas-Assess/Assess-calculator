@@ -60,9 +60,9 @@ export default {
       nl: 'Kosten'
     },
     incapacite_temp: {
-      fr: 'Incapacité temporaire',
-      en: 'Temporary disability',
-      nl: 'Tijdelijke ongeschiktheid',
+      fr: 'Incapacités Temporaires',
+      en: 'Temporary Disabilities',
+      nl: 'Tijdelijke Ongeschiktheden',
       personnel: {
         fr: 'Personnelles',
         en: 'Personal',
