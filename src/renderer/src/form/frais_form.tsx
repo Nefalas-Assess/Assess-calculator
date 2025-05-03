@@ -112,7 +112,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         name="frais"
         formValues={formValues}
         editable={editable}
-        addRowDefaults={{ coefficient: 5, amount: 30 }}
+        addRowDefaults={{ coefficient: 5,}}
         calculateTotal={(e) => e.amount}
       />
       <div className="total-box">

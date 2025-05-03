@@ -429,8 +429,8 @@ export default {
       nl: 'Forfaitair bedrag'
     },
     total_frais: {
-      fr: 'Total des frais :',
-      en: 'Total of costs :',
+      fr: 'Total frais :',
+      en: 'Total costs :',
       nl: 'Totale kosten :'
     },
     aides_non_qualifies: {
@@ -500,7 +500,7 @@ export default {
     total: {
       fr: 'Total des provisions :',
       en: 'Total provisions :',
-      nl: 'Totaal van de provisies :'
+      nl: 'Totaal provisies :'
     }
   },
   recapitulatif: {
