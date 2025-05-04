@@ -141,7 +141,6 @@ button:focus-visible {
   table {
     margin-top: 20px !important; /* Espacement depuis le haut */
     margin-bottom: 30px;
-    page-break-inside: avoid;
     padding-top: 100PX;
   }
 
