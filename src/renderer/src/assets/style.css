@@ -124,8 +124,7 @@ button:focus-visible {
     left: 0;
     width: 100%;
     text-align: center;
-    height: 50px;
-    border-top: 1px solid #ccc;
+    height: 20px;
   }
 
   #content {
