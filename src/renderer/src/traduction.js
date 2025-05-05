@@ -345,6 +345,38 @@ export default {
       fr: 'Coefficient',
       en: 'Coefficient',
       nl: 'Coefficient'
+    },
+    salary_yearly_net: {
+      fr: 'Salaire annuel net (€)',
+      en: 'Yearly net salary (€)',
+      nl: 'Netto jaarlijks salaris (€)'
+    },
+    import_date: {
+      fr: 'Importer dates',
+      en: 'Import dates',
+      nl: 'Dates importeren'
+    },
+    personnel: {
+      fr: 'Personnel',
+      en: 'Personal',
+      nl: 'Persoonlijke'
+    },
+    menagère: {
+      fr: 'Ménagère',
+      en: 'Household',
+      nl: 'Huishoudelijke'
+    },
+    economique: {
+      net: {
+        fr: 'Économique net',
+        en: 'Economic net',
+        nl: 'Economische netto'
+      },
+      brut: {
+        fr: 'Économique brut',
+        en: 'Economic brut',
+        nl: 'Economische brutto'
+      }
     }
   },
   errors: {
@@ -352,6 +384,28 @@ export default {
       fr: 'Date de naissance manquante',
       en: 'Missing date of birth',
       nl: 'Geboortedatum ontbrekend'
+    }
+  },
+  tooltip: {
+    number_days_before_25: {
+      fr: "Nombre de jours avant l'age de 25",
+      en: 'Number of days before the age of 25',
+      nl: 'Aantal dagen voor de leeftijd van 25'
+    },
+    born_at: {
+      fr: 'né le',
+      en: 'born at',
+      nl: 'geboren op'
+    },
+    interest_calculated_for_period: {
+      fr: 'Intérêt calculé pour la période',
+      en: 'Interest calculated for the period',
+      nl: 'Intrest berekend voor de periode'
+    },
+    for: {
+      fr: 'Pour',
+      en: 'For',
+      nl: 'Voor'
     }
   },
   deces: {
@@ -587,11 +641,6 @@ export default {
         en: 'Yearly gross salary (€)',
         nl: 'Bruto jaarlijks salaris (€)'
       },
-      salary_yearly_net: {
-        fr: 'Salaire annuel net (€)',
-        en: 'Yearly net salary (€)',
-        nl: 'Netto jaarlijks salaris (€)'
-      },
       total: {
         fr: 'Total général :',
         en: 'Total general :',
@@ -716,6 +765,95 @@ export default {
         fr: 'Incapacités permanentes personnelles',
         en: 'Permanent personal disabilities',
         nl: 'Permanente persoonlijke ongeschiktheden'
+      }
+    }
+  },
+  incapacite_temp: {
+    economique: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      estimate: {
+        fr: 'Estimation/Réclamation',
+        en: 'Estimate/Claim',
+        nl: 'Schatting/Claim'
+      },
+      title: {
+        fr: 'Incapacités temporaires économiques',
+        en: 'Temporary economic disabilities',
+        nl: 'Tijdelijke economische ongeschiktheden'
+      },
+      indemnite_nette: {
+        fr: 'Indemnisation nette',
+        en: 'Net indemnity',
+        nl: 'Netto vergoeding'
+      },
+      indemnite_brute: {
+        fr: 'Indemnisation brute',
+        en: 'Gross indemnity',
+        nl: 'Bruto vergoeding'
+      }
+    },
+    effa: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Efforts accrus',
+        en: 'Efforts accrued',
+        nl: 'Efforts gekapitaliseerd'
+      }
+    },
+    hospitalisation: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Hospitalisation',
+        en: 'Hospitalisation',
+        nl: 'Ziekenhuisopname'
+      }
+    },
+    menagere: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Incapacités temporaires menagères',
+        en: 'Temporary household disabilities',
+        nl: 'Tijdelijke huishoudelijke ongeschiktheden'
+      }
+    },
+    personnel: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Incapacités temporaires personnelles',
+        en: 'Temporary personal disabilities',
+        nl: 'Tijdelijke persoonlijke ongeschiktheden'
+      }
+    },
+    pretium: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Pretium Doloris Temporaire',
+        en: 'Temporary Doloris Premium',
+        nl: 'Tijdelijke Doloris premie'
       }
     }
   }

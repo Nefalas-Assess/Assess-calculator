@@ -11,6 +11,7 @@ import Tooltip from './tooltip'
 import { useCallback, useMemo, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { FaArrowRightLong } from 'react-icons/fa6'
+import TextItem from './textItem'
 
 const getDaysPerYearInRange = (startDate, endDate) => {
   const result = []
@@ -93,7 +94,7 @@ const Interest = ({ amount, start, end }) => {
     return (
       <div>
         <div>
-          Intéret calculé pour la période:
+          <TextItem path="tooltip.interest_calculated_for_period" tag="span" />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
             {start && isValid(new Date(start)) && format(start, 'dd/MM/yyyy')} <FaArrowRightLong />{' '}
             {end && isValid(new Date(end)) && format(end, 'dd/MM/yyyy')}
@@ -101,7 +102,9 @@ const Interest = ({ amount, start, end }) => {
         </div>
         {info?.map((it, key) => (
           <div key={key}>
-            <div>Pour {it?.year}:</div>
+            <div>
+              <TextItem path="tooltip.for" tag="span" /> {it?.year}:
+            </div>
             <div>
               <math>
                 <mn>{it?.amount}</mn>

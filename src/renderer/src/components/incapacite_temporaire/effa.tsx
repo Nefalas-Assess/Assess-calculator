@@ -24,7 +24,7 @@ const EFFA = ({ editable }) => {
           editable={editable}
           initialValues={data?.efforts_accrus}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="incapacite_temp.effa.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

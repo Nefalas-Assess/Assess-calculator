@@ -24,7 +24,7 @@ const PretiumDoloris = ({ editable }) => {
           editable={editable}
           initialValues={data?.pretium_doloris}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="incapacite_temp.pretium.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

@@ -1,25 +1,13 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
-import Field from '@renderer/generic/field'
 import DynamicTable from '@renderer/generic/dynamicTable'
 
 const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
-
   const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
-  })
-
-  const { fields, remove, append } = useFieldArray({
-    control,
-    name: 'periods' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -61,37 +49,20 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
     return (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2)
   }, [])
 
-  const addNext = useCallback(
-    (append, initial = {}) => {
-      const lastRowEnd = formValues?.periods?.[formValues?.periods?.length - 1]?.end
-
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
-    },
-    [formValues]
-  )
-
   const columns = [
-    { header: 'Début', key: 'start', type: 'start' },
-    { header: 'Fin', key: 'end', type: 'end' },
-    { header: 'Jours', key: 'days', type: 'calculated' },
-    { header: 'Indemnité journalière (€)', key: 'amount', type: 'number' },
-    { header: 'Total (€)', key: 'total', type: 'calculated' },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts (€)', key: 'interest', type: 'interest', median: true, className: 'int' }
+    { header: 'common.start', key: 'start', type: 'start' },
+    { header: 'common.end', key: 'end', type: 'end' },
+    { header: 'common.days', key: 'days', type: 'calculated' },
+    { header: 'common.indemnite_journaliere', key: 'amount', type: 'number' },
+    { header: 'common.total', key: 'total', type: 'calculated' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
   ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Hospitalisation"
+        title="incapacite_temp.hospitalisation.title"
         columns={columns}
         control={control}
         name="periods"

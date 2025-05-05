@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import TextItem from './textItem'
 
 const ActionMenuButton = ({ label, actions }) => {
   const [isMenuOpen, setMenuOpen] = useState(false)
@@ -34,7 +35,9 @@ const ActionMenuButton = ({ label, actions }) => {
   return (
     <div style={{ position: 'relative', display: 'inline-block' }} ref={menuRef}>
       {/* Bouton principal */}
-      <button onClick={toggleMenu}>{label || 'Actions'}</button>
+      <button onClick={toggleMenu}>
+        <TextItem path={label || 'Action'} />
+      </button>
 
       {/* Menu des options */}
       <AnimatePresence>
@@ -76,7 +79,7 @@ const ActionMenuButton = ({ label, actions }) => {
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f5f5f5')}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
                   >
-                    {option?.label || 'Option ' + index}
+                    <TextItem path={option?.label || 'Option ' + index} />
                   </button>
                 </li>
               ))}

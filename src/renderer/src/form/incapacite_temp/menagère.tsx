@@ -13,6 +13,7 @@ import { FaRegQuestionCircle } from 'react-icons/fa'
 import { format } from 'date-fns'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
   const renderToolTipChildren = useCallback((res: any[]): JSX.Element => {
@@ -20,8 +21,11 @@ const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         {res?.map((it, key) => (
           <div key={key} style={{ padding: 10 }} className="border-item">
-            {it?.name} né le {format(it?.birthDate, 'dd/MM/yyyy')}
-            <div>Nombres de jours avant l'age de 25 ans: {it?.days?.before25}</div>
+            {it?.name} <TextItem path="tooltip.born_at" tag="span" />{' '}
+            {format(it?.birthDate, 'dd/MM/yyyy')}
+            <div>
+              <TextItem path="tooltip.number_days_before_25" tag="span" /> {it?.days?.before25}
+            </div>
             <div>
               <math>
                 <mfrac>
@@ -218,16 +222,16 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [])
 
   const columns = [
-    { header: 'Début', key: 'start', type: 'start' },
-    { header: 'Fin', key: 'end', type: 'end' },
-    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'common.start', key: 'start', type: 'start' },
+    { header: 'common.end', key: 'end', type: 'end' },
+    { header: 'common.days', key: 'days', type: 'calculated' },
     {
-      header: 'Enfant(s)',
+      header: 'common.children',
       key: 'children',
       render: (e, rowData) => <ChildrenCell children={getChildOnPeriod(rowData)} />
     },
     {
-      header: 'Indemnité journalière (€)',
+      header: 'common.indemnite_journaliere',
       key: 'amount',
       type: 'number',
       additionalContent: (rowData) => (
@@ -245,35 +249,35 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     },
     { header: '%', key: 'percentage', type: 'number', width: 50 },
     {
-      header: 'Contribution (%)',
+      header: 'common.contribution',
       key: 'contribution',
       type: 'select',
       options: constants.contribution
     },
     {
-      header: 'Total',
+      header: 'common.total',
       key: 'total',
       type: 'calculated',
       tooltipContent: (rowData, days) =>
         renderTooltipTotal(rowData, days, getChildOnPeriod(rowData))
     },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
   ]
 
   const customActions = {
-    label: 'Importer dates',
+    label: 'common.import_date',
     actions: [
-      { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods') },
-      { label: 'Economique net', action: () => copyDate('incapacite_temp_economique.net') },
-      { label: 'Economique brut', action: () => copyDate('incapacite_temp_economique.brut') }
+      { label: 'common.personnel', action: () => copyDate('incapacite_temp_personnel.periods') },
+      { label: 'common.economique.net', action: () => copyDate('incapacite_temp_economique.net') },
+      { label: 'common.economique.brut', action: () => copyDate('incapacite_temp_economique.brut') }
     ]
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Incapacités temporaires menagères"
+        title="incapacite_temp.menagere.title"
         columns={columns}
         control={control}
         name="periods"

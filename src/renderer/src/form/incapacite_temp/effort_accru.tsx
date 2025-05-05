@@ -55,11 +55,11 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [])
 
   const columns = [
-    { header: 'Début', key: 'start', type: 'date', width: 140 },
-    { header: 'Fin', key: 'end', type: 'date', width: 140 },
-    { header: 'Jours', key: 'days', type: 'calculated' },
+    { header: 'common.start', key: 'start', type: 'date', width: 140 },
+    { header: 'common.end', key: 'end', type: 'date', width: 140 },
+    { header: 'common.days', key: 'days', type: 'calculated' },
     {
-      header: 'Indemnité journalière (€)',
+      header: 'common.indemnite_journaliere',
       key: 'amount',
       type: 'number',
       props: { step: '0.01' }
@@ -72,7 +72,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       props: { style: { width: 50 } }
     },
     {
-      header: 'Coefficient',
+      header: 'common.coefficient',
       key: 'coefficient',
       type: 'select',
       width: 50,
@@ -86,15 +86,15 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
         { value: 7, label: '7' }
       ]
     },
-    { header: 'Total', key: 'total', type: 'calculated' },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+    { header: 'common.total', key: 'total', type: 'calculated' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
   ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Efforts accrus"
+        title="incapacite_temp.effa.title"
         columns={columns}
         control={control}
         name="efforts"

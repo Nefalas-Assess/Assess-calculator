@@ -1,15 +1,11 @@
 import React, { useCallback, useContext, useEffect, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
-import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
+import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
-import ActionMenuButton from '@renderer/generic/actionButton'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -19,16 +15,6 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       net: [],
       brut: []
     }
-  })
-
-  const brutFields = useFieldArray({
-    control,
-    name: 'brut' // Champs dynamiques pour les enfants
-  })
-
-  const netFields = useFieldArray({
-    control,
-    name: 'net' // Champs dynamiques pour les enfants
   })
 
   const formValues = watch()
@@ -74,23 +60,6 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, brutValues, netValues, submitForm, handleSubmit])
 
-  const addNext = useCallback(
-    (append, name, initial = {}) => {
-      const lastRowEnd = formValues?.[name]?.[formValues?.[name]?.length - 1]?.end
-
-      if (lastRowEnd) {
-        const finDate = new Date(lastRowEnd)
-        if (!isNaN(finDate)) {
-          finDate.setDate(finDate.getDate() + 1) // Ajoute 1 jour à la date de fin précédente
-          append({ start: finDate.toISOString().split('T')[0], ...initial })
-        }
-      } else {
-        append({ ...initial })
-      }
-    },
-    [formValues]
-  )
-
   const getSalaryTotalAmount = useCallback((item = {}, days) => {
     const { amount = 0, percentage = 0 } = item
     return (
@@ -114,23 +83,29 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   )
 
   const columns = [
-    { header: 'Début', key: 'start', type: 'start' },
-    { header: 'Fin', key: 'end', type: 'end' },
-    { header: 'Jours', key: 'days', type: 'calculated' },
-    { header: 'Salaire annuel net', key: 'amount', type: 'number' },
+    { header: 'common.start', key: 'start', type: 'start' },
+    { header: 'common.end', key: 'end', type: 'end' },
+    { header: 'common.days', key: 'days', type: 'calculated' },
+    { header: 'common.salary_yearly_net', key: 'amount', type: 'number' },
     { header: '%', key: 'percentage', type: 'number', width: 50 },
-    { header: 'Total net', key: 'total', type: 'calculated' },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+    { header: 'common.total_net', key: 'total', type: 'calculated' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
   ]
 
   const customActions = (name) => ({
-    label: 'Importer dates',
+    label: 'common.import_date',
     actions: [
-      { label: 'Personnel', action: () => copyDate('incapacite_temp_personnel.periods', name) },
-      { label: 'Ménagère', action: () => copyDate('incapacite_temp_menagere.periods', name) },
       {
-        label: `Economique ${name === 'net' ? 'brut' : 'net'}`,
+        label: 'common.personnel',
+        action: () => copyDate('incapacite_temp_personnel.periods', name)
+      },
+      {
+        label: 'common.menagère',
+        action: () => copyDate('incapacite_temp_menagere.periods', name)
+      },
+      {
+        label: `common.economique.${name === 'net' ? 'brut' : 'net'}`,
         action: () => copyDate(name === 'net' ? formValues?.brut : formValues?.net, name)
       }
     ]
@@ -139,8 +114,8 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Incapacités temporaires économiques"
-        subtitle="Indemnisation nette"
+        title="incapacite_temp.economique.title"
+        subtitle="incapacite_temp.economique.indemnite_nette"
         columns={columns}
         control={control}
         name="net"
@@ -151,7 +126,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       />
 
       <DynamicTable
-        subtitle="Indemnisation brute"
+        subtitle="incapacite_temp.economique.indemnite_brute"
         columns={columns}
         control={control}
         name="brut"
@@ -162,7 +137,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       />
       <table style={{ maxWidth: 1200 }}>
         <tr>
-          <td>Estimation/Réclamation</td>
+          <TextItem path="incapacite_temp.economique.estimate" tag="td" />
           <td>
             <Field control={control} type="number" name={`estimate`} editable={editable}>
               {(props) => <input {...props} />}
@@ -171,7 +146,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
           {editable && (
             <td>
               <button type="button" onClick={() => setValue('estimate', '')}>
-                Supprimer
+                <TextItem path="common.delete" />
               </button>
             </td>
           )}

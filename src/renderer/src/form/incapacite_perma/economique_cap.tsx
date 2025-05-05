@@ -207,7 +207,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <TextItem path={'common.date_consolidation'} tag="th" />
               <TextItem path={'common.date_paiement'} tag="th" />
               <TextItem path={'common.days'} tag="th" />
-              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_net'} tag="th" />
+              <TextItem path={'common.salary_yearly_net'} tag="th" />
               <th style={{ width: 50 }}>%</th>
               <TextItem path={'common.total_net'} tag="th" />
               <TextItem path="common.interest" tag="th" className="int" />
@@ -289,9 +289,9 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_net'} tag="th" />
+              <th>Salaire annuel net (€)</th>
               <th style={{ width: 50 }}>%</th>
-              <TextItem path={'common.total'} tag="th" />
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>

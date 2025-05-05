@@ -24,7 +24,7 @@ const Personnel = ({ editable }) => {
           editable={editable}
           initialValues={data?.incapacite_temp_personnel}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="incapacite_temp.personnel.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

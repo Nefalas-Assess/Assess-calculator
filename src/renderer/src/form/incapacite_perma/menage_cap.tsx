@@ -122,8 +122,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
         {res?.map((it, key) => (
           <div key={key} style={{ padding: 10 }} className="border-item">
-            {it?.name} né le {format(it?.birthDate, 'dd/MM/yyyy')}
-            <div>Nombres de jours avant l'age de 25 ans: {it?.days?.before25}</div>
+            {it?.name} <TextItem path="tooltip.born_at" tag="span" />{' '}
+            {format(it?.birthDate, 'dd/MM/yyyy')}
+            <div>
+              <TextItem path="tooltip.number_days_before_25" tag="span" /> {it?.days?.before25}
+            </div>
             <div>
               <math>
                 <mfrac>

@@ -76,29 +76,29 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   )
 
   const customActions = {
-    label: 'Importer dates',
+    label: 'common.import_date',
     actions: [
-      { label: 'Ménagère', action: () => copyDate('incapacite_temp_menagere.periods') },
-      { label: 'Economique net', action: () => copyDate('incapacite_temp_economique.net') },
-      { label: 'Economique brut', action: () => copyDate('incapacite_temp_economique.brut') }
+      { label: 'common.menagère', action: () => copyDate('incapacite_temp_menagere.periods') },
+      { label: 'common.economique.net', action: () => copyDate('incapacite_temp_economique.net') },
+      { label: 'common.economique.brut', action: () => copyDate('incapacite_temp_economique.brut') }
     ]
   }
 
   const columns = [
-    { header: 'Début', key: 'start', type: 'start' },
-    { header: 'Fin', key: 'end', type: 'end' },
-    { header: 'Jours', key: 'days', type: 'calculated' },
-    { header: 'Indemnité journalière (€)', key: 'amount', type: 'number' },
+    { header: 'common.start', key: 'start', type: 'start' },
+    { header: 'common.end', key: 'end', type: 'end' },
+    { header: 'common.days', key: 'days', type: 'calculated' },
+    { header: 'common.indemnite_journaliere', key: 'amount', type: 'number' },
     { header: '%', key: 'percentage', type: 'number', width: 50 },
-    { header: 'Total', key: 'total', type: 'calculated' },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
-    { header: 'Intérêts', key: 'interest', type: 'interest', median: true, className: 'int' }
+    { header: 'common.total', key: 'total', type: 'calculated' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
   ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Incapacités temporaires personnelles"
+        title="incapacite_temp.personnel.title"
         columns={columns}
         control={control}
         name="periods"
