@@ -290,6 +290,61 @@ export default {
       fr: 'Nom',
       en: 'Name',
       nl: 'Naam'
+    },
+    variables_cap: {
+      fr: 'Variables du calcul de capitalisation',
+      en: 'Capitalization calculation variables',
+      nl: 'Variabelen voor kapitalisatie berekening'
+    },
+    period_consolidation_payment: {
+      fr: 'Période entre la consolidation et le paiement',
+      en: 'Period between consolidation and payment',
+      nl: 'Periode tussen consolidatie en betaling'
+    },
+    total_brut: {
+      fr: 'Total brut',
+      en: 'Total brut',
+      nl: 'Totaal brut'
+    },
+    total_net: {
+      fr: 'Total net',
+      en: 'Total net',
+      nl: 'Totaal net'
+    },
+    age_consolidation: {
+      fr: 'Âge de consolidation',
+      en: 'Age of consolidation',
+      nl: 'Leeftijd van consolidatie'
+    },
+    points: {
+      fr: 'Points',
+      en: 'Points',
+      nl: 'Punten'
+    },
+    children: {
+      fr: 'Enfants',
+      en: 'Children',
+      nl: 'Kinderen'
+    },
+    ref: {
+      fr: 'Référence',
+      en: 'Reference',
+      nl: 'Referentie'
+    },
+    pourcentage: {
+      fr: 'Pourcentage (%)',
+      en: 'Percentage (%)',
+      nl: 'Percentage (%)'
+    },
+    period: {
+      fr: 'Période',
+      en: 'Period',
+      nl: 'Periode'
+    },
+    coefficient: {
+      fr: 'Coefficient',
+      en: 'Coefficient',
+      nl: 'Coefficient'
     }
   },
   errors: {
@@ -475,11 +530,6 @@ export default {
       en: 'Default contribution',
       nl: 'Standaard bijdrage'
     },
-    children: {
-      fr: 'Enfants',
-      en: 'Children',
-      nl: 'Kinderen'
-    },
     add_child: {
       fr: 'Ajouter un enfant',
       en: 'Add a child',
@@ -518,6 +568,155 @@ export default {
       fr: 'Total global',
       en: 'Total global',
       nl: 'Algemeen totaal'
+    }
+  },
+  incapacite_perma: {
+    eco_cap: {
+      title: {
+        fr: 'Incapacités permanentes économiques capitalisées',
+        en: 'Permanent economic disabilities capitalized',
+        nl: 'Permanente economische ongeschiktheden gekapitaliseerd'
+      },
+      title_eco: {
+        fr: 'Incapacités permanentes économiques',
+        en: 'Permanent economic disabilities',
+        nl: 'Permanente economische ongeschiktheden'
+      },
+      salary_yearly_brut: {
+        fr: 'Salaire annuel brut (€)',
+        en: 'Yearly gross salary (€)',
+        nl: 'Bruto jaarlijks salaris (€)'
+      },
+      salary_yearly_net: {
+        fr: 'Salaire annuel net (€)',
+        en: 'Yearly net salary (€)',
+        nl: 'Netto jaarlijks salaris (€)'
+      },
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      }
+    },
+    forfait: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title_inc_perma: {
+        fr: 'Incapacités personnelles permanentes',
+        en: 'Permanent personal disabilities',
+        nl: 'Permanente persoonlijke ongeschiktheden'
+      },
+      title_menage: {
+        fr: 'Incapacités ménagères permanentes',
+        en: 'Permanent household disabilities',
+        nl: 'Permanente huishoudelijke ongeschiktheden'
+      },
+      title_eco: {
+        fr: 'Incapacités économiques permanentes',
+        en: 'Permanent economic disabilities',
+        nl: 'Permanente economische ongeschiktheden'
+      }
+    },
+    frais_cap: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      duration: {
+        fr: "Nombre d'années",
+        en: 'Number of years',
+        nl: 'Aantal jaren'
+      },
+      future: {
+        fr: 'Frais futurs',
+        en: 'Future costs',
+        nl: 'Toekomstige kosten'
+      },
+      paid: {
+        fr: 'Frais payés dans N années',
+        en: 'Paid costs in N years',
+        nl: 'Betaalde kosten in N jaren'
+      },
+      forfait: {
+        fr: 'Forfait',
+        en: 'Lump sum',
+        nl: 'Forfaitair bedrag'
+      }
+    },
+    menage: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Incapacités permanentes ménagères capitalisées',
+        en: 'Permanent household disabilities capitalized',
+        nl: 'Permanente huishoudelijke ongeschiktheden gekapitaliseerd'
+      },
+      title_perma_menage: {
+        fr: 'Incapacités permanentes ménagères',
+        en: 'Permanent household disabilities',
+        nl: 'Permanente huishoudelijke ongeschiktheden'
+      }
+    },
+    particulier: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      indemnite_name: {
+        fr: 'Indemnités/Frais',
+        en: 'Indemnity/Fees',
+        nl: 'Vergoeding/Kosten'
+      },
+      title: {
+        fr: 'Préjudices particuliers',
+        en: 'Particular damages',
+        nl: 'Specifieke schade'
+      },
+      quantum_doloris: {
+        fr: 'Quantum Doloris',
+        en: 'Quantum Doloris',
+        nl: 'Quantum Doloris'
+      },
+      esthetique: {
+        fr: 'Préjudice esthétique',
+        en: 'Esthetic prejudice',
+        nl: 'Esthetische schade'
+      },
+      sexuel: {
+        fr: 'Préjudice sexuel',
+        en: 'Sexual prejudice',
+        nl: 'Seksuele schade'
+      },
+      agrement: {
+        fr: "Préjudice d'Agrément",
+        en: 'Agreement prejudice',
+        nl: 'Agreement schade'
+      }
+    },
+    personnel: {
+      total: {
+        fr: 'Total général :',
+        en: 'Total general :',
+        nl: 'Algemeen totaal :'
+      },
+      title: {
+        fr: 'Incapacités permanentes personnelles capitalisées',
+        en: 'Permanent personal disabilities capitalized',
+        nl: 'Permanente persoonlijke ongeschiktheden gekapitaliseerd'
+      },
+      incapacite_perma: {
+        fr: 'Incapacités permanentes personnelles',
+        en: 'Permanent personal disabilities',
+        nl: 'Permanente persoonlijke ongeschiktheden'
+      }
     }
   }
 }

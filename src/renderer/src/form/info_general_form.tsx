@@ -188,7 +188,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         )}
       </div>
 
-      <TextItem path="info_general.children" tag="h3" />
+      <TextItem path="common.children" tag="h3" />
       <table style={{ maxWidth: 1200 }}>
         <thead>
           <tr>

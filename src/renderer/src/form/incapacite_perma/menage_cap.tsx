@@ -12,6 +12,7 @@ import Tooltip from '@renderer/generic/tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import { useCapitalization } from '@renderer/hooks/capitalization'
+import TextItem from '@renderer/generic/textItem'
 
 const CapAmount = ({ values, start, end, usePersoReference = false }) => {
   const {
@@ -234,12 +235,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Incapacités permanentes ménagères capitalisées</h1>
-      <h3>Variables du calcul de capitalisation</h3>
+      <TextItem path="incapacite_perma.menage.title" tag="h1" />
+      <TextItem path="common.variables_cap" tag="h3" />
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Table de référence</td>
+            <TextItem path="common.ref_table" tag="td" />
             <td>
               <Field
                 control={control}
@@ -251,7 +252,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             </td>
           </tr>
           <tr>
-            <td>Taux d'intérêt de la capitalisation</td>
+            <TextItem path="common.taux_interet_capitalisation" tag="td" />
             <td>
               <Field
                 control={control}
@@ -263,7 +264,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             </td>
           </tr>
           <tr>
-            <td>Date du paiement</td>
+            <TextItem path="common.date_paiement" tag="td" />
             <td>
               <Field control={control} type="date" name={`paiement`} editable={editable}>
                 {(props) => <input {...props} />}
@@ -273,19 +274,19 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         </tbody>
       </table>
       <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
-        <h3>Période entre la consolidation et le paiement</h3>
+        <TextItem path="common.period_consolidation_payment" tag="h3" />
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Date de consolidation</th>
-              <th>Date du paiement</th>
-              <th>Jours</th>
-              <th>Enfants</th>
-              <th>Indemnité journalière (€)</th>
+              <TextItem path="common.date_consolidation" tag="th" />
+              <TextItem path="common.date_paiement" tag="th" />
+              <TextItem path="common.days" tag="th" />
+              <TextItem path="common.children" tag="th" />
+              <TextItem path="common.indemnite_journaliere" tag="th" />
               <th style={{ width: 50 }}>%</th>
-              <th>Contribution (%)</th>
-              <th>Total (€)</th>
-              <th className="int">Intérêts</th>
+              <TextItem path="common.contribution" tag="th" />
+              <TextItem path="common.total" tag="th" />
+              <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
@@ -351,13 +352,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           </tbody>
         </table>
 
-        <h3>Incapacités permanentes ménagères</h3>
+        <TextItem path="incapacite_perma.menage.title_perma_menage" tag="h3" />
         {sortedChildren?.length > 0 ? (
           <>
             <table id="IPPCTableInfo" style={{ maxWidth: 800 }}>
               <tbody>
                 <tr>
-                  <td>Reférence</td>
+                  <TextItem path="common.ref" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -369,7 +370,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   </td>
                 </tr>
                 <tr>
-                  <td>Indemnité journalière (€)</td>
+                  <TextItem path="common.indemnite_journaliere" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -382,7 +383,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   </td>
                 </tr>
                 <tr>
-                  <td>Pourcentage (%) </td>
+                  <TextItem path="common.pourcentage" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -395,7 +396,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   </td>
                 </tr>
                 <tr>
-                  <td>Contribution (%)</td>
+                  <TextItem path="common.contribution" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -411,11 +412,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
               <thead>
                 <tr>
-                  <th>Période</th>
-                  <th>Indemnité journalière (€)</th>
+                  <TextItem path="common.period" tag="th" />
+                  <TextItem path="common.indemnite_journaliere" tag="th" />
                   <th style={{ width: 50 }}>%</th>
-                  <th>Contribution (%)</th>
-                  <th>Total (€)</th>
+                  <TextItem path="common.contribution" tag="th" />
+                  <TextItem path="common.total" tag="th" />
                 </tr>
               </thead>
               <tbody>
@@ -478,11 +479,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
             <thead>
               <tr>
-                <th>Date du paiement</th>
-                <th>Indemnité journalière (€)</th>
+                <TextItem path="common.date_paiement" tag="th" />
+                <TextItem path="common.indemnite_journaliere" tag="th" />
                 <th style={{ width: 50 }}>%</th>
-                <th>Contribution (%)</th>
-                <th>Total (€)</th>
+                <TextItem path="common.contribution" tag="th" />
+                <TextItem path="common.total" tag="th" />
               </tr>
             </thead>
             <tbody>

@@ -20,7 +20,7 @@ const Forfait = ({ editable }) => {
     <div id="content">
       <div id="main" ref={ref}>
         <ForfaitForm onSubmit={saveData} editable={editable} initialValues={data?.forfait_ip} />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label={'incapacite_perma.forfait.total'} documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

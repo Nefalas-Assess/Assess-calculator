@@ -8,11 +8,12 @@ import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import TextItem from '@renderer/generic/textItem'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
       coefficient_quantum_doloris: '',
       coefficient_prejudice_esthétique: ''
@@ -75,10 +76,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
   )
 
   const prejudiceSexuelColumns = [
-    { header: 'Indemnités/Frais', key: 'indemnite', type: 'text' },
-    { header: 'Payé', key: 'paid', type: 'select', options: constants.boolean },
+    { header: 'incapacite_perma.particulier.indemnite_name', key: 'indemnite', type: 'text' },
+    { header: 'common.paid', key: 'paid', type: 'select', options: constants.boolean },
     {
-      header: 'Montant',
+      header: 'common.amount',
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
@@ -87,9 +88,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
         </td>
       )
     },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
     {
-      header: 'Intérêts',
+      header: 'common.interest',
       key: 'interests',
       type: 'interest',
       className: 'int',
@@ -98,10 +99,10 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
   ]
 
   const prejudiceAgrementColumns = [
-    { header: 'Indemnités/Frais', key: 'indemnite', type: 'text' },
-    { header: 'Payé', key: 'paid', type: 'select', options: constants.boolean },
+    { header: 'incapacite_perma.particulier.indemnite_name', key: 'indemnite', type: 'text' },
+    { header: 'common.paid', key: 'paid', type: 'select', options: constants.boolean },
     {
-      header: 'Montant',
+      header: 'common.amount',
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
@@ -110,9 +111,9 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
         </td>
       )
     },
-    { header: 'Date du paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
     {
-      header: 'Intérêts',
+      header: 'common.interest',
       key: 'interests',
       type: 'interest',
       className: 'int',
@@ -122,16 +123,16 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h1>Préjudices particuliers</h1>
-      <h3>Quantum Doloris</h3>
+      <TextItem path="incapacite_perma.particulier.title" tag="h1" />
+      <TextItem path="incapacite_perma.particulier.quantum_doloris" tag="h3" />
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Âge consolidation</th>
-            <th>Coefficient</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
+            <TextItem path="common.age_consolidation" tag="th" />
+            <TextItem path="common.coefficient" tag="th" />
+            <TextItem path="common.total" tag="th" />
+            <TextItem path="common.date_paiement" tag="th" className="int" />
+            <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
@@ -179,15 +180,15 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
         </tbody>
       </table>
 
-      <h3>Préjudice Esthétique</h3>
+      <TextItem path="incapacite_perma.particulier.esthetique" tag="h3" />
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Âge consolidation</th>
-            <th>Coefficient</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
+            <TextItem path="common.age_consolidation" tag="th" />
+            <TextItem path="common.coefficient" tag="th" />
+            <TextItem path="common.total" tag="th" />
+            <TextItem path="common.date_paiement" tag="th" className="int" />
+            <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
@@ -240,7 +241,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       </table>
 
       <DynamicTable
-        subtitle="Préjudice Sexuel"
+        subtitle="incapacite_perma.particulier.sexuel"
         columns={prejudiceSexuelColumns}
         control={control}
         name="prejudice_sexuels"
@@ -250,7 +251,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       />
 
       <DynamicTable
-        subtitle="Préjudice d'Agrément"
+        subtitle="incapacite_perma.particulier.agrement"
         columns={prejudiceAgrementColumns}
         control={control}
         name="prejudice_agrements"

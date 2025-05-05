@@ -25,7 +25,7 @@ const MenageCap = ({ editable }) => {
           editable={editable}
           initialValues={data?.incapacite_perma_menage_cap}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="incapacite_perma.menage.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

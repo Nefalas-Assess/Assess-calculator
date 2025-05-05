@@ -24,7 +24,7 @@ const PersonnelCap = ({ editable }) => {
           editable={editable}
           initialValues={data?.incapacite_perma_personnel_cap}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label="incapacite_perma.personnel.total" documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

@@ -24,7 +24,7 @@ const FraisCap = ({ editable }) => {
           editable={editable}
           initialValues={data?.incapacite_perma_charges}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label={'incapacite_perma.frais_cap.total'} documentRef={ref} />
       </div>
     </div>
   )

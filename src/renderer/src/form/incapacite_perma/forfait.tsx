@@ -6,6 +6,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import { useForm, useFieldArray } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
+import TextItem from '@renderer/generic/textItem'
 
 export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -52,31 +53,19 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const point = useMemo(() => getPoint(data?.computed_info?.age_consolidation), [getPoint, data])
 
-  const getTotalSum = useCallback(
-    (values) => {
-      const sum1 = point * parseInt(values?.pourcentage_ipp || 0)
-      const sum2 =
-        point * parseInt(values?.pourcentage_imp || 0) * ((values?.contribution_imp || 0) / 100)
-      const sum3 = point * parseInt(values?.pourcentage_iep || 0)
-
-      return (sum1 + sum2 + sum3).toFixed(2)
-    },
-    [point]
-  )
-
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Incapacités personnelles permanentes</h1>
+      <TextItem path={'incapacite_perma.forfait.title_inc_perma'} tag="h1" />
 
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Âge consolidation</th>
-            <th>Points</th>
+            <TextItem path={'common.age_consolidation'} tag="th" />
+            <TextItem path={'common.points'} tag="th" />
             <th style={{ width: 50 }}>%</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
+            <TextItem path={'common.total'} tag="th" />
+            <TextItem path={'common.date_paiement'} tag="th" className="int" />
+            <TextItem path={'common.interest'} tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
@@ -107,18 +96,18 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
         </tbody>
       </table>
 
-      <h1>Incapacités ménagères permanentes</h1>
+      <TextItem path={'incapacite_perma.forfait.title_menage'} tag="h1" />
 
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Âge consolidation</th>
-            <th>Points</th>
+            <TextItem path={'common.age_consolidation'} tag="th" />
+            <TextItem path={'common.points'} tag="th" />
             <th style={{ width: 50 }}>%</th>
-            <th style={{ width: 120 }}>Contribution (%)</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
+            <TextItem path={'common.contribution'} tag="th" style={{ width: 120 }} />
+            <TextItem path={'common.total'} tag="th" />
+            <TextItem path={'common.date_paiement'} tag="th" className="int" />
+            <TextItem path={'common.interest'} tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
@@ -174,17 +163,17 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
         </tbody>
       </table>
 
-      <h1>Incapacités économiques permanentes</h1>
+      <TextItem path={'incapacite_perma.forfait.title_eco'} tag="h1" />
 
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
-            <th>Âge consolidation</th>
-            <th>Points</th>
+            <TextItem path={'common.age_consolidation'} tag="th" />
+            <TextItem path={'common.points'} tag="th" />
             <th style={{ width: 50 }}>%</th>
-            <th>Total</th>
-            <th className="int">Date du paiement</th>
-            <th className="int">Intérêts</th>
+            <TextItem path={'common.total'} tag="th" />
+            <TextItem path={'common.date_paiement'} tag="th" className="int" />
+            <TextItem path={'common.interest'} tag="th" className="int" />
           </tr>
         </thead>
         <tbody>

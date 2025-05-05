@@ -9,6 +9,7 @@ import { useCapitalization } from '@renderer/hooks/capitalization'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
+import TextItem from '@renderer/generic/textItem'
 
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -103,12 +104,12 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <h1>Incapacités permanentes économiques capitalisées</h1>
-      <h3>Variables du calcul de capitalisation</h3>
+      <TextItem path={'incapacite_perma.eco_cap.title'} tag="h1" />
+      <TextItem path={'common.variables_cap'} tag="h3" />
       <table id="IPVariables">
         <tbody>
           <tr>
-            <td>Table de référence</td>
+            <TextItem path={'common.ref_table'} tag="td" />
             <td>
               <Field
                 control={control}
@@ -120,7 +121,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Taux d'intérêt de la capitalisation</td>
+            <TextItem path={'common.taux_interet_capitalisation'} tag="td" />
             <td>
               <Field
                 control={control}
@@ -132,7 +133,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
           </tr>
           <tr>
-            <td>Date du paiement</td>
+            <TextItem path={'common.date_paiement'} tag="td" />
             <td>
               <Field control={control} type="date" name={`paiement`} editable={editable}>
                 {(props) => <input {...props} />}
@@ -142,17 +143,17 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         </tbody>
       </table>
       <FadeIn show={formValues?.paiement && formValues?.reference && formValues?.interet}>
-        <h3>Période entre la consolidation et le paiement</h3>
+        <TextItem path={'common.period_consolidation_payment'} tag="h3" />
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Date de consolidation</th>
-              <th>Date du paiement</th>
-              <th>Jours</th>
-              <th>Salaire annuel brut (€)</th>
+              <TextItem path={'common.date_consolidation'} tag="th" />
+              <TextItem path={'common.date_paiement'} tag="th" />
+              <TextItem path={'common.days'} tag="th" />
+              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_brut'} tag="th" />
               <th style={{ width: 50 }}>%</th>
-              <th>Total brut</th>
-              <th className="int">Intérêts</th>
+              <TextItem path={'common.total_brut'} tag="th" />
+              <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
@@ -203,13 +204,13 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Date de consolidation</th>
-              <th>Date du paiement</th>
-              <th>Jours</th>
-              <th>Salaire annuel net (€)</th>
+              <TextItem path={'common.date_consolidation'} tag="th" />
+              <TextItem path={'common.date_paiement'} tag="th" />
+              <TextItem path={'common.days'} tag="th" />
+              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_net'} tag="th" />
               <th style={{ width: 50 }}>%</th>
-              <th>Total net</th>
-              <th className="int">Intérêts</th>
+              <TextItem path={'common.total_net'} tag="th" />
+              <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
@@ -252,13 +253,13 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
           </tbody>
         </table>
 
-        <h3>Incapacités permanentes économiques</h3>
+        <TextItem path={'incapacite_perma.eco_cap.title_eco'} tag="h3" />
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Salaire annuel brut (€)</th>
+              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_brut'} tag="th" />
               <th style={{ width: 50 }}>%</th>
-              <th>Total</th>
+              <TextItem path={'common.total'} tag="th" />
             </tr>
           </thead>
           <tbody>
@@ -288,9 +289,9 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Salaire annuel net (€)</th>
+              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_net'} tag="th" />
               <th style={{ width: 50 }}>%</th>
-              <th>Total</th>
+              <TextItem path={'common.total'} tag="th" />
             </tr>
           </thead>
           <tbody>

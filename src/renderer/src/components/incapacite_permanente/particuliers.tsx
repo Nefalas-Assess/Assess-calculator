@@ -24,7 +24,7 @@ const Particuliers = ({ editable }) => {
           editable={editable}
           initialValues={data?.prejudice_particulier}
         />
-        <TotalBox label="Total général :" documentRef={ref} />
+        <TotalBox label={'incapacite_perma.particulier.total'} documentRef={ref} />
         <TotalBoxInterest documentRef={ref} />
       </div>
     </div>

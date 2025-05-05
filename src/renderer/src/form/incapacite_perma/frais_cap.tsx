@@ -61,23 +61,23 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, chargesValues, paidValues, packageValues, submitForm, handleSubmit])
 
   const frais_futurs_columns = [
-    { header: 'Frais', key: 'name', type: 'text' },
-    { header: 'Date du paiement', key: 'date_payment', type: 'date' },
+    { header: 'common.frais', key: 'name', type: 'text' },
+    { header: 'common.date_paiement', key: 'date_payment', type: 'date' },
     {
-      header: 'Table de référence',
+      header: 'common.ref_table',
       key: 'reference',
       type: 'reference',
       options: constants.reference_light.concat(constants.reference)
     },
     {
-      header: "Taux d'intérêt de la capitalisation",
+      header: 'common.taux_interet_capitalisation',
       key: 'rate',
       type: 'select',
       options: constants.interet_amount
     },
-    { header: 'Montant', key: 'amount', type: 'number' },
+    { header: 'common.amount', key: 'amount', type: 'number' },
     {
-      header: 'Total',
+      header: 'common.total',
       key: 'total',
       type: 'capitalization',
       props: { end: 'date_payment', ref: 'reference', index: 'rate', amount: 'amount' }
@@ -85,22 +85,27 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   ]
 
   const frais_payes_columns = [
-    { header: 'Frais', key: 'name', type: 'text' },
-    { header: 'Montant', key: 'amount', type: 'number' },
-    { header: "Nombre d'années", key: 'year', type: 'select', options: constants.zeroToFifty },
+    { header: 'common.frais', key: 'name', type: 'text' },
+    { header: 'common.amount', key: 'amount', type: 'number' },
     {
-      header: 'Table de référence',
+      header: 'incapacite_perma.frais_cap.duration',
+      key: 'year',
+      type: 'select',
+      options: constants.zeroToFifty
+    },
+    {
+      header: 'common.ref_table',
       key: 'reference',
       type: 'reference'
     },
     {
-      header: "Taux d'intérêt de la capitalisation",
+      header: 'common.taux_interet_capitalisation',
       key: 'rate',
       type: 'select',
       options: constants.interet_amount
     },
     {
-      header: 'Total',
+      header: 'common.total',
       key: 'total',
       type: 'capitalization',
       props: {
@@ -115,14 +120,14 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   ]
 
   const forfait_columns = [
-    { header: 'Frais', key: 'name', type: 'text' },
-    { header: 'Montant', key: 'amount', type: 'number' }
+    { header: 'common.frais', key: 'name', type: 'text' },
+    { header: 'common.amount', key: 'amount', type: 'number' }
   ]
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
-        title="Frais futurs"
+        title="incapacite_perma.frais_cap.future"
         columns={frais_futurs_columns}
         control={control}
         name="charges"
@@ -131,7 +136,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         addRowDefaults={{ amount: 30 }}
       />
       <DynamicTable
-        subtitle="Frais payés dans N années"
+        subtitle="incapacite_perma.frais_cap.paid"
         columns={frais_payes_columns}
         control={control}
         name="paid"
@@ -139,7 +144,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         editable={editable}
       />
       <DynamicTable
-        subtitle="Forfait"
+        subtitle="incapacite_perma.frais_cap.forfait"
         columns={forfait_columns}
         control={control}
         name="package"
