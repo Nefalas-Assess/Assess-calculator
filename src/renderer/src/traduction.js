@@ -303,13 +303,13 @@ export default {
     },
     total_brut: {
       fr: 'Total brut',
-      en: 'Total brut',
-      nl: 'Totaal brut'
+      en: 'Total gross',
+      nl: 'Totaal bruto'
     },
     total_net: {
       fr: 'Total net',
       en: 'Total net',
-      nl: 'Totaal net'
+      nl: 'Totaal netto'
     },
     age_consolidation: {
       fr: 'Âge de consolidation',
@@ -349,12 +349,12 @@ export default {
     salary_yearly_net: {
       fr: 'Salaire annuel net (€)',
       en: 'Yearly net salary (€)',
-      nl: 'Netto jaarlijks salaris (€)'
+      nl: 'Netto jaarsalaris (€)'
     },
     import_date: {
       fr: 'Importer dates',
       en: 'Import dates',
-      nl: 'Dates importeren'
+      nl: 'Data importeren'
     },
     personnel: {
       fr: 'Personnel',
@@ -394,13 +394,13 @@ export default {
     },
     born_at: {
       fr: 'né le',
-      en: 'born at',
+      en: 'born on the',
       nl: 'geboren op'
     },
     interest_calculated_for_period: {
-      fr: 'Intérêt calculé pour la période',
-      en: 'Interest calculated for the period',
-      nl: 'Intrest berekend voor de periode'
+      fr: 'Intérêts calculés pour la période',
+      en: 'Interests calculated for the period',
+      nl: 'Intresten berekend voor de periode'
     },
     for: {
       fr: 'Pour',
@@ -629,17 +629,17 @@ export default {
       title: {
         fr: 'Incapacités permanentes économiques capitalisées',
         en: 'Permanent economic disabilities capitalized',
-        nl: 'Permanente economische ongeschiktheden gekapitaliseerd'
+        nl: 'Blijvende economische ongeschiktheden gekapitaliseerd'
       },
       title_eco: {
         fr: 'Incapacités permanentes économiques',
         en: 'Permanent economic disabilities',
-        nl: 'Permanente economische ongeschiktheden'
+        nl: 'Blijvende economische ongeschiktheden'
       },
       salary_yearly_brut: {
         fr: 'Salaire annuel brut (€)',
         en: 'Yearly gross salary (€)',
-        nl: 'Bruto jaarlijks salaris (€)'
+        nl: 'Bruto jaarsalaris (€)'
       },
       total: {
         fr: 'Total général :',
@@ -656,17 +656,17 @@ export default {
       title_inc_perma: {
         fr: 'Incapacités personnelles permanentes',
         en: 'Permanent personal disabilities',
-        nl: 'Permanente persoonlijke ongeschiktheden'
+        nl: 'Blijvende persoonlijke ongeschiktheden'
       },
       title_menage: {
         fr: 'Incapacités ménagères permanentes',
         en: 'Permanent household disabilities',
-        nl: 'Permanente huishoudelijke ongeschiktheden'
+        nl: 'Blijvende huishoudelijke ongeschiktheden'
       },
       title_eco: {
         fr: 'Incapacités économiques permanentes',
         en: 'Permanent economic disabilities',
-        nl: 'Permanente economische ongeschiktheden'
+        nl: 'Blijvende economische ongeschiktheden'
       }
     },
     frais_cap: {
@@ -705,12 +705,12 @@ export default {
       title: {
         fr: 'Incapacités permanentes ménagères capitalisées',
         en: 'Permanent household disabilities capitalized',
-        nl: 'Permanente huishoudelijke ongeschiktheden gekapitaliseerd'
+        nl: 'Blijvende huishoudelijke ongeschiktheden gekapitaliseerd'
       },
       title_perma_menage: {
         fr: 'Incapacités permanentes ménagères',
         en: 'Permanent household disabilities',
-        nl: 'Permanente huishoudelijke ongeschiktheden'
+        nl: 'Blijvende huishoudelijke ongeschiktheden'
       }
     },
     particulier: {
@@ -759,12 +759,12 @@ export default {
       title: {
         fr: 'Incapacités permanentes personnelles capitalisées',
         en: 'Permanent personal disabilities capitalized',
-        nl: 'Permanente persoonlijke ongeschiktheden gekapitaliseerd'
+        nl: 'Blijvende persoonlijke ongeschiktheden gekapitaliseerd'
       },
       incapacite_perma: {
         fr: 'Incapacités permanentes personnelles',
         en: 'Permanent personal disabilities',
-        nl: 'Permanente persoonlijke ongeschiktheden'
+        nl: 'Blijvende persoonlijke ongeschiktheden'
       }
     }
   },
@@ -778,7 +778,7 @@ export default {
       estimate: {
         fr: 'Estimation/Réclamation',
         en: 'Estimate/Claim',
-        nl: 'Schatting/Claim'
+        nl: 'Schatting/Eis'
       },
       title: {
         fr: 'Incapacités temporaires économiques',
@@ -804,8 +804,8 @@ export default {
       },
       title: {
         fr: 'Efforts accrus',
-        en: 'Efforts accrued',
-        nl: 'Efforts gekapitaliseerd'
+        en: 'Increased efforts',
+        nl: 'Verhoogde inspanningen'
       }
     },
     hospitalisation: {
@@ -816,8 +816,8 @@ export default {
       },
       title: {
         fr: 'Hospitalisation',
-        en: 'Hospitalisation',
-        nl: 'Ziekenhuisopname'
+        en: 'Hospitalization',
+        nl: 'Hospitalisatie'
       }
     },
     menagere: {
@@ -852,8 +852,8 @@ export default {
       },
       title: {
         fr: 'Pretium Doloris Temporaire',
-        en: 'Temporary Doloris Premium',
-        nl: 'Tijdelijke Doloris premie'
+        en: 'Temporary Pretium Doloris',
+        nl: 'Tijdelijke Pretium Doloris'
       }
     }
   }
