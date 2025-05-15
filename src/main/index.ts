@@ -36,6 +36,16 @@ function createWindow(): void {
     }
   })
 
+  // Ajout de la gestion des arguments de ligne de commande pour ouvrir des fichiers
+  if (process.argv.length >= 2) {
+    const filePath = process.argv[1]
+    if (filePath && filePath.endsWith('.assess')) {
+      mainWindow.webContents.once('did-finish-load', () => {
+        mainWindow?.webContents.send('open-file', filePath)
+      })
+    }
+  }
+
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show()
   })
@@ -155,6 +165,96 @@ function registerIpcHandlers(): void {
     store.clear()
     return { success: true }
   })
+
+  // Gestionnaire pour l'association de fichiers
+  ipcMain.handle('register-file-association', async () => {
+    if (process.platform === 'win32') {
+      app.setAsDefaultProtocolClient('assess')
+
+      // Enregistrer l'extension .assess
+      const exePath = process.execPath
+      const iconPath = join(app.getAppPath(), 'resources', 'icon.png')
+
+      try {
+        const Registry = require('winreg')
+
+        // Créer l'association de fichier
+        const fileAssocKey = new Registry({
+          hive: Registry.HKCU,
+          key: '\\Software\\Classes\\.assess'
+        })
+
+        await fileAssocKey.create()
+        await fileAssocKey.set('', 'REG_SZ', 'AssessFile')
+
+        // Créer le type de fichier
+        const fileTypeKey = new Registry({
+          hive: Registry.HKCU,
+          key: '\\Software\\Classes\\AssessFile'
+        })
+
+        await fileTypeKey.create()
+        await fileTypeKey.set('', 'REG_SZ', 'Fichier Assess')
+
+        // Ajouter l'icône
+        const iconKey = new Registry({
+          hive: Registry.HKCU,
+          key: '\\Software\\Classes\\AssessFile\\DefaultIcon'
+        })
+
+        await iconKey.create()
+        await iconKey.set('', 'REG_SZ', `${iconPath},0`)
+
+        // Ajouter la commande d'ouverture
+        const commandKey = new Registry({
+          hive: Registry.HKCU,
+          key: '\\Software\\Classes\\AssessFile\\shell\\open\\command'
+        })
+
+        await commandKey.create()
+        await commandKey.set('', 'REG_SZ', `"${exePath}" "%1"`)
+
+        return { success: true }
+      } catch (error) {
+        console.error("Erreur lors de l'enregistrement de l'association de fichier:", error)
+        return { success: false, error }
+      }
+    } else if (process.platform === 'darwin') {
+      // macOS gère les associations de fichiers via Info.plist
+      return { success: true, info: 'Sur macOS, les associations sont définies dans Info.plist' }
+    } else {
+      // Linux utilise des fichiers .desktop
+      return {
+        success: true,
+        info: 'Sur Linux, utilisez des fichiers .desktop pour les associations'
+      }
+    }
+  })
+
+  // Gestionnaire pour l'ouverture de fichiers .assess
+  ipcMain.handle('open-assess-file', async (_, filePath) => {
+    try {
+      const content = await fs.readFile(filePath, 'utf8')
+      return { success: true, content, filePath }
+    } catch (error) {
+      return { success: false, error: error.message }
+    }
+  })
+
+  // Gestionnaire pour l'enregistrement de fichiers .assess
+  ipcMain.handle('save-assess-file', async (_, filePath, content) => {
+    try {
+      // Ajouter l'extension .assess si elle n'est pas présente
+      if (!filePath.endsWith('.assess')) {
+        filePath += '.assess'
+      }
+
+      await fs.writeFile(filePath, content, 'utf8')
+      return { success: true, filePath }
+    } catch (error) {
+      return { success: false, error: error.message }
+    }
+  })
 }
 
 // Initialisation de l'application
@@ -171,6 +271,21 @@ app.whenReady().then(() => {
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  })
+
+  // Gérer l'ouverture de fichiers sur macOS
+  app.on('open-file', (event, filePath) => {
+    event.preventDefault()
+    if (filePath.endsWith('.assess')) {
+      if (mainWindow) {
+        mainWindow.webContents.send('open-file', filePath)
+      } else {
+        // Si la fenêtre n'est pas encore créée, stocker le chemin pour l'ouvrir plus tard
+        app.on('ready', () => {
+          mainWindow.webContents.send('open-file', filePath)
+        })
+      }
+    }
   })
 })
 
@@ -262,7 +377,7 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
     }
   }
 
-  // 🔥 Vérifier la licence et l'association avec l’appareil
+  // 🔥 Vérifier la licence et l'association avec l'appareil
   const result = await validateLicense(licenseKey)
   if (result.valid) {
     attemptCache[machineId] = {}

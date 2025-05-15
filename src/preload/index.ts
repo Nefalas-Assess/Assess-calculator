@@ -35,7 +35,15 @@ const api = {
   setStore: (key, value) => ipcRenderer.invoke('store:set', key, value),
 
   // License
-  checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey)
+  checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey),
+
+  // Fonctions pour la gestion des fichiers .assess
+  registerFileAssociation: () => ipcRenderer.invoke('register-file-association'),
+  openAssessFile: (filePath) => ipcRenderer.invoke('open-assess-file', filePath),
+  saveAssessFile: (filePath, content) => ipcRenderer.invoke('save-assess-file', filePath, content),
+
+  // Écouteur pour l'ouverture de fichiers
+  onOpenFile: (callback) => ipcRenderer.on('open-file', callback)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -1,6 +1,6 @@
 import { AppContext } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 
 const getFileNameWithoutExtension = (filePath: string): string => {
@@ -15,8 +15,8 @@ const getFileNameWithoutExtension = (filePath: string): string => {
 export const useRecentFiles = () => {
   const [recentFiles, setRecentFiles] = useState<string[]>([])
 
-  const { setFilePath, setData } = useContext(AppContext)
-  const { addToast } = useToast()
+  const { setFilePath, setData, data } = useContext(AppContext)
+  const { addToast, showToast } = useToast()
 
   const navigate = useNavigate()
 
@@ -44,55 +44,139 @@ export const useRecentFiles = () => {
     }
   }
 
-  const importFile = async () => {
+  const importFile = useCallback(async () => {
     try {
-      const { canceled, filePaths } = await window.api.showOpenDialog({
-        title: 'Importer un fichier',
-        filters: [{ name: 'JSON Files', extensions: ['json'] }],
-        properties: ['openFile']
+      const result = await window.api.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+          { name: 'Fichiers Assess', extensions: ['assess'] },
+          { name: 'Tous les fichiers', extensions: ['*'] }
+        ]
       })
 
-      if (!canceled && filePaths.length > 0) {
-        const filePath = filePaths[0]
-        const fileData = await window.api.readFile(filePath)
-        setFilePath(filePath)
-        navigate('/infog')
-        const parsedData = JSON.parse(fileData)
-        setData(parsedData)
-
-        const res = getFileNameWithoutExtension(filePath)
-        addFile({ path: filePath, name: res })
+      if (result.canceled || !result.filePaths || result.filePaths.length === 0) {
+        return
       }
 
-      addToast('Fichier importé')
-    } catch (err) {
-      addToast(err?.toString())
+      const filePath = result.filePaths[0]
+
+      // Vérifier si c'est un fichier .assess
+      if (filePath.endsWith('.assess')) {
+        const fileResult = await window.api.openAssessFile(filePath)
+
+        if (fileResult.success) {
+          const fileData = JSON.parse(fileResult.content)
+          setData(fileData)
+
+          // Ajouter aux fichiers récents
+          const recentFiles = JSON.parse(localStorage.getItem('recentFiles') || '[]')
+          const updatedRecentFiles = [
+            { path: filePath, name: filePath.split('/').pop().split('\\').pop() },
+            ...recentFiles.filter((file) => file.path !== filePath)
+          ].slice(0, 10) // Garder seulement les 10 plus récents
+
+          localStorage.setItem('recentFiles', JSON.stringify(updatedRecentFiles))
+
+          navigate('/infog')
+          showToast('Fichier importé avec succès', 'success')
+        } else {
+          showToast(`Erreur lors de l'ouverture du fichier: ${fileResult.error}`, 'error')
+        }
+      } else {
+        // Gestion des autres types de fichiers si nécessaire
+        const content = await window.api.readFile(filePath)
+        const fileData = JSON.parse(content)
+        setData(fileData)
+        navigate('/infog')
+        showToast('Fichier importé avec succès', 'success')
+      }
+    } catch (error) {
+      showToast(`Erreur lors de l'importation: ${error.message}`, 'error')
     }
-  }
+  }, [setData, navigate, showToast])
 
-  const createFile = async (fileName) => {
+  const createFile = useCallback(
+    async (fileName) => {
+      if (!fileName) return
+
+      try {
+        const result = await window.api.showSaveDialog({
+          title: 'Créer un nouveau fichier',
+          defaultPath: `${fileName}.assess`,
+          filters: [{ name: 'Fichiers Assess', extensions: ['assess'] }]
+        })
+
+        if (result.canceled || !result.filePath) {
+          return
+        }
+
+        const filePath = result.filePath
+        const initialData = { general_info: { reference: fileName } }
+
+        const saveResult = await window.api.saveAssessFile(filePath, JSON.stringify(initialData))
+
+        if (saveResult.success) {
+          setData(initialData)
+
+          // Ajouter aux fichiers récents
+          const recentFiles = JSON.parse(localStorage.getItem('recentFiles') || '[]')
+          const updatedRecentFiles = [
+            { path: filePath, name: fileName },
+            ...recentFiles.filter((file) => file.path !== filePath)
+          ].slice(0, 10)
+
+          localStorage.setItem('recentFiles', JSON.stringify(updatedRecentFiles))
+
+          navigate('/infog')
+          showToast('Fichier créé avec succès', 'success')
+        } else {
+          showToast(`Erreur lors de la création du fichier: ${saveResult.error}`, 'error')
+        }
+      } catch (error) {
+        showToast(`Erreur lors de la création: ${error.message}`, 'error')
+      }
+    },
+    [setData, navigate, showToast]
+  )
+
+  const saveFile = useCallback(async () => {
+    if (!data) return
+
     try {
-      // Données initiales pour le fichier
-      const defaultData = {}
-
-      // Appel pour sauvegarder un nouveau fichier
-      const { canceled, filePath } = await window.api.showSaveDialog({
-        title: 'Créer un nouveau fichier',
-        defaultPath: `${fileName}.json`,
-        filters: [{ name: 'JSON Files', extensions: ['json'] }]
+      const result = await window.api.showSaveDialog({
+        title: 'Enregistrer le fichier',
+        defaultPath: `${data.general_info?.reference || 'sans-titre'}.assess`,
+        filters: [{ name: 'Fichiers Assess', extensions: ['assess'] }]
       })
 
-      if (!canceled && filePath) {
-        await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
-        setFilePath(filePath)
-        addFile({ path: filePath, name: fileName })
-        addToast('Fichier créé')
-        navigate('/infog')
+      if (result.canceled || !result.filePath) {
+        return
       }
-    } catch (err) {
-      addToast('Erreur lors de la création du fichier')
+
+      const filePath = result.filePath
+      const saveResult = await window.api.saveAssessFile(filePath, JSON.stringify(data))
+
+      if (saveResult.success) {
+        // Ajouter aux fichiers récents
+        const recentFiles = JSON.parse(localStorage.getItem('recentFiles') || '[]')
+        const updatedRecentFiles = [
+          {
+            path: filePath,
+            name: data.general_info?.reference || filePath.split('/').pop().split('\\').pop()
+          },
+          ...recentFiles.filter((file) => file.path !== filePath)
+        ].slice(0, 10)
+
+        localStorage.setItem('recentFiles', JSON.stringify(updatedRecentFiles))
+
+        showToast('Fichier enregistré avec succès', 'success')
+      } else {
+        showToast(`Erreur lors de l'enregistrement: ${saveResult.error}`, 'error')
+      }
+    } catch (error) {
+      showToast(`Erreur lors de l'enregistrement: ${error.message}`, 'error')
     }
-  }
+  }, [data, showToast])
 
   useEffect(() => {
     async function fetchRecentFiles() {
@@ -103,5 +187,5 @@ export const useRecentFiles = () => {
     fetchRecentFiles()
   }, [])
 
-  return { addFile, importFile, createFile, selectFile, recentFiles }
+  return { addFile, importFile, createFile, selectFile, recentFiles, saveFile }
 }

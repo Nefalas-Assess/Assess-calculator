@@ -1,3 +1,4 @@
+import { useRecentFiles } from '@renderer/hooks/recentFiles'
 import { intervalToDuration } from 'date-fns'
 import React, { createContext, useCallback, useState } from 'react'
 
@@ -49,11 +50,12 @@ const AppProvider = ({ children }) => {
   const [filePath, setFilePath] = useState(null)
 
   const handleSave = useCallback(async () => {
-    try {
-      await window.api.writeFile(filePath, JSON.stringify(data, null, 2))
-    } catch (err) {
-      console.error(err)
-    }
+    console.log('todo')
+    // try {
+    //   await window.api.writeFile(filePath, JSON.stringify(data, null, 2))
+    // } catch (err) {
+    //   console.error(err)
+    // }
   }, [filePath, data])
 
   const handleBackHome = useCallback(() => {
