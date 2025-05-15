@@ -5,7 +5,13 @@ import content from '@renderer/traduction'
 /**
  * Récupère la traduction pour un chemin donné
  */
-export const getTranslation = (path: string, lg: string): string => {
+export const getTranslation = (path: string | { [key: string]: string }): string => {
+  const { lg } = useContext(AppContext)
+
+  if (typeof path === 'object') {
+    return path[lg]
+  }
+
   const keys = path.split('.')
   let result: any = content
 
@@ -28,8 +34,7 @@ interface TextItemProps extends React.HTMLAttributes<HTMLElement> {
  * Composant de traduction
  */
 export const TextItem = ({ path, tag: Tag = 'span', ...rest }: TextItemProps) => {
-  const { lg } = useContext(AppContext)
-  const translation = getTranslation(path, lg)
+  const translation = getTranslation(path)
 
   return <Tag {...rest}>{translation}</Tag>
 }

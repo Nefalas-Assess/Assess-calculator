@@ -9,7 +9,7 @@ import Tooltip from './tooltip'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import CoefficientInfo from './coefficientInfo'
-import TextItem from './textItem'
+import TextItem, { getTranslation } from './textItem'
 
 // Define column types
 type ColumnType = {
@@ -304,7 +304,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                 <option>Select</option>
                                 {column.options?.map((option) => (
                                   <option key={option.value} value={option.value}>
-                                    {option.label}
+                                    {getTranslation(option.label)}
                                   </option>
                                 ))}
                               </select>

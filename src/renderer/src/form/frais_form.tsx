@@ -81,7 +81,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const columns = [
     { header: 'frais.indemnite_frais', key: 'indemnite', type: 'text' },
     { header: 'frais.facture_number', key: 'facture', type: 'text' },
-    { header: 'common.paid', key: 'paid', type: 'select', options: constants.boolean },
+    { header: 'common.paid', key: 'paid', type: 'select', options: constants.boolean, width: 50 },
     {
       header: 'common.amount',
       key: 'amount',
@@ -112,7 +112,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         name="frais"
         formValues={formValues}
         editable={editable}
-        addRowDefaults={{ coefficient: 5,}}
+        addRowDefaults={{ coefficient: 5 }}
         calculateTotal={(e) => e.amount}
       />
       <div className="total-box">

@@ -2,6 +2,7 @@ import constants from '@renderer/constants'
 import { format, isValid } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
+import { getTranslation } from './textItem'
 
 const ReferenceInput = ({ options, onChange, value }) => {
   const [value1, setValue1] = useState('')
@@ -31,7 +32,7 @@ const ReferenceInput = ({ options, onChange, value }) => {
         <option value={''}>Select</option>
         {(constants.reference_type || [])?.map((it, key) => (
           <option key={key} value={it?.value}>
-            {it?.label || it?.value}
+            {getTranslation(it?.label || it?.value)}
           </option>
         ))}
       </select>
@@ -44,7 +45,7 @@ const ReferenceInput = ({ options, onChange, value }) => {
           <option value={''}>Select</option>
           {(options || [])?.map((it, key) => (
             <option key={key} value={it?.value}>
-              {it?.label || it?.value}
+              {getTranslation(it?.label || it?.value)}
             </option>
           ))}
         </select>
@@ -65,8 +66,10 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
 
       if (type === 'select') {
         if (val?.toString() && options) {
-          return (options || [])?.find((e) => e?.value === val || e?.value?.toString() === val)
-            ?.label
+          const res = (options || [])?.find(
+            (e) => e?.value === val || e?.value?.toString() === val
+          )?.label
+          return res ? getTranslation(res) : '-'
         }
       }
 
@@ -109,7 +112,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
             <option value={''}>Select</option>
             {(options || [])?.map((it, key) => (
               <option key={key} value={it?.value}>
-                {it?.label || it?.value}
+                {getTranslation(it?.label || it?.value)}
               </option>
             ))}
           </select>
