@@ -72,14 +72,14 @@ rel: ${i.start-s} until ${i.end-s} and ${e.start-s} until ${e.end-s}`)}}n.push(e
       <body>
         <div class="print-layout" id="printable">
           <div class="print-header">
-            <h2>Assess</h2>
+            <h2>Evalix</h2>
             <img src="file://${(n==null?void 0:n.logo)||""}" alt="Logo">
           </div>
           <div class="print-content">
             ${(n==null?void 0:n.content)||""}
           </div>
           <div class="print-footer">
-            <p>&copy; 2025 - Assess</p>
+            <p>&copy; 2025 - Evalix</p>
           </div>
         </div>
       </body>
