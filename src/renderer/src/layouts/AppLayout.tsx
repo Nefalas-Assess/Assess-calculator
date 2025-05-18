@@ -129,7 +129,7 @@ export const AppLayout = () => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img style={{ width: 40, marginRight: 10 }} src={logo} alt="Logo" />
             <div style={{ color: '#8bbdff' }} className="left">
-              Assess
+              Evalix
             </div>
           </div>
           <div className="right">

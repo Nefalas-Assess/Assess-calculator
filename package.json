@@ -1,7 +1,7 @@
 {
-  "name": "Assess",
+  "name": "Evalix",
   "version": "0.1.5",
-  "description": "Calculateur Assess",
+  "description": "Calculateur Evalix",
   "main": "./out/main/index.js",
   "author": "JVTP SNC",
   "homepage": "https://electron-vite.org",
