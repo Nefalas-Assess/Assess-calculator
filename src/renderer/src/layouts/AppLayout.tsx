@@ -128,9 +128,6 @@ export const AppLayout = () => {
         <div className="app-header">
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <img style={{ width: 40, marginRight: 10 }} src={logo} alt="Logo" />
-            <div style={{ color: '#395dff' }} className="left">
-              Evalix
-            </div>
           </div>
           <div className="right">
             <button onClick={toggleDarkMode}>
