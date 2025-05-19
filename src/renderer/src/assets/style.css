@@ -35,7 +35,7 @@
     }
 
     &.active {
-      color: #8bbdff;
+      color: #395dff;
     }
   }
 }
@@ -53,12 +53,12 @@
 
 a {
   font-weight: 500;
-  color: #8bbdff;
+  color: #395dff;
   text-decoration: inherit;
 }
 a:hover {
-  border-color: #8bbdff;
-  color: #8bbdff;
+  border-color: #395dff;
+  color: #395dff;
 }
 
 button {
@@ -75,8 +75,8 @@ button {
   margin-bottom: 10px
 }
 button:hover {
-  border-color: #8bbdff;
-  color: #8bbdff;
+  border-color: #395dff;
+  color: #395dff;
 }
 button:focus,
 button:focus-visible {
@@ -191,7 +191,7 @@ h1 {
   text-align: left;
   margin-bottom: 10px;
   font-weight: 700;
-  color: #8bbdff;
+  color: #395dff;
 }
 
 h3 {
@@ -289,19 +289,19 @@ button {
     }
 
     &.active {
-      color: #8bbdff;
+      color: #395dff;
     }
   } 
 }
 
 .sub-nav-title {
   font-weight: 500;
-  color: #8bbdff;
+  color: #395dff;
   text-decoration: inherit;
 }
 .sub-nav-title:hover {
-  border-color: #8bbdff;
-  color: #8bbdff;
+  border-color: #395dff;
+  color: #395dff;
 }
 
 .recent-files-list{
