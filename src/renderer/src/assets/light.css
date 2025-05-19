@@ -35,12 +35,12 @@
 
   a {
     font-weight: 500;
-    color: #8bbdff;
+    color: #395dff;
     text-decoration: inherit;
   }
   a:hover {
-    border-color: #8bbdff;
-    color: #8bbdff;
+    border-color: #395dff;
+    color: #395dff;
   }
 
   button {
@@ -56,8 +56,8 @@
     transition: border-color 0.25s;
   }
   button:hover {
-    border-color: #8bbdff;
-    color: #8bbdff;
+    border-color: #395dff;
+    color: #395dff;
   }
   button:focus,
   button:focus-visible {
@@ -119,19 +119,19 @@
       }
   
       &.active {
-        color: #8bbdff;
+        color: #395dff;
       }
     } 
   }
   
   .sub-nav-title {
     font-weight: 500;
-    color: #8bbdff;
+    color: #395dff;
     text-decoration: inherit;
   }
   .sub-nav-title:hover {
-    border-color: #8bbdff;
-    color: #8bbdff;
+    border-color: #395dff;
+    color: #395dff;
   }
 
   h1 {
@@ -139,7 +139,7 @@
     font-size: 24px;
     text-align: left;
     margin-bottom: 10px;
-    color: #8bbdff;
+    color: #395dff;
   }
 
   h2 {
