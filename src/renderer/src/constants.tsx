@@ -4,15 +4,15 @@ export default {
     { label: { fr: 'Femme', en: 'Woman', nl: 'Vrouw' }, value: 'femme' }
   ],
   marital_status: [
-    { label: { fr: 'Marié', en: 'Married', nl: 'Gehuwd' }, value: 'marié' },
+    { label: { fr: 'Marié(e)', en: 'Married', nl: 'Gehuwd' }, value: 'marié' },
     { label: { fr: 'Célibataire', en: 'Single', nl: 'Ongehuwd' }, value: 'célibataire' }
   ],
   profession: [
-    { value: 'employe', label: { fr: 'Employé', en: 'Employee', nl: 'Werknemer' } },
-    { value: 'ouvrier', label: { fr: 'Ouvrier', en: 'Worker', nl: 'Arbeider' } },
+    { value: 'employe', label: { fr: 'Employé(e)', en: 'Employee', nl: 'Werknemer' } },
+    { value: 'ouvrier', label: { fr: 'Ouvrier / Ouvrière', en: 'Worker', nl: 'Arbeider' } },
     { value: 'sans_emploi', label: { fr: 'Sans emploi', en: 'Unemployed', nl: 'Ziektewet' } },
-    { value: 'retraite', label: { fr: 'Retraité', en: 'Retired', nl: 'Ouderenwet' } },
-    { value: 'independant', label: { fr: 'Indépendant', en: 'Independent', nl: 'Zelfstandig' } },
+    { value: 'retraite', label: { fr: 'Retraité(e)', en: 'Retired', nl: 'Ouderenwet' } },
+    { value: 'independant', label: { fr: 'Indépendant(e)', en: 'Independent', nl: 'Zelfstandig' } },
     { value: 'fonctionnaire', label: { fr: 'Fonctionnaire', en: 'Functionary', nl: 'Ambtenaar' } },
     { value: 'invalide', label: { fr: 'Invalide', en: 'Invalid', nl: 'Invalidenwet' } }
   ],
