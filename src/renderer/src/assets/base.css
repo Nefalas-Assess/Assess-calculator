@@ -36,6 +36,9 @@
 *::after {
   box-sizing: border-box;
   margin: 0;
+}
+
+th{
   font-weight: normal;
 }
 
