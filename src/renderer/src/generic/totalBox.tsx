@@ -34,11 +34,7 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
 
   return (
     <div className="total-box">
-      {label && (
-        <strong>
-          <TextItem path={label} />
-        </strong>
-      )}
+      {label && <TextItem tag="strong" path={label} />}
       <Money
         className={`total${name ? '-' + name : ''}`}
         value={negative ? -getTotalDisplayedOnPage() : getTotalDisplayedOnPage()}

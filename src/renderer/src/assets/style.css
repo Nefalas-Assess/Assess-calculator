@@ -234,8 +234,8 @@ button {
   border: 2px solid black;
   font-size: 18px;
   text-align: center;
-  font-weight: bold;
   max-width: 1200px;
+  font-weight: normal;
 }
 
 .home {
