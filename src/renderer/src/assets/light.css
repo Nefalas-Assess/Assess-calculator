@@ -3,65 +3,29 @@
 .light {
   background-color: white;
   .app {
-    display: flex;
-    height: 100%;
-    min-height: 100vh;
-    width: 100%;
     background-color: white;
   }
 
   .layout-menu {
-    width: 220px;
-    min-width: 210px;
     border-right: 2px solid black;
-    overflow: hidden;
     background-color: white;
-    display: flex;
-    flex-direction: column;
 
     a {
-      display: block;
-      text-align: left;
-      margin: 10px;
-      padding: 5px;
-      background-color: white;
       color: black;
-      border-radius: 5px;
+      background-color: white;
       &:hover{
-        background-color: gray;
+        color: var(--color-primary);
+        background-color: whitesmoke;
+      }
+      &.active{
+        color: var(--color-primary);
       }
     }
   }
 
-
-  a {
-    font-weight: 500;
-    color: #395dff;
-    text-decoration: inherit;
-  }
-  a:hover {
-    border-color: #395dff;
-    color: #395dff;
-  }
-
   button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-weight: 500;
-    font-family: inherit;
     background-color: white;
     color: black;
-    cursor: pointer;
-    transition: border-color 0.25s;
-  }
-  button:hover {
-    border-color: #395dff;
-    color: #395dff;
-  }
-  button:focus,
-  button:focus-visible {
-    outline: 4px auto -webkit-focus-ring-color;
   }
 
 
@@ -71,31 +35,11 @@
 
   /* Contenu */
   #content {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Commencer en haut de la page */
-    flex: 1;
     background-color: white;
   }
 
   #top-menu {
-    top: 0;
     background-color: #242424;
-    padding: 10px;
-    /* border-bottom: 2px solid black;*/
-    display: flex;
-    justify-content: space-between;
-    left: 0; /* Fixe le top-menu à gauche de l'écran */
-    width: 100%; /* Prendre toute la largeur de l'écran */
-    z-index: 10; /* Placer le top-menu au-dessus des autres éléments */
-    justify-content: right; /* Centre les éléments horizontalement */
-  }
-
-  #top-menu button,
-  #loadFileInput {
-    padding: 10px;
-    cursor: pointer;
   }
 
   #top-menu button:hover {
@@ -103,73 +47,35 @@
   }
 
   .sub-nav {
-    padding: 0 10px;
     color: white;
     .sub-nav-title {
-      cursor: pointer;
-      user-select: none; 
-      padding: 5px;
-      margin: 10px 0;
       background-color: white;
       color: black;
-      border-radius: 5px;
       &:hover{
-        background-color: gray;
-      }
-  
-      &.active {
-        color: #395dff;
+        color: var(--color-primary);
+        background-color: whitesmoke;
       }
     } 
   }
   
-  .sub-nav-title {
-    font-weight: 500;
-    color: #395dff;
-    text-decoration: inherit;
-  }
-  .sub-nav-title:hover {
-    border-color: #395dff;
-    color: #395dff;
-  }
 
 .recent-files-list{
   color: white;
-  overflow: auto;
   .recent-file-item {
     background-color: white;
     color: black;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 0 5px;
-    font-size: 14px;
     &:hover{
       background-color: gray;
     }
   }
 }
 
-  h1 {
-    margin-top: 10;
-    font-size: 24px;
-    text-align: left;
-    margin-bottom: 10px;
-    color: #395dff;
-  }
 
   h2 {
     color:black;
   }
 
-  h3 {
-    color:#9F9ADB;
-  }
-
   table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    margin-bottom: 10px;
     background-color: whitesmoke;
   }
 
@@ -178,58 +84,21 @@
   }
 
   th, td {
-    padding: 8px;
-    text-align: center;
     color:black;
   }
 
   /* Style des boutons */
   button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
     border: 1px solid black;
   }
 
   .total-box {
-    margin-top: 20px;
-    padding: 10px;
     background-color: whitesmoke;
     border: 2px solid black;
-    font-size: 18px;
-    text-align: center;
-    font-weight: bold;
     color: black;
   }
 
-  #inv {
-    display: none;
-  }
-
-  .home {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    .create-file {
-      margin-top: 10px;
-    }
-    button {
-      margin: 0;
-    }
-  }
-
   .separator {
-    width: 200px;
     border-top: 1px solid black;
-    margin: 20px;
   }
-
 }

@@ -35,7 +35,7 @@
     }
 
     &.active {
-      color: #395dff;
+      color: var(--color-primary);
     }
   }
 }
@@ -53,12 +53,12 @@
 
 a {
   font-weight: 500;
-  color: #395dff;
+  color: var(--color-primary);
   text-decoration: inherit;
 }
 a:hover {
-  border-color: #395dff;
-  color: #395dff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 button {
@@ -75,8 +75,8 @@ button {
   margin-bottom: 10px
 }
 button:hover {
-  border-color: #395dff;
-  color: #395dff;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 button:focus,
 button:focus-visible {
@@ -186,18 +186,18 @@ button:focus-visible {
 }
 
 h1 {
-  margin-top: 10;
+  margin-top: 10px;
   font-size: 24px;
   text-align: left;
   margin-bottom: 10px;
   font-weight: 700;
-  color: #395dff;
+  color: var(--color-primary);
 }
 
 h3 {
   font-weight: bold;
   font-style: italic;
-  color: #9F9ADB;
+  color: var(--color-primary);
 }
 
 table {
@@ -291,18 +291,18 @@ button {
     }
 
     &.active {
-      color: #395dff;
+      color: var(--color-primary);
     }
   } 
 }
 
 .sub-nav-title {
   font-weight: 500;
-  color: #395dff;
+  color: var(--color-primary);
   text-decoration: inherit;
 }
 .sub-nav-title:hover {
-  border-color: #395dff;
+  border-color: var(--color-primary);
   color: #8bbdff;
 }
 
