@@ -219,6 +219,10 @@ th, td {
   max-width: 200px;
 }
 
+th{
+  font-weight: bold;
+}
+
 /* Style des boutons */
 button {
   margin-top: 10px;
