@@ -97,9 +97,11 @@ body {
 .app{
   &.dark{
     --color-primary: #9F9ADB;
+    --color-primary-hsl: 245, 47%, 73%;  /* Format: hue, saturation, lightness */
   }
   &.light{
     --color-primary: #3422F2;
+    --color-primary-hsl: 245, 89%, 54%;
   }
 }
 

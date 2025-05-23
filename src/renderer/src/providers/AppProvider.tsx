@@ -1,5 +1,5 @@
 import { intervalToDuration } from 'date-fns'
-import React, { createContext, useCallback, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useState } from 'react'
 
 export const AppContext = createContext()
 
@@ -110,11 +110,24 @@ const AppProvider = ({ children }) => {
   )
 
   const toggleDarkMode = useCallback(() => {
+    window.api.setStore('mode', darkMode ? 'light' : 'dark')
     setDarkMode(!darkMode)
   }, [setDarkMode, darkMode])
 
   const resetData = useCallback(() => {
     setData(initial)
+  }, [])
+
+  useEffect(() => {
+    const getMode = async () => {
+      const mode = await window.api.getStore('mode')
+      if (mode === 'dark') {
+        setDarkMode(true)
+      } else {
+        setDarkMode(false)
+      }
+    }
+    getMode()
   }, [])
 
   // the value passed in here will be accessible anywhere in our application

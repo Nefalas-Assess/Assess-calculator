@@ -263,6 +263,9 @@ button {
   max-width: 1200px;
   font-weight: normal;
   border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  background-color: hsla(var(--color-primary-hsl), 0.3)
 }
 
 .home {
@@ -337,6 +340,7 @@ button {
   color: white;
   overflow: auto;
   .recent-file-item {
+    cursor: pointer;
     background-color: #242424;
     color: white;
     border-radius: 5px;
