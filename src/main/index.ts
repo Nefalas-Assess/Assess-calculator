@@ -108,7 +108,6 @@ function registerIpcHandlers(): void {
       <body>
         <div class="print-layout" id="printable">
           <div class="print-header">
-            <h2>Evalix</h2>
             <img src="file://${doc?.logo || ''}" alt="Logo">
           </div>
           <div class="print-content">
