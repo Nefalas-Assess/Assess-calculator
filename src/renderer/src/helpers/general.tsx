@@ -1,4 +1,4 @@
-import { addDays, differenceInDays } from 'date-fns'
+import { addDays, differenceInDays, isSameDay } from 'date-fns'
 
 export const getChildrenUnder25 = (children) => {
   const now = new Date()
@@ -51,6 +51,7 @@ export const getDays = (item = {}, varName) => {
       // Calcul du nombre de jours entre les deux dates en tenant compte de la date de début et de fin
       const timeDiff = finDate.getTime() - debutDate.getTime() // En millisecondes
       const jours = Math.max(0, timeDiff / (1000 * 3600 * 24) + 1) // Conversion en jours
+
       return jours
     }
   }
@@ -77,6 +78,10 @@ export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
   const start = parseDate(dates?.[0])
   const end = parseDate(dates?.[1])
 
+  // if (isSameDay(start, end)) {
+  //   end = addDays(start, 1)
+  // }
+
   // Vérification des dates
   if (start > end) {
     return 'La date de début doit être avant la date de fin.'
@@ -88,7 +93,7 @@ export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
   // Calcul des jours entre deux dates
   const calculateDaysBetween = (date1, date2) => {
     const diffTime = Math.abs(date2 - date1)
-    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) // Convertir les millisecondes en jours
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1 // Convertir les millisecondes en jours
   }
 
   let before25 = 0
@@ -98,6 +103,7 @@ export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
   if (start <= twentyFifthBirthday) {
     // Calcul des jours avant les 25 ans
     const actualEndBefore25 = end <= twentyFifthBirthday ? end : twentyFifthBirthday
+
     before25 = calculateDaysBetween(start, actualEndBefore25)
 
     // Calcul des jours après les 25 ans
