@@ -192,12 +192,33 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         }, 0) *
           10
 
-      return (
-        parseInt(days || 0) *
-        real_conso_amount *
-        (parseFloat(conso_pourcentage || 0) / 100) *
-        (parseFloat(conso_contribution || 0) / 100)
-      ).toFixed(2)
+      return {
+        tooltip: () => (
+          <div>
+            <math>
+              <mn>{parseInt(days || 0)}</mn>
+              <mo>x</mo>
+              <mn>{real_conso_amount}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{parseFloat(conso_pourcentage || 0)}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{parseFloat(conso_contribution || 0)}</mn>
+                <mn>100</mn>
+              </mfrac>
+            </math>
+          </div>
+        ),
+        value: (
+          parseInt(days || 0) *
+          real_conso_amount *
+          (parseFloat(conso_pourcentage || 0) / 100) *
+          (parseFloat(conso_contribution || 0) / 100)
+        ).toFixed(2)
+      }
     },
     [days, childrenOnPeriod]
   )
@@ -339,11 +360,14 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                 ></Field>
               </td>
               <td>
-                <Money value={getConsoAmount(formValues)} />
+                <Money
+                  value={getConsoAmount(formValues)?.value}
+                  tooltip={getConsoAmount(formValues)?.tooltip()}
+                />
               </td>
               <td className="int">
                 <Interest
-                  amount={getConsoAmount(formValues)}
+                  amount={getConsoAmount(formValues)?.value}
                   start={getMedDate({
                     start: data?.general_info?.date_consolidation,
                     end: formValues?.paiement

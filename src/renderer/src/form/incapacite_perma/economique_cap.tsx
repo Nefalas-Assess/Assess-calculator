@@ -10,6 +10,7 @@ import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import TextItem from '@renderer/generic/textItem'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -83,6 +84,32 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
     [days]
   )
 
+  const renderToolTipConso = useCallback(
+    (values, name) => {
+      const { conso_amount, conso_pourcentage } = values || {}
+      const numDays = days[name || 'brut']
+
+      return (
+        <div>
+          <math>
+            <mn>{numDays}</mn>
+            <mo>x</mo>
+            <mfrac>
+              <mn>{conso_amount}</mn>
+              <mn>365</mn>
+            </mfrac>
+            <mo>x</mo>
+            <mfrac>
+              <mn>{conso_pourcentage}</mn>
+              <mn>100</mn>
+            </mfrac>
+          </math>
+        </div>
+      )
+    },
+    [days]
+  )
+
   const getCapAmount = useCallback(
     (values) => {
       const { amount = 0, pourcentage = 0 } = values || {}
@@ -94,10 +121,38 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
       const coef = useCapitalization({
         end: formValues?.paiement,
         ref: formValues?.reference,
-        index
+        index,
+        asObject: true
       })
 
-      return (parseFloat(amount) * (parseFloat(pourcentage) / 100) * parseFloat(coef)).toFixed(2)
+      return {
+        tooltip: () => (
+          <div>
+            <math>
+              <mn>{parseFloat(amount)}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{pourcentage}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>x</mo>
+              <CoefficientInfo
+                table={coef?.table}
+                index={coef?.index}
+                headers={constants?.interet_amount}
+                startIndex={1}
+              >
+                <mn>{coef?.value}</mn>
+              </CoefficientInfo>
+            </math>
+          </div>
+        ),
+        value: (
+          parseFloat(amount) *
+          (parseFloat(pourcentage) / 100) *
+          parseFloat(coef?.value)
+        ).toFixed(2)
+      }
     },
     [data, formValues]
   )
@@ -185,7 +240,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Money value={getConsoAmount(formValues?.brut, 'brut')} />
+                <Money
+                  value={getConsoAmount(formValues?.brut, 'brut')}
+                  tooltip={renderToolTipConso(formValues?.brut, 'brut')}
+                />
               </td>
               <td className="int">
                 <Interest
@@ -237,7 +295,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Money value={getConsoAmount(formValues?.net, 'net')} />
+                <Money
+                  value={getConsoAmount(formValues?.net, 'net')}
+                  tooltip={renderToolTipConso(formValues?.net, 'net')}
+                />
               </td>
               <td className="int">
                 <Interest
@@ -280,7 +341,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Money value={getCapAmount(formValues?.brut)} />
+                <Money
+                  value={getCapAmount(formValues?.brut)?.value}
+                  tooltip={getCapAmount(formValues?.brut)?.tooltip()}
+                />
               </td>
             </tr>
           </tbody>
@@ -307,7 +371,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                 </Field>
               </td>
               <td>
-                <Money value={getCapAmount(formValues?.net)} />
+                <Money
+                  value={getCapAmount(formValues?.net)?.value}
+                  tooltip={getCapAmount(formValues?.net)?.tooltip()}
+                />
               </td>
             </tr>
           </tbody>

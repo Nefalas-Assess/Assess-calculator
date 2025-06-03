@@ -53,6 +53,30 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const point = useMemo(() => getPoint(data?.computed_info?.age_consolidation), [getPoint, data])
 
+  const getAmount = useCallback((point, pourcentage, pourcentage2) => {
+    return {
+      tooltip: () => (
+        <div>
+          <math>
+            <mn>{point}</mn>
+            <mo>x</mo>
+            <mn>{parseInt(pourcentage || 0)}</mn>
+            {pourcentage2 && (
+              <>
+                <mo>x</mo>
+                <mfrac>
+                  <mn>{parseInt(pourcentage2 || 0)}</mn>
+                  <mn>100</mn>
+                </mfrac>
+              </>
+            )}
+          </math>
+        </div>
+      ),
+      value: (point * parseInt(pourcentage || 0) * (parseInt(pourcentage2 || 100) / 100)).toFixed(2)
+    }
+  }, [])
+
   return (
     <form onSubmit={handleSubmit(submitForm)}>
       <TextItem path={'incapacite_perma.forfait.title_inc_perma'} tag="h1" />
@@ -78,7 +102,10 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Money value={(point * parseInt(formValues?.pourcentage_ipp || 0)).toFixed(2)} />
+              <Money
+                value={getAmount(point, formValues?.pourcentage_ipp)?.value}
+                tooltip={getAmount(point, formValues?.pourcentage_ipp)?.tooltip()}
+              />
             </td>
             <td className="int">
               <Field control={control} type="date" name={`perso_date_paiement`} editable={editable}>
@@ -87,7 +114,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
             <td className="int">
               <Interest
-                amount={point * parseInt(formValues?.pourcentage_ipp || 0)}
+                amount={getAmount(point, formValues?.pourcentage_ipp)?.value}
                 start={data?.general_info?.date_consolidation}
                 end={formValues?.perso_date_paiement}
               />
@@ -131,11 +158,14 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
             <td>
               <Money
-                value={(
-                  point *
-                  parseInt(formValues?.pourcentage_imp || 0) *
-                  ((formValues?.contribution_imp || 0) / 100)
-                ).toFixed(2)}
+                value={
+                  getAmount(point, formValues?.pourcentage_imp, formValues?.contribution_imp)?.value
+                }
+                tooltip={getAmount(
+                  point,
+                  formValues?.pourcentage_imp,
+                  formValues?.contribution_imp
+                )?.tooltip()}
               />
             </td>
             <td className="int">
@@ -151,9 +181,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td className="int">
               <Interest
                 amount={
-                  point *
-                  parseInt(formValues?.pourcentage_imp || 0) *
-                  ((formValues?.contribution_imp || 0) / 100)
+                  getAmount(point, formValues?.pourcentage_imp, formValues?.contribution_imp)?.value
                 }
                 start={data?.general_info?.date_consolidation}
                 end={formValues?.menage_date_paiement}
@@ -186,7 +214,10 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Money value={(point * parseInt(formValues?.pourcentage_iep || 0)).toFixed(2)} />
+              <Money
+                value={getAmount(point, formValues?.pourcentage_iep)?.value}
+                tooltip={getAmount(point, formValues?.pourcentage_iep)?.tooltip()}
+              />
             </td>
             <td className="int">
               <Field control={control} type="date" name={`eco_date_paiement`} editable={editable}>
@@ -195,7 +226,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             </td>
             <td className="int">
               <Interest
-                amount={point * parseInt(formValues?.pourcentage_iep || 0)}
+                amount={getAmount(point, formValues?.pourcentage_iep)?.value}
                 start={data?.general_info?.date_consolidation}
                 end={formValues?.eco_date_paiement}
               />

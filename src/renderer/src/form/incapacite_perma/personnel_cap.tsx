@@ -10,6 +10,7 @@ import constants from '@renderer/constants'
 import FadeIn from '@renderer/generic/fadeIn'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import TextItem from '@renderer/generic/textItem'
+import CoefficientInfo from '@renderer/generic/coefficientInfo'
 
 export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -54,11 +55,28 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
   const getConsoAmount = useCallback(
     (values) => {
       const { conso_amount, conso_pourcentage } = values || {}
-      return (
-        parseInt(days || 0) *
-        parseFloat(conso_amount || 0) *
-        (parseFloat(conso_pourcentage || 0) / 100)
-      ).toFixed(2)
+
+      return {
+        tooltip: () => (
+          <div>
+            <math>
+              <mn>{parseInt(days || 0)}</mn>
+              <mo>x</mo>
+              <mn>{parseFloat(conso_amount || 0)}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{parseFloat(conso_pourcentage || 0)}</mn>
+                <mn>100</mn>
+              </mfrac>
+            </math>
+          </div>
+        ),
+        value: (
+          parseInt(days || 0) *
+          parseFloat(conso_amount || 0) *
+          (parseFloat(conso_pourcentage || 0) / 100)
+        ).toFixed(2)
+      }
     },
     [days]
   )
@@ -74,15 +92,41 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
       const coef = useCapitalization({
         end: paiement,
         ref: formValues?.reference,
-        index
+        index,
+        asObject: true
       })
 
-      return (
-        parseFloat(perso_amount) *
-        (parseFloat(perso_pourcentage) / 100) *
-        365 *
-        parseFloat(coef)
-      ).toFixed(2)
+      return {
+        tooltip: () => (
+          <div>
+            <math>
+              <mn>{parseFloat(perso_amount)}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{parseFloat(perso_pourcentage)}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>x</mo>
+              <mn>365</mn>
+              <mo>x</mo>
+              <CoefficientInfo
+                table={coef?.table}
+                index={coef?.index}
+                headers={constants?.interet_amount}
+                startIndex={1}
+              >
+                <mn>{coef?.value}</mn>
+              </CoefficientInfo>
+            </math>
+          </div>
+        ),
+        value: (
+          parseFloat(perso_amount) *
+          (parseFloat(perso_pourcentage) / 100) *
+          365 *
+          parseFloat(coef?.value)
+        ).toFixed(2)
+      }
     },
     [data]
   )
@@ -167,11 +211,14 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
                 </Field>
               </td>
               <td>
-                <Money value={getConsoAmount(formValues)} />
+                <Money
+                  value={getConsoAmount(formValues)?.value}
+                  tooltip={getConsoAmount(formValues)?.tooltip()}
+                />
               </td>
               <td className="int">
                 <Interest
-                  amount={getConsoAmount(formValues)}
+                  amount={getConsoAmount(formValues)?.value}
                   start={getMedDate({
                     start: data?.general_info?.date_consolidation,
                     end: formValues?.paiement
@@ -212,7 +259,10 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
                 </Field>
               </td>
               <td>
-                <Money value={getCapAmount(formValues)} />
+                <Money
+                  value={getCapAmount(formValues)?.value}
+                  tooltip={getCapAmount(formValues)?.tooltip()}
+                />
               </td>
             </tr>
           </tbody>
