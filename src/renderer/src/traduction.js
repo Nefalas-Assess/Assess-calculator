@@ -523,9 +523,9 @@ export default {
       nl: 'Administratief [€ 50 - € 150]'
     },
     vestimentaire_value: {
-      fr: 'Vestimentaires [€ 50 - € 150]',
-      en: 'Clothing [€ 50 - € 150]',
-      nl: 'Kleding [€ 50 - € 150]'
+      fr: 'Vestimentaires [€ 400]',
+      en: 'Clothing [€ 400]',
+      nl: 'Kleding [€ 400]'
     },
     deplacement_value: {
       fr: 'Déplacement',
