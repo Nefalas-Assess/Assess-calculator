@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
+import Money from '@renderer/generic/money'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -62,11 +63,29 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const getSalaryTotalAmount = useCallback((item = {}, days) => {
     const { amount = 0, percentage = 0 } = item
-    return (
-      (parseInt(days) || 0) *
-      ((parseFloat(amount) || 0) / 365) *
-      ((parseFloat(percentage) || 0) / 100)
-    ).toFixed(2)
+
+    return {
+      value: (
+        (parseInt(days) || 0) *
+        ((parseFloat(amount) || 0) / 365) *
+        ((parseFloat(percentage) || 0) / 100)
+      ).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{parseInt(days) || 0}</mn>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{parseFloat(amount) || 0}</mn>
+            <mn>365</mn>
+          </mfrac>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{parseFloat(percentage) || 0}</mn>
+            <mn>100</mn>
+          </mfrac>
+        </math>
+      )
+    }
   }, [])
 
   const copyDate = useCallback(
@@ -142,6 +161,9 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
             <Field control={control} type="number" name={`estimate`} editable={editable}>
               {(props) => <input {...props} />}
             </Field>
+            <div className="hide">
+              <Money value={formValues?.estimate} />
+            </div>
           </td>
           {editable && (
             <td>

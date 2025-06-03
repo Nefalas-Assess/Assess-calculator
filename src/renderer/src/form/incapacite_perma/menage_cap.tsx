@@ -193,7 +193,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
           10
 
       return {
-        tooltip: () => (
+        tooltip: (
           <div>
             <math>
               <mn>{parseInt(days || 0)}</mn>
@@ -362,7 +362,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
               <td>
                 <Money
                   value={getConsoAmount(formValues)?.value}
-                  tooltip={getConsoAmount(formValues)?.tooltip()}
+                  tooltip={getConsoAmount(formValues)?.tooltip}
                 />
               </td>
               <td className="int">

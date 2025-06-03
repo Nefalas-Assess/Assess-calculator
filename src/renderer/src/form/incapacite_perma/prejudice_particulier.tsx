@@ -70,6 +70,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
       const age = data?.computed_info?.age_consolidation
       const keys = Object.keys(data_pp)
       const ageKey = findClosestIndex(keys, age)
+
       return Object.values(data_pp)[ageKey][coef]
     },
     [data]

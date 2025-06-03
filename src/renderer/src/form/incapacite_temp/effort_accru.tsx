@@ -46,12 +46,31 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, effortsValues, submitForm, handleSubmit])
 
   const getTotalAmount = useCallback((values, days) => {
-    return (
-      parseInt(days || 0) *
-      parseFloat(values?.amount || 0) *
-      parseFloat((values?.pourcentage || 0) / 100) *
-      (parseInt(values?.coefficient || 0) / 5)
-    ).toFixed(2)
+    return {
+      value: (
+        parseInt(days || 0) *
+        parseFloat(values?.amount || 0) *
+        parseFloat((values?.pourcentage || 0) / 100) *
+        (parseInt(values?.coefficient || 0) / 5)
+      ).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{parseInt(days || 0)}</mn>
+          <mo>x</mo>
+          <mn>{parseFloat(values?.amount || 0)}</mn>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{parseFloat(values?.pourcentage || 0)}</mn>
+            <mn>100</mn>
+          </mfrac>
+          <mo>x</mo>
+          <mfrac>
+            <mn>{parseInt(values?.coefficient || 0)}</mn>
+            <mn>5</mn>
+          </mfrac>
+        </math>
+      )
+    }
   }, [])
 
   const columns = [

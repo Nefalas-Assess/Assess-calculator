@@ -46,7 +46,16 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, periodsValues, submitForm, handleSubmit])
 
   const getTotalAmount = useCallback((values, days) => {
-    return (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2)
+    return {
+      value: (parseInt(days || 0) * parseFloat(values?.amount || 0)).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{parseInt(days || 0)}</mn>
+          <mo>x</mo>
+          <mn>{parseFloat(values?.amount || 0)}</mn>
+        </math>
+      )
+    }
   }, [])
 
   const columns = [

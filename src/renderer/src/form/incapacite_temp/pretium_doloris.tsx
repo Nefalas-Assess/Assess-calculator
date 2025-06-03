@@ -55,7 +55,16 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [formValues, periodsValues, submitForm, handleSubmit])
 
   const getAmount = useCallback((values, days) => {
-    return (parseInt(days || 0) * parseFloat(values?.coefficient || 0)).toFixed(2)
+    return {
+      value: (parseInt(days || 0) * parseFloat(values?.coefficient || 0)).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{parseInt(days || 0)}</mn>
+          <mo>x</mo>
+          <mn>{parseFloat(values?.coefficient || 0)}</mn>
+        </math>
+      )
+    }
   }, [])
 
   const columns = [

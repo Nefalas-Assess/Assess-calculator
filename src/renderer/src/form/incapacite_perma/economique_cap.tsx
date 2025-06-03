@@ -126,7 +126,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
       })
 
       return {
-        tooltip: () => (
+        tooltip: (
           <div>
             <math>
               <mn>{parseFloat(amount)}</mn>
@@ -343,7 +343,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <td>
                 <Money
                   value={getCapAmount(formValues?.brut)?.value}
-                  tooltip={getCapAmount(formValues?.brut)?.tooltip()}
+                  tooltip={getCapAmount(formValues?.brut)?.tooltip}
                 />
               </td>
             </tr>
@@ -373,7 +373,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <td>
                 <Money
                   value={getCapAmount(formValues?.net)?.value}
-                  tooltip={getCapAmount(formValues?.net)?.tooltip()}
+                  tooltip={getCapAmount(formValues?.net)?.tooltip}
                 />
               </td>
             </tr>

@@ -57,7 +57,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
       const { conso_amount, conso_pourcentage } = values || {}
 
       return {
-        tooltip: () => (
+        tooltip: (
           <div>
             <math>
               <mn>{parseInt(days || 0)}</mn>
@@ -97,7 +97,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
       })
 
       return {
-        tooltip: () => (
+        tooltip: (
           <div>
             <math>
               <mn>{parseFloat(perso_amount)}</mn>
@@ -213,7 +213,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
               <td>
                 <Money
                   value={getConsoAmount(formValues)?.value}
-                  tooltip={getConsoAmount(formValues)?.tooltip()}
+                  tooltip={getConsoAmount(formValues)?.tooltip}
                 />
               </td>
               <td className="int">
@@ -261,7 +261,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
               <td>
                 <Money
                   value={getCapAmount(formValues)?.value}
-                  tooltip={getCapAmount(formValues)?.tooltip()}
+                  tooltip={getCapAmount(formValues)?.tooltip}
                 />
               </td>
             </tr>

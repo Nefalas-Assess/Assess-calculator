@@ -55,7 +55,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const getAmount = useCallback((point, pourcentage, pourcentage2) => {
     return {
-      tooltip: () => (
+      tooltip: (
         <div>
           <math>
             <mn>{point}</mn>
@@ -104,7 +104,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Money
                 value={getAmount(point, formValues?.pourcentage_ipp)?.value}
-                tooltip={getAmount(point, formValues?.pourcentage_ipp)?.tooltip()}
+                tooltip={getAmount(point, formValues?.pourcentage_ipp)?.tooltip}
               />
             </td>
             <td className="int">
@@ -161,11 +161,10 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
                 value={
                   getAmount(point, formValues?.pourcentage_imp, formValues?.contribution_imp)?.value
                 }
-                tooltip={getAmount(
-                  point,
-                  formValues?.pourcentage_imp,
-                  formValues?.contribution_imp
-                )?.tooltip()}
+                tooltip={
+                  getAmount(point, formValues?.pourcentage_imp, formValues?.contribution_imp)
+                    ?.tooltip
+                }
               />
             </td>
             <td className="int">
@@ -216,7 +215,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <td>
               <Money
                 value={getAmount(point, formValues?.pourcentage_iep)?.value}
-                tooltip={getAmount(point, formValues?.pourcentage_iep)?.tooltip()}
+                tooltip={getAmount(point, formValues?.pourcentage_iep)?.tooltip}
               />
             </td>
             <td className="int">

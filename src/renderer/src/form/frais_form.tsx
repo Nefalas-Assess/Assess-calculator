@@ -29,22 +29,42 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       .toFixed(2)
   }, [formValues])
 
-  const totalDeplacementFrais = useMemo(() => {
-    return (formValues?.deplacement_value * formValues?.deplacement_type).toFixed(2)
-  }, [formValues])
+  const totalDeplacementFrais = useMemo(
+    () => ({
+      value: (formValues?.deplacement_value * formValues?.deplacement_type).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{formValues?.deplacement_value}</mn>
+          <mo>x</mo>
+          <mn>{formValues?.deplacement_type}</mn>
+        </math>
+      )
+    }),
+    [formValues]
+  )
 
   const totalSumRest = useMemo(() => {
     return (
-      parseFloat(totalDeplacementFrais || 0) +
+      parseFloat(totalDeplacementFrais?.value || 0) +
       parseFloat(formValues?.administratif_value || 0) +
       parseFloat(formValues?.vestimentaire_value || 0) +
       parseFloat(formValues?.package_value || 0)
     ).toFixed(2)
   }, [formValues, totalDeplacementFrais])
 
-  const totalAides = useMemo(() => {
-    return (parseFloat(formValues?.aides || 0) * 11.5).toFixed(2)
-  }, [formValues])
+  const totalAides = useMemo(
+    () => ({
+      value: (parseFloat(formValues?.aides || 0) * 11.5).toFixed(2),
+      tooltip: (
+        <math>
+          <mn>{formValues?.aides}</mn>
+          <mo>x</mo>
+          <mn>11.5</mn>
+        </math>
+      )
+    }),
+    [formValues]
+  )
 
   const fraisValues = useWatch({
     control,
@@ -208,7 +228,11 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               ></Field>
             </td>
             <td>
-              <Money value={totalDeplacementFrais} ignore />
+              <Money
+                value={totalDeplacementFrais?.value}
+                tooltip={totalDeplacementFrais?.tooltip}
+                ignore
+              />
             </td>
           </tr>
           <tr>
@@ -257,7 +281,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
             <td>
-              <Money value={totalAides} />
+              <Money value={totalAides?.value} tooltip={totalAides?.tooltip} />
             </td>
           </tr>
         </tbody>

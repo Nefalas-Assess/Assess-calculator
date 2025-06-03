@@ -219,7 +219,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                             justifyContent: 'center'
                           }}
                         >
-                          <Money value={total} />
+                          <Money value={total?.value || total} tooltip={total?.tooltip} />
                           {column?.tooltipContent && (
                             <Tooltip tooltipContent={column?.tooltipContent(rowData, days)}>
                               <FaRegQuestionCircle style={{ marginLeft: 5 }} />
@@ -238,7 +238,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 
                     return (
                       <td key={colIndex} className={column.className}>
-                        <Interest amount={total} start={start} end={rowData?.date_paiement} />
+                        <Interest
+                          amount={total?.value || total}
+                          start={start}
+                          end={rowData?.date_paiement}
+                        />
                       </td>
                     )
                   }

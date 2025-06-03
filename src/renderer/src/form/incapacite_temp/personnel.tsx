@@ -55,6 +55,27 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   const getTotalAmount = useCallback((item, days) => {
     const { amount = 0, percentage = 0 } = item
 
+    return {
+      value: (
+        (parseInt(days) || 0) *
+        (parseFloat(amount) || 0) *
+        ((parseFloat(percentage) || 0) / 100)
+      ).toFixed(2),
+      tooltip: (
+        <div>
+          <math>
+            <mn>{parseInt(days) || 0}</mn>
+            <mo>x</mo>
+            <mn>{parseFloat(amount) || 0}</mn>
+            <mo>x</mo>
+            <mfrac>
+              <mn>{parseFloat(percentage) || 0}</mn>
+              <mn>100</mn>
+            </mfrac>
+          </math>
+        </div>
+      )
+    }
     return (
       (parseInt(days) || 0) *
       (parseFloat(amount) || 0) *
