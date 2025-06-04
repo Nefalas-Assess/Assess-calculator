@@ -114,6 +114,14 @@ const AppProvider = ({ children }) => {
     setDarkMode(!darkMode)
   }, [setDarkMode, darkMode])
 
+  const setLanguage = useCallback(
+    (lang: string) => {
+      window.api.setStore('lang', lang)
+      setLg(lang)
+    },
+    [setLg]
+  )
+
   const resetData = useCallback(() => {
     setData(initial)
   }, [])
@@ -127,8 +135,13 @@ const AppProvider = ({ children }) => {
         setDarkMode(false)
       }
     }
+    const getLang = async () => {
+      const lang = await window.api.getStore('lang')
+      setLg(lang)
+    }
     getMode()
-  }, [])
+    getLang()
+  }, [setLg])
 
   // the value passed in here will be accessible anywhere in our application
   // you can pass any value, in our case we pass our state and it's update method
@@ -145,7 +158,7 @@ const AppProvider = ({ children }) => {
         toggleDarkMode,
         mode: darkMode ? 'dark' : 'light',
         lg,
-        setLg
+        setLg: setLanguage
       }}
     >
       {children}

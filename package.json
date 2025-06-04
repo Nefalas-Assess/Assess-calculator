@@ -1,6 +1,6 @@
 {
   "name": "Evalix",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "Calculateur Evalix",
   "main": "./out/main/index.js",
   "author": "JVTP SNC",

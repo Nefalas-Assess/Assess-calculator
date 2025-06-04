@@ -64,7 +64,7 @@ const DetectMissingData = ({ children, data, required }) => {
 }
 
 export const AppLayout = () => {
-  const { data, save, back, toggleDarkMode, mode, filePath, setLg } = useContext(AppContext)
+  const { data, save, back, toggleDarkMode, mode, filePath, setLg, lg } = useContext(AppContext)
 
   const { addToast, removeToast } = useToast()
 
@@ -93,19 +93,19 @@ export const AppLayout = () => {
 
   useEffect(() => {
     window.api.onUpdateAvailable(() => {
-      addToast('Mise à jour trouvée. Téléchargement en cours.', true, 'update-available')
+      addToast('toast.update_available', true, 'update-available')
       setUpdateCheck(false)
     })
 
     window.api.onUpdateNotAvailable(() => {
-      addToast("L'application est à jour")
+      addToast('toast.update_not_available')
       setUpdateCheck(false)
     })
 
     window.api.onUpdateDownloaded(() => {
       removeToast('update-available')
-      addToast('Mise à jour téléchargée.', true, 'update-downloaded', {
-        text: 'Redémarrer',
+      addToast('toast.update_downloaded', true, 'update-downloaded', {
+        text: 'common.restart',
         action: () => window.api.restartApp()
       })
     })
@@ -113,7 +113,7 @@ export const AppLayout = () => {
 
   const handleSave = useCallback(() => {
     save()
-    addToast('Fichier sauvegardé')
+    addToast('toast.file_saved')
   }, [save, data])
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export const AppLayout = () => {
                 </button>
               </>
             )}
-            <select className="select-lang" onChange={(e) => setLg(e?.target?.value)}>
+            <select className="select-lang" value={lg} onChange={(e) => setLg(e?.target?.value)}>
               <option value="fr">FR</option>
               <option value="nl">NL</option>
               <option value="en">EN</option>

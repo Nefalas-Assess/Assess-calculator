@@ -84,11 +84,11 @@ const Main = () => {
 function App(): JSX.Element {
   return (
     <License>
-      <ToastProvider>
-        <AppProvider>
+      <AppProvider>
+        <ToastProvider>
           <Main />
-        </AppProvider>
-      </ToastProvider>
+        </ToastProvider>
+      </AppProvider>
     </License>
   )
 }

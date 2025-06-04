@@ -37,7 +37,7 @@ export const useRecentFiles = () => {
         setData(parsedData)
         const res = getFileNameWithoutExtension(filePath)
         addFile({ path: filePath, name: res })
-        addToast('Fichier importé')
+        addToast('toast.file_imported')
       }
     } catch (err) {
       addToast(err?.toString())
@@ -64,7 +64,7 @@ export const useRecentFiles = () => {
         addFile({ path: filePath, name: res })
       }
 
-      addToast('Fichier importé')
+      addToast('toast.file_imported')
     } catch (err) {
       addToast(err?.toString())
     }
@@ -86,11 +86,11 @@ export const useRecentFiles = () => {
         await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
         setFilePath(filePath)
         addFile({ path: filePath, name: fileName })
-        addToast('Fichier créé')
+        addToast('toast.file_created')
         navigate('/infog')
       }
     } catch (err) {
-      addToast('Erreur lors de la création du fichier')
+      addToast('toast.file_creation_error')
     }
   }
 

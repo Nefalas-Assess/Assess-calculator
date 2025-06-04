@@ -161,6 +161,11 @@ export default {
     }
   },
   common: {
+    restart: {
+      fr: 'Redémarrer',
+      en: 'Restart',
+      nl: 'Herstart'
+    },
     date_naissance: {
       fr: 'Date de naissance',
       en: 'Date of birth',
@@ -855,6 +860,43 @@ export default {
         en: 'Temporary Pretium Doloris',
         nl: 'Tijdelijke Pretium Doloris'
       }
+    }
+  },
+  toast: {
+    update_available: {
+      fr: 'Mise à jour trouvée. Téléchargement en cours.',
+      en: 'Update found. Downloading...',
+      nl: 'Update gevonden. Downloaden...'
+    },
+    update_downloaded: {
+      fr: 'Mise à jour téléchargée.',
+      en: 'Update downloaded.',
+      nl: 'Update gedownload.'
+    },
+    update_not_available: {
+      fr: "L'application est à jour",
+      en: 'The application is up to date',
+      nl: 'De applicatie is up to date'
+    },
+    file_imported: {
+      fr: 'Fichier importé.',
+      en: 'File imported.',
+      nl: 'Bestand geïmporteerd.'
+    },
+    file_created: {
+      fr: 'Fichier créé.',
+      en: 'File created.',
+      nl: 'Bestand gecreëerd.'
+    },
+    file_creation_error: {
+      fr: 'Erreur lors de la création du fichier',
+      en: 'Error creating file',
+      nl: 'Fout bij het maken van het bestand'
+    },
+    file_saved: {
+      fr: 'Fichier sauvegardé.',
+      en: 'File saved.',
+      nl: 'Bestand opgeslagen.'
     }
   }
 }

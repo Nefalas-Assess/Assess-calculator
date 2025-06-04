@@ -2,6 +2,7 @@
 import React, { createContext, useState, useContext, useCallback, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import Loader from '@renderer/generic/loader'
+import TextItem from '@renderer/generic/textItem'
 
 interface Toast {
   id: string
@@ -25,7 +26,7 @@ const UpdateProgress = () => {
 
     // Nettoyer l'écouteur lors du démontage du composant
     return () => {
-      window.api.onDownloadProgress(() => { }) // Supprimer l'écouteur
+      window.api.onDownloadProgress(() => {}) // Supprimer l'écouteur
     }
   }, [])
 
@@ -49,7 +50,7 @@ const ToastContent = ({ item }) => {
 
   return (
     <>
-      {item.message}
+      <TextItem path={item.message} />
       {item.action && (
         <button
           onClick={() => {
@@ -68,7 +69,7 @@ const ToastContent = ({ item }) => {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
-            {item.action.text}
+            <TextItem path={item.action.text} />
             {clicked && (
               <Loader
                 style={{
