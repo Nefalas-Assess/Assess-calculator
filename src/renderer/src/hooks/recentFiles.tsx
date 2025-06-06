@@ -3,6 +3,19 @@ import { useToast } from '@renderer/providers/ToastProvider'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
+interface RecentFile {
+  path: string
+  name: string
+}
+
+interface RecentFilesHook {
+  addFile: (item: RecentFile) => void
+  importFile: () => Promise<void>
+  createFile: (fileName: string) => Promise<void>
+  selectFile: (filePath: string) => Promise<void>
+  recentFiles: RecentFile[]
+}
+
 const getFileNameWithoutExtension = (filePath: string): string => {
   return (
     filePath
@@ -12,28 +25,34 @@ const getFileNameWithoutExtension = (filePath: string): string => {
   )
 }
 
-export const useRecentFiles = () => {
-  const [recentFiles, setRecentFiles] = useState<string[]>([])
+const removeBOM = (str: string): string => {
+  if (str.charCodeAt(0) === 0xfeff) {
+    return str.slice(1)
+  }
+  return str
+}
+
+export const useRecentFiles = (): RecentFilesHook => {
+  const [recentFiles, setRecentFiles] = useState<RecentFile[]>([])
 
   const { setFilePath, setData } = useContext(AppContext)
   const { addToast } = useToast()
-
   const navigate = useNavigate()
 
-  // Ajouter un fichier à l'historique
-  const addFile = (item) => {
-    const updatedFiles = [item, ...(recentFiles || [])?.filter((e) => e?.path !== item?.path)] // Garder les 10 derniers fichiers
+  const addFile = (item: RecentFile): void => {
+    const updatedFiles = [item, ...recentFiles.filter((e) => e.path !== item.path)]
     window.api.setStore('recent-files', updatedFiles)
     setRecentFiles(updatedFiles)
   }
 
-  const selectFile = async (filePath) => {
+  const selectFile = async (filePath: string): Promise<void> => {
     try {
       if (filePath) {
         const fileData = await window.api.readFile(filePath)
         setFilePath(filePath)
         navigate('/infog')
-        const parsedData = JSON.parse(fileData)
+        const cleanData = removeBOM(fileData)
+        const parsedData = JSON.parse(cleanData)
         setData(parsedData)
         const res = getFileNameWithoutExtension(filePath)
         addFile({ path: filePath, name: res })
@@ -44,7 +63,7 @@ export const useRecentFiles = () => {
     }
   }
 
-  const importFile = async () => {
+  const importFile = async (): Promise<void> => {
     try {
       const { canceled, filePaths } = await window.api.showOpenDialog({
         title: 'Importer un fichier',
@@ -57,7 +76,9 @@ export const useRecentFiles = () => {
         const fileData = await window.api.readFile(filePath)
         setFilePath(filePath)
         navigate('/infog')
-        const parsedData = JSON.parse(fileData)
+
+        const cleanData = removeBOM(fileData)
+        const parsedData = JSON.parse(cleanData)
         setData(parsedData)
 
         const res = getFileNameWithoutExtension(filePath)
@@ -66,16 +87,15 @@ export const useRecentFiles = () => {
 
       addToast('toast.file_imported')
     } catch (err) {
+      console.log(err)
       addToast(err?.toString())
     }
   }
 
-  const createFile = async (fileName) => {
+  const createFile = async (fileName: string): Promise<void> => {
     try {
-      // Données initiales pour le fichier
       const defaultData = {}
 
-      // Appel pour sauvegarder un nouveau fichier
       const { canceled, filePath } = await window.api.showSaveDialog({
         title: 'Créer un nouveau fichier',
         defaultPath: `${fileName}.json`,
@@ -95,7 +115,7 @@ export const useRecentFiles = () => {
   }
 
   useEffect(() => {
-    async function fetchRecentFiles() {
+    async function fetchRecentFiles(): Promise<void> {
       const files = await window.api.getStore('recent-files', [])
       setRecentFiles(files)
     }

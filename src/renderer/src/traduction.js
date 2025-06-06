@@ -811,6 +811,11 @@ export default {
         fr: 'Efforts accrus',
         en: 'Increased efforts',
         nl: 'Verhoogde inspanningen'
+      },
+      coefficient: {
+        fr: 'Jours travaillés/sem.',
+        en: 'Working days/week',
+        nl: 'Werkdagen/week'
       }
     },
     hospitalisation: {

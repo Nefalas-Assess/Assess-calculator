@@ -11,7 +11,14 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
     let total = 0
 
     list?.forEach((e) => {
-      const rawText = e.innerText
+      // Skip elements that are inside a tooltip container
+      let rawText = e.innerText
+
+      // Get only text that is not inside tooltip-content class
+      const tooltipContent = e.querySelector('.tooltip-container')
+      if (tooltipContent) {
+        rawText = rawText.replace(tooltipContent.innerText, '')
+      }
 
       // Nettoyer le texte : supprimer les espaces, remplacer les virgules par des points, et retirer les symboles non numériques
       const cleanedText = rawText

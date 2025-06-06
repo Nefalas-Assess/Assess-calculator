@@ -92,6 +92,14 @@ export const AppLayout = () => {
   }, [location.pathname]) // Réagir uniquement si le chemin change
 
   useEffect(() => {
+    if (!data) {
+      setIncPerma(false)
+      setIncTemp(false)
+      setDead(false)
+    }
+  }, [data])
+
+  useEffect(() => {
     window.api.onUpdateAvailable(() => {
       addToast('toast.update_available', true, 'update-available')
       setUpdateCheck(false)
