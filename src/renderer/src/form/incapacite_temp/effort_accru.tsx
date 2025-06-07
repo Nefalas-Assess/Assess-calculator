@@ -51,7 +51,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
         parseInt(days || 0) *
         parseFloat(values?.amount || 0) *
         parseFloat((values?.pourcentage || 0) / 100) *
-        (parseInt(values?.coefficient || 0) / 5)
+        (parseInt(values?.coefficient || 0) / 7)
       ).toFixed(2),
       tooltip: (
         <math>
