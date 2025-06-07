@@ -66,7 +66,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
           <mo>x</mo>
           <mfrac>
             <mn>{parseInt(values?.coefficient || 0)}</mn>
-            <mn>5</mn>
+            <mn>7</mn>
           </mfrac>
         </math>
       )
