@@ -83,6 +83,20 @@
     background-color: whitesmoke;
   }
 
+  .coefficient-table{
+    background-color: transparent;
+    border-left: none;
+    color: whitesmoke;
+
+    thead{
+      background-color: whitesmoke
+    }
+  
+    tbody{
+      background-color: whitesmoke
+    }
+  }
+
 
   th, td {
     color:black;

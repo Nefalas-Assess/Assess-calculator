@@ -168,11 +168,7 @@ const TotalMenage = ({ values = {}, data }) => {
             <mo>x</mo>
             <mn>365</mn>
             <mo>x</mo>
-            <CoefficientInfo
-              table={coef?.table}
-              headers={constants.interet_amount}
-              index={coef?.index}
-            >
+            <CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
               <mn>{coef?.value}</mn>
             </CoefficientInfo>
             <mo>=</mo>

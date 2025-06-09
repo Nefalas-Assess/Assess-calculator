@@ -109,12 +109,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
               <mo>x</mo>
               <mn>365</mn>
               <mo>x</mo>
-              <CoefficientInfo
-                table={coef?.table}
-                index={coef?.index}
-                headers={constants?.interet_amount}
-                startIndex={1}
-              >
+              <CoefficientInfo {...coef?.info} headers={constants?.interet_amount} startIndex={1}>
                 <mn>{coef?.value}</mn>
               </CoefficientInfo>
             </math>

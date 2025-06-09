@@ -3,9 +3,13 @@ import TextItem from './textItem'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
 
-const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0 }) => {
+const Explanation = ({ explanation }) => {
+  return <div className="coef-explanation">{explanation}</div>
+}
+
+const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanation }) => {
   // Créer un élément DOM pour y attacher le portail
-  const modalRoot = document.getElementById('root')
+  const modalRoot = document.getElementsByClassName('app-layout')[0]
 
   if (!isOpen) return null
 
@@ -45,6 +49,17 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0 }) => {
                   zIndex: 1000,
                   overflow: 'scroll'
                 }}
+                onClick={(e) => {
+                  // Check if click is in thead or tbody
+                  const thead = e.target.closest('thead')
+                  const tbody = e.target.closest('tbody')
+
+                  if (thead || tbody) {
+                    return
+                  }
+
+                  onClose()
+                }}
               >
                 <table className="coefficient-table">
                   {headers && Array.isArray(headers) && (
@@ -61,20 +76,57 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0 }) => {
                   )}
                   <tbody>
                     {Object?.values(table).map((row, i) => (
-                      <tr key={i}>
-                        <td className={i === index?.[0] && 'highlight'}>{startIndex + i}</td>
+                      <tr key={i} style={{ position: 'relative' }}>
+                        <td
+                          className={
+                            (i === index?.[0] && 'highlight') ||
+                            (i === index?.[0] - 1 && 'highlight')
+                          }
+                        >
+                          {startIndex + i}
+                        </td>
                         {Object.values(row).map((value, y) => (
                           <td
                             key={y}
                             className={
-                              (y === index?.[1] && i === index?.[0] && 'selected') ||
+                              (y === index?.[1] && i === index?.[0] && 'bordered no-top') ||
+                              (y === index?.[1] && i === index?.[0] - 1 && 'bordered no-bot') ||
                               (y === index?.[1] && 'highlight') ||
-                              (i === index?.[0] && 'highlight')
+                              (i === index?.[0] && 'highlight') ||
+                              (i === index?.[0] - 1 && 'highlight')
                             }
                           >
                             {value}
                           </td>
                         ))}
+                        {i === index?.[0] && explanation && (
+                          <div
+                            style={{
+                              position: 'absolute',
+                              top: '-100%',
+                              right: '100%',
+                              bottom: 0,
+                              display: 'flex',
+                              alignItems: 'center',
+                              width: '250px',
+                              overflow: 'visible',
+                              marginRight: '5px'
+                            }}
+                          >
+                            <motion.div
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              style={{
+                                width: '250px',
+                                backgroundColor: 'black',
+                                borderRadius: '8px',
+                                zIndex: 999
+                              }}
+                            >
+                              <Explanation explanation={explanation} />
+                            </motion.div>
+                          </div>
+                        )}
                       </tr>
                     ))}
                   </tbody>

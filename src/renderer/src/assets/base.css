@@ -144,19 +144,47 @@ body {
 
 .coefficient-table{
   font-size: 10px;
-  background-color: #1a1a1a;
   margin: 0;
+  padding-left: 300px;
+  background-color: transparent;
+
   th, td{
     padding: 5px;
     min-width: 0;
     max-width: none;
   }
 
-  .highlight{
-    background-color: rgba(9, 110, 242, 0.1);
+  thead{
+    background-color: var(--color-background-soft);
   }
-  .selected{
-    background-color: rgba(9, 110, 242, 0.5);
+
+  tbody{
+    background-color: var(--color-background-soft);
+  }
+
+  .highlight{
+    background-color: hsla(var(--color-primary-hsl), 0.1);
+  }
+  .bordered{
+    background-color: hsla(var(--color-primary-hsl), 0.1);
+    border: 1px solid var(--color-primary);
     font-weight: bold;
+    &.no-top{
+      border-top: none;
+    }
+    &.no-bot{
+      border-bottom: 1px solid black;
+    }
+  }
+
+  .coef-explanation{
+    /* background-color: var(--color-primary); */
+    background-color: hsla(var(--color-primary-hsl), 0.3);
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    margin-right: 10px;
   }
 }

@@ -56,12 +56,12 @@ export const getCapitalizationTable = async (
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, amount, ref, index, asObject, base, noGender = false } = props
+  const { end, start, ref, index, asObject, base, noGender = false } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
 
-  const { years: age = 0 } = intervalToDuration({
+  const { years: age = 0, days } = intervalToDuration({
     start: start || new Date(data?.general_info?.date_naissance),
     end
   })
@@ -81,12 +81,52 @@ export const useCapitalization = (props = {}) => {
   const rowIndex = Object.keys(table).findIndex((e) => parseInt(e) === (age || 0))
   const row = Object.values(table)[rowIndex]
 
-  let value = row?.[index]
-  if (amount) value = amount * row[index]
+  const prev = Object.values(table)[rowIndex - 1]
+  const currentYear = row?.[index]
+  const previousYear = prev?.[index]
+  const perDays = (previousYear - currentYear) / 365
+
+  const value = previousYear - perDays * days
+
+  const coefficientInfo = {
+    index: [rowIndex, index],
+    table,
+    explanation: (
+      <div>
+        <div>
+          <math>
+            <mo>(</mo>
+            <mi>A</mi>
+            <mo>)</mo>
+            <mo>=</mo>
+            <mn>{previousYear}</mn>
+            <mo>-</mo>
+            <mn>{currentYear}</mn>
+          </math>
+        </div>
+        <div>
+          <math>
+            <mn>{previousYear}</mn>
+            <mo>-</mo>
+            <mo>(</mo>
+            <mfrac>
+              <mi>A</mi>
+              <mn>365</mn>
+            </mfrac>
+            <mo>x</mo>
+            <mn>{days}</mn>
+            <mo>)</mo>
+            <mo>=</mo>
+            <mn>{value}</mn>
+          </math>
+        </div>
+      </div>
+    )
+  }
 
   if (!asObject) {
     return value
   } else {
-    return { table, value, index: [rowIndex, index] }
+    return { value, info: coefficientInfo }
   }
 }

@@ -136,12 +136,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                 <mn>100</mn>
               </mfrac>
               <mo>x</mo>
-              <CoefficientInfo
-                table={coef?.table}
-                index={coef?.index}
-                headers={constants?.interet_amount}
-                startIndex={1}
-              >
+              <CoefficientInfo headers={constants?.interet_amount} startIndex={1} {...coef?.info}>
                 <mn>{coef?.value}</mn>
               </CoefficientInfo>
             </math>

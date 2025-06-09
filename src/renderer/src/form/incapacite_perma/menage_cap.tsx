@@ -49,8 +49,7 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
           <mn>365</mn>
           <mo>x</mo>
           <CoefficientInfo
-            table={values?.capitalization?.table}
-            index={values?.capitalization?.index}
+            {...values?.capitalization?.info}
             headers={constants.interet_amount}
             startIndex={1}
           >
