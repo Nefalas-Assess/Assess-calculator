@@ -1,5 +1,5 @@
 import { AppContext } from '@renderer/providers/AppProvider'
-import { intervalToDuration } from 'date-fns'
+import { addYears, differenceInDays, intervalToDuration } from 'date-fns'
 import { useContext, useEffect, useState } from 'react'
 
 export const getCapitalizationTable = async (
@@ -61,10 +61,14 @@ export const useCapitalization = (props = {}) => {
 
   const sexe = data?.general_info?.sexe
 
-  const { years: age = 0, days } = intervalToDuration({
-    start: start || new Date(data?.general_info?.date_naissance),
+  const startDate = start || new Date(data?.general_info?.date_naissance)
+
+  const { years: age = 0 } = intervalToDuration({
+    start: startDate,
     end
   })
+
+  const days = differenceInDays(end, addYears(startDate, age))
 
   const [table, setTable] = useState(null)
 
