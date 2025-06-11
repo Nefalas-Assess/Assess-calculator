@@ -91,11 +91,7 @@ const TotalRevenue = ({ values, data }) => {
             <mn>{variables?.personnel}</mn>
             <mo>)</mo>
             <mo>x</mo>
-            <CoefficientInfo
-              table={capitalization?.table}
-              index={capitalization?.index}
-              headers={constants.interet_amount}
-            >
+            <CoefficientInfo {...capitalization?.info} headers={constants.interet_amount}>
               <mn>{variables?.coef}</mn>
             </CoefficientInfo>
             <mo>=</mo>
@@ -360,7 +356,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           </tr>
         </tbody>
       </table>
-      <FadeIn show={formValues?.menage_ref && formValues?.interet}>
+      <FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
         <TextItem path="deces.prejudice_proche.contribution_menage" tag="h3" />
         <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>

@@ -80,7 +80,7 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                         <td
                           className={
                             (i === index?.[0] && 'highlight') ||
-                            (i === index?.[0] - 1 && explanation && 'highlight')
+                            (i === index?.[0] + 1 && explanation && 'highlight')
                           }
                         >
                           {startIndex + i}
@@ -91,14 +91,14 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                             className={
                               (y === index?.[1] &&
                                 i === index?.[0] &&
-                                `bordered ${explanation ? 'no-top' : ''} `) ||
+                                `bordered ${explanation ? 'no-bot' : ''} `) ||
                               (y === index?.[1] &&
-                                i === index?.[0] - 1 &&
+                                i === index?.[0] + 1 &&
                                 explanation &&
-                                'bordered no-bot') ||
+                                'bordered no-top') ||
                               (y === index?.[1] && 'highlight') ||
                               (i === index?.[0] && 'highlight') ||
-                              (i === index?.[0] - 1 && explanation && 'highlight')
+                              (i === index?.[0] + 1 && explanation && 'highlight')
                             }
                           >
                             {value}
@@ -108,7 +108,7 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                           <div
                             style={{
                               position: 'absolute',
-                              top: '-100%',
+                              top: '100%',
                               right: '100%',
                               bottom: 0,
                               display: 'flex',

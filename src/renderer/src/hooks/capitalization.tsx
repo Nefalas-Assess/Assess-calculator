@@ -85,12 +85,12 @@ export const useCapitalization = (props = {}) => {
   const rowIndex = Object.keys(table).findIndex((e) => parseInt(e) === (age || 0))
   const row = Object.values(table)[rowIndex]
 
-  const prev = Object.values(table)[rowIndex - 1]
+  const next = Object.values(table)[rowIndex + 1]
   const currentYear = row?.[index]
-  const previousYear = prev?.[index]
-  const perDays = (previousYear - currentYear) / 365
+  const nextYear = next?.[index]
+  const perDays = (currentYear - nextYear) / 365
 
-  const value = days !== 0 ? previousYear - perDays * days : currentYear
+  const value = days !== 0 ? nextYear + perDays * days : currentYear
 
   const coefficientInfo = {
     index: [rowIndex, index],
@@ -103,15 +103,15 @@ export const useCapitalization = (props = {}) => {
             <mi>A</mi>
             <mo>)</mo>
             <mo>=</mo>
-            <mn>{previousYear}</mn>
-            <mo>-</mo>
             <mn>{currentYear}</mn>
+            <mo>-</mo>
+            <mn>{nextYear}</mn>
           </math>
         </div>
         <div>
           <math>
-            <mn>{previousYear}</mn>
-            <mo>-</mo>
+            <mn>{nextYear}</mn>
+            <mo>+</mo>
             <mo>(</mo>
             <mfrac>
               <mi>A</mi>
