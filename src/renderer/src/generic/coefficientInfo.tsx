@@ -80,7 +80,7 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                         <td
                           className={
                             (i === index?.[0] && 'highlight') ||
-                            (i === index?.[0] - 1 && 'highlight')
+                            (i === index?.[0] - 1 && explanation && 'highlight')
                           }
                         >
                           {startIndex + i}
@@ -89,11 +89,16 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                           <td
                             key={y}
                             className={
-                              (y === index?.[1] && i === index?.[0] && 'bordered no-top') ||
-                              (y === index?.[1] && i === index?.[0] - 1 && 'bordered no-bot') ||
+                              (y === index?.[1] &&
+                                i === index?.[0] &&
+                                `bordered ${explanation ? 'no-top' : ''} `) ||
+                              (y === index?.[1] &&
+                                i === index?.[0] - 1 &&
+                                explanation &&
+                                'bordered no-bot') ||
                               (y === index?.[1] && 'highlight') ||
                               (i === index?.[0] && 'highlight') ||
-                              (i === index?.[0] - 1 && 'highlight')
+                              (i === index?.[0] - 1 && explanation && 'highlight')
                             }
                           >
                             {value}

@@ -353,7 +353,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 control={control}
                 type="select"
                 options={constants.interet_amount}
-                name="interet"
+                name="menage_interet"
                 editable={editable}
               ></Field>
             </td>

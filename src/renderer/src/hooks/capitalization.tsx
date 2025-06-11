@@ -90,12 +90,12 @@ export const useCapitalization = (props = {}) => {
   const previousYear = prev?.[index]
   const perDays = (previousYear - currentYear) / 365
 
-  const value = previousYear - perDays * days
+  const value = days !== 0 ? previousYear - perDays * days : currentYear
 
   const coefficientInfo = {
     index: [rowIndex, index],
     table,
-    explanation: (
+    explanation: days !== 0 && (
       <div>
         <div>
           <math>
