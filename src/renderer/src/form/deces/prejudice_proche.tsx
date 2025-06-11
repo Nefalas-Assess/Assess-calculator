@@ -134,7 +134,7 @@ const TotalMenage = ({ values = {}, data }) => {
     end: endDate,
     start: startDate,
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.interet)),
-    ref: values?.reference,
+    ref: values?.menage_ref,
     asObject: true
   })
 
@@ -330,6 +330,37 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             </tr>
           </tbody>
         </table>
+      </FadeIn>
+      <TextItem path="common.variables_cap" tag="h3" />
+      <table id="IPVariables">
+        <tbody>
+          <tr>
+            <TextItem path="common.ref_table" tag="td" />
+            <td>
+              <Field
+                control={control}
+                type="reference"
+                options={constants.reference_light}
+                name="menage_ref"
+                editable={editable}
+              ></Field>
+            </td>
+          </tr>
+          <tr>
+            <TextItem path="common.taux_interet" tag="td" />
+            <td>
+              <Field
+                control={control}
+                type="select"
+                options={constants.interet_amount}
+                name="interet"
+                editable={editable}
+              ></Field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <FadeIn show={formValues?.menage_ref && formValues?.interet}>
         <TextItem path="deces.prejudice_proche.contribution_menage" tag="h3" />
         <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>

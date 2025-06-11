@@ -94,7 +94,9 @@ export const useRecentFiles = (): RecentFilesHook => {
 
   const createFile = async (fileName: string): Promise<void> => {
     try {
-      const defaultData = {}
+      const defaultData = {
+        version: import.meta.env.VITE_APP_VERSION
+      }
 
       const { canceled, filePath } = await window.api.showSaveDialog({
         title: 'Créer un nouveau fichier',
@@ -106,6 +108,7 @@ export const useRecentFiles = (): RecentFilesHook => {
         await window.api.writeFile(filePath, JSON.stringify(defaultData, null, 2))
         setFilePath(filePath)
         addFile({ path: filePath, name: fileName })
+        setData(defaultData)
         addToast('toast.file_created')
         navigate('/infog')
       }
