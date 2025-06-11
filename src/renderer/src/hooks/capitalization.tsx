@@ -58,10 +58,10 @@ export const getCapitalizationTable = async (
 const getPerDays = (currentYear: number, nextYear: number) => {
   // Check if difference is negative
   if (currentYear - nextYear < 0) {
-    return { day: nextYear - currentYear, year: currentYear }
+    return { day: nextYear - currentYear, year: currentYear, before: nextYear, after: currentYear }
   }
 
-  return { day: currentYear - nextYear, year: nextYear }
+  return { day: currentYear - nextYear, year: nextYear, before: currentYear, after: nextYear }
 }
 
 export const useCapitalization = (props = {}) => {
@@ -113,14 +113,14 @@ export const useCapitalization = (props = {}) => {
             <mi>A</mi>
             <mo>)</mo>
             <mo>=</mo>
-            <mn>{currentYear}</mn>
+            <mn>{perDays?.before}</mn>
             <mo>-</mo>
-            <mn>{nextYear}</mn>
+            <mn>{perDays?.after}</mn>
           </math>
         </div>
         <div>
           <math>
-            <mn>{nextYear}</mn>
+            <mn>{perDays?.year}</mn>
             <mo>+</mo>
             <mo>(</mo>
             <mfrac>
