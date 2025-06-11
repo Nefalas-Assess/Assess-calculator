@@ -102,7 +102,7 @@ const Capitalization = ({
           <math>
             <mn>{values?.[columnProps?.amount] || values?.amount}</mn>
             <mo>x</mo>
-            <CoefficientInfo {...coef?.info} headers={constantsArray} startIndex={1}>
+            <CoefficientInfo {...coef?.info} headers={constantsArray}>
               <mn>{coef?.value}</mn>
             </CoefficientInfo>
           </math>

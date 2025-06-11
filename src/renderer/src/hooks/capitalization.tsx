@@ -55,6 +55,15 @@ export const getCapitalizationTable = async (
   }
 }
 
+const getPerDays = (currentYear: number, nextYear: number) => {
+  // Check if difference is negative
+  if (currentYear - nextYear < 0) {
+    return { day: nextYear - currentYear, year: currentYear }
+  }
+
+  return { day: currentYear - nextYear, year: nextYear }
+}
+
 export const useCapitalization = (props = {}) => {
   const { end, start, ref, index, asObject, base, noGender = false } = props
   const { data } = useContext(AppContext)
@@ -88,9 +97,10 @@ export const useCapitalization = (props = {}) => {
   const next = Object.values(table)[rowIndex + 1]
   const currentYear = row?.[index]
   const nextYear = next?.[index]
-  const perDays = (currentYear - nextYear) / 365
 
-  const value = days !== 0 ? nextYear + perDays * days : currentYear
+  const perDays = getPerDays(currentYear, nextYear)
+
+  const value = days !== 0 ? perDays?.year + (perDays?.day / 365) * days : currentYear
 
   const coefficientInfo = {
     index: [rowIndex, index],
