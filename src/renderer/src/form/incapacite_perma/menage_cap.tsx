@@ -377,7 +377,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         <TextItem path="incapacite_perma.menage.title_perma_menage" tag="h3" />
         {sortedChildren?.length > 0 ? (
           <>
-            <table id="IPPCTableInfo" style={{ maxWidth: 800 }}>
+            <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
               <tbody>
                 <tr>
                   <TextItem path="common.ref" tag="td" />
