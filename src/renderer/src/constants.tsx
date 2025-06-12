@@ -55,7 +55,7 @@ export default {
   ],
   reference_light: [
     {
-      value: 'an',
+      value: 'mois',
       label: {
         fr: "Valeur actuelle d'une rente viagère de 1€ par an paiements mensuels",
         en: 'Present value of a life annuity of 1 euro per year payable monthly',
@@ -63,7 +63,7 @@ export default {
       }
     },
     {
-      value: 'mois',
+      value: 'an',
       label: {
         fr: "Valeur actuelle d'une rente viagère de 1€ par an paiements annuels",
         en: 'Present value of a life annuity of 1 euro per year payable annually',
