@@ -61,7 +61,16 @@ const getPerDays = (currentYear: number, nextYear: number) => {
     return { day: nextYear - currentYear, year: currentYear, before: nextYear, after: currentYear }
   }
 
-  return { day: currentYear - nextYear, year: nextYear, before: currentYear, after: nextYear }
+  return { day: currentYear - nextYear, year: currentYear, before: currentYear, after: nextYear }
+}
+
+const getValue = (days, info, current, isDecreasingTable) => {
+  if (days === 0) return current
+
+  if (isDecreasingTable) {
+    return info?.year - (info?.day / 365) * days
+  }
+  return info?.year + (info?.day / 365) * days
 }
 
 export const useCapitalization = (props = {}) => {
@@ -100,7 +109,10 @@ export const useCapitalization = (props = {}) => {
 
   const perDays = getPerDays(currentYear, nextYear)
 
-  const value = days !== 0 ? perDays?.year + (perDays?.day / 365) * days : currentYear
+  const isDecreasingTable = currentYear > nextYear
+  const value = getValue(days, perDays, currentYear, isDecreasingTable)
+
+  console.log(value)
 
   const coefficientInfo = {
     index: [rowIndex, index],
@@ -121,7 +133,7 @@ export const useCapitalization = (props = {}) => {
         <div>
           <math>
             <mn>{perDays?.year}</mn>
-            <mo>+</mo>
+            {isDecreasingTable ? <mo>-</mo> : <mo>+</mo>}
             <mo>(</mo>
             <mfrac>
               <mi>A</mi>
