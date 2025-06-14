@@ -112,8 +112,6 @@ export const useCapitalization = (props = {}) => {
   const isDecreasingTable = currentYear > nextYear
   const value = getValue(days, perDays, currentYear, isDecreasingTable)
 
-  console.log(value)
-
   const coefficientInfo = {
     index: [rowIndex, index],
     table,

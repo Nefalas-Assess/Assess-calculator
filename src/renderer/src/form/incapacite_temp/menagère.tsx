@@ -283,7 +283,10 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
         name="periods"
         formValues={formValues}
         editable={editable}
-        addRowDefaults={{ amount: 30 }}
+        addRowDefaults={{
+          amount: 30,
+          contribution: data?.general_info?.config?.default_contribution
+        }}
         calculateTotal={(rowData, days) => getTotalAmount(rowData, days, getChildOnPeriod(rowData))}
         customActions={customActions}
       />
