@@ -258,7 +258,10 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         formValues={formValues}
         editable={editable}
       />
-      <TextItem path="deces.prejudice_proche.perte_contribution" tag="h3" />
+      <h3>
+        <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
+        <TextItem path="deces.prejudice_proche.perte_contribution_eco" tag="span" />
+      </h3>
       <table id="IPVariables">
         <tbody>
           <tr>
@@ -289,7 +292,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </table>
 
       <FadeIn show={formValues?.reference && formValues?.interet}>
-        <TextItem path="deces.prejudice_proche.perte_revenu" tag="h3" />
+        <TextItem path="deces.prejudice_proche.perte_contribution_eco" tag="h3" />
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
@@ -327,7 +330,10 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           </tbody>
         </table>
       </FadeIn>
-      <TextItem path="common.variables_cap" tag="h3" />
+      <h3>
+        <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
+        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="span" />
+      </h3>
       <table id="IPVariables">
         <tbody>
           <tr>
@@ -357,7 +363,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
       <FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
-        <TextItem path="deces.prejudice_proche.contribution_menage" tag="h3" />
+        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="h3" />
         <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>

@@ -65,7 +65,7 @@ const getPerDays = (currentYear: number, nextYear: number) => {
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, ref, index, asObject, base, noGender = false } = props
+  const { end, start, ref, index, startIndex, asObject, base, noGender = false } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
@@ -141,6 +141,6 @@ export const useCapitalization = (props = {}) => {
   if (!asObject) {
     return value
   } else {
-    return { value, info: coefficientInfo }
+    return { value, info: coefficientInfo, startIndex }
   }
 }

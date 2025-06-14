@@ -449,10 +449,20 @@ export default {
         en: 'Moral damage of relatives',
         nl: 'Morele schade van naastbestaanden'
       },
-      perte_contribution: {
-        fr: 'Perte de la contribution du défunt',
-        en: 'Loss of the deceased contribution',
-        nl: 'Verlies van de bijdrage van de overleden'
+      variables_calcul: {
+        fr: 'Variables du calcul :',
+        en: 'Calculation variables :',
+        nl: 'Berekening variabelen :'
+      },
+      perte_contribution_eco: {
+        fr: 'Perte de la contribution économique du défunt',
+        en: 'Loss of the deceased economic contribution',
+        nl: 'Verlies van de economische bijdrage van de overleden'
+      },
+      perte_contribution_menage: {
+        fr: 'Perte de la contribution ménagères du défunt',
+        en: 'Loss of the deceased household contribution',
+        nl: 'Verlies van de huishoudelijke bijdrage van de overleden'
       },
       lien_parente: {
         fr: 'Lien de parenté',
@@ -483,11 +493,6 @@ export default {
         fr: 'Nombre de membres du ménage avant le décès',
         en: 'Number of members of the household before the death',
         nl: 'Aantal leden van het gezin voor het overlijden'
-      },
-      contribution_menage: {
-        fr: 'Contribution ménagères du défunt',
-        en: 'Contribution of the deceased',
-        nl: 'Bijdrage van de overledene'
       },
       total: {
         fr: 'Total général préjudice des proches :',

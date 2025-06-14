@@ -31,7 +31,8 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
     ref: reference,
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
     asObject: true,
-    noGender: usePersoReference && reference?.includes('rente_certaine')
+    noGender: usePersoReference && reference?.includes('rente_certaine'),
+    startIndex: 0
   })
 
   const coefficient = capitalization?.value
