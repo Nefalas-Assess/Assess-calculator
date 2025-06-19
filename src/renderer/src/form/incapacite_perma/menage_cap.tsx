@@ -32,7 +32,7 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
     asObject: true,
     noGender: usePersoReference && reference?.includes('rente_certaine'),
-    startIndex: 0
+    startIndex: 1
   })
 
   const coefficient = capitalization?.value
@@ -49,8 +49,8 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
           <mo>x</mo>
           <mn>365</mn>
           <mo>x</mo>
-          <CoefficientInfo {...values?.capitalization?.info} headers={constants.interet_amount}>
-            <mn>{values?.capitalization?.value}</mn>
+          <CoefficientInfo {...capitalization?.info} headers={constants.interet_amount}>
+            <mn>{capitalization?.value}</mn>
           </CoefficientInfo>
         </math>
       </div>

@@ -100,10 +100,13 @@ export const useCapitalization = (props = {}) => {
 
   if (!table) return null
 
-  const rowIndex = Object.keys(table).findIndex((e) => parseInt(e) === (age || 0))
+  const ageIndex = age - startIndex
+
+  const rowIndex = Object.keys(table).findIndex((e) => parseInt(e) === (ageIndex || 0))
   const row = Object.values(table)[rowIndex]
 
   const next = Object.values(table)[rowIndex + 1]
+
   const currentYear = row?.[index]
   const nextYear = next?.[index]
 
@@ -151,6 +154,6 @@ export const useCapitalization = (props = {}) => {
   if (!asObject) {
     return value
   } else {
-    return { value, info: coefficientInfo, startIndex }
+    return { value, info: { ...coefficientInfo, startIndex } }
   }
 }
