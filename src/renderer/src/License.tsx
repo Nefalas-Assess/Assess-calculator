@@ -121,7 +121,7 @@ export const License = ({ children }) => {
           flexDirection: 'column'
         }}
       >
-        <h1>Validation de Licence</h1>
+        <h1>Validation de licence</h1>
         <LicenseInput onChange={(e) => setLicenseKey(e)} />
         {error && (
           <div style={{ fontSize: 14, color: 'red', marginTop: 5 }}>{renderError(error)}</div>
