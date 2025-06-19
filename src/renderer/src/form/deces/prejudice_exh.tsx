@@ -74,6 +74,14 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
       key: 'total',
       type: 'calculated',
       tooltipContent: (rowData, days) => renderToolTipAmount(rowData, days)
+    },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    {
+      header: 'common.interest',
+      key: 'interests',
+      type: 'interest',
+      className: 'int',
+      median: true
     }
   ]
 

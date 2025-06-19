@@ -244,7 +244,15 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       type: 'select',
       options: constants.family_link
     },
-    { header: 'common.indemnite', key: 'amount', type: 'number' }
+    { header: 'common.indemnite', key: 'amount', type: 'number' },
+    { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
+    {
+      header: 'common.interest',
+      key: 'interests',
+      type: 'interest',
+      className: 'int',
+      props: { start: data?.general_info?.date_death }
+    }
   ]
 
   return (
@@ -257,6 +265,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         name="members"
         formValues={formValues}
         editable={editable}
+        calculateTotal={(e) => e?.amount}
       />
       <h3>
         <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
