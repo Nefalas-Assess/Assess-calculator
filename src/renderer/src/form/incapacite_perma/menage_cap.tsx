@@ -49,8 +49,8 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
           <mo>x</mo>
           <mn>365</mn>
           <mo>x</mo>
-          <CoefficientInfo {...capitalization?.info} headers={constants.interet_amount}>
-            <mn>{capitalization?.value}</mn>
+          <CoefficientInfo {...values?.capitalization?.info} headers={constants.interet_amount}>
+            <mn>{values?.capitalization?.value}</mn>
           </CoefficientInfo>
         </math>
       </div>
