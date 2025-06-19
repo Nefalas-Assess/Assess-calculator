@@ -8,7 +8,7 @@ const InfoG = ({ editable }) => {
 
   const saveData = useCallback(
     (values) => {
-      setData({ general_info: values })
+      setData({ general_info: values }, { setDefault: true })
     },
     [setData, data]
   )

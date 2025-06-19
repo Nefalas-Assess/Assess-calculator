@@ -17,7 +17,7 @@ const setDefaultValues = (obj: any, defaultValues: any): any => {
       return current.map((item) => {
         const newItem = { ...item }
         Object.entries(defaults).forEach(([key, value]) => {
-          if ((newItem[key] === undefined || newItem[key] === '') && key in defaults) {
+          if (key in defaults) {
             newItem[key] = value
           }
         })
@@ -27,7 +27,8 @@ const setDefaultValues = (obj: any, defaultValues: any): any => {
 
     // Handle objects
     Object.entries(defaults).forEach(([key, value]) => {
-      if (current[key] === undefined || current[key] === '') {
+      console.log(current[key], key, value)
+      if (typeof value !== 'object') {
         // Set default if value doesn't exist or is empty string
         current[key] = value
       } else if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
@@ -62,7 +63,7 @@ const AppProvider = ({ children }) => {
     setData(null)
   }, [setFilePath, setData, handleSave])
 
-  const computeData = useCallback((res) => {
+  const computeData = useCallback((res, options) => {
     if (!res.computed_info) {
       res.computed_info = {}
     }
@@ -77,24 +78,26 @@ const AppProvider = ({ children }) => {
         res.computed_info.rate = parseFloat(res?.general_info?.taux_int)
       }
 
-      if (res?.general_info?.config?.default_contribution) {
-        res.prejudice_proche = setDefaultValues(res?.prejudice_proche, {
-          menage_contribution: res?.general_info?.config?.default_contribution
-        })
-        res.forfait_ip = setDefaultValues(res?.forfait_ip, {
-          contribution_imp: res?.general_info?.config?.default_contribution
-        })
-        res.incapacite_perma_menage_cap = setDefaultValues(res?.incapacite_perma_menage_cap, {
-          conso_contribution: res?.general_info?.config?.default_contribution,
-          perso_contribution: res?.general_info?.config?.default_contribution
-        })
-        if ((res?.incapacite_temp_menagere?.periods || [])?.length !== 0) {
-          res.incapacite_temp_menagere.periods = setDefaultValues(
-            res?.incapacite_temp_menagere?.periods,
-            {
-              contribution: res?.general_info?.config?.default_contribution
-            }
-          )
+      if (options?.setDefault) {
+        if (res?.general_info?.config?.default_contribution) {
+          res.prejudice_proche = setDefaultValues(res?.prejudice_proche, {
+            menage_contribution: res?.general_info?.config?.default_contribution
+          })
+          res.forfait_ip = setDefaultValues(res?.forfait_ip, {
+            contribution_imp: res?.general_info?.config?.default_contribution
+          })
+          res.incapacite_perma_menage_cap = setDefaultValues(res?.incapacite_perma_menage_cap, {
+            conso_contribution: res?.general_info?.config?.default_contribution,
+            perso_contribution: res?.general_info?.config?.default_contribution
+          })
+          if ((res?.incapacite_temp_menagere?.periods || [])?.length !== 0) {
+            res.incapacite_temp_menagere.periods = setDefaultValues(
+              res?.incapacite_temp_menagere?.periods,
+              {
+                contribution: res?.general_info?.config?.default_contribution
+              }
+            )
+          }
         }
       }
     }
@@ -103,8 +106,8 @@ const AppProvider = ({ children }) => {
   }, [])
 
   const storeData = useCallback(
-    (res) => {
-      setData((prev) => computeData({ ...prev, ...res }))
+    (res, options) => {
+      setData((prev) => computeData({ ...prev, ...res }, options))
     },
     [computeData]
   )
