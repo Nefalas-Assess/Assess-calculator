@@ -138,7 +138,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
   const copyDate = useCallback(
     (name) => {
       const initial = get(data, name)
-      let filteredData = initial.map(({ start, end }) => ({ start, end, amount: 30 }))
+      let filteredData = initial.map(({ start, end }) => ({
+        start,
+        end,
+        amount: 30,
+        contribution: data?.general_info?.config?.default_contribution
+      }))
       const currentData = cloneDeep(formValues?.periods)
       if (formValues?.periods) {
         filteredData = currentData.concat(filteredData)
