@@ -2,6 +2,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'reac
 import { useForm, useWatch } from 'react-hook-form'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
+import Money from '@renderer/generic/money'
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   const { control, handleSubmit, watch } = useForm({
@@ -121,7 +122,16 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const forfait_columns = [
     { header: 'common.frais', key: 'name', type: 'text' },
-    { header: 'common.amount', key: 'amount', type: 'number' }
+    {
+      header: 'common.amount',
+      key: 'amount',
+      type: 'number',
+      additionalContent: (e) => (
+        <td className="hide">
+          <Money value={e?.amount} />
+        </td>
+      )
+    }
   ]
 
   return (
