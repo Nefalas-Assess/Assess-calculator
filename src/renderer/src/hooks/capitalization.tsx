@@ -74,7 +74,7 @@ const getValue = (days, info, current, isDecreasingTable) => {
 }
 
 export const useCapitalization = (props = {}) => {
-  const { end, start, ref, index, startIndex, asObject, base, noGender = false } = props
+  const { end, start, ref, index, startIndex = 0, asObject, base, noGender = false } = props
   const { data } = useContext(AppContext)
 
   const sexe = data?.general_info?.sexe
