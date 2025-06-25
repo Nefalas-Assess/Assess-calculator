@@ -115,7 +115,8 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         index: 'rate',
         amount: 'amount',
         noGender: true,
-        base: 'data_va_eur_annees'
+        base: 'data_va_eur_annees',
+        displayStartIndex: 1
       }
     }
   ]
