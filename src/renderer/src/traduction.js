@@ -69,7 +69,7 @@ export default {
         nl: 'Persoonlijke'
       },
       menagère: {
-        fr: 'Menagères',
+        fr: 'Ménagères',
         en: 'Household',
         nl: 'Huishoudelijke'
       },
