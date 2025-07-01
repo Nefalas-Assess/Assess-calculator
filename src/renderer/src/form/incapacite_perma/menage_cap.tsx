@@ -492,6 +492,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                         sortedChildren[sortedChildren?.length - 1]?.birthDate,
                         true
                       )}
+                      startIndex={0}
                     />
                   </td>
                 </tr>
