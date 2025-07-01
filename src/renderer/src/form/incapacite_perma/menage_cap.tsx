@@ -14,7 +14,7 @@ import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import TextItem from '@renderer/generic/textItem'
 
-const CapAmount = ({ values, start, end, usePersoReference = false }) => {
+const CapAmount = ({ values, start, end, usePersoReference = false, startIndex = 1 }) => {
   const {
     paiement = '',
     interet = 0,
@@ -32,7 +32,7 @@ const CapAmount = ({ values, start, end, usePersoReference = false }) => {
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(interet || 0)),
     asObject: true,
     noGender: usePersoReference && reference?.includes('rente_certaine'),
-    startIndex: 1
+    startIndex: startIndex
   })
 
   const coefficient = capitalization?.value
@@ -537,7 +537,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   ></Field>
                 </td>
                 <td>
-                  <CapAmount values={formValues} />
+                  <CapAmount values={formValues} startIndex={0} />
                 </td>
               </tr>
             </tbody>
