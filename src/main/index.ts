@@ -98,6 +98,10 @@ function registerIpcHandlers(): void {
       }
     })
 
+    const logoPath = is.dev
+      ? path.resolve(__dirname, '../../resources/icon.png')
+      : path.join(process.resourcesPath, 'icon.png')
+
     const html = `
     <html>
       <head>
@@ -108,7 +112,7 @@ function registerIpcHandlers(): void {
       <body>
         <div class="print-layout" id="printable">
           <div class="print-header">
-            <img src="file://${doc?.logo || ''}" alt="Logo">
+            <img src="file://${logoPath || ''}" alt="Logo">
           </div>
           <div class="print-content">
             ${doc?.content || ''}

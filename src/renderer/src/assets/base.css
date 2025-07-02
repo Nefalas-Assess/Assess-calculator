@@ -145,7 +145,6 @@ body {
 .coefficient-table{
   font-size: 10px;
   margin: 0;
-  padding-left: 300px;
   background-color: transparent;
 
   th, td{
@@ -177,14 +176,15 @@ body {
     }
   }
 
-  .coef-explanation{
-    /* background-color: var(--color-primary); */
-    background-color: hsla(var(--color-primary-hsl), 0.3);
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-    width: 100%;
-    margin-right: 10px;
-  }
+}
+
+.coef-explanation{
+  /* background-color: var(--color-primary); */
+  background-color: hsla(var(--color-primary-hsl), 0.3);
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  margin-right: 10px;
 }
