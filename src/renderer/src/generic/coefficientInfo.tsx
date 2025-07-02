@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import TextItem from './textItem'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom'
@@ -8,6 +8,41 @@ const Explanation = ({ explanation }) => {
 }
 
 const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanation }) => {
+  const [explanationPos, setExplanationPos] = useState(null)
+  const rowRefs = useRef([])
+  const scrollableRef = useRef(null)
+
+  // Function to calculate explanation position
+  const calculateExplanationPos = () => {
+    if (isOpen && index?.[0] != null && rowRefs.current[index[0]]) {
+      const rowRect = rowRefs.current[index[0]].getBoundingClientRect()
+      setExplanationPos({
+        top: rowRect.top
+      })
+    }
+  }
+
+  useEffect(() => {
+    calculateExplanationPos()
+  }, [isOpen, index])
+
+  // Add scroll event listener
+  useEffect(() => {
+    const scrollableElement = scrollableRef.current
+    if (scrollableElement && explanation) {
+      const handleScroll = () => {
+        calculateExplanationPos()
+      }
+
+      scrollableElement.addEventListener('scroll', handleScroll)
+
+      // Cleanup function
+      return () => {
+        scrollableElement.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [explanation, isOpen, index])
+
   // Créer un élément DOM pour y attacher le portail
   const modalRoot = document.getElementsByClassName('app-layout')[0]
 
@@ -38,6 +73,7 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
 
               {/* Menu latéral avec animation de slide */}
               <motion.div
+                ref={scrollableRef}
                 initial={{ x: '100%' }}
                 animate={{ x: 0 }}
                 exit={{ x: '100%' }}
@@ -76,7 +112,11 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                   )}
                   <tbody>
                     {Object?.values(table).map((row, i) => (
-                      <tr key={i} style={{ position: 'relative' }}>
+                      <tr
+                        key={i}
+                        ref={(el) => (rowRefs.current[i] = el)}
+                        style={{ position: 'relative' }}
+                      >
                         <td
                           className={
                             (i === index?.[0] && 'highlight') ||
@@ -104,39 +144,29 @@ const Side = ({ isOpen, onClose, headers, index, table, startIndex = 0, explanat
                             {value}
                           </td>
                         ))}
-                        {i === index?.[0] && explanation && (
-                          <div
-                            style={{
-                              position: 'absolute',
-                              top: '100%',
-                              right: '100%',
-                              bottom: 0,
-                              display: 'flex',
-                              alignItems: 'center',
-                              width: '250px',
-                              overflow: 'visible',
-                              marginRight: '5px'
-                            }}
-                          >
-                            <motion.div
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              style={{
-                                width: '250px',
-                                backgroundColor: 'black',
-                                borderRadius: '8px',
-                                zIndex: 999
-                              }}
-                            >
-                              <Explanation explanation={explanation} />
-                            </motion.div>
-                          </div>
-                        )}
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </motion.div>
+              {/* Explanation en dehors du conteneur scrollable */}
+              {explanation && explanationPos && (
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  style={{
+                    position: 'fixed',
+                    top: explanationPos.top,
+                    right: scrollableRef?.current?.clientWidth + 10, // adjust as needed
+                    backgroundColor: 'black',
+                    borderRadius: '8px',
+                    zIndex: 2000,
+                    transform: 'translateY(-50%)'
+                  }}
+                >
+                  <Explanation explanation={explanation} />
+                </motion.div>
+              )}
             </>
           )}
         </AnimatePresence>,
