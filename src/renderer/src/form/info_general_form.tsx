@@ -188,44 +188,48 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         )}
       </div>
 
-      <TextItem path="common.children" tag="h3" />
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <TextItem path="common.name" tag="th" />
-            <TextItem path="common.date_naissance" tag="th" />
-            {editable && <th></th>}
-          </tr>
-        </thead>
-        <tbody>
-          {childrenFields?.fields.map((child, index) => (
-            <tr key={child.id}>
-              <td>
-                <Field control={control} name={`children.${index}.name`} editable={editable}>
-                  {(props) => <input style={{ width: 300 }} {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="date"
-                  name={`children.${index}.birthDate`}
-                  editable={editable}
-                >
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              {editable && (
-                <td>
-                  <button type="button" onClick={() => childrenFields?.remove(index)}>
-                    <TextItem path="common.delete" />
-                  </button>
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {(editable || childrenFields?.fields.length > 0) && (
+        <>
+          <TextItem path="common.children" tag="h3" />
+          <table style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="common.name" tag="th" />
+                <TextItem path="common.date_naissance" tag="th" />
+                {editable && <th></th>}
+              </tr>
+            </thead>
+            <tbody>
+              {childrenFields?.fields.map((child, index) => (
+                <tr key={child.id}>
+                  <td>
+                    <Field control={control} name={`children.${index}.name`} editable={editable}>
+                      {(props) => <input style={{ width: 300 }} {...props} />}
+                    </Field>
+                  </td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="date"
+                      name={`children.${index}.birthDate`}
+                      editable={editable}
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  {editable && (
+                    <td>
+                      <button type="button" onClick={() => childrenFields?.remove(index)}>
+                        <TextItem path="common.delete" />
+                      </button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
       {editable && (
         <button type="button" onClick={addChild}>
           <TextItem path="info_general.add_child" />
