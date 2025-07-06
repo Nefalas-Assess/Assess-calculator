@@ -98,9 +98,14 @@ function registerIpcHandlers(): void {
       }
     })
 
-    const logoPath = is.dev
-      ? path.resolve(__dirname, '../../resources/icon.png')
-      : path.join(process.resourcesPath, 'icon.png')
+    // Fix the logo path logic
+    let logoPath
+    if (is.dev) {
+      logoPath = path.resolve(__dirname, '../../resources/icon.png')
+    } else {
+      // In production, resources are in the app.asar.unpacked directory
+      logoPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'resources', 'icon.png')
+    }
 
     const html = `
     <html>
