@@ -197,17 +197,27 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
+              <th style={{ width: 50 }}>%</th>
               <TextItem path={'common.date_consolidation'} tag="th" />
               <TextItem path={'common.date_paiement'} tag="th" />
               <TextItem path={'common.days'} tag="th" />
               <TextItem path={'incapacite_perma.eco_cap.salary_yearly_brut'} tag="th" />
-              <th style={{ width: 50 }}>%</th>
               <TextItem path={'common.total_brut'} tag="th" />
               <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`brut.conso_pourcentage`}
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
               <td>
                 {data?.general_info?.date_consolidation &&
                   format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
@@ -224,16 +234,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                   {(props) => <input {...props} />}
                 </Field>
               </td>
-              <td>
-                <Field
-                  control={control}
-                  type="number"
-                  name={`brut.conso_pourcentage`}
-                  editable={editable}
-                >
-                  {(props) => <input style={{ width: 50 }} {...props} />}
-                </Field>
-              </td>
+
               <td>
                 <Money
                   value={getConsoAmount(formValues?.brut, 'brut')}
@@ -257,17 +258,27 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
+              <th style={{ width: 50 }}>%</th>
               <TextItem path={'common.date_consolidation'} tag="th" />
               <TextItem path={'common.date_paiement'} tag="th" />
               <TextItem path={'common.days'} tag="th" />
               <TextItem path={'common.salary_yearly_net'} tag="th" />
-              <th style={{ width: 50 }}>%</th>
               <TextItem path={'common.total_net'} tag="th" />
               <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`net.conso_pourcentage`}
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
               <td>
                 {data?.general_info?.date_consolidation &&
                   format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
@@ -277,16 +288,6 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <td>
                 <Field control={control} name={`net.conso_amount`} editable={editable}>
                   {(props) => <input type="number" {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="number"
-                  name={`net.conso_pourcentage`}
-                  editable={editable}
-                >
-                  {(props) => <input style={{ width: 50 }} {...props} />}
                 </Field>
               </td>
               <td>
@@ -313,18 +314,13 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_brut'} tag="th" />
               <th style={{ width: 50 }}>%</th>
+              <TextItem path={'incapacite_perma.eco_cap.salary_yearly_brut'} tag="th" />
               <TextItem path={'common.total'} tag="th" />
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
-                <Field control={control} type="number" name={`brut.amount`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
               <td>
                 <Field
                   control={control}
@@ -335,6 +331,12 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
                   {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
                 </Field>
               </td>
+              <td>
+                <Field control={control} type="number" name={`brut.amount`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+
               <td>
                 <Money
                   value={getCapAmount(formValues?.brut)?.value}
@@ -348,21 +350,21 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
         <table id="itebTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
-              <th>Salaire annuel net (€)</th>
               <th style={{ width: 50 }}>%</th>
+              <th>Salaire annuel net (€)</th>
               <th>Total</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
-                <Field control={control} type="number" name={`net.amount`} editable={editable}>
-                  {(props) => <input {...props} />}
+                <Field control={control} type="number" name={`net.pourcentage`} editable={editable}>
+                  {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
                 </Field>
               </td>
               <td>
-                <Field control={control} type="number" name={`net.pourcentage`} editable={editable}>
-                  {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                <Field control={control} type="number" name={`net.amount`} editable={editable}>
+                  {(props) => <input {...props} />}
                 </Field>
               </td>
               <td>
