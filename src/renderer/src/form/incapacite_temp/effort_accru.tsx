@@ -74,6 +74,13 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   }, [])
 
   const columns = [
+    {
+      header: '%',
+      key: 'pourcentage',
+      type: 'number',
+      width: 50,
+      props: { style: { width: 50 } }
+    },
     { header: 'common.start', key: 'start', type: 'date', width: 140 },
     { header: 'common.end', key: 'end', type: 'date', width: 140 },
     { header: 'common.days', key: 'days', type: 'calculated' },
@@ -82,13 +89,6 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       key: 'amount',
       type: 'number',
       props: { step: '0.01' }
-    },
-    {
-      header: '%',
-      key: 'pourcentage',
-      type: 'number',
-      width: 50,
-      props: { style: { width: 50 } }
     },
     {
       header: 'incapacite_temp.effa.coefficient',

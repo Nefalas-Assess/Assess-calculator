@@ -172,17 +172,27 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
         <table id="ippcTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
+              <th style={{ width: 50 }}>%</th>
               <TextItem path="common.date_consolidation" tag="th" />
               <TextItem path="common.date_paiement" tag="th" />
               <TextItem path="common.days" tag="th" style={{ width: 50 }} />
               <TextItem path="common.indemnite_journaliere" tag="th" />
-              <th style={{ width: 50 }}>%</th>
               <TextItem path="common.total" tag="th" />
               <TextItem path="common.interest" tag="th" className="int" />
             </tr>
           </thead>
           <tbody>
             <tr>
+              <td>
+                <Field
+                  control={control}
+                  name={`conso_pourcentage`}
+                  type="number"
+                  editable={editable}
+                >
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
               <td>
                 {data?.general_info?.date_consolidation &&
                   format(data?.general_info?.date_consolidation, 'dd/MM/yyyy')}
@@ -192,16 +202,6 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
               <td style={{ width: 50 }}>{days || 0}</td>
               <td>
                 <Field control={control} name={`conso_amount`} type="number" editable={editable}>
-                  {(props) => <input style={{ width: 50 }} {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  name={`conso_pourcentage`}
-                  type="number"
-                  editable={editable}
-                >
                   {(props) => <input style={{ width: 50 }} {...props} />}
                 </Field>
               </td>
@@ -229,20 +229,14 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
         <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
           <thead>
             <tr>
+              <th style={{ width: 50 }}>%</th>
               <TextItem path="common.date_paiement" tag="th" />
               <TextItem path="common.indemnite_journaliere" tag="th" />
-              <th style={{ width: 50 }}>%</th>
               <TextItem path="common.total" tag="th" />
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
-              <td>
-                <Field control={control} name={`perso_amount`} type="number" editable={editable}>
-                  {(props) => <input style={{ width: 50 }} {...props} />}
-                </Field>
-              </td>
               <td>
                 <Field
                   control={control}
@@ -251,6 +245,12 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
                   editable={editable}
                 >
                   {(props) => <input style={{ width: 50 }} step="0.01" {...props} />}
+                </Field>
+              </td>
+              <td>{formValues?.paiement && format(formValues?.paiement, 'dd/MM/yyyy')}</td>
+              <td>
+                <Field control={control} name={`perso_amount`} type="number" editable={editable}>
+                  {(props) => <input style={{ width: 50 }} {...props} />}
                 </Field>
               </td>
               <td>

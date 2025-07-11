@@ -83,7 +83,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
 
         if (!ref) return '-'
 
-        return `${ref?.label || ref?.value} ${ref2?.label || ref2?.value || ''}`
+        return `${getTranslation(ref?.label || ref?.value)} ${getTranslation(ref2?.label || ref2?.value || '')}`
       }
 
       return val
