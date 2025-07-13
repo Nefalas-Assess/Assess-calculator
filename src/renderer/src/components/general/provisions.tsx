@@ -4,7 +4,7 @@ import ProvisionsForm from '@renderer/form/provisions_form'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
-export const Provisions = () => {
+export const Provisions = ({ editable }) => {
   const { setData, data } = useContext(AppContext)
 
   const ref = useRef(null)
@@ -18,7 +18,7 @@ export const Provisions = () => {
 
   return (
     <div id="content" ref={ref}>
-      <ProvisionsForm onSubmit={saveData} initialValues={data?.provisions} />
+      <ProvisionsForm onSubmit={saveData} editable={editable} initialValues={data?.provisions} />
       <TotalBoxInterest documentRef={ref} />
     </div>
   )

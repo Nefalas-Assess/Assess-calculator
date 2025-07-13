@@ -356,6 +356,11 @@ export default {
       en: 'Yearly net salary (€)',
       nl: 'Netto jaarsalaris (€)'
     },
+    salary_yearly_brut: {
+      fr: 'Salaire annuel brut (€)',
+      en: 'Yearly gross salary (€)',
+      nl: 'Bruto jaarsalaris (€)'
+    },
     import_date: {
       fr: 'Importer dates',
       en: 'Import dates',
@@ -600,9 +605,9 @@ export default {
       nl: 'Kind toevoegen'
     },
     calculate_interests: {
-      fr: 'Voulez-vous calculer les intérêts ?',
-      en: 'Do you want to calculate the interests ?',
-      nl: 'Wilt u de intresten berekenen ?'
+      fr: 'Calculer les intérêts',
+      en: 'Calculate interests',
+      nl: 'Intresten berekenen'
     }
   },
   provisions: {
@@ -645,11 +650,6 @@ export default {
         fr: 'Incapacités permanentes économiques',
         en: 'Permanent economic disabilities',
         nl: 'Blijvende economische ongeschiktheden'
-      },
-      salary_yearly_brut: {
-        fr: 'Salaire annuel brut (€)',
-        en: 'Yearly gross salary (€)',
-        nl: 'Bruto jaarsalaris (€)'
       },
       total: {
         fr: 'Total général :',

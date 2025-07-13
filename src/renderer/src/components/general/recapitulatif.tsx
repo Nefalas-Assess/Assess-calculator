@@ -21,6 +21,7 @@ import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import DelayedContent from '@renderer/generic/delayContent'
 import { AppContext } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
+import Provisions from './provisions'
 
 const Recapitulatif = () => {
   const { data } = useContext(AppContext)
@@ -76,7 +77,8 @@ const Recapitulatif = () => {
 
         {data?.frais_funeraire && <FraisFun editable={false} />}
         {data?.prejudice_exh && <PrejudiceEXH editable={false} />}
-        {data?.prejudice_proche && <PrejudiceProche editable={false} />}
+        {data?.prejudice_proche && <PrejudiceProche editable={false} />} 
+        {data?.provisions && <Provisions editable={false} />}
 
         <DelayedContent delay={1000}>
           <div style={{ padding: '0 20px 20px' }}>

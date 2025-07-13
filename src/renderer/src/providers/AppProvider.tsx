@@ -140,7 +140,11 @@ const AppProvider = ({ children }) => {
     }
     const getLang = async () => {
       const lang = await window.api.getStore('lang')
-      setLg(lang)
+      if (!lang) {
+        setLg('fr')
+      } else {
+        setLg(lang)
+      }
     }
     getMode()
     getLang()
