@@ -40,7 +40,7 @@ export const useRecentFiles = (): RecentFilesHook => {
   const navigate = useNavigate()
 
   const addFile = (item: RecentFile): void => {
-    const updatedFiles = [item, ...recentFiles.filter((e) => e.path !== item.path)]
+    const updatedFiles = [item, ...(recentFiles || []).filter((e) => e.path !== item.path)]
     window.api.setStore('recent-files', updatedFiles)
     setRecentFiles(updatedFiles)
   }
