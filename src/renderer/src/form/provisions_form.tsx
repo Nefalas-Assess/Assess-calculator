@@ -63,11 +63,13 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
       return acc + parseFloat(interest)
     }, 0)
 
+
     return {
-      totalAmount: totalAmount * -1,
-      totalInterest: totalInterest * -1
+      totalAmount: totalAmount,
+      totalInterest: totalInterest
     }
   }, [provisionsValues])
+
 
   const columns = [
     { header: 'provisions.provision_date', key: 'date_provision', type: 'start' },
@@ -91,7 +93,7 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
       </form>
       <div className="total-box">
         <TextItem path="provisions.total" tag="strong" />
-        <Money value={totals.totalAmount.toFixed(2)} />
+        <Money value={totals.totalAmount.toFixed(2)} className={"total"} />
       </div>
     </>
   )

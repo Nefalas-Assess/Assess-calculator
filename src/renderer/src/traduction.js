@@ -605,9 +605,9 @@ export default {
       nl: 'Kind toevoegen'
     },
     calculate_interests: {
-      fr: 'Voulez-vous calculer les intérêts ?',
-      en: 'Do you want to calculate the interests ?',
-      nl: 'Wilt u de intresten berekenen ?'
+      fr: 'Calculer les intérêts',
+      en: 'Calculate interests',
+      nl: 'Intresten berekenen'
     }
   },
   provisions: {

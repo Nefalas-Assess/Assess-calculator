@@ -4,11 +4,17 @@ import DynamicTable from '@renderer/generic/dynamicTable'
 
 const coefficients = [
   { value: 1.15, label: '1/7' },
+  { value: 2.325, label: '1.5/7' },
   { value: 3.5, label: '2/7' },
+  { value: 5.25, label: '2.5/7' },
   { value: 7, label: '3/7' },
+  { value: 9.25, label: '3.5/7' },
   { value: 11.5, label: '4/7' },
+  { value: 14.25, label: '4.5/7' },
   { value: 17, label: '5/7' },
+  { value: 20.5, label: '5.5/7' },
   { value: 24, label: '6/7' },
+  { value: 28, label: '6.5/7' },
   { value: 32, label: '7/7' }
 ]
 

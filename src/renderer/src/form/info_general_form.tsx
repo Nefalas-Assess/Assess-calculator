@@ -173,6 +173,18 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                     ></Field>
                   </td>
                 </tr>
+                <tr>
+                  <TextItem path="info_general.calculate_interests" tag="td" />
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.boolean}
+                      name="calcul_interets"
+                      editable={editable}
+                    ></Field>
+                  </td>
+                </tr>
               </>
             )}
           </tbody>
@@ -236,21 +248,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         </button>
       )}
 
-      {/* Sélecteur pour les intérêts */}
-      {editable && (
-        <div>
-          <label>
-            <TextItem path="info_general.calculate_interests" tag="h3" />
-            <Field
-              control={control}
-              type="select"
-              options={constants.boolean}
-              name="calcul_interets"
-              editable={editable}
-            ></Field>
-          </label>
-        </div>
-      )}
+     
     </form>
   )
 }
