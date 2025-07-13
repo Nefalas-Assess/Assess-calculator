@@ -67,7 +67,7 @@ export const useRecentFiles = (): RecentFilesHook => {
     try {
       const { canceled, filePaths } = await window.api.showOpenDialog({
         title: 'Importer un fichier',
-        filters: [{ name: 'JSON Files', extensions: ['json'] }],
+        filters: [{ name: 'JSON Files', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] }],
         properties: ['openFile']
       })
 
@@ -101,7 +101,7 @@ export const useRecentFiles = (): RecentFilesHook => {
       const { canceled, filePath } = await window.api.showSaveDialog({
         title: 'Créer un nouveau fichier',
         defaultPath: `${fileName}.json`,
-        filters: [{ name: 'JSON Files', extensions: ['json'] }]
+        filters: [{ name: 'JSON Files', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] }]
       })
 
       if (!canceled && filePath) {

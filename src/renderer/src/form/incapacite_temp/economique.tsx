@@ -101,16 +101,16 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues]
   )
 
-  const columns = [
+  const columns = (type) => ([
     { header: '%', key: 'percentage', type: 'number', width: 50 },
     { header: 'common.start', key: 'start', type: 'start' },
     { header: 'common.end', key: 'end', type: 'end' },
     { header: 'common.days', key: 'days', type: 'calculated' },
-    { header: 'common.salary_yearly_net', key: 'amount', type: 'number' },
-    { header: 'common.total_net', key: 'total', type: 'calculated' },
+    { header: `common.salary_yearly_${type}`, key: 'amount', type: 'number' },
+    { header: `common.total_${type}`, key: 'total', type: 'calculated' },
     { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
     { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }
-  ]
+  ])
 
   const customActions = (name) => ({
     label: 'common.import_date',
@@ -135,7 +135,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       <DynamicTable
         title="incapacite_temp.economique.title"
         subtitle="incapacite_temp.economique.indemnite_nette"
-        columns={columns}
+        columns={columns('net')}
         control={control}
         name="net"
         formValues={formValues}
@@ -146,7 +146,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 
       <DynamicTable
         subtitle="incapacite_temp.economique.indemnite_brute"
-        columns={columns}
+        columns={columns('brut')}
         control={control}
         name="brut"
         formValues={formValues}

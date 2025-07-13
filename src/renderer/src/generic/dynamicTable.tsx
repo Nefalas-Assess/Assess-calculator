@@ -35,6 +35,8 @@ type ColumnType = {
   props?: Record<string, unknown>
   tooltipContent?: (values: Record<string, unknown>, days: number) => React.ReactNode
   additionalContent?: (values: Record<string, unknown>) => React.ReactNode
+  minDate?: Date
+  maxDate?: Date
 }
 
 type DynamicTableProps = {
@@ -295,6 +297,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                         type={typeInput || 'text'}
                         name={fieldName}
                         editable={editable}
+                        minDate={column.minDate}
+                        maxDate={column.maxDate}
                       >
                         {(props) => {
                           if (typeInput === 'select') {

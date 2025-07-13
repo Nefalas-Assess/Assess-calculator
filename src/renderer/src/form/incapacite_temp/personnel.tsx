@@ -107,7 +107,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const columns = [
     { header: '%', key: 'percentage', type: 'number', width: 50 },
-    { header: 'common.start', key: 'start', type: 'start' },
+    { header: 'common.start', minDate: data?.general_info?.date_accident, key: 'start', type: 'start' },
     { header: 'common.end', key: 'end', type: 'end' },
     { header: 'common.days', key: 'days', type: 'calculated' },
     { header: 'common.indemnite_journaliere', key: 'amount', type: 'number' },

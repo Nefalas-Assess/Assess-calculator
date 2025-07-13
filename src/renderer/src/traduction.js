@@ -356,6 +356,11 @@ export default {
       en: 'Yearly net salary (€)',
       nl: 'Netto jaarsalaris (€)'
     },
+    salary_yearly_brut: {
+      fr: 'Salaire annuel brut (€)',
+      en: 'Yearly gross salary (€)',
+      nl: 'Bruto jaarsalaris (€)'
+    },
     import_date: {
       fr: 'Importer dates',
       en: 'Import dates',
@@ -645,11 +650,6 @@ export default {
         fr: 'Incapacités permanentes économiques',
         en: 'Permanent economic disabilities',
         nl: 'Blijvende economische ongeschiktheden'
-      },
-      salary_yearly_brut: {
-        fr: 'Salaire annuel brut (€)',
-        en: 'Yearly gross salary (€)',
-        nl: 'Bruto jaarsalaris (€)'
       },
       total: {
         fr: 'Total général :',
