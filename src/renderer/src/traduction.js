@@ -398,9 +398,9 @@ export default {
   },
   tooltip: {
     number_days_before_25: {
-      fr: "Nombre de jours avant l'age de 25",
-      en: 'Number of days before the age of 25',
-      nl: 'Aantal dagen voor de leeftijd van 25'
+      fr: "Nombre de jours avant l'age de 25 ou la date du paiement",
+      en: 'Number of days before the age of 25 or the payment date',
+      nl: 'Aantal dagen voor de leeftijd van 25 of de betalingsdatum'
     },
     born_at: {
       fr: 'né le',

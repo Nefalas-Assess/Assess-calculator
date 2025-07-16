@@ -116,12 +116,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   const renderToolTipChildren = useCallback((res) => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        {res?.map((it, key) => (
+        {res?.map((it, key) => it?.birthDate && (
           <div key={key} style={{ padding: 10 }} className="border-item">
             {it?.name} <TextItem path="tooltip.born_at" tag="span" />{' '}
             {format(it?.birthDate, 'dd/MM/yyyy')}
             <div>
-              <TextItem path="tooltip.number_days_before_25" tag="span" /> {it?.days?.before25}
+              <TextItem path="tooltip.number_days_before_25" tag="span" />: <b>{it?.days?.before25}</b>
             </div>
             <div>
               <math>
@@ -162,14 +162,17 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     for (let i = 0; i < children.length; i += 1) {
       const item = children[i]
       // Skip children without birthdate
-      if (!item?.birthDate) continue
-      const result = calculateDaysBeforeAfter25(item?.birthDate, [
-        data?.general_info?.date_consolidation,
-        formValues?.paiement
-      ])
+      if (!item?.birthDate) {
+        res.push({ days: { percentageBefore25: 1 } })
+      } else {
+        const result = calculateDaysBeforeAfter25(item?.birthDate, [
+          data?.general_info?.date_consolidation,
+          formValues?.paiement
+        ])
 
-      if (result?.before25 !== 0) {
-        res.push({ days: result, ...item })
+        if (result?.before25 !== 0) {
+          res.push({ days: result, ...item })
+        }
       }
     }
 
@@ -244,7 +247,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         // Filter out children without birthdate
         if (!e?.birthDate) return false
         // Get the 25th birthday
-        const date25 = get25thBirthday(e.birthDate)
+        const date25 = get25thBirthday(e?.birthDate)
         // Get consolidation date from general info
         const consolidationDate = new Date(formValues?.paiement)
         // Keep child only if their 25th birthday is after consolidation date
@@ -252,6 +255,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       })
       ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
   }, [childrenOnPeriod])
+
+  // Children without birthdate
+  const unsortedChildren = useMemo(() => {
+    return childrenOnPeriod?.filter((e) => !e?.birthDate)
+  }, [childrenOnPeriod])
+
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
@@ -452,7 +461,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
                   const end = get25thBirthday(item?.birthDate)
                   const perso_amount =
-                    parseFloat(formValues?.perso_amount || 0) + 10 * (sortedChildren?.length - key)
+                    parseFloat(formValues?.perso_amount || 0) + (10 * unsortedChildren?.length) + 10 * (sortedChildren?.length - key)
                   return (
                     <tr key={key}>
                       <td>
@@ -482,13 +491,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     )}
                   </td>
                   <td>
-                    <Money value={formValues?.perso_amount} ignore />
+                    <Money value={parseFloat(formValues?.perso_amount || 0) + (10 * unsortedChildren?.length)} ignore />
                   </td>
                   <td>{formValues?.perso_pourcentage} %</td>
                   <td>{formValues?.perso_contribution} %</td>
                   <td>
                     <CapAmount
-                      values={formValues}
+                      values={{ ...formValues, perso_amount: parseFloat(formValues?.perso_amount || 0) + (10 * unsortedChildren?.length) }}
                       end={get25thBirthday(
                         sortedChildren[sortedChildren?.length - 1]?.birthDate,
                         true

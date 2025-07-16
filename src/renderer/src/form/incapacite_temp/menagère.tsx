@@ -19,7 +19,7 @@ const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
   const renderToolTipChildren = useCallback((res: any[]): JSX.Element => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        {res?.map((it, key) => (
+        {res?.map((it, key) => it?.birthDate && (
           <div key={key} style={{ padding: 10 }} className="border-item">
             {it?.name} <TextItem path="tooltip.born_at" tag="span" />{' '}
             {format(it?.birthDate, 'dd/MM/yyyy')}
@@ -161,9 +161,12 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
       for (let i = 0; i < children.length; i += 1) {
         const item = children[i]
         // Skip children without birthdate
-        if (!item?.birthDate) continue
-        const result = calculateDaysBeforeAfter25(item?.birthDate, [values?.start, values?.end])
-        res.push({ days: result, ...item })
+        if (!item?.birthDate) {
+          res.push({ days: { percentageBefore25: 1 } })
+        } else {
+          const result = calculateDaysBeforeAfter25(item?.birthDate, [values?.start, values?.end])
+          res.push({ days: result, ...item })
+        }
       }
       return res
     },
@@ -278,6 +281,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
       { label: 'common.economique.brut', action: () => copyDate('incapacite_temp_economique.brut') }
     ]
   }
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
