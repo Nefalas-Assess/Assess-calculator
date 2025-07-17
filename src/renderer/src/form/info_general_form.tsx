@@ -4,6 +4,7 @@ import TextItem from '@renderer/generic/textItem'
 import { isValid } from 'date-fns'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { useDebouncedEffect } from '@renderer/hooks/debounce'
 
 export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const {
@@ -47,7 +48,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const previousValuesRef = useRef({})
 
-  useEffect(() => {
+  useDebouncedEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children) ||
@@ -64,7 +65,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 
       handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
     }
-  }, [formValues, childrenValues, configValues, submitForm, handleSubmit])
+  }, [formValues, childrenValues, configValues, submitForm, handleSubmit], 500)
 
   const addChild = () => {
     childrenFields.append({ name: '', birthDate: '' }) // Nouveau champ enfant
@@ -156,7 +157,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 <tr>
                   <TextItem
                     path="info_general.configuration"
-                    colspan={2}
+                    colSpan={2}
                     style={{ fontWeight: 'bold' }}
                     tag="td"
                   />

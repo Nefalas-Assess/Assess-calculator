@@ -1,42 +1,48 @@
-import { useContext } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
-import content from '@renderer/traduction'
+import { useContext } from "react";
+import { AppContext } from "@renderer/providers/AppProvider";
+import content from "@renderer/traduction";
 
 /**
  * Récupère la traduction pour un chemin donné
  */
-export const getTranslation = (path: string | { [key: string]: string }): string => {
-  const { lg } = useContext(AppContext)
+export const getTranslation = (
+	path: string | { [key: string]: string },
+): string => {
+	const { lg } = useContext(AppContext);
 
-  if (typeof path === 'object') {
-    return path[lg]
-  }
+	if (typeof path === "object") {
+		return path[lg];
+	}
 
-  const keys = path.split('.')
-  let result: any = content
+	const keys = path.split(".");
+	let result: any = content;
 
-  for (const key of keys) {
-    if (result[key] === undefined) {
-      return path // Retourne le chemin si la traduction n'existe pas
-    }
-    result = result[key]
-  }
+	for (const key of keys) {
+		if (result[key] === undefined) {
+			return path; // Retourne le chemin si la traduction n'existe pas
+		}
+		result = result[key];
+	}
 
-  return result[lg] || path // Retourne la traduction ou le path si la langue n'existe pas
-}
+	return result[lg] || path; // Retourne la traduction ou le path si la langue n'existe pas
+};
 
 interface TextItemProps extends React.HTMLAttributes<HTMLElement> {
-  path: string
-  tag?: keyof JSX.IntrinsicElements // Permet d'utiliser n'importe quelle balise HTML (div, span, p, etc.)
+	path: string;
+	tag?: keyof JSX.IntrinsicElements; // Permet d'utiliser n'importe quelle balise HTML (div, span, p, etc.)
 }
 
 /**
  * Composant de traduction
  */
-export const TextItem = ({ path, tag: Tag = 'span', ...rest }: TextItemProps) => {
-  const translation = getTranslation(path)
+export const TextItem = ({
+	path,
+	tag: Tag = "span",
+	...rest
+}: TextItemProps) => {
+	const translation = getTranslation(path);
 
-  return <Tag {...rest}>{translation}</Tag>
-}
+	return <Tag {...rest}>{translation}</Tag>;
+};
 
-export default TextItem
+export default TextItem;
