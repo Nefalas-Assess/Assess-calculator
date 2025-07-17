@@ -120,6 +120,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
         title="incapacite_temp.personnel.title"
+        base="incapacite_temp_personnel"
         columns={columns}
         control={control}
         name="periods"

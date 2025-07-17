@@ -908,5 +908,17 @@ export default {
       en: 'File saved.',
       nl: 'Bestand opgeslagen.'
     }
+  },
+  errors: {
+    before_date_accident: {
+      fr: 'La date de début ne peut pas être avant la date d\'accident',
+      en: 'The start date cannot be before the accident date',
+      nl: 'De startdatum kan niet voor de ongevalsdatum liggen'
+    },
+    amount_must_be_negative: {
+      fr: 'Le montant ne peut pas être positif',
+      en: 'The amount cannot be positive',
+      nl: 'Het bedrag kan niet positief zijn'
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { validateData } from '@renderer/helpers/validation'
 import { intervalToDuration } from 'date-fns'
 import React, { createContext, useCallback, useEffect, useState } from 'react'
 
@@ -27,7 +28,6 @@ const setDefaultValues = (obj: any, defaultValues: any): any => {
 
     // Handle objects
     Object.entries(defaults).forEach(([key, value]) => {
-      console.log(current[key], key, value)
       if (typeof value !== 'object') {
         // Set default if value doesn't exist or is empty string
         current[key] = value
@@ -45,6 +45,7 @@ const setDefaultValues = (obj: any, defaultValues: any): any => {
 
 const AppProvider = ({ children }) => {
   const [data, setData] = useState(null)
+  const [errors, setErrors] = useState(null)
   const [lg, setLg] = useState('fr')
   const [darkMode, setDarkMode] = useState(true)
   const [filePath, setFilePath] = useState(null)
@@ -105,11 +106,15 @@ const AppProvider = ({ children }) => {
     return res
   }, [])
 
+
   const storeData = useCallback(
     (res, options) => {
-      setData((prev) => computeData({ ...prev, ...res }, options))
+      const computedData = computeData({ ...(data || {}), ...res }, options)
+      const errors = validateData(computedData)
+      setData(computedData)
+      setErrors(errors)
     },
-    [computeData]
+    [computeData, data]
   )
 
   const toggleDarkMode = useCallback(() => {
@@ -156,6 +161,7 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider
       value={{
         data,
+        errors,
         setData: storeData,
         reset: resetData,
         filePath,

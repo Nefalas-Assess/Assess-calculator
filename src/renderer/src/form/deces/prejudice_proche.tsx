@@ -267,6 +267,72 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         editable={editable}
         calculateTotal={(e) => e?.amount}
       />
+     
+      <h3>
+        <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
+        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="span" />
+      </h3>
+      <table id="IPVariables">
+        <tbody>
+          <tr>
+            <TextItem path="common.ref_table" tag="td" />
+            <td>
+              <Field
+                control={control}
+                type="reference"
+                options={constants.reference_light}
+                name="menage_ref"
+                editable={editable}
+              ></Field>
+            </td>
+          </tr>
+          <tr>
+            <TextItem path="common.taux_interet" tag="td" />
+            <td>
+              <Field
+                control={control}
+                type="select"
+                options={constants.interet_amount}
+                name="menage_interet"
+                editable={editable}
+              ></Field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
+        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="h3" />
+        <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+          <thead>
+            <tr>
+              <TextItem path="common.indemnite_journaliere" tag="th" />
+              <TextItem path="common.contribution" tag="th" />
+              <TextItem path="common.total" tag="th" />
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <Field control={control} name={`menage_amount`} type="number" editable={editable}>
+                  {(props) => <input style={{ width: 50 }} {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.contribution}
+                  name={`menage_contribution`}
+                  editable={editable}
+                ></Field>
+              </td>
+              <td>
+                <TotalMenage values={formValues} data={data} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </FadeIn>
       <h3>
         <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
         <TextItem path="deces.prejudice_proche.perte_contribution_eco" tag="span" />
@@ -334,71 +400,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 ) : (
                   <TotalRevenue values={formValues} data={data} />
                 )}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </FadeIn>
-      <h3>
-        <TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{' '}
-        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="span" />
-      </h3>
-      <table id="IPVariables">
-        <tbody>
-          <tr>
-            <TextItem path="common.ref_table" tag="td" />
-            <td>
-              <Field
-                control={control}
-                type="reference"
-                options={constants.reference_light}
-                name="menage_ref"
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
-          <tr>
-            <TextItem path="common.taux_interet" tag="td" />
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.interet_amount}
-                name="menage_interet"
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
-        <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="h3" />
-        <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
-          <thead>
-            <tr>
-              <TextItem path="common.indemnite_journaliere" tag="th" />
-              <TextItem path="common.contribution" tag="th" />
-              <TextItem path="common.total" tag="th" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Field control={control} name={`menage_amount`} type="number" editable={editable}>
-                  {(props) => <input style={{ width: 50 }} {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="select"
-                  options={constants.contribution}
-                  name={`menage_contribution`}
-                  editable={editable}
-                ></Field>
-              </td>
-              <td>
-                <TotalMenage values={formValues} data={data} />
               </td>
             </tr>
           </tbody>
