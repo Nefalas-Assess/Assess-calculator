@@ -1,8 +1,7 @@
 import FraisFunForm from '@renderer/form/deces/frais'
-import Money from '@renderer/generic/money'
 import TotalBox from '@renderer/generic/totalBox'
 import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 
 const FraisFun = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
