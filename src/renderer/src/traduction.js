@@ -389,7 +389,7 @@ export default {
       }
     }
   },
-  errors: {
+  errorsdn: {
     missing_date_naissance: {
       fr: 'Date de naissance manquante',
       en: 'Missing date of birth',

@@ -396,7 +396,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               </td>
               <td>
                 {!data?.general_info?.date_naissance ? (
-                  <TextItem path="errors.missing_date_naissance" />
+                  <TextItem path="errorsdn.missing_date_naissance" />
                 ) : (
                   <TotalRevenue values={formValues} data={data} />
                 )}
