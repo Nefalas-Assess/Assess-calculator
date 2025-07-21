@@ -151,21 +151,11 @@ button:focus-visible {
 		page-break-inside: avoid; /* Important pour éviter les coupures */
 	}
 
-	table {
-		margin-top: 20px !important; /* Espacement depuis le haut */
-		margin-bottom: 30px;
-		font-size: 12px !important;
-	}
-
 	h1 {
 		font-size: 18px !important;
 	}
 
 	h3 {
-		font-size: 14px !important;
-	}
-
-	.total-box {
 		font-size: 14px !important;
 	}
 	/* Ajoute des classes pour contrôler les ruptures de page si nécessaire */
@@ -178,6 +168,7 @@ button:focus-visible {
 	}
 
 	.total-box {
+		font-size: 14px !important;
 		page-break-inside: avoid;
 		margin-top: 30px;
 		margin-bottom: 30px;
@@ -200,7 +191,6 @@ button:focus-visible {
 	padding: 10px;
 	font-size: 16px;
 	cursor: pointer;
-	/* background-color: #242424; */
 }
 
 #top-menu button:hover {
@@ -224,9 +214,9 @@ h3 {
 
 table {
 	width: 100%;
-	/* border-collapse: collapse; */
-	margin-top: 10px;
-	margin-bottom: 20px;
+	margin-top: 20px !important; /* Espacement depuis le haut */
+	margin-bottom: 30px;
+	font-size: 12px !important;
 	background-color: #2f2f2f;
 	border: 1px solid black;
 	td {
