@@ -9,14 +9,14 @@ import IPFrais from '@renderer/components/incapacite_permanente/frais_cap'
 import IPEconomique from '@renderer/components/incapacite_permanente/economique_cap'
 import IPParticulier from '@renderer/components/incapacite_permanente/particuliers'
 
-import EFFA from '@renderer/components/incapacite_temporaire/effa'
-import HOSP from '@renderer/components/incapacite_temporaire/hosp'
-import PRETIUM from '@renderer/components/incapacite_temporaire/pretium'
+import Effa from '@renderer/components/incapacite_temporaire/effa'
+import Hosp from '@renderer/components/incapacite_temporaire/hosp'
+import Pretium from '@renderer/components/incapacite_temporaire/pretium'
 import Personnel from '@renderer/components/incapacite_temporaire/personnel'
 import Menagere from '@renderer/components/incapacite_temporaire/menagere'
 import Economique from '@renderer/components/incapacite_temporaire/economique'
 import INFOG from '@renderer/components/general/infog'
-import FRAIS from '@renderer/components/general/frais'
+import Frais from '@renderer/components/general/frais'
 import Provisions from '@renderer/components/general/provisions'
 import Recapitulatif from '@renderer/components/general/recapitulatif'
 import FraisFun from '@renderer/components/deces/frais_deces'
@@ -32,9 +32,9 @@ const IncapaciteTemp = () => {
       <Route path="/personnel" element={<Personnel />} />
       <Route path="/menagère" element={<Menagere />} />
       <Route path="/economique" element={<Economique />} />
-      <Route path="/hosp" element={<HOSP />} />
-      <Route path="/pretium" element={<PRETIUM />} />
-      <Route path="/effa" element={<EFFA />} />
+      <Route path="/hosp" element={<Hosp />} />
+      <Route path="/pretium" element={<Pretium />} />
+      <Route path="/effa" element={<Effa />} />
     </Routes>
   )
 }
@@ -72,7 +72,7 @@ const Main = () => {
           <Route path="ip/*" element={<IncapacitePerma />} />
           <Route path="it/*" element={<IncapaciteTemp />} />
           <Route path="deces/*" element={<Deces />} />
-          <Route path="frais" element={<FRAIS />} />
+          <Route path="frais" element={<Frais />} />
           <Route path="provisions" element={<Provisions />} />
           <Route path="recap" element={<Recapitulatif />} />
         </Route>
