@@ -22,9 +22,7 @@
   --ev-button-alt-hover-border: transparent;
   --ev-button-alt-hover-text: var(--ev-c-text-1);
   --ev-button-alt-hover-bg: var(--ev-c-gray-2);
-}
 
-:root {
   --color-background: var(--ev-c-black);
   --color-background-soft: var(--ev-c-black-soft);
   --color-background-mute: var(--ev-c-black-mute);
@@ -179,8 +177,7 @@ body {
 }
 
 .coef-explanation{
-  /* background-color: var(--color-primary); */
-  background-color: hsla(var(--color-primary-hsl), 0.3);
+  background-color: hsla(var(--color-primary-hsl), 0.3);   /* background-color: var(--color-primary); */
   border: 1px solid black;
   border-radius: 8px;
   padding: 10px;

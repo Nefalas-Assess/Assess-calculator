@@ -4,7 +4,7 @@ import Frais from './frais'
 import Personnel from '../incapacite_temporaire/personnel'
 import Menagere from '../incapacite_temporaire/menagere'
 import Economique from '../incapacite_temporaire/economique'
-import EFFA from '../incapacite_temporaire/effa'
+import Effa from '../incapacite_temporaire/effa'
 import Hospitalisation from '../incapacite_temporaire/hosp'
 import PretiumDoloris from '../incapacite_temporaire/pretium'
 import Forfait from '../incapacite_permanente/forfait'
@@ -65,7 +65,7 @@ const Recapitulatif = () => {
         {data?.incapacite_temp_personnel && <Personnel editable={false} />}
         {data?.incapacite_temp_menagere && <Menagere editable={false} />}
         {data?.incapacite_temp_economique && <Economique editable={false} />}
-        {data?.efforts_accrus && <EFFA editable={false} />}
+        {data?.efforts_accrus && <Effa editable={false} />}
         {data?.hospitalisation && <Hospitalisation editable={false} />}
         {data?.pretium_doloris && <PretiumDoloris editable={false} />}
         {data?.forfait_ip && <Forfait editable={false} />}

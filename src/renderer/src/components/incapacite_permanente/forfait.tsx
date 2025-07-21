@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import ForfaitForm from '@renderer/form/incapacite_perma/forfait'
 import TotalBox from '@renderer/generic/totalBox'
