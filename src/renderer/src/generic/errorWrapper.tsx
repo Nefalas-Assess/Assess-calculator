@@ -12,7 +12,14 @@ export const ErrorWrapper = ({ error, children, className }) => {
 			style={error && { backgroundColor: "rgba(255, 0, 0, 0.2)" }}
 			className={className}
 		>
-			<div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+			<div
+				style={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					gap: 5,
+				}}
+			>
 				{children}
 
 				{error && (
