@@ -275,7 +275,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 			width: 100,
 			additionalContent: (rowData) => (
 				<div style={{ fontSize: 12 }}>
-					( +
+					(+
 					{(
 						getChildOnPeriod(rowData)?.reduce((acc, value) => {
 							const percentage = parseFloat(
@@ -284,7 +284,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 							return acc + percentage;
 						}, 0) * 10
 					)?.toFixed(2)}
-					€ )
+					€)
 				</div>
 			),
 		},
