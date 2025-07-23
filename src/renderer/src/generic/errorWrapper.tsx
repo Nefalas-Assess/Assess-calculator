@@ -6,9 +6,12 @@ const ErrorText = ({ error }) => {
 	return <TextItem path={error} />;
 };
 
-export const ErrorWrapper = ({ error, children }) => {
+export const ErrorWrapper = ({ error, children, className }) => {
 	return (
-		<td style={error && { backgroundColor: "rgba(255, 0, 0, 0.2)" }}>
+		<td
+			style={error && { backgroundColor: "rgba(255, 0, 0, 0.2)" }}
+			className={className}
+		>
 			<div style={{ display: "flex", alignItems: "center", gap: 5 }}>
 				{children}
 
