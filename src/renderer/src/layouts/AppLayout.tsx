@@ -30,6 +30,24 @@ const LinkItem = ({ to, children, errors, name }) => {
 	);
 };
 
+const SubNavTitle = ({ path, onClick }) => {
+	return (
+		<div
+			className="sub-nav-title"
+			onClick={() => onClick()}
+			onKeyDown={(e) => {
+				if (e.key === "Enter" || e.key === " ") {
+					onClick();
+				}
+			}}
+			tabIndex={0}
+			role="button"
+		>
+			<TextItem path={path} />
+		</div>
+	);
+};
+
 const DetectMissingData = ({ children, data, required }) => {
 	const missingData = useMemo(() => {
 		const res = [];
@@ -226,12 +244,10 @@ export const AppLayout = () => {
 											{ value: "general_info.sexe", label: "common.sexe" },
 										]}
 									>
-										<div
-											className="sub-nav-title"
+										<SubNavTitle
 											onClick={() => setIncTemp(!incTemp)}
-										>
-											<TextItem path={"nav.incapacite_temp"} />
-										</div>
+											path="nav.incapacite_temp"
+										/>
 										{incTemp && (
 											<div>
 												<LinkItem
@@ -277,12 +293,10 @@ export const AppLayout = () => {
 											{ value: "general_info.sexe", label: "common.sexe" },
 										]}
 									>
-										<div
-											className="sub-nav-title"
+										<SubNavTitle
 											onClick={() => setIncPerma(!incPerma)}
-										>
-											<TextItem path={"nav.incapacite_perma"} />
-										</div>
+											path="nav.incapacite_perma"
+										/>
 										{incPerma && (
 											<div>
 												<LinkItem to="/ip/forfait">
@@ -332,12 +346,10 @@ export const AppLayout = () => {
 											{ value: "general_info.sexe", label: "common.sexe" },
 										]}
 									>
-										<div
-											className="sub-nav-title"
+										<SubNavTitle
 											onClick={() => setDead(!dead)}
-										>
-											<TextItem path={"nav.deces"} />
-										</div>
+											path="nav.deces"
+										/>
 										{dead && (
 											<div>
 												<LinkItem to="/deces/frais">
