@@ -264,7 +264,8 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 			header: "common.indemnite_journaliere",
 			key: "amount",
 			type: "number",
-			width: 100,
+			props: { step: '1' },
+			width: 50,
 			additionalContent: (rowData) => (
 				<div style={{ fontSize: 12 }}>
 					(+

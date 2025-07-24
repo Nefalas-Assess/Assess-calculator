@@ -110,7 +110,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
     { header: 'common.start', minDate: data?.general_info?.date_accident, key: 'start', type: 'start' },
     { header: 'common.end', key: 'end', type: 'end' },
     { header: 'common.days', key: 'days', type: 'calculated' },
-    { header: 'common.indemnite_journaliere', key: 'amount', type: 'number' },
+    { header: 'common.indemnite_journaliere', key: 'amount', type: 'number', props: { step: '1' }, width: 50 },
     { header: 'common.total', key: 'total', type: 'calculated' },
     { header: 'common.date_paiement', key: 'date_paiement', type: 'date', className: 'int' },
     { header: 'common.interest', key: 'interest', type: 'interest', median: true, className: 'int' }

@@ -88,7 +88,8 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       header: 'common.indemnite_journaliere',
       key: 'amount',
       type: 'number',
-      props: { step: '0.01' }
+      props: { step: '1' },
+      width: 50,
     },
     {
       header: 'incapacite_temp.effa.coefficient',
