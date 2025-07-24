@@ -9,7 +9,7 @@ import Tooltip from "./tooltip";
 import { FaRegQuestionCircle } from "react-icons/fa";
 import { useCapitalization } from "@renderer/hooks/capitalization";
 import CoefficientInfo from "./coefficientInfo";
-import TextItem, { getTranslation } from "./textItem";
+import TextItem, { useTranslation } from "./textItem";
 import { AppContext } from "@renderer/providers/AppProvider";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { ErrorWrapper } from "./errorWrapper";
@@ -160,6 +160,8 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 	base,
 }) => {
 	const { errors } = useContext(AppContext);
+
+	const translate = useTranslation();
 
 	const { fields, remove, append } = useFieldArray({
 		control,
@@ -358,7 +360,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
 																		key={option.value}
 																		value={option.value}
 																	>
-																		{getTranslation(option.label)}
+																		{translate(option.label)}
 																	</option>
 																))}
 															</select>

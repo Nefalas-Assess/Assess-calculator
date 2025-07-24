@@ -3,13 +3,12 @@ import { AppContext } from "@renderer/providers/AppProvider";
 import content from "@renderer/traduction";
 
 /**
- * Récupère la traduction pour un chemin donné
+ * Pure function to get translation for a given path and language
  */
-export const getTranslation = (
+const getTranslation = (
 	path: string | { [key: string]: string },
+	lg: string,
 ): string => {
-	const { lg } = useContext(AppContext);
-
 	if (typeof path === "object") {
 		return path[lg];
 	}
@@ -19,28 +18,40 @@ export const getTranslation = (
 
 	for (const key of keys) {
 		if (result[key] === undefined) {
-			return path; // Retourne le chemin si la traduction n'existe pas
+			return path; // Return path if translation doesn't exist
 		}
 		result = result[key];
 	}
 
-	return result[lg] || path; // Retourne la traduction ou le path si la langue n'existe pas
+	return result[lg] || path; // Return translation or path if language doesn't exist
+};
+
+/**
+ * Hook to get translation using current app context
+ */
+export const useTranslation = () => {
+	const { lg } = useContext(AppContext);
+
+	return (path: string | { [key: string]: string }) => {
+		return getTranslation(path, lg);
+	};
 };
 
 interface TextItemProps extends React.HTMLAttributes<HTMLElement> {
 	path: string;
-	tag?: keyof JSX.IntrinsicElements; // Permet d'utiliser n'importe quelle balise HTML (div, span, p, etc.)
+	tag?: keyof JSX.IntrinsicElements; // Allows using any HTML tag (div, span, p, etc.)
 }
 
 /**
- * Composant de traduction
+ * Translation component
  */
 export const TextItem = ({
 	path,
 	tag: Tag = "span",
 	...rest
 }: TextItemProps) => {
-	const translation = getTranslation(path);
+	const translate = useTranslation();
+	const translation = translate(path);
 
 	return <Tag {...rest}>{translation}</Tag>;
 };
