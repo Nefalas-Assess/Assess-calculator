@@ -1,187 +1,176 @@
 :root {
-  --ev-c-white: #ffffff;
-  --ev-c-white-soft: #f8f8f8;
-  --ev-c-white-mute: #f2f2f2;
+	--ev-c-white: #ffffff;
+	--ev-c-white-soft: #f8f8f8;
+	--ev-c-white-mute: #f2f2f2;
 
+	--ev-c-black: #242424;
+	--ev-c-black-soft: #242424;
+	--ev-c-black-mute: #242424;
 
-  --ev-c-black: #242424;
-  --ev-c-black-soft: #242424;
-  --ev-c-black-mute: #242424;
+	--ev-c-gray-1: #515c67;
+	--ev-c-gray-2: #414853;
+	--ev-c-gray-3: #32363f;
 
-  --ev-c-gray-1: #515c67;
-  --ev-c-gray-2: #414853;
-  --ev-c-gray-3: #32363f;
+	--ev-c-text-1: rgba(255, 255, 245, 0.86);
+	--ev-c-text-2: rgba(235, 235, 245, 0.6);
+	--ev-c-text-3: rgba(235, 235, 245, 0.38);
 
-  --ev-c-text-1: rgba(255, 255, 245, 0.86);
-  --ev-c-text-2: rgba(235, 235, 245, 0.6);
-  --ev-c-text-3: rgba(235, 235, 245, 0.38);
+	--ev-button-alt-border: transparent;
+	--ev-button-alt-text: var(--ev-c-text-1);
+	--ev-button-alt-bg: var(--ev-c-gray-3);
+	--ev-button-alt-hover-border: transparent;
+	--ev-button-alt-hover-text: var(--ev-c-text-1);
+	--ev-button-alt-hover-bg: var(--ev-c-gray-2);
 
-  --ev-button-alt-border: transparent;
-  --ev-button-alt-text: var(--ev-c-text-1);
-  --ev-button-alt-bg: var(--ev-c-gray-3);
-  --ev-button-alt-hover-border: transparent;
-  --ev-button-alt-hover-text: var(--ev-c-text-1);
-  --ev-button-alt-hover-bg: var(--ev-c-gray-2);
+	--color-background: var(--ev-c-black);
+	--color-background-soft: var(--ev-c-black-soft);
+	--color-background-mute: var(--ev-c-black-mute);
 
-  --color-background: var(--ev-c-black);
-  --color-background-soft: var(--ev-c-black-soft);
-  --color-background-mute: var(--ev-c-black-mute);
-
-  --color-text: var(--ev-c-text-1);
+	--color-text: var(--ev-c-text-1);
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
+	box-sizing: border-box;
+	margin: 0;
 }
 
-th{
-  font-weight: normal;
+th {
+	font-weight: normal;
 }
 
 ul {
-  list-style: none;
+	list-style: none;
 }
 
 body {
-  height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	height: 100vh;
+	color: var(--color-text);
+	background: var(--color-background);
+	line-height: 1.6;
+	font-family:
+		Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+		Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  height: 100vh;
-  display: flex;
+	height: 100vh;
+	display: flex;
 }
 
 .app-header {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid black;
-  padding: 10px;
-  align-items: center;
-  .left {
-    font-weight: bold;
-  }
-  .right {
-    display: flex;
-    gap: 10px;
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px solid black;
+	padding: 10px;
+	align-items: center;
+	.left {
+		font-weight: bold;
+	}
+	.right {
+		display: flex;
+		gap: 10px;
 
-    button {
-      margin: 0;
-    }
-  }
+		button {
+			margin: 0;
+		}
+	}
 }
 
-.app{
-  &.dark{
-    --color-primary: #9F9ADB;
-    --color-primary-hsl: 245, 47%, 73%;  /* Format: hue, saturation, lightness */
-  }
-  &.light{
-    --color-primary: #3422F2;
-    --color-primary-hsl: 245, 89%, 54%;
-  }
+.app {
+	&.dark {
+		--color-primary: #9f9adb;
+		--color-primary-hsl: 245, 47%, 73%; /* Format: hue, saturation, lightness */
+	}
+	&.light {
+		--color-primary: #3422f2;
+		--color-primary-hsl: 245, 89%, 54%;
+	}
 }
 
 .app-layout {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  .core {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  .content {
-    flex: 1;
-    overflow: auto;
-  }
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	.core {
+		display: flex;
+		flex: 1;
+		overflow: hidden;
+	}
+	.content {
+		flex: 1;
+		overflow: auto;
+	}
 
-  .scroll{
-    overflow: auto;
-    height: 100%;
-  }
+	.scroll {
+		overflow: auto;
+		height: 100%;
+	}
 
-  .contentWithOutInteret{
-    .int {
-      display: none
-    }
-  }
+	.contentWithOutInteret {
+		.int {
+			display: none;
+		}
+	}
 }
 
-.select-lang{
-  appearance: none;
-  color: white;
-  padding: 5px;
-  border-radius: 6px;
-  user-select: none;
-  background-color: #1a1a1a;
-  border: none;
+.select-lang {
+	appearance: none;
+	color: white;
+	padding: 5px;
+	border-radius: 6px;
+	user-select: none;
+	background-color: #1a1a1a;
+	border: none;
 }
 
-.coefficient-table{
-  font-size: 10px;
-  margin: 0;
-  background-color: transparent;
+.coefficient-table {
+	font-size: 10px;
+	margin: 0;
+	background-color: transparent;
 
-  th, td{
-    padding: 5px;
-    min-width: 0;
-    max-width: none;
-  }
+	th,
+	td {
+		padding: 5px;
+		min-width: 0;
+		max-width: none;
+	}
 
-  thead{
-    background-color: var(--color-background-soft);
-  }
+	thead {
+		background-color: var(--color-background-soft);
+	}
 
-  tbody{
-    background-color: var(--color-background-soft);
-  }
+	tbody {
+		background-color: var(--color-background-soft);
+	}
 
-  .highlight{
-    background-color: hsla(var(--color-primary-hsl), 0.1);
-  }
-  .bordered{
-    background-color: hsla(var(--color-primary-hsl), 0.1);
-    border: 1px solid var(--color-primary);
-    font-weight: bold;
-    &.no-top{
-      border-top: none;
-    }
-    &.no-bot{
-      border-bottom: 1px solid black;
-    }
-  }
-
+	.highlight {
+		background-color: hsla(var(--color-primary-hsl), 0.1);
+	}
+	.bordered {
+		background-color: hsla(var(--color-primary-hsl), 0.1);
+		border: 1px solid var(--color-primary);
+		font-weight: bold;
+		&.no-top {
+			border-top: none;
+		}
+		&.no-bot {
+			border-bottom: 1px solid black;
+		}
+	}
 }
 
-.coef-explanation{
-  background-color: hsla(var(--color-primary-hsl), 0.3);   /* background-color: var(--color-primary); */
-  border: 1px solid black;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 14px;
-  width: 100%;
-  margin-right: 10px;
+.coef-explanation {
+	background-color: hsla(var(--color-primary-hsl), 0.3);
+	border: 1px solid black;
+	border-radius: 8px;
+	padding: 10px;
+	font-size: 14px;
+	width: 100%;
+	margin-right: 10px;
 }

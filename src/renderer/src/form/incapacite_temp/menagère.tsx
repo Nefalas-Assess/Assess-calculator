@@ -1,11 +1,4 @@
-import ActionMenuButton from "@renderer/generic/actionButton";
-import Field from "@renderer/generic/field";
-import Interest from "@renderer/generic/interet";
-import Money from "@renderer/generic/money";
-import {
-	calculateDaysBeforeAfter25,
-	getMedDate,
-} from "@renderer/helpers/general";
+import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
 import { AppContext } from "@renderer/providers/AppProvider";
 import React, {
 	useCallback,
@@ -13,9 +6,8 @@ import React, {
 	useEffect,
 	useMemo,
 	useRef,
-	useState,
 } from "react";
-import { useFieldArray, useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
 import Tooltip from "@renderer/generic/tooltip";
@@ -265,7 +257,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 			header: "common.children",
 			key: "children",
 			render: (e, rowData) => (
-				<ChildrenCell children={getChildOnPeriod(rowData)} />
+				<ChildrenCell>{getChildOnPeriod(rowData)}</ChildrenCell>
 			),
 		},
 		{
