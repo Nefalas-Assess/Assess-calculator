@@ -56,7 +56,16 @@ const ReferenceInput = ({ options, onChange, value }) => {
 	);
 };
 
-const Field = ({ editable, name, type, children, control, options, style }) => {
+const Field = ({
+	editable,
+	name,
+	type,
+	children,
+	control,
+	options,
+	style,
+	noSelect,
+}) => {
 	const translate = useTranslation();
 
 	const renderValue = useCallback(
@@ -117,7 +126,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
 			if (type === "select" && options) {
 				return (
 					<select {...field} style={{ maxWidth: "100%" }}>
-						<option value={""}>Select</option>
+						{!noSelect && <option value={""}>Select</option>}
 						{(options || [])?.map((it, key) => (
 							<option key={key} value={it?.value}>
 								{translate(it?.label || it?.value)}
@@ -133,7 +142,7 @@ const Field = ({ editable, name, type, children, control, options, style }) => {
 
 			return children({ ...field, type });
 		},
-		[children, type],
+		[children, type, noSelect],
 	);
 
 	return (

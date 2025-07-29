@@ -55,7 +55,11 @@ const DetectMissingData = ({ children, data, required }) => {
 			const item = required[i];
 			if (!item?.value) return;
 
-			if (!get(data, item?.value)) {
+			const value = get(data, item?.value);
+
+			if (item?.eq && value !== item?.eq) {
+				res.push(item);
+			} else if (!value) {
 				res.push(item);
 			}
 		}
@@ -69,7 +73,11 @@ const DetectMissingData = ({ children, data, required }) => {
 				<ul>
 					{missingData?.map((it, key) => (
 						<li key={key} style={{ listStyle: "inside" }}>
-							<TextItem path={it?.label} />
+							{it?.error ? (
+								<TextItem path={it?.error} />
+							) : (
+								<TextItem path={it?.label} />
+							)}
 						</li>
 					))}
 				</ul>
@@ -299,24 +307,73 @@ export const AppLayout = () => {
 										/>
 										{incPerma && (
 											<div>
-												<LinkItem to="/ip/forfait">
-													<TextItem path={"nav.incapacite_perma.forfait"} />
-												</LinkItem>
-												<LinkItem to="/ip/personnel">
-													<TextItem
-														path={"nav.incapacite_perma.personnel_cap"}
-													/>
-												</LinkItem>
-												<LinkItem to="/ip/menagère">
-													<TextItem
-														path={"nav.incapacite_perma.menagère_cap"}
-													/>
-												</LinkItem>
-												<LinkItem to="/ip/economique">
-													<TextItem
-														path={"nav.incapacite_perma.economique_cap"}
-													/>
-												</LinkItem>
+												{Object.values(data?.general_info?.ip)?.filter(
+													(it) => it?.method === "forfait",
+												)?.length !== 0 && (
+													<LinkItem to="/ip/forfait">
+														<TextItem path={"nav.incapacite_perma.forfait"} />
+													</LinkItem>
+												)}
+												<DetectMissingData
+													data={data}
+													required={[
+														{
+															value: "general_info.ip.personnel.method",
+															eq: "capitalized",
+															label: "errors.method_capitalized",
+														},
+														{
+															value: "general_info.ip.personnel.interet",
+															label: "info_general.incapacite_perma.interet",
+														},
+													]}
+												>
+													<LinkItem to="/ip/personnel">
+														<TextItem
+															path={"nav.incapacite_perma.personnel_cap"}
+														/>
+													</LinkItem>
+												</DetectMissingData>
+												<DetectMissingData
+													data={data}
+													required={[
+														{
+															value: "general_info.ip.menagere.method",
+															eq: "capitalized",
+															label: "errors.method_capitalized",
+														},
+														{
+															value: "general_info.ip.menagere.interet",
+															label: "info_general.incapacite_perma.interet",
+														},
+													]}
+												>
+													<LinkItem to="/ip/menagère">
+														<TextItem
+															path={"nav.incapacite_perma.menagère_cap"}
+														/>
+													</LinkItem>
+												</DetectMissingData>
+												<DetectMissingData
+													data={data}
+													required={[
+														{
+															value: "general_info.ip.economique.method",
+															eq: "capitalized",
+															label: "errors.method_capitalized",
+														},
+														{
+															value: "general_info.ip.economique.interet",
+															label: "info_general.incapacite_perma.interet",
+														},
+													]}
+												>
+													<LinkItem to="/ip/economique">
+														<TextItem
+															path={"nav.incapacite_perma.economique_cap"}
+														/>
+													</LinkItem>
+												</DetectMissingData>
 												<LinkItem to="/ip/frais">
 													<TextItem
 														path={"nav.incapacite_perma.frais_futurs"}

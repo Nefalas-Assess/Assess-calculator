@@ -230,9 +230,12 @@ table {
 			border-right: 1px solid black;
 		}
 	}
-	tr:last-child {
-		td {
-			border-bottom: 0px;
+
+	&:not(.main-table) {
+		tr:last-child {
+			td {
+				border-bottom: 0px;
+			}
 		}
 	}
 	th {
@@ -450,4 +453,13 @@ th {
 .border-item {
 	border: 1px solid black;
 	border-radius: 5px;
+}
+
+.table-inside-table {
+	border: none;
+	margin: 0 !important;
+
+	td {
+		word-break: break-word;
+	}
 }

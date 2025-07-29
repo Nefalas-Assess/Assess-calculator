@@ -1,3 +1,4 @@
+
 export default {
   home: {
     reference: {
@@ -608,6 +609,38 @@ export default {
       fr: 'Calculer les intérêts',
       en: 'Calculate interests',
       nl: 'Intresten berekenen'
+    },
+    incapacite_perma: {
+      title: {
+        fr: 'Incapacités permanentes',
+        en: 'Permanent disabilities',
+        nl: 'Blijvende ongeschiktheden'
+      },
+      menagere: {
+        fr: 'Ménagères',
+        en: 'Household',
+        nl: 'Huishoudelijk'
+      },
+      personnel: {
+        fr: 'Personnelles',
+        en: 'Personal',
+        nl: 'Persoonlijk'
+      },
+      economique: {
+        fr: 'Économiques',
+        en: 'Economic',
+        nl: 'Economisch'
+      },
+      method: {
+        fr: 'Méthode',
+        en: 'Method',
+        nl: 'Methode'
+      },
+      interet: {
+        fr: 'Taux d\'incapacité',
+        en: 'Disability rate',
+        nl: 'Percentage'
+      }
     }
   },
   provisions: {
@@ -919,6 +952,11 @@ export default {
       fr: 'Le montant ne peut pas être positif',
       en: 'The amount cannot be positive',
       nl: 'Het bedrag kan niet positief zijn'
+    },
+    method_capitalized: {
+      fr: 'La méthode doit être capitalisée',
+      en: 'The method must be capitalized',
+      nl: 'De methode moet hoofdletter geschreven zijn'
     }
   }
 }
