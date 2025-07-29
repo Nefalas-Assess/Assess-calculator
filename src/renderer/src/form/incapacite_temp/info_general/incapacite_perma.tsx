@@ -80,7 +80,12 @@ const IncapacitePerma = ({ control, editable, formValues }) => {
 								editable={editable}
 							>
 								{(props) => (
-									<input style={{ width: 50 }} step="0.01" {...props} />
+									<input
+										style={{ width: 50 }}
+										step="0.01"
+										max={100}
+										{...props}
+									/>
 								)}
 							</Field>
 						</td>
@@ -93,7 +98,12 @@ const IncapacitePerma = ({ control, editable, formValues }) => {
 								editable={editable}
 							>
 								{(props) => (
-									<input style={{ width: 50 }} step="0.01" {...props} />
+									<input
+										style={{ width: 50 }}
+										step="0.01"
+										max={100}
+										{...props}
+									/>
 								)}
 							</Field>
 						</td>
@@ -106,7 +116,12 @@ const IncapacitePerma = ({ control, editable, formValues }) => {
 								editable={editable}
 							>
 								{(props) => (
-									<input style={{ width: 50 }} step="0.01" {...props} />
+									<input
+										style={{ width: 50 }}
+										step="0.01"
+										max={100}
+										{...props}
+									/>
 								)}
 							</Field>
 						</td>

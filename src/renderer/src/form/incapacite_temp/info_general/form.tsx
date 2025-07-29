@@ -19,6 +19,11 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 			profession: "employe", // Valeur par défaut
 			calcul_interets: "non",
 			children: [], // Liste vide d'enfants par défaut
+			ip: {
+				personnel: { method: "forfait" },
+				menagere: { method: "forfait" },
+				economique: { method: "forfait" },
+			},
 		},
 	});
 

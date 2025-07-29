@@ -470,18 +470,7 @@ export const IPMenageCapForm = ({
 								</tr>
 								<tr>
 									<TextItem path="common.pourcentage" tag="td" />
-									<td>
-										<Field
-											control={control}
-											name={`perso_pourcentage`}
-											type="number"
-											editable={editable}
-										>
-											{(props) => (
-												<input style={{ width: 50 }} step="0.01" {...props} />
-											)}
-										</Field>
-									</td>
+									<td>{data?.general_info?.ip?.menagere?.interet}</td>
 								</tr>
 								<tr>
 									<TextItem path="common.contribution" tag="td" />
@@ -531,11 +520,16 @@ export const IPMenageCapForm = ({
 											<td>
 												<Money value={perso_amount} ignore />
 											</td>
-											<td>{formValues?.perso_pourcentage} %</td>
+											<td>{data?.general_info?.ip?.menagere?.interet} %</td>
 											<td>{formValues?.perso_contribution} %</td>
 											<td>
 												<CapAmount
-													values={{ ...formValues, perso_amount: perso_amount }}
+													values={{
+														...formValues,
+														perso_amount: perso_amount,
+														perso_pourcentage:
+															data?.general_info?.ip?.menagere?.interet,
+													}}
 													start={start}
 													end={end}
 													usePersoReference={true}
@@ -563,7 +557,7 @@ export const IPMenageCapForm = ({
 											ignore
 										/>
 									</td>
-									<td>{formValues?.perso_pourcentage} %</td>
+									<td>{data?.general_info?.ip?.menagere?.interet} %</td>
 									<td>{formValues?.perso_contribution} %</td>
 									<td>
 										<CapAmount
@@ -572,6 +566,8 @@ export const IPMenageCapForm = ({
 												perso_amount:
 													parseFloat(formValues?.perso_amount || 0) +
 													10 * unsortedChildren?.length,
+												perso_pourcentage:
+													data?.general_info?.ip?.menagere?.interet,
 											}}
 											end={get25thBirthday(
 												sortedChildren[sortedChildren?.length - 1]?.birthDate,
@@ -597,18 +593,7 @@ export const IPMenageCapForm = ({
 						</thead>
 						<tbody>
 							<tr>
-								<td>
-									<Field
-										control={control}
-										name={`perso_pourcentage`}
-										type="number"
-										editable={editable}
-									>
-										{(props) => (
-											<input style={{ width: 50 }} step="0.01" {...props} />
-										)}
-									</Field>
-								</td>
+								<td>{data?.general_info?.ip?.menagere?.interet}</td>
 								<td>
 									{formValues?.paiement &&
 										format(formValues?.paiement, "dd/MM/yyyy")}
@@ -633,7 +618,14 @@ export const IPMenageCapForm = ({
 									></Field>
 								</td>
 								<td>
-									<CapAmount values={formValues} startIndex={0} />
+									<CapAmount
+										values={{
+											...formValues,
+											perso_pourcentage:
+												data?.general_info?.ip?.menagere?.interet,
+										}}
+										startIndex={0}
+									/>
 								</td>
 							</tr>
 						</tbody>
