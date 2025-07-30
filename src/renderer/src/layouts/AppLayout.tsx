@@ -7,7 +7,6 @@ import get from "lodash/get";
 import Tooltip from "@renderer/generic/tooltip";
 import Loader from "@renderer/generic/loader";
 import { RecentFilesList } from "@renderer/generic/recentFilesList";
-import { useRecentFiles } from "@renderer/hooks/recentFiles";
 import TextItem from "@renderer/generic/textItem";
 
 const LinkItem = ({ to, children, errors, name }) => {
@@ -53,7 +52,15 @@ const DetectMissingData = ({ children, data, required }) => {
 		const res = [];
 		for (let i = 0; i < (required || []).length; i += 1) {
 			const item = required[i];
-			if (!item?.value) return;
+
+			if (!item?.value && !item?.function) return;
+
+			if (item?.function) {
+				if (!item?.function()) {
+					res.push(item);
+				}
+				continue;
+			}
 
 			const value = get(data, item?.value);
 
@@ -307,13 +314,22 @@ export const AppLayout = () => {
 										/>
 										{incPerma && (
 											<div>
-												{Object.values(data?.general_info?.ip)?.filter(
-													(it) => it?.method === "forfait",
-												)?.length !== 0 && (
+												<DetectMissingData
+													data={data}
+													required={[
+														{
+															label: "errors.method_forfait",
+															function: () =>
+																Object.values(data?.general_info?.ip)?.filter(
+																	(it) => it?.method === "forfait",
+																)?.length !== 0,
+														},
+													]}
+												>
 													<LinkItem to="/ip/forfait">
 														<TextItem path={"nav.incapacite_perma.forfait"} />
 													</LinkItem>
-												)}
+												</DetectMissingData>
 												<DetectMissingData
 													data={data}
 													required={[

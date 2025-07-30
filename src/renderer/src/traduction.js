@@ -957,6 +957,11 @@ export default {
       fr: 'La méthode doit être capitalisée',
       en: 'The method must be capitalized',
       nl: 'De methode moet hoofdletter geschreven zijn'
+    },
+    method_forfait: {
+      fr: "L'une des méthodes doit être forfaitaire",
+      en: 'One of the methods must be forfaitary',
+      nl: 'Eén van de methoden moet forfaitair zijn'
     }
   }
 }
