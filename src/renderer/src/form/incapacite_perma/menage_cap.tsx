@@ -486,99 +486,101 @@ export const IPMenageCapForm = ({
 								</tr>
 							</tbody>
 						</table>
-						<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
-							<thead>
-								<tr>
-									<TextItem path="common.period" tag="th" />
-									<TextItem path="common.indemnite_journaliere" tag="th" />
-									<th style={{ width: 50 }}>%</th>
-									<TextItem path="common.contribution" tag="th" />
-									<TextItem path="common.total" tag="th" />
-								</tr>
-							</thead>
-							<tbody>
-								{sortedChildren?.map((item, key) => {
-									const start =
-										key === 0
-											? addDays(formValues?.paiement || new Date(), 1)
-											: get25thBirthday(
-													sortedChildren[key - 1]?.birthDate,
-													true,
-												);
+						<FadeIn show={formValues?.perso_reference}>
+							<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+								<thead>
+									<tr>
+										<TextItem path="common.period" tag="th" />
+										<TextItem path="common.indemnite_journaliere" tag="th" />
+										<th style={{ width: 50 }}>%</th>
+										<TextItem path="common.contribution" tag="th" />
+										<TextItem path="common.total" tag="th" />
+									</tr>
+								</thead>
+								<tbody>
+									{sortedChildren?.map((item, key) => {
+										const start =
+											key === 0
+												? addDays(formValues?.paiement || new Date(), 1)
+												: get25thBirthday(
+														sortedChildren[key - 1]?.birthDate,
+														true,
+													);
 
-									const end = get25thBirthday(item?.birthDate);
-									const perso_amount =
-										parseFloat(formValues?.perso_amount || 0) +
-										10 * unsortedChildren?.length +
-										10 * (sortedChildren?.length - key);
-									return (
-										<tr key={key}>
-											<td>
-												{format(start, "dd/MM/yyyy")} -{" "}
-												{format(end, "dd/MM/yyyy")}
-											</td>
-											<td>
-												<Money value={perso_amount} ignore />
-											</td>
-											<td>{data?.general_info?.ip?.menagere?.interet} %</td>
-											<td>{formValues?.perso_contribution} %</td>
-											<td>
-												<CapAmount
-													values={{
-														...formValues,
-														perso_amount: perso_amount,
-														perso_pourcentage:
-															data?.general_info?.ip?.menagere?.interet,
-													}}
-													start={start}
-													end={end}
-													usePersoReference={true}
-												/>
-											</td>
-										</tr>
-									);
-								})}
-								<tr>
-									<td>
-										{format(
-											get25thBirthday(
-												sortedChildren[sortedChildren?.length - 1]?.birthDate,
-												true,
-											),
-											"dd/MM/yyyy",
-										)}
-									</td>
-									<td>
-										<Money
-											value={
-												parseFloat(formValues?.perso_amount || 0) +
-												10 * unsortedChildren?.length
-											}
-											ignore
-										/>
-									</td>
-									<td>{data?.general_info?.ip?.menagere?.interet} %</td>
-									<td>{formValues?.perso_contribution} %</td>
-									<td>
-										<CapAmount
-											values={{
-												...formValues,
-												perso_amount:
-													parseFloat(formValues?.perso_amount || 0) +
-													10 * unsortedChildren?.length,
-												perso_pourcentage:
-													data?.general_info?.ip?.menagere?.interet,
-											}}
-											end={get25thBirthday(
-												sortedChildren[sortedChildren?.length - 1]?.birthDate,
-												true,
+										const end = get25thBirthday(item?.birthDate);
+										const perso_amount =
+											parseFloat(formValues?.perso_amount || 0) +
+											10 * unsortedChildren?.length +
+											10 * (sortedChildren?.length - key);
+										return (
+											<tr key={key}>
+												<td>
+													{format(start, "dd/MM/yyyy")} -{" "}
+													{format(end, "dd/MM/yyyy")}
+												</td>
+												<td>
+													<Money value={perso_amount} ignore />
+												</td>
+												<td>{data?.general_info?.ip?.menagere?.interet} %</td>
+												<td>{formValues?.perso_contribution} %</td>
+												<td>
+													<CapAmount
+														values={{
+															...formValues,
+															perso_amount: perso_amount,
+															perso_pourcentage:
+																data?.general_info?.ip?.menagere?.interet,
+														}}
+														start={start}
+														end={end}
+														usePersoReference={true}
+													/>
+												</td>
+											</tr>
+										);
+									})}
+									<tr>
+										<td>
+											{format(
+												get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												),
+												"dd/MM/yyyy",
 											)}
-											startIndex={0}
-										/>
-									</td>
-								</tr>
-							</tbody>
-						</table>
+										</td>
+										<td>
+											<Money
+												value={
+													parseFloat(formValues?.perso_amount || 0) +
+													10 * unsortedChildren?.length
+												}
+												ignore
+											/>
+										</td>
+										<td>{data?.general_info?.ip?.menagere?.interet} %</td>
+										<td>{formValues?.perso_contribution} %</td>
+										<td>
+											<CapAmount
+												values={{
+													...formValues,
+													perso_amount:
+														parseFloat(formValues?.perso_amount || 0) +
+														10 * unsortedChildren?.length,
+													perso_pourcentage:
+														data?.general_info?.ip?.menagere?.interet,
+												}}
+												end={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												)}
+												startIndex={0}
+											/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</FadeIn>
 					</>
 				) : (
 					<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
