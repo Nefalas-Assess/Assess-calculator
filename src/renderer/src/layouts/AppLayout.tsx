@@ -272,21 +272,41 @@ export const AppLayout = () => {
 												>
 													<TextItem path={"nav.incapacite_temp.personnel"} />
 												</LinkItem>
-												<LinkItem to="/it/menagère">
+												<LinkItem
+													to="/it/menagère"
+													errors={errors}
+													name="incapacite_temp_menagere"
+												>
 													<TextItem path={"nav.incapacite_temp.menagère"} />
 												</LinkItem>
-												<LinkItem to="/it/economique">
+												<LinkItem
+													to="/it/economique"
+													errors={errors}
+													name="incapacite_temp_economique"
+												>
 													<TextItem path={"nav.incapacite_temp.economique"} />
 												</LinkItem>
-												<LinkItem to="/it/effa">
+												<LinkItem
+													to="/it/effa"
+													errors={errors}
+													name="efforts_accrus"
+												>
 													<TextItem path={"nav.incapacite_temp.effa"} />
 												</LinkItem>
-												<LinkItem to="/it/hosp">
+												<LinkItem
+													to="/it/hosp"
+													errors={errors}
+													name="hospitalisation"
+												>
 													<TextItem
 														path={"nav.incapacite_temp.hospitalisation"}
 													/>
 												</LinkItem>
-												<LinkItem to="/it/pretium">
+												<LinkItem
+													to="/it/pretium"
+													errors={errors}
+													name="pretium_doloris"
+												>
 													<TextItem path={"nav.incapacite_temp.pretium"} />
 												</LinkItem>
 											</div>

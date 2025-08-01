@@ -264,7 +264,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 			header: "common.indemnite_journaliere",
 			key: "amount",
 			type: "number",
-			props: { step: '1' },
+			props: { step: "1" },
 			width: 50,
 			additionalContent: (rowData) => (
 				<div style={{ fontSize: 12 }}>
@@ -327,6 +327,17 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 		],
 	};
 
+	const addRowDefaults = useMemo(() => {
+		const defaultRow = {
+			amount: 30,
+			contribution: data?.general_info?.config?.default_contribution,
+		};
+		if (!formValues?.periods?.[0]) {
+			defaultRow.start = data?.general_info?.date_accident;
+		}
+		return defaultRow;
+	}, [data]);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<DynamicTable
@@ -334,12 +345,10 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 				columns={columns}
 				control={control}
 				name="periods"
+				base="incapacite_temp_menagere"
 				formValues={formValues}
 				editable={editable}
-				addRowDefaults={{
-					amount: 30,
-					contribution: data?.general_info?.config?.default_contribution,
-				}}
+				addRowDefaults={addRowDefaults}
 				calculateTotal={(rowData, days) =>
 					getTotalAmount(rowData, days, getChildOnPeriod(rowData))
 				}

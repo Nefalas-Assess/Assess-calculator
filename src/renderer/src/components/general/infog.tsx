@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from "react";
 import { AppContext } from "@renderer/providers/AppProvider";
-import InfoForm from "@renderer/form/incapacite_temp/info_general/form";
+import InfoForm from "@renderer/form/info_general/form";
 import TextItem from "@renderer/generic/textItem";
 
 const InfoG = ({ editable }) => {
