@@ -1,5 +1,5 @@
 import AppProvider, { AppContext } from './providers/AppProvider'
-import { HashRouter, Navigate, Route, Routes } from 'react-router'
+import { HashRouter, Route, Routes } from 'react-router'
 import AppLayout from './layouts/AppLayout'
 import Home from '@renderer/components/Home'
 import IPForfait from '@renderer/components/incapacite_permanente/forfait'

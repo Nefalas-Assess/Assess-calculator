@@ -8,9 +8,8 @@ import React, {
 	useEffect,
 	useMemo,
 	useRef,
-	useState,
 } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import Field from "@renderer/generic/field";
 import constants from "@renderer/constants";
 import TextItem from "@renderer/generic/textItem";
@@ -18,7 +17,7 @@ import TextItem from "@renderer/generic/textItem";
 export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 	const { data } = useContext(AppContext);
 
-	const { register, handleSubmit, watch, control } = useForm({
+	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
 			contribution_imp: data?.general_info?.config?.default_contribution,
 		},

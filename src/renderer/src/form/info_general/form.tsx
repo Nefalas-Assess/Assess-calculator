@@ -2,7 +2,7 @@ import constants from "@renderer/constants";
 import Field from "@renderer/generic/field";
 import TextItem from "@renderer/generic/textItem";
 import { isValid } from "date-fns";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { useDebouncedEffect } from "@renderer/hooks/debounce";
 import IncapacitePerma from "./incapacite_perma";
