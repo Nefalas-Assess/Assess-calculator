@@ -1,6 +1,5 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
-import data_pp from '@renderer/data/data_pp'
 import { findClosestIndex, getDays, getMedDate } from '@renderer/helpers/general'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'

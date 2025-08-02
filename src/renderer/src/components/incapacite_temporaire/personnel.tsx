@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { AppContext } from '@renderer/providers/AppProvider'
 import ITPersonnelForm from '@renderer/form/incapacite_temp/personnel'
 import TotalBox from '@renderer/generic/totalBox'

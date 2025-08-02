@@ -2,7 +2,7 @@ import IPPersonnelCapForm from '@renderer/form/incapacite_perma/personnel_cap'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 
 const PersonnelCap = ({ editable }) => {
   const { data, setData } = useContext(AppContext)
