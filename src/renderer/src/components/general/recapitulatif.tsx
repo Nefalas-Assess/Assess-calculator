@@ -1,4 +1,4 @@
-import React, {	useContext,	useRef,} from "react";
+import React, { useContext, useRef } from "react";
 import InfoG from "./infog";
 import Frais from "./frais";
 import Personnel from "../incapacite_temporaire/personnel";
@@ -31,7 +31,7 @@ const Recapitulatif = () => {
 	const handlePrint = async () => {
 		const content = contentRef.current.outerHTML;
 
-		const styles = Array.from(document.styleSheets)
+		let styles = Array.from(document.styleSheets)
 			.map((styleSheet) => {
 				try {
 					return Array.from(styleSheet.cssRules)
@@ -43,6 +43,16 @@ const Recapitulatif = () => {
 				}
 			})
 			.join("");
+
+		if (data?.general_info?.calcul_interets === "false") {
+			styles =
+				styles +
+				`
+			.int {
+				display: none;
+				}
+				`;
+		}
 
 		try {
 			const absoluteLogoPath = `${await window.api.resolvePath("src/renderer/src/assets/icon-plain.png")}`;
