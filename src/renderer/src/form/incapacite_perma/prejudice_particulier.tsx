@@ -190,12 +190,18 @@ const PrejudiceParticuliersForm = ({
 											Select
 										</option>
 										<option value={1}>1/7</option>
-										<option value={2}>2/7</option>
-										<option value={3}>3/7</option>
-										<option value={4}>4/7</option>
-										<option value={5}>5/7</option>
-										<option value={6}>6/7</option>
-										<option value={7}>7/7</option>
+										<option value={2}>1.5/7</option>
+										<option value={3}>2/7</option>
+										<option value={4}>2.5/7</option>
+										<option value={5}>3/7</option>
+										<option value={6}>3.5/7</option>
+										<option value={7}>4/7</option>
+										<option value={8}>4.5/7</option>
+										<option value={9}>5/7</option>
+										<option value={10}>5.5/7</option>
+										<option value={11}>6/7</option>
+										<option value={12}>6.5/7</option>
+										<option value={13}>7/7</option>
 									</select>
 								)}
 							</Field>
@@ -256,12 +262,18 @@ const PrejudiceParticuliersForm = ({
 											Select
 										</option>
 										<option value={1}>1/7</option>
-										<option value={2}>2/7</option>
-										<option value={3}>3/7</option>
-										<option value={4}>4/7</option>
-										<option value={5}>5/7</option>
-										<option value={6}>6/7</option>
-										<option value={7}>7/7</option>
+										<option value={2}>1.5/7</option>
+										<option value={3}>2/7</option>
+										<option value={4}>2.5/7</option>
+										<option value={5}>3/7</option>
+										<option value={6}>3.5/7</option>
+										<option value={7}>4/7</option>
+										<option value={8}>4.5/7</option>
+										<option value={9}>5/7</option>
+										<option value={10}>5.5/7</option>
+										<option value={11}>6/7</option>
+										<option value={12}>6.5/7</option>
+										<option value={13}>7/7</option>
 									</select>
 								)}
 							</Field>
