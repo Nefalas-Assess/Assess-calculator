@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useRef } from "react";
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+} from "react";
 import { AppContext } from "@renderer/providers/AppProvider";
 import { useForm, useWatch } from "react-hook-form";
 import DynamicTable from "@renderer/generic/dynamicTable";
@@ -124,6 +130,19 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
 		},
 	];
 
+	const addRowDefaults = useMemo(() => {
+		const defaultValues = {
+			coefficient: 5,
+			amount: 30,
+		};
+
+		if (!formValues?.efforts?.[0]) {
+			defaultValues.start = data?.general_info?.date_accident;
+		}
+
+		return defaultValues;
+	}, []);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<DynamicTable
@@ -134,13 +153,8 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
 				base="efforts_accrus"
 				formValues={formValues}
 				editable={editable}
-				addRowDefaults={{ coefficient: 5, amount: 30 }}
 				calculateTotal={getTotalAmount}
-				addRowDefaults={
-					formValues?.efforts?.[0]
-						? {}
-						: { start: data?.general_info?.date_accident }
-				}
+				addRowDefaults={addRowDefaults}
 			/>
 		</form>
 	);
