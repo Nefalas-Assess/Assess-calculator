@@ -1,10 +1,4 @@
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import React, {	useContext,	useRef,} from "react";
 import InfoG from "./infog";
 import Frais from "./frais";
 import Personnel from "../incapacite_temporaire/personnel";

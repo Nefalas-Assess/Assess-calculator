@@ -15,14 +15,13 @@ import Pretium from '@renderer/components/incapacite_temporaire/pretium'
 import Personnel from '@renderer/components/incapacite_temporaire/personnel'
 import Menagere from '@renderer/components/incapacite_temporaire/menagere'
 import Economique from '@renderer/components/incapacite_temporaire/economique'
-import INFOG from '@renderer/components/general/infog'
+import InfoG from '@renderer/components/general/infog'
 import Frais from '@renderer/components/general/frais'
 import Provisions from '@renderer/components/general/provisions'
 import Recapitulatif from '@renderer/components/general/recapitulatif'
 import FraisFun from '@renderer/components/deces/frais_deces'
 import PrejudiceEXH from '@renderer/components/deces/prejudice_exh'
 import PrejudiceProche from '@renderer/components/deces/prejudice_proche'
-import { useCallback, useContext, useEffect, useState } from 'react'
 import ToastProvider from './providers/ToastProvider'
 import License from './License'
 
@@ -68,7 +67,7 @@ const Main = () => {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<Home />} />
-          <Route path="infog" element={<INFOG />} />
+          <Route path="infog" element={<InfoG />} />
           <Route path="ip/*" element={<IncapacitePerma />} />
           <Route path="it/*" element={<IncapaciteTemp />} />
           <Route path="deces/*" element={<Deces />} />

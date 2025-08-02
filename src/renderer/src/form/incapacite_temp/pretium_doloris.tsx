@@ -95,6 +95,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
 			key: "coefficient",
 			type: "select",
 			options: coefficients,
+			width: 60,
 		},
 		{ header: "common.total", key: "total", type: "calculated" },
 		{
