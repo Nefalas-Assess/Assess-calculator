@@ -363,8 +363,8 @@ export default {
       nl: 'Bruto jaarsalaris (€)'
     },
     import_date: {
-      fr: 'Importer dates',
-      en: 'Import dates',
+      fr: 'Importer données',
+      en: 'Import data',
       nl: 'Data importeren'
     },
     personnel: {
@@ -385,7 +385,7 @@ export default {
       },
       brut: {
         fr: 'Économique brut',
-        en: 'Economic brut',
+        en: 'Economic gross',
         nl: 'Economische brutto'
       }
     }
