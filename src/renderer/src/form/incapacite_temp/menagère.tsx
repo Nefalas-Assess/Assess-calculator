@@ -154,9 +154,10 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 	const copyDate = useCallback(
 		(name) => {
 			const initial = get(data, name);
-			let filteredData = initial.map(({ start, end }) => ({
+			let filteredData = initial.map(({ start, end, percentage }) => ({
 				start,
 				end,
+				percentage,
 				amount: 30,
 				contribution: data?.general_info?.config?.default_contribution,
 			}));

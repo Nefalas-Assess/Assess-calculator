@@ -94,7 +94,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 	const copyDate = useCallback(
 		(name, fieldName) => {
 			const initial = typeof name === "string" ? get(data, name) : name;
-			let filteredData = initial.map(({ start, end }) => ({ start, end }));
+			let filteredData = initial.map(({ start, end, percentage }) => ({
+				start,
+				end,
+				percentage,
+			}));
 			const currentData = cloneDeep(formValues?.[fieldName]);
 			if (currentData) {
 				filteredData = currentData.concat(filteredData);
