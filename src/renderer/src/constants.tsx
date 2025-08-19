@@ -47,7 +47,7 @@ export default {
 	method_incapacite_perma: [
 		{
 			value: "forfait",
-			label: { fr: "Forfait", en: "Forfait", nl: "Forfait" },
+			label: { fr: "Forfait", en: "Lump sum", nl: "Forfait" },
 		},
 		{
 			value: "capitalized",

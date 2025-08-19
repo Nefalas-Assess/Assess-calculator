@@ -960,7 +960,7 @@ export default {
     },
     method_forfait: {
       fr: "L'une des méthodes doit être forfaitaire",
-      en: 'One of the methods must be forfaitary',
+      en: 'One of the methods must be lump sum',
       nl: 'Eén van de methoden moet forfaitair zijn'
     }
   }
