@@ -47,11 +47,11 @@ export default {
 	method_incapacite_perma: [
 		{
 			value: "forfait",
-			label: { fr: "Forfait", en: "Lump sum", nl: "Forfait" },
+			label: { fr: "Forfait", en: "Lump sum", nl: "Forfaitair" },
 		},
 		{
 			value: "capitalized",
-			label: { fr: "Capitalisé", en: "Capitalized", nl: "Capitalisé" },
+			label: { fr: "Capitalisé", en: "Capitalized", nl: "Gekapitaliseerde" },
 		},
 	],
 	contribution: [
