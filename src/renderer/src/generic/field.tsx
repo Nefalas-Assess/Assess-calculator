@@ -142,7 +142,7 @@ const Field = ({
 
 			return children({ ...field, type });
 		},
-		[children, type, noSelect],
+		[children, type, noSelect, translate],
 	);
 
 	return (
