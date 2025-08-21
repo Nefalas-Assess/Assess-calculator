@@ -64,24 +64,22 @@ const LicenseInput = ({ onChange }) => {
 export const License = ({ children }) => {
 	const [licenseKey, setLicenseKey] = useState("");
 	const [error, setError] = useState(null);
-	const [valid, setValid] = useState(
-		localStorage.getItem("licenseKey") ? true : false,
-	);
+	const [valid, setValid] = useState<boolean | "waiting">("waiting");
 	const [loading, setLoading] = useState(null);
 
 	const checkLicense = useCallback(async () => {
-		const storedKey = localStorage.getItem("licenseKey");
-		if (storedKey) {
-			const result = await window.api.checkLicense(storedKey);
-
-			console.log("result", result);
+		const storedKey = await window.api.getStore("license");
+		await new Promise((resolve) => setTimeout(resolve, 500));
+		if (storedKey?.key) {
+			const result = await window.api.checkLicense(storedKey?.key);
 
 			if (result.valid) {
 				setValid(result.valid);
 			} else {
-				localStorage.removeItem("licenseKey");
 				setValid(false);
 			}
+		} else {
+			setValid(false);
 		}
 	}, []);
 
@@ -93,10 +91,8 @@ export const License = ({ children }) => {
 
 		const result = await window.api.checkLicense(licenseKey);
 		if (result.valid) {
-			localStorage.setItem("licenseKey", licenseKey);
 			setValid(true);
 		} else {
-			localStorage.removeItem("licenseKey");
 			setError(result?.error);
 		}
 		setLoading(false);
@@ -108,11 +104,28 @@ export const License = ({ children }) => {
 		if (code === "invalid_key") return "Clé invalide";
 		if (code === "error_update") return "Oups! Une erreur est survenue";
 		if (code === "too_many_attempts") return "Trop de tentative!";
+		if (code === "expired") return "La licence a expiré";
+		return code?.toString();
 	}, []);
 
 	useEffect(() => {
 		checkLicense();
 	}, []);
+
+	if (valid === "waiting")
+		return (
+			<div
+				style={{
+					width: "100%",
+					height: "100%",
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+				}}
+			>
+				<Loader style={{ width: 100, height: 100 }} />
+			</div>
+		);
 
 	if (valid) return children;
 

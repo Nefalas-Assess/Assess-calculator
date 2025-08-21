@@ -20,6 +20,24 @@ async function initStore() {
   store = new Store()
 }
 
+async function hasInternetConnection(): Promise<boolean> {
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 2000) // 1 seconde
+    
+    const response = await fetch('https://1.1.1.1', { // DNS Cloudflare - très rapide
+      method: 'HEAD',
+      signal: controller.signal,
+      cache: 'no-cache'
+    })
+    
+    clearTimeout(timeoutId)
+    return response.ok
+  } catch (error) {
+    return false
+  }
+}
+
 const machineId = machineIdSync()
 
 function createWindow(): void {
@@ -261,7 +279,9 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
   if (!store) await initStore()
   const cachedLicense = store.get('license')
 
-  if (cachedLicense) {
+  const hasInternet = await hasInternetConnection();
+
+  if (cachedLicense && !hasInternet) {
     const expiration = cachedLicense.expiration
     const now = Date.now()
 
@@ -270,11 +290,13 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
     }
   }
 
+  const key = licenseKey || cachedLicense?.key
+
   // 🔥 Vérifier la licence et l'association avec l’appareil
-  const result = await validateLicense(licenseKey)
+  const result = await validateLicense(key)
   if (result.valid) {
     attemptCache[machineId] = {}
-    store.set('license', { key: licenseKey, expiration: Date.now() + 7 * 24 * 60 * 60 * 1000 })
+    store.set('license', { key: key, expiration: Date.now() + 7 * 24 * 60 * 60 * 1000 })
   } else {
     store.delete('license')
   }
@@ -290,8 +312,10 @@ async function disableDevice(licenseKey) {
   return response?.data && JSON.parse(response?.data)
 }
 
-ipcMain.handle('disable-device', async (event, licenseKey) => {
-  const result = await disableDevice(licenseKey)
+ipcMain.handle('disable-device', async () => {
+  const key = store.get('license')?.key
+
+  const result = await disableDevice(key)
 
   if(result.success) {
     store.delete('license')

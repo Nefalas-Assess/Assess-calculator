@@ -196,14 +196,8 @@ export const AppLayout = () => {
 	}, [save, data]);
 
 	const handleDisableDevice = useCallback(async () => {
-		const result = await window.api.disableDevice(
-			localStorage.getItem("licenseKey"),
-		);
+		const result = await window.api.disableDevice();
 		setShowDisableConfirm(false);
-		if (result.success) {
-			localStorage.removeItem("licenseKey");
-			window.location.reload();
-		}
 	}, []);
 
 	useEffect(() => {
