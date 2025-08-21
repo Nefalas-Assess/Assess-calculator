@@ -35,7 +35,8 @@ const api = {
   setStore: (key, value) => ipcRenderer.invoke('store:set', key, value),
 
   // License
-  checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey)
+  checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey),
+  disableDevice: (licenseKey) => ipcRenderer.invoke('disable-device', licenseKey)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

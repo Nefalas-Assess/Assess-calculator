@@ -249,7 +249,7 @@ function checkAttempts(ip) {
 
 // 📌 Fonction pour valider la licence
 async function validateLicense(licenseKey) {
-  const response = await supabase.functions.invoke('checkLicense', {
+  const response = await supabase.functions.invoke('check-license', {
     body: { licenseKey, machineId }
   })
 
@@ -279,5 +279,22 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
     store.delete('license')
   }
 
+  return result
+})
+
+// Fonction pour désactiver un appareil
+async function disableDevice(licenseKey) {
+  const response = await supabase.functions.invoke('remove-device', {
+    body: { licenseKey, machineId }
+  })
+  return response?.data && JSON.parse(response?.data)
+}
+
+ipcMain.handle('disable-device', async (event, licenseKey) => {
+  const result = await disableDevice(licenseKey)
+
+  if(result.success) {
+    store.delete('license')
+  }
   return result
 })

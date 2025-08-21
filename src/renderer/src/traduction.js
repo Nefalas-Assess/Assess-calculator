@@ -42,6 +42,31 @@ export default {
       fr: 'Mode',
       en: 'Mode',
       nl: 'Modus'
+    },
+    disable_device: {
+      fr: 'Désactiver cet appareil',
+      en: 'Disable this device',
+      nl: 'Deze apparatuur uitschakelen'
+    },
+    disable_device_confirm_title: {
+      fr: 'Confirmation',
+      en: 'Confirmation',
+      nl: 'Bevestiging'
+    },
+    disable_device_confirm_message: {
+      fr: 'Êtes-vous sûr de vouloir désactiver cet appareil ?',
+      en: 'Are you sure you want to disable this device?',
+      nl: 'Weet u zeker dat u dit apparaat wilt uitschakelen?'
+    },
+    confirm: {
+      fr: 'Confirmer',
+      en: 'Confirm',
+      nl: 'Bevestigen'
+    },
+    cancel: {
+      fr: 'Annuler',
+      en: 'Cancel',
+      nl: 'Annuleren'
     }
   },
   nav: {
