@@ -43,11 +43,6 @@ export default {
       en: 'Mode',
       nl: 'Modus'
     },
-    disable_device: {
-      fr: 'Désactiver cet appareil',
-      en: 'Disable this device',
-      nl: 'Deze apparatuur uitschakelen'
-    },
     disable_device_confirm_title: {
       fr: 'Confirmation',
       en: 'Confirmation',

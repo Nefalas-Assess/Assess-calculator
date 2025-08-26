@@ -239,6 +239,12 @@ ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall()
 })
 
+ipcMain.handle('get-computer-info', async () => {
+  return {
+    machineId,
+  }
+})
+
 const attemptCache = {}
 
 // Rate limiting

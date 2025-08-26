@@ -8,6 +8,7 @@ import Tooltip from "@renderer/generic/tooltip";
 import Loader from "@renderer/generic/loader";
 import { RecentFilesList } from "@renderer/generic/recentFilesList";
 import TextItem from "@renderer/generic/textItem";
+import { useLongPress } from "@renderer/hooks/useLongPress";
 
 const LinkItem = ({ to, children, errors, name }) => {
 	const errorList = useMemo(
@@ -43,6 +44,22 @@ const SubNavTitle = ({ path, onClick }) => {
 			role="button"
 		>
 			<TextItem path={path} />
+		</div>
+	);
+};
+
+const VersionInfo = () => {
+	const longPressProps = useLongPress({
+		onLongPress: () => {
+			window.api.getComputerInfo().then((res) => {
+				window.alert(JSON.stringify(res));
+			});
+		},
+		delay: 1000,
+	});
+	return (
+		<div {...longPressProps} style={{ padding: 5 }}>
+			{import.meta.env.VITE_APP_VERSION}
 		</div>
 	);
 };
@@ -143,7 +160,6 @@ export const AppLayout = () => {
 	const [dead, setDead] = useState(false);
 
 	const [updateCheck, setUpdateCheck] = useState(false);
-	const [showDisableConfirm, setShowDisableConfirm] = useState(false);
 
 	const navigate = useNavigate();
 	const location = useLocation(); // Utilisé pour détecter l'URL actuelle
@@ -194,11 +210,6 @@ export const AppLayout = () => {
 		save();
 		addToast("toast.file_saved");
 	}, [save, data]);
-
-	const handleDisableDevice = useCallback(async () => {
-		const result = await window.api.disableDevice();
-		setShowDisableConfirm(false);
-	}, []);
 
 	useEffect(() => {
 		if (filePath === null) {
@@ -509,32 +520,7 @@ export const AppLayout = () => {
 									)}
 								</div>
 							</button>
-							<button
-								style={{
-									fontSize: 10,
-									marginTop: 10,
-									marginBottom: 5,
-									borderColor: "red",
-								}}
-								onClick={() => {
-									setShowDisableConfirm(true);
-								}}
-								type="button"
-							>
-								<div
-									style={{
-										display: "flex",
-										alignItems: "center",
-										position: "relative",
-										color: "red",
-									}}
-								>
-									<TextItem path={"layout.disable_device"} />
-								</div>
-							</button>
-							<div style={{ padding: 5 }}>
-								{import.meta.env.VITE_APP_VERSION}
-							</div>
+							<VersionInfo />
 						</div>
 					</div>
 					<div
@@ -546,95 +532,6 @@ export const AppLayout = () => {
 					</div>
 				</div>
 			</div>
-
-			{/* Popup de confirmation pour disable device */}
-			{showDisableConfirm && (
-				<div
-					style={{
-						position: "fixed",
-						top: 0,
-						left: 0,
-						right: 0,
-						bottom: 0,
-						backgroundColor: "rgba(0, 0, 0, 0.5)",
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						zIndex: 1000,
-					}}
-					onClick={() => setShowDisableConfirm(false)}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							setShowDisableConfirm(false);
-						}
-					}}
-					tabIndex={0}
-					role="button"
-				>
-					<div
-						style={{
-							backgroundColor: mode === "dark" ? "#2d2d2d" : "#fff",
-							padding: "20px",
-							borderRadius: "8px",
-							minWidth: "300px",
-							maxWidth: "500px",
-							color: mode === "dark" ? "#fff" : "#000",
-							boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-						}}
-						onClick={(e) => e.stopPropagation()}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") {
-								e.stopPropagation();
-							}
-						}}
-						tabIndex={0}
-						role="button"
-					>
-						<h3 style={{ margin: "0 0 15px 0", fontSize: "18px" }}>
-							<TextItem path="layout.disable_device_confirm_title" />
-						</h3>
-						<p style={{ margin: "0 0 20px 0", lineHeight: "1.5" }}>
-							<TextItem path="layout.disable_device_confirm_message" />
-						</p>
-						<div
-							style={{
-								display: "flex",
-								gap: "10px",
-								justifyContent: "flex-end",
-							}}
-						>
-							<button
-								type="button"
-								style={{
-									padding: "8px 16px",
-									border: "1px solid #ccc",
-									borderRadius: "4px",
-									backgroundColor: mode === "dark" ? "#404040" : "#f5f5f5",
-									color: mode === "dark" ? "#fff" : "#000",
-									cursor: "pointer",
-								}}
-								onClick={() => setShowDisableConfirm(false)}
-							>
-								<TextItem path="layout.cancel" />
-							</button>
-							<button
-								type="button"
-								style={{
-									padding: "8px 16px",
-									border: "1px solid #dc3545",
-									borderRadius: "4px",
-									backgroundColor: "#dc3545",
-									color: "#fff",
-									cursor: "pointer",
-								}}
-								onClick={handleDisableDevice}
-							>
-								<TextItem path="layout.confirm" />
-							</button>
-						</div>
-					</div>
-				</div>
-			)}
 		</div>
 	);
 };

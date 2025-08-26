@@ -19,6 +19,7 @@ interface CustomAPI {
   clearStore: () => Promise<void>
   deleteStore: (key: string) => Promise<void>
   setStore: (key: string, value: any) => Promise<void>
+  getComputerInfo: () => Promise<{ machineId: string }>
   checkLicense: (licenseKey: string) => Promise<{ valid: boolean; cached: boolean }>
   disableDevice: (licenseKey: string) => Promise<{ success: boolean }>
 }

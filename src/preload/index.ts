@@ -28,6 +28,9 @@ const api = {
   onUpdateError: (callback) => ipcRenderer.on('update_error', callback),
   onDownloadProgress: (callback) => ipcRenderer.on('download-progress', callback),
 
+  // Computer
+  getComputerInfo: () => ipcRenderer.invoke('get-computer-info'),
+
   // Electron store
   getStore: (key) => ipcRenderer.invoke('store:get', key),
   clearStore: () => ipcRenderer.invoke('store:clear'),
