@@ -128,7 +128,7 @@ const TotalRevenue = ({ values, data }) => {
 
 const TotalMenage = ({ values = {}, data }) => {
 	const {
-		interet = 0,
+		menage_interet = 0,
 		menage_amount = 0,
 		menage_pourcentage = 100,
 		menage_contribution = 0,
@@ -145,9 +145,10 @@ const TotalMenage = ({ values = {}, data }) => {
 	const coef = useCapitalization({
 		end: endDate,
 		start: startDate,
-		index: constants.interet_amount?.findIndex(
-			(e) => e?.value === parseFloat(values?.interet),
-		),
+		index:
+			constants.interet_amount?.findIndex(
+				(e) => e?.value === parseFloat(menage_interet),
+			) || 0,
 		ref: values?.menage_ref,
 		asObject: true,
 	});

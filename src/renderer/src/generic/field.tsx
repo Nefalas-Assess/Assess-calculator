@@ -11,14 +11,17 @@ const ReferenceInput = ({ options, onChange, value }) => {
 	const translate = useTranslation();
 
 	useEffect(() => {
-		if (value1) {
+		if (
+			value1 &&
+			((options && value !== value1 + "_" + value2) || (!options && !value))
+		) {
 			if (value2) {
 				onChange(value1 + "_" + value2);
 			} else if (!options) {
 				onChange(value1);
 			}
 		}
-	}, [value1, value2, options]);
+	}, [value1, value2, options, value]);
 
 	useEffect(() => {
 		if (value) {
