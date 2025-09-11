@@ -18,6 +18,8 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
+import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
+import { addDays, format } from "date-fns";
 
 const TotalRevenue = ({ values, data }) => {
 	const revenue = parseFloat(values?.revenue_total);
@@ -126,7 +128,7 @@ const TotalRevenue = ({ values, data }) => {
 	);
 };
 
-const TotalMenage = ({ values = {}, data }) => {
+const TotalMenage = ({ values = {}, data, start, end, reference }) => {
 	const {
 		menage_interet = 0,
 		menage_amount = 0,
@@ -135,12 +137,20 @@ const TotalMenage = ({ values = {}, data }) => {
 	} = values;
 
 	// Vérification des dates
-	const startDate = data?.general_info?.date_naissance
-		? new Date(data.general_info.date_naissance)
-		: null;
-	const endDate = data?.general_info?.date_death
-		? new Date(data.general_info.date_death)
-		: null;
+
+	const startDate =
+		start ||
+		(data?.general_info?.date_naissance
+			? new Date(data.general_info.date_naissance)
+			: null);
+
+	const endDate =
+		end ||
+		(data?.general_info?.date_death
+			? new Date(data.general_info.date_death)
+			: null);
+
+	// console.log(reference, values?.menage_ref);
 
 	const coef = useCapitalization({
 		end: endDate,
@@ -149,8 +159,10 @@ const TotalMenage = ({ values = {}, data }) => {
 			constants.interet_amount?.findIndex(
 				(e) => e?.value === parseFloat(menage_interet),
 			) || 0,
-		ref: values?.menage_ref,
+		ref: reference || values?.menage_ref,
 		asObject: true,
+		noGender: !!reference,
+		startIndex: reference ? 1 : 0,
 	});
 
 	// Calcul du montant total avec useMemo
@@ -263,6 +275,68 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 		}
 	}, [formValues, membersValues, submitForm, handleSubmit]);
 
+	const childrenOnPeriod = useMemo(() => {
+		const children = data?.general_info?.children || [];
+		const res = [];
+		for (let i = 0; i < children.length; i += 1) {
+			const item = children[i];
+			// Skip children without birthdate
+			if (!item?.birthDate) {
+				res.push({ days: { percentageBefore25: 1 } });
+			} else {
+				const result = calculateDaysBeforeAfter25(item?.birthDate, [
+					data?.general_info?.date_death,
+					formValues?.paiement,
+				]);
+
+				if (result?.before25 !== 0) {
+					res.push({ days: result, ...item });
+				}
+			}
+		}
+
+		return res;
+	}, [formValues, data]);
+
+	const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
+		// Return null if no birth date provided
+		if (!birthDate) return null;
+
+		// Create date object from birth date
+		const birth = new Date(birthDate);
+
+		// Add 25 years to birth date
+		const date25 = new Date(birth);
+		date25.setFullYear(birth.getFullYear() + 25);
+
+		// Add one day if requested
+		if (addOneDay) {
+			date25.setDate(date25.getDate() + 1);
+		}
+
+		return date25;
+	}, []);
+
+	const sortedChildren = useMemo(() => {
+		return childrenOnPeriod
+			?.filter((e) => {
+				// Filter out children without birthdate
+				if (!e?.birthDate) return false;
+				// Get the 25th birthday
+				const date25 = get25thBirthday(e?.birthDate);
+				// Get consolidation date from general info
+				const deathDate = new Date(data?.general_info?.date_death);
+				// Keep child only if their 25th birthday is after consolidation date
+				return date25 > deathDate;
+			})
+			?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate));
+	}, [childrenOnPeriod]);
+
+	// Children without birthdate
+	const unsortedChildren = useMemo(() => {
+		return childrenOnPeriod?.filter((e) => !e?.birthDate);
+	}, [childrenOnPeriod]);
+
 	const columns = [
 		{ header: "deces.prejudice_proche.name_membre", key: "name", type: "text" },
 		{
@@ -335,47 +409,203 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 					</tr>
 				</tbody>
 			</table>
+
 			<FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
 				<TextItem
 					path="deces.prejudice_proche.perte_contribution_menage"
 					tag="h3"
 				/>
-				<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
-					<thead>
-						<tr>
-							<TextItem path="common.indemnite_journaliere" tag="th" />
-							<TextItem path="common.contribution" tag="th" />
-							<TextItem path="common.total" tag="th" />
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<Field
-									control={control}
-									name={`menage_amount`}
-									type="number"
-									editable={editable}
-								>
-									{(props) => <input style={{ width: 50 }} {...props} />}
-								</Field>
-							</td>
-							<td>
-								<Field
-									control={control}
-									type="select"
-									options={constants.contribution}
-									name={`menage_contribution`}
-									editable={editable}
-								></Field>
-							</td>
-							<td>
-								<TotalMenage values={formValues} data={data} />
-							</td>
-						</tr>
-					</tbody>
-				</table>
+				{sortedChildren?.length > 0 ? (
+					<>
+						<table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
+							<tbody>
+								<tr>
+									<TextItem path="common.ref" tag="td" />
+									<td>
+										<Field
+											control={control}
+											type="reference"
+											options={constants.reference_menage_children}
+											name="menage_reference"
+											editable={editable}
+										></Field>
+									</td>
+								</tr>
+								<tr>
+									<TextItem path="common.indemnite_journaliere" tag="td" />
+									<td>
+										<Field
+											control={control}
+											name={`menage_amount`}
+											type="number"
+											editable={editable}
+										>
+											{(props) => <input style={{ width: 50 }} {...props} />}
+										</Field>
+									</td>
+								</tr>
+								<tr>
+									<TextItem path="common.contribution" tag="td" />
+									<td>
+										<Field
+											control={control}
+											name={`menage_contribution`}
+											type="select"
+											options={constants.contribution}
+											editable={editable}
+										></Field>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<FadeIn show={formValues?.menage_reference}>
+							<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+								<thead>
+									<tr>
+										<TextItem path="common.period" tag="th" />
+										<TextItem path="common.indemnite_journaliere" tag="th" />
+										<th style={{ width: 50 }}>%</th>
+										<TextItem path="common.contribution" tag="th" />
+										<TextItem path="common.total" tag="th" />
+									</tr>
+								</thead>
+								<tbody>
+									{sortedChildren?.map((item, key) => {
+										const start =
+											key === 0
+												? addDays(formValues?.paiement || new Date(), 1)
+												: get25thBirthday(
+														sortedChildren[key - 1]?.birthDate,
+														true,
+													);
+
+										const end = get25thBirthday(item?.birthDate);
+										const menage_amount =
+											parseFloat(formValues?.menage_amount || 0) +
+											10 * unsortedChildren?.length +
+											10 * (sortedChildren?.length - key);
+
+										return (
+											<tr key={key}>
+												<td>
+													{format(start, "dd/MM/yyyy")} -{" "}
+													{format(end, "dd/MM/yyyy")}
+												</td>
+												<td>
+													<Money value={menage_amount} ignore />
+												</td>
+												<td style={{ textWrap: "nowrap" }}>100 %</td>
+												<td>{formValues?.menage_contribution} %</td>
+												<td>
+													<TotalMenage
+														values={{
+															...formValues,
+															menage_amount: menage_amount,
+														}}
+														reference={formValues?.menage_reference}
+														start={start}
+														end={end}
+														data={data}
+													/>
+												</td>
+											</tr>
+										);
+									})}
+									<tr>
+										<td>
+											{format(
+												get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												),
+												"dd/MM/yyyy",
+											)}
+										</td>
+										<td>
+											<Money
+												value={
+													parseFloat(formValues?.menage_amount || 0) +
+													10 * unsortedChildren?.length
+												}
+												ignore
+											/>
+										</td>
+										<td>100 %</td>
+										<td>{formValues?.menage_contribution} %</td>
+										<td>
+											<TotalMenage
+												values={{
+													...formValues,
+													menage_amount:
+														parseFloat(formValues?.menage_amount || 0) +
+														10 * unsortedChildren?.length,
+												}}
+												end={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												)}
+												data={data}
+											/>
+											{/* <CapAmount
+												values={{
+													...formValues,
+													menage_amount:
+														parseFloat(formValues?.menage_amount || 0) +
+														10 * unsortedChildren?.length,
+													menage_pourcentage:
+														data?.general_info?.ip?.menagere?.interet,
+												}}
+												end={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												)}
+												startIndex={0}
+											/> */}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</FadeIn>
+					</>
+				) : (
+					<table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+						<thead>
+							<tr>
+								<TextItem path="common.indemnite_journaliere" tag="th" />
+								<TextItem path="common.contribution" tag="th" />
+								<TextItem path="common.total" tag="th" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>
+									<Field
+										control={control}
+										name={`menage_amount`}
+										type="number"
+										editable={editable}
+									>
+										{(props) => <input style={{ width: 50 }} {...props} />}
+									</Field>
+								</td>
+								<td>
+									<Field
+										control={control}
+										type="select"
+										options={constants.contribution}
+										name={`menage_contribution`}
+										editable={editable}
+									></Field>
+								</td>
+								<td>
+									<TotalMenage values={formValues} data={data} />
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				)}
 			</FadeIn>
+
 			<h3>
 				<TextItem path="deces.prejudice_proche.variables_calcul" tag="span" />{" "}
 				<TextItem

@@ -94,7 +94,7 @@ export default {
 	],
 	reference_menage_children: [
 		{
-			value: "rente_certaine_an",
+			value: "rente_certaine_mois",
 			label: {
 				fr: "Valeur actuelle de la rente certaine de 1€ par an paiements mensuels",
 				en: "Present value of an assured annuity of 1 euro per year payments monthly",
@@ -102,7 +102,7 @@ export default {
 			},
 		},
 		{
-			value: "rente_certaine_mois",
+			value: "rente_certaine_an",
 			label: {
 				fr: "Valeur actuelle d'une rente certaine de 1€ par an paiements annuels",
 				en: "Present value of an assured annuity of 1 euro per year payments annually",

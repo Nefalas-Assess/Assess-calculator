@@ -17,6 +17,10 @@ export const getCapitalizationTable = async (
 		try {
 			let endPath = `${base}_${gender}${suffix}`;
 			if (!gender && !suffix) endPath = base;
+			console.log(
+				"Load Table:",
+				`@renderer/data/${path[0]}/${path[1]}/${endPath}.tsx`,
+			);
 			const module = await import(
 				`@renderer/data/${path[0]}/${path[1]}/${endPath}.tsx`
 			);
