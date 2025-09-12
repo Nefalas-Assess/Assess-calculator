@@ -20,6 +20,7 @@ import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
 import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
 import { addDays, format } from "date-fns";
+import Interest from "@renderer/generic/interet";
 
 const TotalRevenue = ({ values, data }) => {
 	const revenue = parseFloat(values?.revenue_total);
@@ -467,13 +468,19 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 										<th style={{ width: 50 }}>%</th>
 										<TextItem path="common.contribution" tag="th" />
 										<TextItem path="common.total" tag="th" />
+										<TextItem
+											path="common.date_paiement"
+											tag="th"
+											className="int"
+										/>
+										<TextItem path="common.interest" tag="th" className="int" />
 									</tr>
 								</thead>
 								<tbody>
 									{sortedChildren?.map((item, key) => {
 										const start =
 											key === 0
-												? addDays(formValues?.paiement || new Date(), 1)
+												? addDays(data?.general_info?.date_death, 1)
 												: get25thBirthday(
 														sortedChildren[key - 1]?.birthDate,
 														true,
@@ -508,6 +515,17 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 														data={data}
 													/>
 												</td>
+												<td className="int">
+													<Field
+														control={control}
+														type="date"
+														name="date_paiement"
+														editable={editable}
+													>
+														{(props) => <input {...props} />}
+													</Field>
+												</td>
+												<td className="int"></td>
 											</tr>
 										);
 									})}
@@ -546,22 +564,18 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 												)}
 												data={data}
 											/>
-											{/* <CapAmount
-												values={{
-													...formValues,
-													menage_amount:
-														parseFloat(formValues?.menage_amount || 0) +
-														10 * unsortedChildren?.length,
-													menage_pourcentage:
-														data?.general_info?.ip?.menagere?.interet,
-												}}
-												end={get25thBirthday(
-													sortedChildren[sortedChildren?.length - 1]?.birthDate,
-													true,
-												)}
-												startIndex={0}
-											/> */}
 										</td>
+										<td className="int">
+											<Field
+												control={control}
+												type="date"
+												name="date_paiement"
+												editable={editable}
+											>
+												{(props) => <input {...props} />}
+											</Field>
+										</td>
+										<td className="int"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -599,6 +613,29 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 								</td>
 								<td>
 									<TotalMenage values={formValues} data={data} />
+								</td>
+								<td className="int">
+									<Field
+										control={control}
+										type="date"
+										name="date_paiement"
+										editable={editable}
+									>
+										{(props) => <input {...props} />}
+									</Field>
+								</td>
+								<td className="int">
+									{/* <Interest
+										amount={
+											getAmount(
+												point,
+												data?.general_info?.ip?.menagere?.interet,
+												formValues?.contribution_imp,
+											)?.value
+										}
+										start={data?.general_info?.date_consolidation}
+										end={formValues?.menage_date_paiement}
+									/> */}
 								</td>
 							</tr>
 						</tbody>
