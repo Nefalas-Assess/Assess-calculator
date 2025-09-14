@@ -139,7 +139,7 @@ export const useCapitalization = (props = {}) => {
 
 	const next = Object.values(table)[rowIndex + 1];
 
-	const currentYear = row?.[index];
+	const currentYear = row?.[index] || 0;
 	const nextYear = next?.[index];
 
 	const perDays = getPerDays(currentYear, nextYear);

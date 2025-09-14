@@ -151,8 +151,6 @@ const TotalMenage = ({ values = {}, data, start, end, reference }) => {
 			? new Date(data.general_info.date_death)
 			: null);
 
-	// console.log(reference, values?.menage_ref);
-
 	const coef = useCapitalization({
 		end: endDate,
 		start: startDate,
@@ -487,6 +485,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 													);
 
 										const end = get25thBirthday(item?.birthDate);
+
 										const menage_amount =
 											parseFloat(formValues?.menage_amount || 0) +
 											10 * unsortedChildren?.length +
