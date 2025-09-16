@@ -360,6 +360,85 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 		},
 	];
 
+	const getTotalMenageAmount = useCallback(
+		(values = {}, data, start, end, reference) => {
+			const {
+				menage_interet = 0,
+				menage_amount = 0,
+				menage_pourcentage = 100,
+				menage_contribution = 0,
+			} = values;
+
+			// Vérification des dates
+
+			const startDate =
+				start ||
+				(data?.general_info?.date_naissance
+					? new Date(data.general_info.date_naissance)
+					: null);
+
+			const endDate =
+				end ||
+				(data?.general_info?.date_death
+					? new Date(data.general_info.date_death)
+					: null);
+
+			const coef = useCapitalization({
+				end: endDate,
+				start: startDate,
+				index:
+					constants.interet_amount?.findIndex(
+						(e) => e?.value === parseFloat(menage_interet),
+					) || 0,
+				ref: reference || values?.menage_ref,
+				asObject: true,
+				noGender: !!reference,
+				startIndex: reference ? 1 : 0,
+			});
+
+			// Calcul du montant total avec useMemo
+			const totalAmount = (
+				parseFloat(menage_amount) *
+				(parseFloat(menage_pourcentage) / 100) *
+				(parseFloat(menage_contribution) / 100) *
+				365 *
+				parseFloat(coef?.value)
+			).toFixed(2);
+
+			return {
+				value: totalAmount,
+				tooltip: (
+					<div>
+						<math>
+							<mn>{menage_amount}</mn>
+							<mo>x</mo>
+							<mo>(</mo>
+							<mfrac>
+								<mn>{menage_contribution}</mn>
+								<mn>100</mn>
+							</mfrac>
+							<mo>)</mo>
+							<mo>x</mo>
+							<mn>1</mn>
+							<mo>x</mo>
+							<mn>365</mn>
+							<mo>x</mo>
+							<CoefficientInfo
+								headers={constants.interet_amount}
+								{...coef?.info}
+							>
+								<mn>{coef?.value}</mn>
+							</CoefficientInfo>
+							<mo>=</mo>
+							<mn>{totalAmount}</mn>
+						</math>
+					</div>
+				),
+			};
+		},
+		[],
+	);
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} ref={ref}>
 			<DynamicTable
@@ -503,28 +582,41 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 												<td style={{ textWrap: "nowrap" }}>100 %</td>
 												<td>{formValues?.menage_contribution} %</td>
 												<td>
-													<TotalMenage
-														values={{
-															...formValues,
-															menage_amount: menage_amount,
-														}}
-														reference={formValues?.menage_reference}
-														start={start}
-														end={end}
-														data={data}
+													<Money
+														{...getTotalMenageAmount(
+															{ ...formValues, menage_amount: menage_amount },
+															data,
+															start,
+															end,
+															formValues?.menage_reference,
+														)}
 													/>
 												</td>
 												<td className="int">
 													<Field
 														control={control}
 														type="date"
-														name="date_paiement"
+														name={`menage_date_paiement_${key}`}
 														editable={editable}
 													>
 														{(props) => <input {...props} />}
 													</Field>
 												</td>
-												<td className="int"></td>
+												<td className="int">
+													<Interest
+														start={start}
+														end={formValues?.[`menage_date_paiement_${key}`]}
+														amount={
+															getTotalMenageAmount(
+																{ ...formValues, menage_amount: menage_amount },
+																data,
+																start,
+																end,
+																formValues?.menage_reference,
+															)?.value
+														}
+													/>
+												</td>
 											</tr>
 										);
 									})}
@@ -550,31 +642,60 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 										<td>100 %</td>
 										<td>{formValues?.menage_contribution} %</td>
 										<td>
-											<TotalMenage
-												values={{
-													...formValues,
-													menage_amount:
-														parseFloat(formValues?.menage_amount || 0) +
-														10 * unsortedChildren?.length,
-												}}
-												end={get25thBirthday(
-													sortedChildren[sortedChildren?.length - 1]?.birthDate,
-													true,
+											<Money
+												{...getTotalMenageAmount(
+													{
+														...formValues,
+														menage_amount:
+															parseFloat(formValues?.menage_amount || 0) +
+															10 * unsortedChildren?.length,
+													},
+													data,
+													null,
+													get25thBirthday(
+														sortedChildren[sortedChildren?.length - 1]
+															?.birthDate,
+														true,
+													),
 												)}
-												data={data}
 											/>
 										</td>
 										<td className="int">
 											<Field
 												control={control}
 												type="date"
-												name="date_paiement"
+												name="menage_date_paiement"
 												editable={editable}
 											>
 												{(props) => <input {...props} />}
 											</Field>
 										</td>
-										<td className="int"></td>
+										<td className="int">
+											<Interest
+												amount={
+													getTotalMenageAmount(
+														{
+															...formValues,
+															menage_amount:
+																parseFloat(formValues?.menage_amount || 0) +
+																10 * unsortedChildren?.length,
+														},
+														data,
+														null,
+														get25thBirthday(
+															sortedChildren[sortedChildren?.length - 1]
+																?.birthDate,
+															true,
+														),
+													)?.value
+												}
+												start={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												)}
+												end={formValues?.menage_date_paiement}
+											/>
+										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -587,6 +708,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 								<TextItem path="common.indemnite_journaliere" tag="th" />
 								<TextItem path="common.contribution" tag="th" />
 								<TextItem path="common.total" tag="th" />
+								<TextItem
+									path="common.date_paiement"
+									tag="th"
+									className="int"
+								/>
+								<TextItem path="common.interest" tag="th" className="int" />
 							</tr>
 						</thead>
 						<tbody>
@@ -611,30 +738,24 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									></Field>
 								</td>
 								<td>
-									<TotalMenage values={formValues} data={data} />
+									<Money {...getTotalMenageAmount(formValues, data)} />
 								</td>
 								<td className="int">
 									<Field
 										control={control}
 										type="date"
-										name="date_paiement"
+										name="menage_date_paiement"
 										editable={editable}
 									>
 										{(props) => <input {...props} />}
 									</Field>
 								</td>
 								<td className="int">
-									{/* <Interest
-										amount={
-											getAmount(
-												point,
-												data?.general_info?.ip?.menagere?.interet,
-												formValues?.contribution_imp,
-											)?.value
-										}
-										start={data?.general_info?.date_consolidation}
+									<Interest
+										amount={getTotalMenageAmount(formValues, data)?.value}
+										start={data?.general_info?.date_death}
 										end={formValues?.menage_date_paiement}
-									/> */}
+									/>
 								</td>
 							</tr>
 						</tbody>
