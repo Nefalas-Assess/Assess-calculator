@@ -19,6 +19,64 @@ import FadeIn from "@renderer/generic/fadeIn";
 import TextItem from "@renderer/generic/textItem";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
 
+const CapAmount = ({ values, type = "net" }) => {
+	const { data } = useContext(AppContext);
+
+	const index = constants?.interet_amount?.findIndex(
+		(e) => e?.value === parseFloat(values?.interet || 0),
+	);
+
+	const coef = useCapitalization({
+		end: values?.paiement,
+		ref: values?.reference,
+		index,
+		asObject: true,
+	});
+
+	const getCapAmount = useCallback(
+		(values) => {
+			const { amount = 0 } = values || {};
+
+			const pourcentage = data?.general_info?.ip?.economique?.interet;
+
+			return {
+				tooltip: (
+					<div>
+						<math>
+							<mn>{parseFloat(amount)}</mn>
+							<mo>x</mo>
+							<mfrac>
+								<mn>{pourcentage}</mn>
+								<mn>100</mn>
+							</mfrac>
+							<mo>x</mo>
+							<CoefficientInfo
+								headers={constants?.interet_amount}
+								{...coef?.info}
+							>
+								<mn>{coef?.value}</mn>
+							</CoefficientInfo>
+						</math>
+					</div>
+				),
+				value: (
+					parseFloat(amount) *
+					(parseFloat(pourcentage) / 100) *
+					parseFloat(coef?.value)
+				).toFixed(2),
+			};
+		},
+		[data, coef],
+	);
+
+	return (
+		<Money
+			value={getCapAmount(values?.[type])?.value}
+			tooltip={getCapAmount(values?.[type])?.tooltip}
+		/>
+	);
+};
+
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 	const { data } = useContext(AppContext);
 
@@ -122,52 +180,6 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 			);
 		},
 		[days],
-	);
-
-	const getCapAmount = useCallback(
-		(values) => {
-			const { amount = 0 } = values || {};
-
-			const pourcentage = data?.general_info?.ip?.economique?.interet;
-			const index = constants?.interet_amount?.findIndex(
-				(e) => e?.value === parseFloat(formValues?.interet || 0),
-			);
-
-			const coef = useCapitalization({
-				end: formValues?.paiement,
-				ref: formValues?.reference,
-				index,
-				asObject: true,
-			});
-
-			return {
-				tooltip: (
-					<div>
-						<math>
-							<mn>{parseFloat(amount)}</mn>
-							<mo>x</mo>
-							<mfrac>
-								<mn>{pourcentage}</mn>
-								<mn>100</mn>
-							</mfrac>
-							<mo>x</mo>
-							<CoefficientInfo
-								headers={constants?.interet_amount}
-								{...coef?.info}
-							>
-								<mn>{coef?.value}</mn>
-							</CoefficientInfo>
-						</math>
-					</div>
-				),
-				value: (
-					parseFloat(amount) *
-					(parseFloat(pourcentage) / 100) *
-					parseFloat(coef?.value)
-				).toFixed(2),
-			};
-		},
-		[data, formValues],
 	);
 
 	return (
@@ -353,10 +365,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 							</td>
 
 							<td>
-								<Money
-									value={getCapAmount(formValues?.brut)?.value}
-									tooltip={getCapAmount(formValues?.brut)?.tooltip}
-								/>
+								<CapAmount values={formValues} type="brut" />
 							</td>
 						</tr>
 					</tbody>
@@ -384,10 +393,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 								</Field>
 							</td>
 							<td>
-								<Money
-									value={getCapAmount(formValues?.net)?.value}
-									tooltip={getCapAmount(formValues?.net)?.tooltip}
-								/>
+								<CapAmount values={formValues} type="net" />
 							</td>
 						</tr>
 					</tbody>

@@ -19,6 +19,68 @@ import { useCapitalization } from "@renderer/hooks/capitalization";
 import TextItem from "@renderer/generic/textItem";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
 
+const CapAmount = ({ values }) => {
+	const { data } = useContext(AppContext);
+	const { paiement = "", interet = 0 } = values || {};
+
+	const index = constants.interet_amount?.findIndex(
+		(e) => e?.value === parseFloat(interet || 0),
+	);
+
+	const coef = useCapitalization({
+		end: paiement,
+		ref: values?.reference,
+		index,
+		asObject: true,
+	});
+
+	const getCapAmount = useCallback(
+		(values) => {
+			const { perso_amount = 0 } = values;
+
+			const perso_pourcentage = data?.general_info?.ip?.personnel?.interet;
+
+			return {
+				tooltip: (
+					<div>
+						<math>
+							<mn>{parseFloat(perso_amount)}</mn>
+							<mo>x</mo>
+							<mfrac>
+								<mn>{parseFloat(perso_pourcentage)}</mn>
+								<mn>100</mn>
+							</mfrac>
+							<mo>x</mo>
+							<mn>365</mn>
+							<mo>x</mo>
+							<CoefficientInfo
+								{...coef?.info}
+								headers={constants?.interet_amount}
+							>
+								<mn>{coef?.value}</mn>
+							</CoefficientInfo>
+						</math>
+					</div>
+				),
+				value: (
+					parseFloat(perso_amount) *
+					(parseFloat(perso_pourcentage) / 100) *
+					365 *
+					parseFloat(coef?.value)
+				).toFixed(2),
+			};
+		},
+		[data, coef],
+	);
+
+	return (
+		<Money
+			value={getCapAmount(values)?.value}
+			tooltip={getCapAmount(values)?.tooltip}
+		/>
+	);
+};
+
 export const IPPersonnelCapForm = ({
 	onSubmit,
 	initialValues,
@@ -92,56 +154,6 @@ export const IPPersonnelCapForm = ({
 			};
 		},
 		[days, data],
-	);
-
-	const getCapAmount = useCallback(
-		(values) => {
-			const { paiement = "", interet = 0, perso_amount = 0 } = values;
-
-			const perso_pourcentage = data?.general_info?.ip?.personnel?.interet;
-
-			const index = constants.interet_amount?.findIndex(
-				(e) => e?.value === parseFloat(interet || 0),
-			);
-
-			const coef = useCapitalization({
-				end: paiement,
-				ref: formValues?.reference,
-				index,
-				asObject: true,
-			});
-
-			return {
-				tooltip: (
-					<div>
-						<math>
-							<mn>{parseFloat(perso_amount)}</mn>
-							<mo>x</mo>
-							<mfrac>
-								<mn>{parseFloat(perso_pourcentage)}</mn>
-								<mn>100</mn>
-							</mfrac>
-							<mo>x</mo>
-							<mn>365</mn>
-							<mo>x</mo>
-							<CoefficientInfo
-								{...coef?.info}
-								headers={constants?.interet_amount}
-							>
-								<mn>{coef?.value}</mn>
-							</CoefficientInfo>
-						</math>
-					</div>
-				),
-				value: (
-					parseFloat(perso_amount) *
-					(parseFloat(perso_pourcentage) / 100) *
-					365 *
-					parseFloat(coef?.value)
-				).toFixed(2),
-			};
-		},
-		[data],
 	);
 
 	return (
@@ -279,10 +291,7 @@ export const IPPersonnelCapForm = ({
 								</Field>
 							</td>
 							<td>
-								<Money
-									value={getCapAmount(formValues)?.value}
-									tooltip={getCapAmount(formValues)?.tooltip}
-								/>
+								<CapAmount values={formValues} />
 							</td>
 						</tr>
 					</tbody>
