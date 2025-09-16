@@ -524,6 +524,11 @@ export default {
         fr: 'Total général préjudice des proches :',
         en: 'Total general prejudice of relatives :',
         nl: 'Algemeen totaal schade van het gezin :'
+      },
+      total_interest: {
+        fr: 'Total intérêt préjudice des proches :',
+        en: 'Total interest prejudice of relatives :',
+        nl: 'Algemeen intrestentotaal schade van het gezin :'
       }
     }
   },
