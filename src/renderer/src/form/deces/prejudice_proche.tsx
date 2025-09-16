@@ -13,8 +13,6 @@ import Field from "@renderer/generic/field";
 import constants from "@renderer/constants";
 import FadeIn from "@renderer/generic/fadeIn";
 import TotalBox from "@renderer/generic/totalBox";
-import Tooltip from "@renderer/generic/tooltip";
-import { FaRegQuestionCircle } from "react-icons/fa";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
@@ -22,113 +20,6 @@ import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
 import { addDays, format } from "date-fns";
 import Interest from "@renderer/generic/interet";
 import TotalBoxInterest from "@renderer/generic/totalBoxInterest";
-
-const TotalRevenue = ({ values, data }) => {
-	const revenue = parseFloat(values?.revenue_total);
-	const personnel = revenue / (parseInt(values?.members_amount) + 1);
-
-	const capitalization = useCapitalization({
-		end: data?.general_info?.date_death,
-		index: constants.interet_amount?.findIndex(
-			(e) => e?.value === parseFloat(values?.interet),
-		),
-		ref: values?.reference,
-		asObject: true,
-	});
-
-	const variables = useMemo(
-		() => ({
-			revenue,
-			personnel,
-			coef: capitalization?.value,
-		}),
-		[revenue, personnel, capitalization],
-	);
-
-	const totalAmount = useMemo(() => {
-		return (
-			((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) *
-			variables.coef
-		);
-	}, [values?.revenue_defunt, variables]);
-
-	const renderToolTipAmount = useCallback(() => {
-		return (
-			<>
-				<div>
-					<math>
-						<mrow>
-							<mstyle style={{ marginRight: 5 }}>
-								<mo>(</mo>
-								<mi>R</mi>
-								<mo>)</mo>
-							</mstyle>
-							<mn>{variables?.revenue}</mn>
-						</mrow>
-					</math>
-				</div>
-				<div>
-					<math>
-						<mrow>
-							<mstyle style={{ marginRight: 5 }}>
-								<mo>(</mo>
-								<mi>P</mi>
-								<mo>)</mo>
-							</mstyle>
-							<mfrac>
-								<mrow>
-									<mi>Revenue</mi>
-								</mrow>
-								<mrow>
-									<mo>(</mo>
-									<mn>{values?.members_amount}</mn>
-									<mo>+</mo>
-									<mn>1</mn>
-									<mo>)</mo>
-								</mrow>
-							</mfrac>
-							<mo>=</mo>
-							<mn>{variables?.personnel}</mn>
-						</mrow>
-					</math>
-				</div>
-				<div>
-					<math>
-						<mo>(</mo>
-						<mn>{values?.revenue_defunt}</mn>
-						<mo>-</mo>
-						<mn>{variables?.personnel}</mn>
-						<mo>)</mo>
-						<mo>x</mo>
-						<CoefficientInfo
-							{...capitalization?.info}
-							headers={constants.interet_amount}
-						>
-							<mn>{variables?.coef}</mn>
-						</CoefficientInfo>
-						<mo>=</mo>
-						<mn>{totalAmount}</mn>
-					</math>
-				</div>
-			</>
-		);
-	}, [variables, values, totalAmount]);
-
-	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<Money value={totalAmount} />
-			<Tooltip tooltipContent={renderToolTipAmount()}>
-				<FaRegQuestionCircle style={{ marginLeft: 5 }} />
-			</Tooltip>
-		</div>
-	);
-};
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { data } = useContext(AppContext);
@@ -138,6 +29,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { control, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
 			menage_contribution: data?.general_info?.config?.default_contribution,
+			menage_amount: 30,
 			members: data?.general_info?.children?.map((it, key) => ({
 				name: it?.name,
 				link: "parent/enfant",
@@ -845,7 +737,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 								{!data?.general_info?.date_naissance ? (
 									<TextItem path="errorsdn.missing_date_naissance" />
 								) : (
-									<TotalRevenue values={formValues} data={data} />
+									<Money {...getTotalRevenueAmount(formValues, data)} />
 								)}
 							</td>
 							<td className="int">
