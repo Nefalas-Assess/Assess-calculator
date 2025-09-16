@@ -21,6 +21,7 @@ import TextItem from "@renderer/generic/textItem";
 import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
 import { addDays, format } from "date-fns";
 import Interest from "@renderer/generic/interet";
+import TotalBoxInterest from "@renderer/generic/totalBoxInterest";
 
 const TotalRevenue = ({ values, data }) => {
 	const revenue = parseFloat(values?.revenue_total);
@@ -125,99 +126,6 @@ const TotalRevenue = ({ values, data }) => {
 			<Tooltip tooltipContent={renderToolTipAmount()}>
 				<FaRegQuestionCircle style={{ marginLeft: 5 }} />
 			</Tooltip>
-		</div>
-	);
-};
-
-const TotalMenage = ({ values = {}, data, start, end, reference }) => {
-	const {
-		menage_interet = 0,
-		menage_amount = 0,
-		menage_pourcentage = 100,
-		menage_contribution = 0,
-	} = values;
-
-	// Vérification des dates
-
-	const startDate =
-		start ||
-		(data?.general_info?.date_naissance
-			? new Date(data.general_info.date_naissance)
-			: null);
-
-	const endDate =
-		end ||
-		(data?.general_info?.date_death
-			? new Date(data.general_info.date_death)
-			: null);
-
-	const coef = useCapitalization({
-		end: endDate,
-		start: startDate,
-		index:
-			constants.interet_amount?.findIndex(
-				(e) => e?.value === parseFloat(menage_interet),
-			) || 0,
-		ref: reference || values?.menage_ref,
-		asObject: true,
-		noGender: !!reference,
-		startIndex: reference ? 1 : 0,
-	});
-
-	// Calcul du montant total avec useMemo
-	const totalAmount = useMemo(() => {
-		return (
-			parseFloat(menage_amount) *
-			(parseFloat(menage_pourcentage) / 100) *
-			(parseFloat(menage_contribution) / 100) *
-			365 *
-			parseFloat(coef?.value)
-		).toFixed(2);
-	}, [menage_amount, menage_pourcentage, menage_contribution, coef]);
-
-	// Fonction pour rendre le tooltip
-	const renderToolTipAmount = useCallback(() => {
-		return (
-			<>
-				<div>
-					<math>
-						<mn>{menage_amount}</mn>
-						<mo>x</mo>
-						<mo>(</mo>
-						<mfrac>
-							<mn>{menage_contribution}</mn>
-							<mn>100</mn>
-						</mfrac>
-						<mo>)</mo>
-						<mo>x</mo>
-						<mn>1</mn>
-						<mo>x</mo>
-						<mn>365</mn>
-						<mo>x</mo>
-						<CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
-							<mn>{coef?.value}</mn>
-						</CoefficientInfo>
-						<mo>=</mo>
-						<mn>{totalAmount}</mn>
-					</math>
-				</div>
-			</>
-		);
-	}, [menage_amount, menage_pourcentage, totalAmount, coef, totalAmount]);
-
-	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-			}}
-		>
-			<Money value={totalAmount} />
-			<Tooltip tooltipContent={renderToolTipAmount()}>
-				<FaRegQuestionCircle style={{ marginLeft: 5 }} />
-			</Tooltip>
-			<div className="hide">{totalAmount}</div>
 		</div>
 	);
 };
@@ -438,6 +346,89 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 		},
 		[],
 	);
+
+	const getTotalRevenueAmount = useCallback((values = {}, data) => {
+		const revenue = parseFloat(values?.revenue_total);
+		const personnel = revenue / (parseInt(values?.members_amount) + 1);
+
+		const capitalization = useCapitalization({
+			end: data?.general_info?.date_death,
+			index: constants.interet_amount?.findIndex(
+				(e) => e?.value === parseFloat(values?.interet),
+			),
+			ref: values?.reference,
+			asObject: true,
+		});
+
+		const variables = { revenue, personnel, coef: capitalization?.value };
+
+		const totalAmount =
+			((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) *
+			variables.coef;
+
+		return {
+			value: totalAmount,
+			tooltip: (
+				<>
+					<div>
+						<math>
+							<mrow>
+								<mstyle style={{ marginRight: 5 }}>
+									<mo>(</mo>
+									<mi>R</mi>
+									<mo>)</mo>
+								</mstyle>
+								<mn>{variables?.revenue}</mn>
+							</mrow>
+						</math>
+					</div>
+					<div>
+						<math>
+							<mrow>
+								<mstyle style={{ marginRight: 5 }}>
+									<mo>(</mo>
+									<mi>P</mi>
+									<mo>)</mo>
+								</mstyle>
+								<mfrac>
+									<mrow>
+										<mi>Revenue</mi>
+									</mrow>
+									<mrow>
+										<mo>(</mo>
+										<mn>{values?.members_amount}</mn>
+										<mo>+</mo>
+										<mn>1</mn>
+										<mo>)</mo>
+									</mrow>
+								</mfrac>
+								<mo>=</mo>
+								<mn>{variables?.personnel}</mn>
+							</mrow>
+						</math>
+					</div>
+					<div>
+						<math>
+							<mo>(</mo>
+							<mn>{values?.revenue_defunt}</mn>
+							<mo>-</mo>
+							<mn>{variables?.personnel}</mn>
+							<mo>)</mo>
+							<mo>x</mo>
+							<CoefficientInfo
+								{...capitalization?.info}
+								headers={constants.interet_amount}
+							>
+								<mn>{variables?.coef}</mn>
+							</CoefficientInfo>
+							<mo>=</mo>
+							<mn>{totalAmount}</mn>
+						</math>
+					</div>
+				</>
+			),
+		};
+	}, []);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} ref={ref}>
@@ -814,6 +805,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 							/>
 							<TextItem path="deces.prejudice_proche.number_menage" tag="th" />
 							<TextItem path="common.total" tag="th" />
+							<TextItem path="common.date_paiement" tag="th" className="int" />
+							<TextItem path="common.interest" tag="th" className="int" />
 						</tr>
 					</thead>
 					<tbody>
@@ -855,6 +848,23 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									<TotalRevenue values={formValues} data={data} />
 								)}
 							</td>
+							<td className="int">
+								<Field
+									control={control}
+									type="date"
+									name="revenue_date_paiement"
+									editable={editable}
+								>
+									{(props) => <input {...props} />}
+								</Field>
+							</td>
+							<td className="int">
+								<Interest
+									amount={getTotalRevenueAmount(formValues, data)?.value}
+									start={data?.general_info?.date_death}
+									end={formValues?.revenue_date_paiement}
+								/>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -869,6 +879,10 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 						return total + amount;
 					}, 0)
 				}
+			/>
+			<TotalBoxInterest
+				label="deces.prejudice_proche.total_interest"
+				documentRef={ref}
 			/>
 		</form>
 	);
