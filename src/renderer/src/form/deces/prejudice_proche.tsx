@@ -487,7 +487,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 												</td>
 												<td className="int">
 													<Interest
-														start={start}
+														start={data?.general_info?.date_death}
 														end={formValues?.[`menage_date_paiement_${key}`]}
 														amount={
 															getTotalMenageAmount(
@@ -572,10 +572,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 														),
 													)?.value
 												}
-												start={get25thBirthday(
-													sortedChildren[sortedChildren?.length - 1]?.birthDate,
-													true,
-												)}
+												start={data?.general_info?.date_death}
 												end={formValues?.menage_date_paiement}
 											/>
 										</td>
