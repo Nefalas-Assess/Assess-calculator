@@ -144,7 +144,6 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
         name="charges"
         formValues={formValues}
         editable={editable}
-        addRowDefaults={{ amount: 30 }}
       />
       <DynamicTable
         subtitle="incapacite_perma.frais_cap.paid"
