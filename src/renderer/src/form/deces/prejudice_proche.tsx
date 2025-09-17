@@ -21,6 +21,214 @@ import { addDays, format } from "date-fns";
 import Interest from "@renderer/generic/interet";
 import TotalBoxInterest from "@renderer/generic/totalBoxInterest";
 
+const TotalRevenueAmount = ({ values, data, control, editable }) => {
+	const capitalization = useCapitalization({
+		end: data?.general_info?.date_death,
+		index: constants.interet_amount?.findIndex(
+			(e) => e?.value === parseFloat(values?.interet),
+		),
+		ref: values?.reference,
+		asObject: true,
+	});
+
+	const getTotalRevenueAmount = useCallback(() => {
+		const revenue = parseFloat(values?.revenue_total);
+		const personnel = revenue / (parseInt(values?.members_amount) + 1);
+
+		const variables = { revenue, personnel, coef: capitalization?.value };
+
+		const totalAmount =
+			((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) *
+			variables.coef;
+
+		return {
+			value: totalAmount,
+			tooltip: (
+				<>
+					<div>
+						<math>
+							<mrow>
+								<mstyle style={{ marginRight: 5 }}>
+									<mo>(</mo>
+									<mi>R</mi>
+									<mo>)</mo>
+								</mstyle>
+								<mn>{variables?.revenue}</mn>
+							</mrow>
+						</math>
+					</div>
+					<div>
+						<math>
+							<mrow>
+								<mstyle style={{ marginRight: 5 }}>
+									<mo>(</mo>
+									<mi>P</mi>
+									<mo>)</mo>
+								</mstyle>
+								<mfrac>
+									<mrow>
+										<mi>Revenue</mi>
+									</mrow>
+									<mrow>
+										<mo>(</mo>
+										<mn>{values?.members_amount}</mn>
+										<mo>+</mo>
+										<mn>1</mn>
+										<mo>)</mo>
+									</mrow>
+								</mfrac>
+								<mo>=</mo>
+								<mn>{variables?.personnel}</mn>
+							</mrow>
+						</math>
+					</div>
+					<div>
+						<math>
+							<mo>(</mo>
+							<mn>{values?.revenue_defunt}</mn>
+							<mo>-</mo>
+							<mn>{variables?.personnel}</mn>
+							<mo>)</mo>
+							<mo>x</mo>
+							<CoefficientInfo
+								{...capitalization?.info}
+								headers={constants.interet_amount}
+							>
+								<mn>{variables?.coef}</mn>
+							</CoefficientInfo>
+							<mo>=</mo>
+							<mn>{totalAmount}</mn>
+						</math>
+					</div>
+				</>
+			),
+		};
+	}, [capitalization, values]);
+
+	return (
+		<>
+			<td>
+				{!data?.general_info?.date_naissance ? (
+					<TextItem path="errorsdn.missing_date_naissance" />
+				) : (
+					<Money {...getTotalRevenueAmount()} />
+				)}
+			</td>
+			<td className="int">
+				<Field
+					control={control}
+					type="date"
+					name="revenue_date_paiement"
+					editable={editable}
+				>
+					{(props) => <input {...props} />}
+				</Field>
+			</td>
+			<td className="int">
+				<Interest
+					amount={getTotalRevenueAmount()?.value}
+					start={data?.general_info?.date_death}
+					end={values?.revenue_date_paiement}
+				/>
+			</td>
+		</>
+	);
+};
+
+const TotalMenageAmount = ({
+	values,
+	data,
+	start,
+	end,
+	reference,
+	interest,
+}) => {
+	const {
+		menage_interet = 0,
+		menage_amount = 0,
+		menage_pourcentage = 100,
+		menage_contribution = 0,
+	} = values;
+
+	// Vérification des dates
+
+	const startDate =
+		start ||
+		(data?.general_info?.date_naissance
+			? new Date(data.general_info.date_naissance)
+			: null);
+
+	const endDate =
+		end ||
+		(data?.general_info?.date_death
+			? new Date(data.general_info.date_death)
+			: null);
+
+	const coef = useCapitalization({
+		end: endDate,
+		start: startDate,
+		index:
+			constants.interet_amount?.findIndex(
+				(e) => e?.value === parseFloat(menage_interet),
+			) || 0,
+		ref: reference || values?.menage_ref,
+		asObject: true,
+		noGender: !!reference,
+		startIndex: reference ? 1 : 0,
+	});
+
+	const getTotalMenageAmount = useCallback(() => {
+		// Calcul du montant total avec useMemo
+		const totalAmount = (
+			parseFloat(menage_amount) *
+			(parseFloat(menage_pourcentage) / 100) *
+			(parseFloat(menage_contribution) / 100) *
+			365 *
+			parseFloat(coef?.value)
+		).toFixed(2);
+
+		return {
+			value: totalAmount,
+			tooltip: (
+				<div>
+					<math>
+						<mn>{menage_amount}</mn>
+						<mo>x</mo>
+						<mo>(</mo>
+						<mfrac>
+							<mn>{menage_contribution}</mn>
+							<mn>100</mn>
+						</mfrac>
+						<mo>)</mo>
+						<mo>x</mo>
+						<mn>1</mn>
+						<mo>x</mo>
+						<mn>365</mn>
+						<mo>x</mo>
+						<CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
+							<mn>{coef?.value}</mn>
+						</CoefficientInfo>
+						<mo>=</mo>
+						<mn>{totalAmount}</mn>
+					</math>
+				</div>
+			),
+		};
+	}, [coef, menage_amount, menage_contribution, menage_pourcentage]);
+
+	if (interest) {
+		return (
+			<Interest
+				amount={getTotalMenageAmount()?.value}
+				start={interest?.start}
+				end={interest?.end}
+			/>
+		);
+	} else {
+		return <Money {...getTotalMenageAmount()} />;
+	}
+};
+
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { data } = useContext(AppContext);
 
@@ -159,168 +367,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 			props: { start: data?.general_info?.date_death },
 		},
 	];
-
-	const getTotalMenageAmount = useCallback(
-		(values = {}, data, start, end, reference) => {
-			const {
-				menage_interet = 0,
-				menage_amount = 0,
-				menage_pourcentage = 100,
-				menage_contribution = 0,
-			} = values;
-
-			// Vérification des dates
-
-			const startDate =
-				start ||
-				(data?.general_info?.date_naissance
-					? new Date(data.general_info.date_naissance)
-					: null);
-
-			const endDate =
-				end ||
-				(data?.general_info?.date_death
-					? new Date(data.general_info.date_death)
-					: null);
-
-			const coef = useCapitalization({
-				end: endDate,
-				start: startDate,
-				index:
-					constants.interet_amount?.findIndex(
-						(e) => e?.value === parseFloat(menage_interet),
-					) || 0,
-				ref: reference || values?.menage_ref,
-				asObject: true,
-				noGender: !!reference,
-				startIndex: reference ? 1 : 0,
-			});
-
-			// Calcul du montant total avec useMemo
-			const totalAmount = (
-				parseFloat(menage_amount) *
-				(parseFloat(menage_pourcentage) / 100) *
-				(parseFloat(menage_contribution) / 100) *
-				365 *
-				parseFloat(coef?.value)
-			).toFixed(2);
-
-			return {
-				value: totalAmount,
-				tooltip: (
-					<div>
-						<math>
-							<mn>{menage_amount}</mn>
-							<mo>x</mo>
-							<mo>(</mo>
-							<mfrac>
-								<mn>{menage_contribution}</mn>
-								<mn>100</mn>
-							</mfrac>
-							<mo>)</mo>
-							<mo>x</mo>
-							<mn>1</mn>
-							<mo>x</mo>
-							<mn>365</mn>
-							<mo>x</mo>
-							<CoefficientInfo
-								headers={constants.interet_amount}
-								{...coef?.info}
-							>
-								<mn>{coef?.value}</mn>
-							</CoefficientInfo>
-							<mo>=</mo>
-							<mn>{totalAmount}</mn>
-						</math>
-					</div>
-				),
-			};
-		},
-		[],
-	);
-
-	const getTotalRevenueAmount = useCallback((values = {}, data) => {
-		const revenue = parseFloat(values?.revenue_total);
-		const personnel = revenue / (parseInt(values?.members_amount) + 1);
-
-		const capitalization = useCapitalization({
-			end: data?.general_info?.date_death,
-			index: constants.interet_amount?.findIndex(
-				(e) => e?.value === parseFloat(values?.interet),
-			),
-			ref: values?.reference,
-			asObject: true,
-		});
-
-		const variables = { revenue, personnel, coef: capitalization?.value };
-
-		const totalAmount =
-			((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) *
-			variables.coef;
-
-		return {
-			value: totalAmount,
-			tooltip: (
-				<>
-					<div>
-						<math>
-							<mrow>
-								<mstyle style={{ marginRight: 5 }}>
-									<mo>(</mo>
-									<mi>R</mi>
-									<mo>)</mo>
-								</mstyle>
-								<mn>{variables?.revenue}</mn>
-							</mrow>
-						</math>
-					</div>
-					<div>
-						<math>
-							<mrow>
-								<mstyle style={{ marginRight: 5 }}>
-									<mo>(</mo>
-									<mi>P</mi>
-									<mo>)</mo>
-								</mstyle>
-								<mfrac>
-									<mrow>
-										<mi>Revenue</mi>
-									</mrow>
-									<mrow>
-										<mo>(</mo>
-										<mn>{values?.members_amount}</mn>
-										<mo>+</mo>
-										<mn>1</mn>
-										<mo>)</mo>
-									</mrow>
-								</mfrac>
-								<mo>=</mo>
-								<mn>{variables?.personnel}</mn>
-							</mrow>
-						</math>
-					</div>
-					<div>
-						<math>
-							<mo>(</mo>
-							<mn>{values?.revenue_defunt}</mn>
-							<mo>-</mo>
-							<mn>{variables?.personnel}</mn>
-							<mo>)</mo>
-							<mo>x</mo>
-							<CoefficientInfo
-								{...capitalization?.info}
-								headers={constants.interet_amount}
-							>
-								<mn>{variables?.coef}</mn>
-							</CoefficientInfo>
-							<mo>=</mo>
-							<mn>{totalAmount}</mn>
-						</math>
-					</div>
-				</>
-			),
-		};
-	}, []);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} ref={ref}>
@@ -465,14 +511,15 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 												<td style={{ textWrap: "nowrap" }}>100 %</td>
 												<td>{formValues?.menage_contribution} %</td>
 												<td>
-													<Money
-														{...getTotalMenageAmount(
-															{ ...formValues, menage_amount: menage_amount },
-															data,
-															start,
-															end,
-															formValues?.menage_reference,
-														)}
+													<TotalMenageAmount
+														values={{
+															...formValues,
+															menage_amount: menage_amount,
+														}}
+														data={data}
+														start={start}
+														end={end}
+														reference={formValues?.menage_reference}
 													/>
 												</td>
 												<td className="int">
@@ -486,18 +533,19 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 													</Field>
 												</td>
 												<td className="int">
-													<Interest
-														start={data?.general_info?.date_death}
-														end={formValues?.[`menage_date_paiement_${key}`]}
-														amount={
-															getTotalMenageAmount(
-																{ ...formValues, menage_amount: menage_amount },
-																data,
-																start,
-																end,
-																formValues?.menage_reference,
-															)?.value
-														}
+													<TotalMenageAmount
+														values={{
+															...formValues,
+															menage_amount: menage_amount,
+														}}
+														data={data}
+														start={start}
+														end={end}
+														reference={formValues?.menage_reference}
+														interest={{
+															start: data?.general_info?.date_death,
+															end: formValues?.[`menage_date_paiement_${key}`],
+														}}
 													/>
 												</td>
 											</tr>
@@ -525,21 +573,17 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 										<td>100 %</td>
 										<td>{formValues?.menage_contribution} %</td>
 										<td>
-											<Money
-												{...getTotalMenageAmount(
-													{
-														...formValues,
-														menage_amount:
-															parseFloat(formValues?.menage_amount || 0) +
-															10 * unsortedChildren?.length,
-													},
-													data,
-													null,
-													get25thBirthday(
-														sortedChildren[sortedChildren?.length - 1]
-															?.birthDate,
-														true,
-													),
+											<TotalMenageAmount
+												values={{
+													...formValues,
+													menage_amount:
+														parseFloat(formValues?.menage_amount || 0) +
+														10 * unsortedChildren?.length,
+												}}
+												data={data}
+												end={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
 												)}
 											/>
 										</td>
@@ -554,26 +598,22 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 											</Field>
 										</td>
 										<td className="int">
-											<Interest
-												amount={
-													getTotalMenageAmount(
-														{
-															...formValues,
-															menage_amount:
-																parseFloat(formValues?.menage_amount || 0) +
-																10 * unsortedChildren?.length,
-														},
-														data,
-														null,
-														get25thBirthday(
-															sortedChildren[sortedChildren?.length - 1]
-																?.birthDate,
-															true,
-														),
-													)?.value
-												}
-												start={data?.general_info?.date_death}
-												end={formValues?.menage_date_paiement}
+											<TotalMenageAmount
+												values={{
+													...formValues,
+													menage_amount:
+														parseFloat(formValues?.menage_amount || 0) +
+														10 * unsortedChildren?.length,
+												}}
+												data={data}
+												end={get25thBirthday(
+													sortedChildren[sortedChildren?.length - 1]?.birthDate,
+													true,
+												)}
+												interest={{
+													start: data?.general_info?.date_death,
+													end: formValues?.menage_date_paiement,
+												}}
 											/>
 										</td>
 									</tr>
@@ -618,7 +658,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									></Field>
 								</td>
 								<td>
-									<Money {...getTotalMenageAmount(formValues, data)} />
+									<TotalMenageAmount values={formValues} data={data} />
 								</td>
 								<td className="int">
 									<Field
@@ -631,10 +671,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									</Field>
 								</td>
 								<td className="int">
-									<Interest
-										amount={getTotalMenageAmount(formValues, data)?.value}
-										start={data?.general_info?.date_death}
-										end={formValues?.menage_date_paiement}
+									<TotalMenageAmount
+										values={formValues}
+										data={data}
+										interest={{
+											start: data?.general_info?.date_death,
+											end: formValues?.menage_date_paiement,
+										}}
 									/>
 								</td>
 							</tr>
@@ -730,30 +773,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									{(props) => <input {...props} />}
 								</Field>
 							</td>
-							<td>
-								{!data?.general_info?.date_naissance ? (
-									<TextItem path="errorsdn.missing_date_naissance" />
-								) : (
-									<Money {...getTotalRevenueAmount(formValues, data)} />
-								)}
-							</td>
-							<td className="int">
-								<Field
-									control={control}
-									type="date"
-									name="revenue_date_paiement"
-									editable={editable}
-								>
-									{(props) => <input {...props} />}
-								</Field>
-							</td>
-							<td className="int">
-								<Interest
-									amount={getTotalRevenueAmount(formValues, data)?.value}
-									start={data?.general_info?.date_death}
-									end={formValues?.revenue_date_paiement}
-								/>
-							</td>
+							<TotalRevenueAmount
+								values={formValues}
+								data={data}
+								control={control}
+								editable={editable}
+							/>
 						</tr>
 					</tbody>
 				</table>
