@@ -1,0 +1,40 @@
+Composition du nom : 
+  h = hommes
+  f = femmes
+  Pour les tableaux avec plusieures années 'NN' marque le nombre d'années.
+--------------------------------------------------------------------------
+
+data_taux.tsx = Taux d'intérêts légaux.
+
+schryvers\2025\data_cap_rente_certaine_an.tsx =
+schryvers\2025\data_cap_rente_certaine_mois.tsx =
+  1. Valeur actuelle d'une rente certaine de 1 euro par an
+  Distinction par mois mais pas par genre.
+
+schryvers\2025\data_cap_h_esp_vie_an.tsx =
+schryvers\2025\data_cap_h_esp_vie_mois.tsx =
+  2. Valeur actuelle d'une rente certaine de 1 euro par an
+  Durée égale à l'espérance de vie prospective 2025
+
+schryvers\2025\data_cap_h_vie_med_an.tsx =
+schryvers\2025\data_cap_h_vie_med_mois.tsx =
+  3. Valeur actuelle d'une rente certaine de 1 euro par an
+  Durée égale à la durée de vie médiane prospective 2025
+
+schryvers\2025\data_cap_h_an.tsx =
+  4. Valeur actuelle d'une rente viagère de 1 euro par an payable annuellement
+
+schryvers\2025\data_cap_h_mois.tsx
+  5. Valeur actuelle d'une rente viagère de 1 euro par an payable mensuellement
+
+schryvers\20XX\data_cap_f_NN_an.tsx = 
+  6. Valeur actuelle d'une rente viagère temporaire de 1 euro par an payable annuellement 
+
+schryvers\20XX\data_cap_h_NN_mois.tsx = 
+  7. Valeur actuelle d'une rente viagère temporaire de 1 euro par an payable mensuellement
+
+schryvers\2025\data_va_eur_annees.tsx = 
+  11. Valeur actuelle de 1 euro payable dans n années
+
+schryvers\2025\data_ff_h.tsx = 
+  12. Paiement anticipé frais funéraires 
