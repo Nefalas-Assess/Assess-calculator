@@ -140,6 +140,27 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 						);
 					}
 				}
+				if (res?.general_info?.config?.date_paiement) {
+					const configDate = res?.general_info?.config?.date_paiement;
+					if (
+						res?.incapacite_perma_economique_cap &&
+						!res?.incapacite_perma_economique_cap.paiement
+					) {
+						res.incapacite_perma_economique_cap.paiement = configDate;
+					}
+					if (
+						res?.incapacite_perma_menage_cap?.paiement &&
+						!res?.incapacite_perma_menage_cap?.paiement
+					) {
+						res.incapacite_perma_menage_cap.paiement = configDate;
+					}
+					if (
+						res?.incapacite_perma_personnel_cap?.paiement &&
+						!res?.incapacite_perma_personnel_cap?.paiement
+					) {
+						res.incapacite_perma_personnel_cap.paiement = configDate;
+					}
+				}
 			}
 		}
 

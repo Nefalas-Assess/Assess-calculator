@@ -101,7 +101,7 @@ export const IPMenageCapForm = ({
 			perso_amount: 30,
 			perso_contribution: generalInfo?.config?.default_contribution,
 			conso_contribution: generalInfo?.config?.default_contribution,
-			paiement: generalInfo?.date_paiement,
+			paiement: generalInfo?.config?.date_paiement,
 		},
 	});
 

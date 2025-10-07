@@ -16,8 +16,6 @@ const EconomiqueCap = ({ editable }) => {
 		[setData],
 	);
 
-	console.log(data);
-
 	return (
 		<div id="content">
 			<div id="main" ref={ref}>

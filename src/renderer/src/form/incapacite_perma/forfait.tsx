@@ -23,9 +23,9 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
 			contribution_imp: generalInfo?.config?.default_contribution,
-			perso_date_paiement: generalInfo?.date_paiement,
-			menage_date_paiement: generalInfo?.date_paiement,
-			eco_date_paiement: generalInfo?.date_paiement,
+			perso_date_paiement: generalInfo?.config?.date_paiement,
+			menage_date_paiement: generalInfo?.config?.date_paiement,
+			eco_date_paiement: generalInfo?.config?.date_paiement,
 		},
 	});
 

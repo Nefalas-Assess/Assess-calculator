@@ -114,7 +114,7 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
 					editable={editable}
 					calculateTotal={(e) => e?.amount}
 					addRowDefaults={{
-						date_paiement: generalInfo?.date_paiement,
+						date_paiement: generalInfo?.config?.date_paiement,
 					}}
 				/>
 			</form>

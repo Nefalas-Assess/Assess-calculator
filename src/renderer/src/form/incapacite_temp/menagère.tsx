@@ -335,7 +335,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 		const defaultRow = {
 			amount: 30,
 			contribution: generalInfo?.config?.default_contribution,
-			date_paiement: generalInfo?.date_paiement,
+			date_paiement: generalInfo?.config?.date_paiement,
 		};
 		if (!formValues?.periods?.[0]) {
 			defaultRow.start = generalInfo?.date_accident;

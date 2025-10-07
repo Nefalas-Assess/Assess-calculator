@@ -233,7 +233,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 										<Field
 											control={control}
 											type="date"
-											name="date_paiement"
+											name="config.date_paiement"
 											editable={editable}
 										>
 											{(props) => <input {...props} />}

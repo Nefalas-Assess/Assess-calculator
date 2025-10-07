@@ -110,7 +110,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
 	const addRowDefaults = useMemo(() => {
 		const defaultRow = {
 			amount: 30,
-			date_paiement: generalInfo?.date_paiement,
+			date_paiement: generalInfo?.config?.date_paiement,
 		};
 		if (!formValues?.periods?.[0]) {
 			defaultRow.start = generalInfo?.date_accident;

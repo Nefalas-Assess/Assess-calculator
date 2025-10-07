@@ -167,10 +167,10 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 				customActions={customActions("net")}
 				addRowDefaults={
 					formValues?.net?.[0]
-						? { date_paiement: generalInfo?.date_paiement }
+						? { date_paiement: generalInfo?.config?.date_paiement }
 						: {
 								start: generalInfo?.date_accident,
-								date_paiement: generalInfo?.date_paiement,
+								date_paiement: generalInfo?.config?.date_paiement,
 							}
 				}
 			/>
@@ -187,10 +187,10 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 				customActions={customActions("brut")}
 				addRowDefaults={
 					formValues?.brut?.[0]
-						? { date_paiement: generalInfo?.date_paiement }
+						? { date_paiement: generalInfo?.config?.date_paiement }
 						: {
 								start: generalInfo?.date_accident,
-								date_paiement: generalInfo?.date_paiement,
+								date_paiement: generalInfo?.config?.date_paiement,
 							}
 				}
 			/>

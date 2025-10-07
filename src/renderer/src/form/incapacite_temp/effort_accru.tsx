@@ -128,7 +128,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
 		const defaultValues = {
 			coefficient: 5,
 			amount: 30,
-			date_paiement: generalInfo?.date_paiement,
+			date_paiement: generalInfo?.config?.date_paiement,
 		};
 
 		if (!formValues?.efforts?.[0]) {

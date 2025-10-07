@@ -83,7 +83,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 
 	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
-			paiement: generalInfo?.date_paiement,
+			paiement: generalInfo?.config?.date_paiement,
 		},
 	});
 

@@ -24,8 +24,8 @@ const PrejudiceParticuliersForm = ({
 		defaultValues: initialValues || {
 			coefficient_quantum_doloris: "",
 			coefficient_prejudice_esthétique: "",
-			date_paiement_quantum_doloris: generalInfo?.date_paiement,
-			date_paiement_prejudice_esthétique: generalInfo?.date_paiement,
+			date_paiement_quantum_doloris: generalInfo?.config?.date_paiement,
+			date_paiement_prejudice_esthétique: generalInfo?.config?.date_paiement,
 		},
 	});
 
@@ -322,7 +322,7 @@ const PrejudiceParticuliersForm = ({
 				editable={editable}
 				calculateTotal={(e) => e?.amount}
 				addRowDefaults={{
-					date_paiement: generalInfo?.date_paiement,
+					date_paiement: generalInfo?.config?.date_paiement,
 				}}
 			/>
 
@@ -335,7 +335,7 @@ const PrejudiceParticuliersForm = ({
 				editable={editable}
 				calculateTotal={(e) => e?.amount}
 				addRowDefaults={{
-					date_paiement: generalInfo?.date_paiement,
+					date_paiement: generalInfo?.config?.date_paiement,
 				}}
 			/>
 		</form>

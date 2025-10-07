@@ -93,7 +93,7 @@ export const IPPersonnelCapForm = ({
 		defaultValues: initialValues || {
 			conso_amount: 32,
 			perso_amount: 32,
-			paiement: generalInfo?.date_paiement,
+			paiement: generalInfo?.config?.date_paiement,
 		},
 	});
 

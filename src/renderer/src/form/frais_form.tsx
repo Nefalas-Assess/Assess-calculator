@@ -152,7 +152,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
 				editable={editable}
 				addRowDefaults={{
 					coefficient: 5,
-					date_paiement: generalInfo?.date_paiement,
+					date_paiement: generalInfo?.config?.date_paiement,
 				}}
 				calculateTotal={(e) => e.amount}
 			/>

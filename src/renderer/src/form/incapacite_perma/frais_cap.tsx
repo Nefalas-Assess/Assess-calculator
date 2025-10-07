@@ -18,7 +18,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
 		defaultValues: initialValues || {
 			charges: [
 				{
-					date_payment: generalInfo?.date_paiement,
+					date_payment: generalInfo?.config?.date_paiement,
 				},
 			],
 		},
@@ -174,7 +174,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
 				formValues={formValues}
 				editable={editable}
 				addRowDefaults={{
-					date_payment: generalInfo?.date_paiement,
+					date_payment: generalInfo?.config?.date_paiement,
 				}}
 			/>
 			<DynamicTable
