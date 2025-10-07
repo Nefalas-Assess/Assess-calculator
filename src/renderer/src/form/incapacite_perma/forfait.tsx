@@ -13,13 +13,19 @@ import { useForm } from "react-hook-form";
 import Field from "@renderer/generic/field";
 import constants from "@renderer/constants";
 import TextItem from "@renderer/generic/textItem";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 	const { data } = useContext(AppContext);
 
+	const generalInfo = useGeneralInfo();
+
 	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
-			contribution_imp: data?.general_info?.config?.default_contribution,
+			contribution_imp: generalInfo?.config?.default_contribution,
+			perso_date_paiement: generalInfo?.date_paiement,
+			menage_date_paiement: generalInfo?.date_paiement,
+			eco_date_paiement: generalInfo?.date_paiement,
 		},
 	});
 
@@ -93,9 +99,9 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
 	const isDisplayed = useCallback(
 		(type) => {
-			return data?.general_info?.ip?.[type]?.method === "forfait";
+			return generalInfo?.ip?.[type]?.method === "forfait";
 		},
-		[data],
+		[generalInfo],
 	);
 
 	return (
@@ -126,20 +132,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 							<tr>
 								<td>{data?.computed_info?.age_consolidation}</td>
 								<td>{point}</td>
-								<td>{data?.general_info?.ip?.personnel?.interet}</td>
+								<td>{generalInfo?.ip?.personnel?.interet}</td>
 								<td>
 									<Money
 										value={
-											getAmount(
-												point,
-												data?.general_info?.ip?.personnel?.interet,
-											)?.value
+											getAmount(point, generalInfo?.ip?.personnel?.interet)
+												?.value
 										}
 										tooltip={
-											getAmount(
-												point,
-												data?.general_info?.ip?.personnel?.interet,
-											)?.tooltip
+											getAmount(point, generalInfo?.ip?.personnel?.interet)
+												?.tooltip
 										}
 									/>
 								</td>
@@ -156,12 +158,10 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 								<td className="int">
 									<Interest
 										amount={
-											getAmount(
-												point,
-												data?.general_info?.ip?.personnel?.interet,
-											)?.value
+											getAmount(point, generalInfo?.ip?.personnel?.interet)
+												?.value
 										}
-										start={data?.general_info?.date_consolidation}
+										start={generalInfo?.date_consolidation}
 										end={formValues?.perso_date_paiement}
 									/>
 								</td>
@@ -199,7 +199,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 							<tr>
 								<td>{data?.computed_info?.age_consolidation}</td>
 								<td>{point}</td>
-								<td>{data?.general_info?.ip?.menagere?.interet}</td>
+								<td>{generalInfo?.ip?.menagere?.interet}</td>
 								<td>
 									<Field
 										control={control}
@@ -215,14 +215,14 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 										value={
 											getAmount(
 												point,
-												data?.general_info?.ip?.menagere?.interet,
+												generalInfo?.ip?.menagere?.interet,
 												formValues?.contribution_imp,
 											)?.value
 										}
 										tooltip={
 											getAmount(
 												point,
-												data?.general_info?.ip?.menagere?.interet,
+												generalInfo?.ip?.menagere?.interet,
 												formValues?.contribution_imp,
 											)?.tooltip
 										}
@@ -243,11 +243,11 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 										amount={
 											getAmount(
 												point,
-												data?.general_info?.ip?.menagere?.interet,
+												generalInfo?.ip?.menagere?.interet,
 												formValues?.contribution_imp,
 											)?.value
 										}
-										start={data?.general_info?.date_consolidation}
+										start={generalInfo?.date_consolidation}
 										end={formValues?.menage_date_paiement}
 									/>
 								</td>
@@ -280,20 +280,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 							<tr>
 								<td>{data?.computed_info?.age_consolidation}</td>
 								<td>{point}</td>
-								<td>{data?.general_info?.ip?.economique?.interet}</td>
+								<td>{generalInfo?.ip?.economique?.interet}</td>
 								<td>
 									<Money
 										value={
-											getAmount(
-												point,
-												data?.general_info?.ip?.economique?.interet,
-											)?.value
+											getAmount(point, generalInfo?.ip?.economique?.interet)
+												?.value
 										}
 										tooltip={
-											getAmount(
-												point,
-												data?.general_info?.ip?.economique?.interet,
-											)?.tooltip
+											getAmount(point, generalInfo?.ip?.economique?.interet)
+												?.tooltip
 										}
 									/>
 								</td>
@@ -310,12 +306,10 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 								<td className="int">
 									<Interest
 										amount={
-											getAmount(
-												point,
-												data?.general_info?.ip?.economique?.interet,
-											)?.value
+											getAmount(point, generalInfo?.ip?.economique?.interet)
+												?.value
 										}
-										start={data?.general_info?.date_consolidation}
+										start={generalInfo?.date_consolidation}
 										end={formValues?.eco_date_paiement}
 									/>
 								</td>

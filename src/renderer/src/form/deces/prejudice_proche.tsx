@@ -20,10 +20,11 @@ import { calculateDaysBeforeAfter25 } from "@renderer/helpers/general";
 import { addDays, format } from "date-fns";
 import Interest from "@renderer/generic/interet";
 import TotalBoxInterest from "@renderer/generic/totalBoxInterest";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const TotalRevenueAmount = ({ values, data, control, editable }) => {
 	const capitalization = useCapitalization({
-		end: data?.general_info?.date_death,
+		end: data?.date_death,
 		index: constants.interet_amount?.findIndex(
 			(e) => e?.value === parseFloat(values?.interet),
 		),
@@ -108,7 +109,7 @@ const TotalRevenueAmount = ({ values, data, control, editable }) => {
 	return (
 		<>
 			<td>
-				{!data?.general_info?.date_naissance ? (
+				{!data?.date_naissance ? (
 					<TextItem path="errorsdn.missing_date_naissance" />
 				) : (
 					<Money {...getTotalRevenueAmount()} />
@@ -127,7 +128,7 @@ const TotalRevenueAmount = ({ values, data, control, editable }) => {
 			<td className="int">
 				<Interest
 					amount={getTotalRevenueAmount()?.value}
-					start={data?.general_info?.date_death}
+					start={data?.date_death}
 					end={values?.revenue_date_paiement}
 				/>
 			</td>
@@ -153,16 +154,9 @@ const TotalMenageAmount = ({
 	// Vérification des dates
 
 	const startDate =
-		start ||
-		(data?.general_info?.date_naissance
-			? new Date(data.general_info.date_naissance)
-			: null);
+		start || (data?.date_naissance ? new Date(data.date_naissance) : null);
 
-	const endDate =
-		end ||
-		(data?.general_info?.date_death
-			? new Date(data.general_info.date_death)
-			: null);
+	const endDate = end || (data?.date_death ? new Date(data.date_death) : null);
 
 	const coef = useCapitalization({
 		end: endDate,
@@ -230,15 +224,15 @@ const TotalMenageAmount = ({
 };
 
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const ref = useRef(null);
 
 	const { control, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
-			menage_contribution: data?.general_info?.config?.default_contribution,
+			menage_contribution: generalInfo?.config?.default_contribution,
 			menage_amount: 30,
-			members: data?.general_info?.children?.map((it, key) => ({
+			members: generalInfo?.children?.map((it, key) => ({
 				name: it?.name,
 				link: "parent/enfant",
 			})),
@@ -283,7 +277,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 	}, [formValues, membersValues, submitForm, handleSubmit]);
 
 	const childrenOnPeriod = useMemo(() => {
-		const children = data?.general_info?.children || [];
+		const children = generalInfo?.children || [];
 		const res = [];
 		for (let i = 0; i < children.length; i += 1) {
 			const item = children[i];
@@ -292,7 +286,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 				res.push({ days: { percentageBefore25: 1 } });
 			} else {
 				const result = calculateDaysBeforeAfter25(item?.birthDate, [
-					data?.general_info?.date_death,
+					generalInfo?.date_death,
 					formValues?.paiement,
 				]);
 
@@ -303,7 +297,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 		}
 
 		return res;
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
 		// Return null if no birth date provided
@@ -332,12 +326,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 				// Get the 25th birthday
 				const date25 = get25thBirthday(e?.birthDate);
 				// Get consolidation date from general info
-				const deathDate = new Date(data?.general_info?.date_death);
+				const deathDate = new Date(generalInfo?.date_death);
 				// Keep child only if their 25th birthday is after consolidation date
 				return date25 > deathDate;
 			})
 			?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate));
-	}, [childrenOnPeriod]);
+	}, [childrenOnPeriod, generalInfo]);
 
 	// Children without birthdate
 	const unsortedChildren = useMemo(() => {
@@ -364,7 +358,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 			key: "interests",
 			type: "interest",
 			className: "int",
-			props: { start: data?.general_info?.date_death },
+			props: { start: generalInfo?.date_death },
 		},
 	];
 
@@ -379,6 +373,9 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 				formValues={formValues}
 				editable={editable}
 				calculateTotal={(e) => e?.amount}
+				addRowDefaults={{
+					date_paiement: generalInfo?.date_paiement,
+				}}
 			/>
 
 			<h3>
@@ -486,7 +483,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									{sortedChildren?.map((item, key) => {
 										const start =
 											key === 0
-												? addDays(data?.general_info?.date_death, 1)
+												? addDays(generalInfo?.date_death, 1)
 												: get25thBirthday(
 														sortedChildren[key - 1]?.birthDate,
 														true,
@@ -516,7 +513,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 															...formValues,
 															menage_amount: menage_amount,
 														}}
-														data={data}
+														data={generalInfo}
 														start={start}
 														end={end}
 														reference={formValues?.menage_reference}
@@ -538,12 +535,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 															...formValues,
 															menage_amount: menage_amount,
 														}}
-														data={data}
+														data={generalInfo}
 														start={start}
 														end={end}
 														reference={formValues?.menage_reference}
 														interest={{
-															start: data?.general_info?.date_death,
+															start: generalInfo?.date_death,
 															end: formValues?.[`menage_date_paiement_${key}`],
 														}}
 													/>
@@ -580,7 +577,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 														parseFloat(formValues?.menage_amount || 0) +
 														10 * unsortedChildren?.length,
 												}}
-												data={data}
+												data={generalInfo}
 												end={get25thBirthday(
 													sortedChildren[sortedChildren?.length - 1]?.birthDate,
 													true,
@@ -605,13 +602,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 														parseFloat(formValues?.menage_amount || 0) +
 														10 * unsortedChildren?.length,
 												}}
-												data={data}
+												data={generalInfo}
 												end={get25thBirthday(
 													sortedChildren[sortedChildren?.length - 1]?.birthDate,
 													true,
 												)}
 												interest={{
-													start: data?.general_info?.date_death,
+													start: generalInfo?.date_death,
 													end: formValues?.menage_date_paiement,
 												}}
 											/>
@@ -658,7 +655,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 									></Field>
 								</td>
 								<td>
-									<TotalMenageAmount values={formValues} data={data} />
+									<TotalMenageAmount values={formValues} data={generalInfo} />
 								</td>
 								<td className="int">
 									<Field
@@ -673,9 +670,9 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 								<td className="int">
 									<TotalMenageAmount
 										values={formValues}
-										data={data}
+										data={generalInfo}
 										interest={{
-											start: data?.general_info?.date_death,
+											start: generalInfo?.date_death,
 											end: formValues?.menage_date_paiement,
 										}}
 									/>
@@ -775,7 +772,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 							</td>
 							<TotalRevenueAmount
 								values={formValues}
-								data={data}
+								data={generalInfo}
 								control={control}
 								editable={editable}
 							/>

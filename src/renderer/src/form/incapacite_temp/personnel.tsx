@@ -10,9 +10,13 @@ import { useForm, useWatch } from "react-hook-form";
 import get from "lodash/get";
 import cloneDeep from "lodash/cloneDeep";
 import DynamicTable from "@renderer/generic/dynamicTable";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { data } = useContext(AppContext);
+
+	const generalInfo = useGeneralInfo();
+
 	const { control, setValue, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
 			periods: [],
@@ -125,7 +129,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
 		{ header: "%", key: "percentage", type: "number", width: 50 },
 		{
 			header: "common.start",
-			minDate: data?.general_info?.date_accident,
+			minDate: generalInfo?.date_accident,
 			key: "start",
 			type: "start",
 		},
@@ -157,12 +161,13 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
 	const addRowDefaults = useMemo(() => {
 		const defaultRow = {
 			amount: 32,
+			date_paiement: generalInfo?.date_paiement,
 		};
 		if (!formValues?.periods?.[0]) {
-			defaultRow.start = data?.general_info?.date_accident;
+			defaultRow.start = generalInfo?.date_accident;
 		}
 		return defaultRow;
-	}, [data]);
+	}, [formValues, generalInfo]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>

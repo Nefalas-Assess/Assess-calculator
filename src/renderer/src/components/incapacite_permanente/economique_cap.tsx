@@ -1,8 +1,8 @@
-import IPEcoCapForm from '@renderer/form/incapacite_perma/economique_cap'
-import TotalBox from '@renderer/generic/totalBox'
-import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import IPEcoCapForm from "@renderer/form/incapacite_perma/economique_cap";
+import TotalBox from "@renderer/generic/totalBox";
+import TotalBoxInterest from "@renderer/generic/totalBoxInterest";
+import { AppContext } from "@renderer/providers/AppProvider";
+import React, { useCallback, useContext, useRef } from "react";
 
 const EconomiqueCap = ({ editable }) => {
 	const { data, setData } = useContext(AppContext);
@@ -15,6 +15,8 @@ const EconomiqueCap = ({ editable }) => {
 		},
 		[setData],
 	);
+
+	console.log(data);
 
 	return (
 		<div id="content">

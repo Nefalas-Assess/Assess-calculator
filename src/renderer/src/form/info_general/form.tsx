@@ -93,13 +93,9 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(submitForm)}>
+		<form onSubmit={handleSubmit(submitForm)} style={{ maxWidth: 1000 }}>
 			<div style={{ display: "flex" }}>
-				<table
-					id="infogTable"
-					style={{ width: 600 }}
-					className={editable ? "main-table" : ""}
-				>
+				<table id="infogTable" className={editable ? "main-table" : ""}>
 					<tbody>
 						<tr>
 							<TextItem path="info_general.name_victime" tag="td" />
@@ -232,6 +228,19 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 									</td>
 								</tr>
 								<tr>
+									<TextItem path="info_general.default_payment_date" tag="td" />
+									<td>
+										<Field
+											control={control}
+											type="date"
+											name="date_paiement"
+											editable={editable}
+										>
+											{(props) => <input {...props} />}
+										</Field>
+									</td>
+								</tr>
+								<tr>
 									<IncapacitePerma
 										control={control}
 										formValues={formValues}
@@ -242,15 +251,6 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 						)}
 					</tbody>
 				</table>
-				{editable && (
-					<Field
-						control={control}
-						type="textarea"
-						style={{ flex: 1, margin: 10 }}
-						name="note"
-						editable={true}
-					></Field>
-				)}
 			</div>
 
 			{(editable || childrenFields?.fields.length > 0) && (
@@ -306,6 +306,23 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 				<button type="button" onClick={addChild}>
 					<TextItem path="info_general.add_child" />
 				</button>
+			)}
+			{editable && (
+				<div>
+					<TextItem path="common.note" tag="h3" />
+					<Field
+						control={control}
+						type="textarea"
+						style={{
+							flex: 1,
+							marginTop: 10,
+							width: "100%",
+							minHeight: 200,
+						}}
+						name="note"
+						editable={true}
+					></Field>
+				</div>
 			)}
 		</form>
 	);

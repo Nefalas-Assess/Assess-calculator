@@ -18,9 +18,10 @@ import constants from "@renderer/constants";
 import FadeIn from "@renderer/generic/fadeIn";
 import TextItem from "@renderer/generic/textItem";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const CapAmount = ({ values, type = "net" }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const index = constants?.interet_amount?.findIndex(
 		(e) => e?.value === parseFloat(values?.interet || 0),
@@ -37,7 +38,7 @@ const CapAmount = ({ values, type = "net" }) => {
 		(values) => {
 			const { amount = 0 } = values || {};
 
-			const pourcentage = data?.general_info?.ip?.economique?.interet;
+			const pourcentage = generalInfo?.ip?.economique?.interet;
 
 			return {
 				tooltip: (
@@ -66,7 +67,7 @@ const CapAmount = ({ values, type = "net" }) => {
 				).toFixed(2),
 			};
 		},
-		[data, coef],
+		[generalInfo, coef],
 	);
 
 	return (
@@ -78,10 +79,12 @@ const CapAmount = ({ values, type = "net" }) => {
 };
 
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const { handleSubmit, watch, control } = useForm({
-		defaultValues: initialValues || {},
+		defaultValues: initialValues || {
+			paiement: generalInfo?.date_paiement,
+		},
 	});
 
 	const formValues = watch();
@@ -128,22 +131,22 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 	const days = useMemo(() => {
 		return {
 			brut: getDays({
-				start: data?.general_info?.date_consolidation,
+				start: generalInfo?.date_consolidation,
 				end: formValues?.paiement,
 			}),
 			net: getDays({
-				start: data?.general_info?.date_consolidation,
+				start: generalInfo?.date_consolidation,
 				end: formValues?.paiement,
 			}),
 		};
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	const getConsoAmount = useCallback(
 		(values, name) => {
 			const { conso_amount } = values || {};
 			const numDays = days[name || "brut"];
 
-			const conso_pourcentage = data?.general_info?.ip?.economique?.interet;
+			const conso_pourcentage = generalInfo?.ip?.economique?.interet;
 
 			return (
 				parseInt(numDays || 0) *
@@ -159,7 +162,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 			const { conso_amount } = values || {};
 			const numDays = days[name || "brut"];
 
-			const conso_pourcentage = data?.general_info?.ip?.economique?.interet;
+			const conso_pourcentage = generalInfo?.ip?.economique?.interet;
 
 			return (
 				<div>
@@ -179,7 +182,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 				</div>
 			);
 		},
-		[days],
+		[days, generalInfo],
 	);
 
 	return (
@@ -247,10 +250,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.economique?.interet}</td>
+							<td>{generalInfo?.ip?.economique?.interet}</td>
 							<td>
-								{data?.general_info?.date_consolidation &&
-									format(data?.general_info?.date_consolidation, "dd/MM/yyyy")}
+								{generalInfo?.date_consolidation &&
+									format(generalInfo?.date_consolidation, "dd/MM/yyyy")}
 							</td>
 							<td>
 								{formValues?.paiement &&
@@ -278,7 +281,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 								<Interest
 									amount={getConsoAmount(formValues?.brut, "brut")}
 									start={getMedDate({
-										start: data?.general_info?.date_consolidation,
+										start: generalInfo?.date_consolidation,
 										end: formValues?.paiement,
 									})}
 									end={formValues?.paiement}
@@ -302,10 +305,10 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.economique?.interet}</td>
+							<td>{generalInfo?.ip?.economique?.interet}</td>
 							<td>
-								{data?.general_info?.date_consolidation &&
-									format(data?.general_info?.date_consolidation, "dd/MM/yyyy")}
+								{generalInfo?.date_consolidation &&
+									format(generalInfo?.date_consolidation, "dd/MM/yyyy")}
 							</td>
 							<td>
 								{formValues?.paiement &&
@@ -331,7 +334,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 								<Interest
 									amount={getConsoAmount(formValues?.net, "net")}
 									start={getMedDate({
-										start: data?.general_info?.date_consolidation,
+										start: generalInfo?.date_consolidation,
 										end: formValues?.paiement,
 									})}
 									end={formValues?.paiement}
@@ -352,7 +355,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.economique?.interet}</td>
+							<td>{generalInfo?.ip?.economique?.interet}</td>
 							<td>
 								<Field
 									control={control}
@@ -381,7 +384,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.economique?.interet}</td>
+							<td>{generalInfo?.ip?.economique?.interet}</td>
 							<td>
 								<Field
 									control={control}

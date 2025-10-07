@@ -1,13 +1,7 @@
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useRef,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import DynamicTable from "@renderer/generic/dynamicTable";
-import { AppContext } from "@renderer/providers/AppProvider";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const coefficients = [
 	{ value: 1.15, label: "1/7" },
@@ -26,7 +20,7 @@ const coefficients = [
 ];
 
 const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const { control, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
@@ -116,12 +110,13 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
 	const addRowDefaults = useMemo(() => {
 		const defaultRow = {
 			amount: 30,
+			date_paiement: generalInfo?.date_paiement,
 		};
 		if (!formValues?.periods?.[0]) {
-			defaultRow.start = data?.general_info?.date_accident;
+			defaultRow.start = generalInfo?.date_accident;
 		}
 		return defaultRow;
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>

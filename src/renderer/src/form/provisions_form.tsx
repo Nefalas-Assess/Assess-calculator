@@ -10,9 +10,12 @@ import Interest from "@renderer/generic/interet";
 import Money from "@renderer/generic/money";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
-	const { control, register, handleSubmit, watch } = useForm({
+	const generalInfo = useGeneralInfo();
+
+	const { control, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
 			provisions: [{}],
 		},
@@ -110,6 +113,9 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
 					formValues={formValues}
 					editable={editable}
 					calculateTotal={(e) => e?.amount}
+					addRowDefaults={{
+						date_paiement: generalInfo?.date_paiement,
+					}}
 				/>
 			</form>
 			<div className="total-box">

@@ -9,6 +9,7 @@ import Field from "@renderer/generic/field";
 import constants from "@renderer/constants";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const PrejudiceParticuliersForm = ({
 	initialValues,
@@ -17,10 +18,14 @@ const PrejudiceParticuliersForm = ({
 }) => {
 	const { data } = useContext(AppContext);
 
+	const generalInfo = useGeneralInfo();
+
 	const { control, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
 			coefficient_quantum_doloris: "",
 			coefficient_prejudice_esthétique: "",
+			date_paiement_quantum_doloris: generalInfo?.date_paiement,
+			date_paiement_prejudice_esthétique: generalInfo?.date_paiement,
 		},
 	});
 
@@ -120,7 +125,7 @@ const PrejudiceParticuliersForm = ({
 			key: "interests",
 			type: "interest",
 			className: "int",
-			props: { start: data?.general_info?.date_consolidation },
+			props: { start: generalInfo?.date_consolidation },
 		},
 	];
 
@@ -157,7 +162,7 @@ const PrejudiceParticuliersForm = ({
 			key: "interests",
 			type: "interest",
 			className: "int",
-			props: { start: data?.general_info?.date_consolidation },
+			props: { start: generalInfo?.date_consolidation },
 		},
 	];
 
@@ -225,7 +230,7 @@ const PrejudiceParticuliersForm = ({
 						</td>
 						<td className="int">
 							<Interest
-								start={data?.general_info?.date_consolidation}
+								start={generalInfo?.date_consolidation}
 								end={formValues?.date_paiement_quantum_doloris}
 								amount={getTotalWithCoef(
 									formValues?.coefficient_quantum_doloris || 0,
@@ -300,7 +305,7 @@ const PrejudiceParticuliersForm = ({
 								amount={getTotalWithCoef(
 									formValues?.coefficient_prejudice_esthétique || 0,
 								)}
-								start={data?.general_info?.date_consolidation}
+								start={generalInfo?.date_consolidation}
 								end={formValues?.date_paiement_prejudice_esthétique}
 							/>
 						</td>
@@ -316,6 +321,9 @@ const PrejudiceParticuliersForm = ({
 				formValues={formValues}
 				editable={editable}
 				calculateTotal={(e) => e?.amount}
+				addRowDefaults={{
+					date_paiement: generalInfo?.date_paiement,
+				}}
 			/>
 
 			<DynamicTable
@@ -326,6 +334,9 @@ const PrejudiceParticuliersForm = ({
 				formValues={formValues}
 				editable={editable}
 				calculateTotal={(e) => e?.amount}
+				addRowDefaults={{
+					date_paiement: generalInfo?.date_paiement,
+				}}
 			/>
 		</form>
 	);

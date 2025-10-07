@@ -18,9 +18,10 @@ import FadeIn from "@renderer/generic/fadeIn";
 import { useCapitalization } from "@renderer/hooks/capitalization";
 import TextItem from "@renderer/generic/textItem";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const CapAmount = ({ values }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 	const { paiement = "", interet = 0 } = values || {};
 
 	const index = constants.interet_amount?.findIndex(
@@ -38,7 +39,7 @@ const CapAmount = ({ values }) => {
 		(values) => {
 			const { perso_amount = 0 } = values;
 
-			const perso_pourcentage = data?.general_info?.ip?.personnel?.interet;
+			const perso_pourcentage = generalInfo?.ip?.personnel?.interet;
 
 			return {
 				tooltip: (
@@ -70,7 +71,7 @@ const CapAmount = ({ values }) => {
 				).toFixed(2),
 			};
 		},
-		[data, coef],
+		[generalInfo, coef],
 	);
 
 	return (
@@ -86,12 +87,13 @@ export const IPPersonnelCapForm = ({
 	initialValues,
 	editable = true,
 }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
 			conso_amount: 32,
 			perso_amount: 32,
+			paiement: generalInfo?.date_paiement,
 		},
 	});
 
@@ -121,15 +123,15 @@ export const IPPersonnelCapForm = ({
 
 	const days = useMemo(() => {
 		return getDays({
-			start: data?.general_info?.date_consolidation,
+			start: generalInfo?.date_consolidation,
 			end: formValues?.paiement,
 		});
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	const getConsoAmount = useCallback(
 		(values) => {
 			const { conso_amount } = values || {};
-			const conso_pourcentage = data?.general_info?.ip?.personnel?.interet;
+			const conso_pourcentage = generalInfo?.ip?.personnel?.interet;
 
 			return {
 				tooltip: (
@@ -153,7 +155,7 @@ export const IPPersonnelCapForm = ({
 				).toFixed(2),
 			};
 		},
-		[days, data],
+		[days, generalInfo],
 	);
 
 	return (
@@ -222,10 +224,10 @@ export const IPPersonnelCapForm = ({
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.personnel?.interet}</td>
+							<td>{generalInfo?.ip?.personnel?.interet}</td>
 							<td>
-								{data?.general_info?.date_consolidation &&
-									format(data?.general_info?.date_consolidation, "dd/MM/yyyy")}
+								{generalInfo?.date_consolidation &&
+									format(generalInfo?.date_consolidation, "dd/MM/yyyy")}
 							</td>
 							<td>
 								{formValues?.paiement &&
@@ -253,7 +255,7 @@ export const IPPersonnelCapForm = ({
 								<Interest
 									amount={getConsoAmount(formValues)?.value}
 									start={getMedDate({
-										start: data?.general_info?.date_consolidation,
+										start: generalInfo?.date_consolidation,
 										end: formValues?.paiement,
 									})}
 									end={formValues?.paiement}
@@ -275,7 +277,7 @@ export const IPPersonnelCapForm = ({
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.personnel?.interet}</td>
+							<td>{generalInfo?.ip?.personnel?.interet}</td>
 							<td>
 								{formValues?.paiement &&
 									format(formValues?.paiement, "dd/MM/yyyy")}

@@ -182,6 +182,11 @@ export default {
     }
   },
   common: {
+    note: {
+      fr: 'Note',
+      en: 'Note',
+      nl: 'Notitie'
+    },
     restart: {
       fr: 'Redémarrer',
       en: 'Restart',
@@ -600,6 +605,11 @@ export default {
     }
   },
   info_general: {
+    default_payment_date: {
+      fr: 'Date de paiement par défaut',
+      en: 'Default payment date',
+      nl: 'Standaard betalingsdatum'
+    },
     name_victime: {
       fr: 'Nom de la victime',
       en: 'Name of the victim',

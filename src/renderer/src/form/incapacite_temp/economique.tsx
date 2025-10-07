@@ -7,9 +7,12 @@ import cloneDeep from "lodash/cloneDeep";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
 import Money from "@renderer/generic/money";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { data } = useContext(AppContext);
+
+	const generalInfo = useGeneralInfo();
 
 	const { control, handleSubmit, watch, setValue } = useForm({
 		defaultValues: initialValues || {
@@ -164,8 +167,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 				customActions={customActions("net")}
 				addRowDefaults={
 					formValues?.net?.[0]
-						? {}
-						: { start: data?.general_info?.date_accident }
+						? { date_paiement: generalInfo?.date_paiement }
+						: {
+								start: generalInfo?.date_accident,
+								date_paiement: generalInfo?.date_paiement,
+							}
 				}
 			/>
 
@@ -181,8 +187,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
 				customActions={customActions("brut")}
 				addRowDefaults={
 					formValues?.brut?.[0]
-						? {}
-						: { start: data?.general_info?.date_accident }
+						? { date_paiement: generalInfo?.date_paiement }
+						: {
+								start: generalInfo?.date_accident,
+								date_paiement: generalInfo?.date_paiement,
+							}
 				}
 			/>
 			<table style={{ maxWidth: 1200 }}>

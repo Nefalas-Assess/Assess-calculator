@@ -3,15 +3,8 @@ import {
 	getDays,
 	getMedDate,
 } from "@renderer/helpers/general";
-import { AppContext } from "@renderer/providers/AppProvider";
 import { format, addDays } from "date-fns";
-import React, {
-	useCallback,
-	useContext,
-	useEffect,
-	useMemo,
-	useRef,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Money from "@renderer/generic/money";
 import Interest from "@renderer/generic/interet";
@@ -23,6 +16,7 @@ import { FaRegQuestionCircle } from "react-icons/fa";
 import CoefficientInfo from "@renderer/generic/coefficientInfo";
 import { useCapitalization } from "@renderer/hooks/capitalization";
 import TextItem from "@renderer/generic/textItem";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const CapAmount = ({
 	values,
@@ -99,14 +93,15 @@ export const IPMenageCapForm = ({
 	initialValues,
 	editable = true,
 }) => {
-	const { data } = useContext(AppContext);
+	const generalInfo = useGeneralInfo();
 
 	const { handleSubmit, watch, control } = useForm({
 		defaultValues: initialValues || {
 			conso_amount: 30,
 			perso_amount: 30,
-			perso_contribution: data?.general_info?.config?.default_contribution,
-			conso_contribution: data?.general_info?.config?.default_contribution,
+			perso_contribution: generalInfo?.config?.default_contribution,
+			conso_contribution: generalInfo?.config?.default_contribution,
+			paiement: generalInfo?.date_paiement,
 		},
 	});
 
@@ -136,10 +131,10 @@ export const IPMenageCapForm = ({
 
 	const days = useMemo(() => {
 		return getDays({
-			start: data?.general_info?.date_consolidation,
+			start: generalInfo?.date_consolidation,
 			end: formValues?.paiement,
 		});
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	const renderToolTipChildren = useCallback((res) => {
 		return (
@@ -191,7 +186,7 @@ export const IPMenageCapForm = ({
 	}, []);
 
 	const childrenOnPeriod = useMemo(() => {
-		const children = data?.general_info?.children || [];
+		const children = generalInfo?.children || [];
 		const res = [];
 		for (let i = 0; i < children.length; i += 1) {
 			const item = children[i];
@@ -200,7 +195,7 @@ export const IPMenageCapForm = ({
 				res.push({ days: { percentageBefore25: 1 } });
 			} else {
 				const result = calculateDaysBeforeAfter25(item?.birthDate, [
-					data?.general_info?.date_consolidation,
+					generalInfo?.date_consolidation,
 					formValues?.paiement,
 				]);
 
@@ -211,13 +206,13 @@ export const IPMenageCapForm = ({
 		}
 
 		return res;
-	}, [formValues, data]);
+	}, [formValues, generalInfo]);
 
 	const getConsoAmount = useCallback(
 		(values) => {
 			const { conso_amount, conso_contribution } = values || {};
 
-			const conso_pourcentage = data?.general_info?.ip?.menagere?.interet;
+			const conso_pourcentage = generalInfo?.ip?.menagere?.interet;
 
 			const real_conso_amount =
 				parseFloat(conso_amount || 0) +
@@ -255,7 +250,7 @@ export const IPMenageCapForm = ({
 				).toFixed(2),
 			};
 		},
-		[days, childrenOnPeriod],
+		[days, childrenOnPeriod, generalInfo],
 	);
 
 	const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
@@ -364,10 +359,10 @@ export const IPMenageCapForm = ({
 					</thead>
 					<tbody>
 						<tr>
-							<td>{data?.general_info?.ip?.menagere?.interet}</td>
+							<td>{generalInfo?.ip?.menagere?.interet}</td>
 							<td>
-								{data?.general_info?.date_consolidation &&
-									format(data?.general_info?.date_consolidation, "dd/MM/yyyy")}
+								{generalInfo?.date_consolidation &&
+									format(generalInfo?.date_consolidation, "dd/MM/yyyy")}
 							</td>
 							<td>
 								{formValues?.paiement &&
@@ -428,7 +423,7 @@ export const IPMenageCapForm = ({
 								<Interest
 									amount={getConsoAmount(formValues)?.value}
 									start={getMedDate({
-										start: data?.general_info?.date_consolidation,
+										start: generalInfo?.date_consolidation,
 										end: formValues?.paiement,
 									})}
 									end={formValues?.paiement}
@@ -470,7 +465,7 @@ export const IPMenageCapForm = ({
 								</tr>
 								<tr>
 									<TextItem path="common.pourcentage" tag="td" />
-									<td>{data?.general_info?.ip?.menagere?.interet}</td>
+									<td>{generalInfo?.ip?.menagere?.interet}</td>
 								</tr>
 								<tr>
 									<TextItem path="common.contribution" tag="td" />
@@ -521,7 +516,7 @@ export const IPMenageCapForm = ({
 												<td>
 													<Money value={perso_amount} ignore />
 												</td>
-												<td>{data?.general_info?.ip?.menagere?.interet} %</td>
+												<td>{generalInfo?.ip?.menagere?.interet} %</td>
 												<td>{formValues?.perso_contribution} %</td>
 												<td>
 													<CapAmount
@@ -529,7 +524,7 @@ export const IPMenageCapForm = ({
 															...formValues,
 															perso_amount: perso_amount,
 															perso_pourcentage:
-																data?.general_info?.ip?.menagere?.interet,
+																generalInfo?.ip?.menagere?.interet,
 														}}
 														start={start}
 														end={end}
@@ -558,7 +553,7 @@ export const IPMenageCapForm = ({
 												ignore
 											/>
 										</td>
-										<td>{data?.general_info?.ip?.menagere?.interet} %</td>
+										<td>{generalInfo?.ip?.menagere?.interet} %</td>
 										<td>{formValues?.perso_contribution} %</td>
 										<td>
 											<CapAmount
@@ -567,8 +562,7 @@ export const IPMenageCapForm = ({
 													perso_amount:
 														parseFloat(formValues?.perso_amount || 0) +
 														10 * unsortedChildren?.length,
-													perso_pourcentage:
-														data?.general_info?.ip?.menagere?.interet,
+													perso_pourcentage: generalInfo?.ip?.menagere?.interet,
 												}}
 												end={get25thBirthday(
 													sortedChildren[sortedChildren?.length - 1]?.birthDate,
@@ -595,7 +589,7 @@ export const IPMenageCapForm = ({
 						</thead>
 						<tbody>
 							<tr>
-								<td>{data?.general_info?.ip?.menagere?.interet}</td>
+								<td>{generalInfo?.ip?.menagere?.interet}</td>
 								<td>
 									{formValues?.paiement &&
 										format(formValues?.paiement, "dd/MM/yyyy")}
@@ -623,8 +617,7 @@ export const IPMenageCapForm = ({
 									<CapAmount
 										values={{
 											...formValues,
-											perso_pourcentage:
-												data?.general_info?.ip?.menagere?.interet,
+											perso_pourcentage: generalInfo?.ip?.menagere?.interet,
 										}}
 										startIndex={0}
 									/>

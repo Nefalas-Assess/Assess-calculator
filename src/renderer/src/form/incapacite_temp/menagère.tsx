@@ -16,6 +16,7 @@ import { format } from "date-fns";
 import constants from "@renderer/constants";
 import DynamicTable from "@renderer/generic/dynamicTable";
 import TextItem from "@renderer/generic/textItem";
+import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
 	const renderToolTipChildren = useCallback((res: any[]): JSX.Element => {
@@ -91,6 +92,8 @@ const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
 const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 	const { data } = useContext(AppContext);
 
+	const generalInfo = useGeneralInfo();
+
 	const { control, setValue, handleSubmit, watch } = useForm({
 		defaultValues: initialValues || {
 			periods: [],
@@ -159,7 +162,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 				end,
 				percentage,
 				amount: 30,
-				contribution: data?.general_info?.config?.default_contribution,
+				contribution: generalInfo?.config?.default_contribution,
 			}));
 			const currentData = cloneDeep(formValues?.periods);
 			if (formValues?.periods) {
@@ -170,7 +173,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 		[formValues],
 	);
 
-	const children = useMemo(() => data?.general_info?.children || [], [data]);
+	const children = useMemo(() => generalInfo?.children || [], [generalInfo]);
 
 	const getChildOnPeriod = useCallback(
 		(values) => {
@@ -331,13 +334,14 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
 	const addRowDefaults = useMemo(() => {
 		const defaultRow = {
 			amount: 30,
-			contribution: data?.general_info?.config?.default_contribution,
+			contribution: generalInfo?.config?.default_contribution,
+			date_paiement: generalInfo?.date_paiement,
 		};
 		if (!formValues?.periods?.[0]) {
-			defaultRow.start = data?.general_info?.date_accident;
+			defaultRow.start = generalInfo?.date_accident;
 		}
 		return defaultRow;
-	}, [data]);
+	}, [formValues, generalInfo]);
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
