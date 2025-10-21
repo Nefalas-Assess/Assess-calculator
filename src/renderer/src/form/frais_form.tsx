@@ -14,7 +14,11 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
-      frais: [{}],
+      frais: [
+        {
+          date_paiement: generalInfo?.config?.date_paiement
+        }
+      ],
       administratif_value: '100',
       vestimentaire_value: '400',
       deplacement_value: 0,
