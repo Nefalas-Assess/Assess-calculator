@@ -1,119 +1,16 @@
-/* Styles pour le menu */
-
 .light {
-  background-color: white;
-  .app {
-    background-color: white;
-  }
+	.home-container {
+		color: var(--content-text-color);
+	}
 
-  .home-container{
-    color: black;
-  }
+	.recent-files-list {
+		> div:first-child {
+			opacity: 0.75;
+		}
+	}
 
-  .layout-menu {
-    border-right: 1px solid black;
-    background-color: white;
-
-    a {
-      color: black;
-      background-color: white;
-      &:hover{
-        color: var(--color-primary);
-        background-color: whitesmoke;
-      }
-      &.active{
-        color: var(--color-primary);
-      }
-    }
-  }
-
-  button {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-  }
-
-  #menu button:hover {
-    background-color: white;
-  }
-
-  /* Contenu */
-  #content {
-    background-color: white;
-  }
-
-  #top-menu {
-    background-color: white;
-  }
-
-  #top-menu button:hover {
-    background-color: gray;
-  }
-
-  .sub-nav {
-    color: white;
-    .sub-nav-title {
-      background-color: white;
-      color: black;
-      &:hover{
-        color: var(--color-primary);
-        background-color: whitesmoke;
-      }
-    } 
-  }
-  
-
-.recent-files-list{
-  color: black;
-  .recent-file-item {
-    background-color: white;
-    color: black;
-    &:hover{
-      background-color: whitesmoke;
-    }
-  }
+	.tooltip-box {
+		border: 1px solid color-mix(in srgb, var(--divider-color) 35%, transparent);
+	}
 }
 
-
-  h2 {
-    color:black;
-  }
-
-  table {
-    background-color: whitesmoke;
-  }
-
-  .coefficient-table{
-    background-color: transparent;
-    border-left: none;
-    color: whitesmoke;
-
-    thead{
-      background-color: whitesmoke
-    }
-  
-    tbody{
-      background-color: whitesmoke
-    }
-  }
-
-
-  th, td {
-    color:black;
-  }
-
-  .total-box {
-    border: 1px solid #3422F2;
-    color: black;
-  }
-
-  .separator {
-    border-top: 1px solid black;
-  }
-
-  .menu-bottom{
-    div{
-      color: black;
-    }
-  }
-}

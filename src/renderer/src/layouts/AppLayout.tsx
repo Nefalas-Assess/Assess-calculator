@@ -9,6 +9,7 @@ import Loader from "@renderer/generic/loader";
 import { RecentFilesList } from "@renderer/generic/recentFilesList";
 import TextItem from "@renderer/generic/textItem";
 import { useLongPress } from "@renderer/hooks/useLongPress";
+import { FaMoon, FaSun } from "react-icons/fa6";
 
 const LinkItem = ({ to, children, errors, name }) => {
 	const errorList = useMemo(
@@ -30,16 +31,17 @@ const LinkItem = ({ to, children, errors, name }) => {
 	);
 };
 
-const SubNavTitle = ({ path, onClick }) => {
+const SubNavTitle = ({ path, onClick, isOpen = false }) => {
 	return (
 		<div
-			className="sub-nav-title"
+			className={`sub-nav-title ${isOpen ? "open" : ""}`}
 			onClick={() => onClick()}
 			onKeyDown={(e) => {
 				if (e.key === "Enter" || e.key === " ") {
 					onClick();
 				}
 			}}
+			aria-expanded={isOpen}
 			tabIndex={0}
 			role="button"
 		>
@@ -225,8 +227,25 @@ export const AppLayout = () => {
 						<img style={{ width: 40, marginRight: 10 }} src={logo} alt="Logo" />
 					</div>
 					<div className="right">
-						<button type="button" onClick={toggleDarkMode}>
-							<TextItem path={"layout.mode"} />
+						<button
+							type="button"
+							className="header-icon-button"
+							onClick={toggleDarkMode}
+							aria-label={
+								mode === "dark"
+									? "Basculer en mode clair"
+									: "Basculer en mode sombre"
+							}
+							title={mode === "dark" ? "Mode clair" : "Mode sombre"}
+						>
+							{mode === "dark" ? (
+								<FaSun aria-hidden="true" />
+							) : (
+								<FaMoon aria-hidden="true" />
+							)}
+							<span className="visually-hidden">
+								<TextItem path={"layout.mode"} />
+							</span>
 						</button>
 						{filePath && (
 							<>
@@ -279,6 +298,7 @@ export const AppLayout = () => {
 									>
 										<SubNavTitle
 											onClick={() => setIncTemp(!incTemp)}
+											isOpen={incTemp}
 											path="nav.incapacite_temp"
 										/>
 										{incTemp && (
@@ -348,6 +368,7 @@ export const AppLayout = () => {
 									>
 										<SubNavTitle
 											onClick={() => setIncPerma(!incPerma)}
+											isOpen={incPerma}
 											path="nav.incapacite_perma"
 										/>
 										{incPerma && (
@@ -459,6 +480,7 @@ export const AppLayout = () => {
 									>
 										<SubNavTitle
 											onClick={() => setDead(!dead)}
+											isOpen={dead}
 											path="nav.deces"
 										/>
 										{dead && (
