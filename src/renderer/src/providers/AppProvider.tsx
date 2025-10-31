@@ -134,6 +134,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
             ensureKey: true,
             filter: (context) => context.exists || context.path.includes('[')
           })
+
           if (
             res?.incapacite_perma_economique_cap &&
             !res?.incapacite_perma_economique_cap.paiement

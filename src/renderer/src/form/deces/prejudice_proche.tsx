@@ -200,7 +200,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const ref = useRef(null)
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {
       menage_contribution: generalInfo?.config?.default_contribution,
       menage_amount: 30,
@@ -229,23 +229,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     },
     [onSubmit]
   )
-
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(membersValues) !== JSON.stringify(previousValuesRef.current?.members)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        members: membersValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, membersValues, submitForm, handleSubmit])
 
   const childrenOnPeriod = useMemo(() => {
     const children = generalInfo?.children || []
@@ -308,6 +291,52 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const unsortedChildren = useMemo(() => {
     return childrenOnPeriod?.filter((e) => !e?.birthDate)
   }, [childrenOnPeriod])
+
+  useEffect(() => {
+    const valuesChanged =
+      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
+      JSON.stringify(membersValues) !== JSON.stringify(previousValuesRef.current?.members)
+
+    if (
+      formValues?.reference &&
+      formValues?.interet &&
+      !formValues?.revenue_date_paiement &&
+      generalInfo?.config?.date_paiement
+    ) {
+      setValue('revenue_date_paiement', generalInfo?.config?.date_paiement)
+    }
+
+    if (
+      formValues?.menage_ref &&
+      formValues?.menage_interet &&
+      !formValues?.menage_date_paiement &&
+      generalInfo?.config?.date_paiement
+    ) {
+      setValue('menage_date_paiement', generalInfo?.config?.date_paiement)
+      sortedChildren?.forEach((child, key) => {
+        setValue(`menage_date_paiement_${key}`, generalInfo?.config?.date_paiement)
+      })
+    }
+
+    // Si des valeurs ont changé, soumettre le formulaire
+    if (valuesChanged) {
+      // Éviter de soumettre si aucune modification réelle
+      previousValuesRef.current = {
+        formValues,
+        members: membersValues
+      }
+
+      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
+    }
+  }, [
+    formValues,
+    membersValues,
+    submitForm,
+    handleSubmit,
+    generalInfo?.config?.date_paiement,
+    setValue,
+    sortedChildren
+  ])
 
   const columns = [
     { header: 'deces.prejudice_proche.name_membre', key: 'name', type: 'text' },
