@@ -118,19 +118,6 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 							</td>
 						</tr>
 						<tr>
-							<TextItem path="common.date_accident" tag="td" />
-							<td>
-								<Field
-									control={control}
-									type="date"
-									name="date_accident"
-									editable={editable}
-								>
-									{(props) => <input {...props} />}
-								</Field>
-							</td>
-						</tr>
-						<tr>
 							<TextItem path="common.date_naissance" tag="td" />
 							<td>
 								<Field
@@ -144,12 +131,12 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 							</td>
 						</tr>
 						<tr>
-							<TextItem path="common.date_death" tag="td" />
+							<TextItem path="common.date_accident" tag="td" />
 							<td>
 								<Field
 									control={control}
 									type="date"
-									name="date_death"
+									name="date_accident"
 									editable={editable}
 								>
 									{(props) => <input {...props} />}
@@ -163,6 +150,19 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
 									control={control}
 									type="date"
 									name="date_consolidation"
+									editable={editable}
+								>
+									{(props) => <input {...props} />}
+								</Field>
+							</td>
+						</tr>
+						<tr>
+							<TextItem path="common.date_death" tag="td" />
+							<td>
+								<Field
+									control={control}
+									type="date"
+									name="date_death"
 									editable={editable}
 								>
 									{(props) => <input {...props} />}
