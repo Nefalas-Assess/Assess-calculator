@@ -23,6 +23,16 @@ export default {
       en: 'Recent files',
       nl: 'Recente bestanden'
     },
+    recentFileSearch: {
+      fr: 'Rechercher un dossier récent',
+      en: 'Search recent files',
+      nl: 'Zoek recente dossiers'
+    },
+    recentFileEmpty: {
+      fr: 'Aucun dossier ne correspond à votre recherche',
+      en: 'No recent files match your search',
+      nl: 'Geen recente dossiers gevonden'
+    },
     maj: {
       fr: 'Recherche de mises à jour',
       en: 'Checking for updates',
