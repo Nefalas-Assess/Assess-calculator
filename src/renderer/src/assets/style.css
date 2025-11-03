@@ -500,6 +500,7 @@ th {
 	color: var(--sidebar-link-active-color, var(--color-primary));
 	word-break: normal;
 	white-space: nowrap;
+	font-size: 12px;
 }
 
 .total-box {
