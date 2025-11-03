@@ -265,7 +265,6 @@ body {
 	.scroll {
 		overflow: auto;
 		height: 100%;
-		padding: clamp(14px, 2.2vw, 28px);
 		display: flex;
 		align-items: flex-start;
 		justify-content: flex-start;
