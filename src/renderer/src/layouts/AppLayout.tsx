@@ -302,7 +302,7 @@ export const AppLayout = () => {
 											path="nav.incapacite_temp"
 										/>
 										{incTemp && (
-											<div>
+											<div className="sub-nav-links">
 												<LinkItem
 													errors={errors}
 													to="/it/personnel"
@@ -372,7 +372,7 @@ export const AppLayout = () => {
 											path="nav.incapacite_perma"
 										/>
 										{incPerma && (
-											<div>
+											<div className="sub-nav-links">
 												<DetectMissingData
 													data={data}
 													required={[
@@ -484,7 +484,7 @@ export const AppLayout = () => {
 											path="nav.deces"
 										/>
 										{dead && (
-											<div>
+											<div className="sub-nav-links">
 												<LinkItem to="/deces/frais">
 													<TextItem path={"nav.deces.frais"} />
 												</LinkItem>
