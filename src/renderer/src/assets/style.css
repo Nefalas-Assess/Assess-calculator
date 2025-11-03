@@ -247,6 +247,18 @@ textarea {
 	}
 }
 
+input[type='number'] {
+	padding: 10px 6px !important;
+	-moz-appearance: textfield;
+	text-align: center;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
 .select-lang {
 	appearance: none;
 	background: var(--input-bg);
@@ -491,6 +503,11 @@ td {
 	text-transform: none;
 	letter-spacing: normal;
 	background: transparent;
+}
+
+table button {
+	white-space: nowrap;
+	word-break: normal;
 }
 
 th {
