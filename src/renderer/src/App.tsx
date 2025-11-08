@@ -23,6 +23,7 @@ import FraisFun from "@renderer/components/deces/frais_deces";
 import PrejudiceEXH from "@renderer/components/deces/prejudice_exh";
 import PrejudiceProche from "@renderer/components/deces/prejudice_proche";
 import ToastProvider from "./providers/ToastProvider";
+import SideProvider from "./providers/SideProvider";
 import License from "./License";
 
 const IncapaciteTemp = () => {
@@ -85,7 +86,9 @@ function App(): JSX.Element {
 		<License>
 			<AppProvider>
 				<ToastProvider>
-					<Main />
+					<SideProvider>
+						<Main />
+					</SideProvider>
 				</ToastProvider>
 			</AppProvider>
 		</License>
