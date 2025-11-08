@@ -45,6 +45,8 @@
 	--sidebar-link-active-color: rgba(255, 255, 255, 0.96);
 	--sidebar-link-indicator: rgba(159, 154, 219, 0.85);
 	--sidebar-section-label: rgba(242, 244, 255, 0.58);
+	--sidebar-badge-color: rgba(255, 255, 255, 0.96);
+	--sidebar-badge-bg: red;
 	--menu-shadow: 0 22px 45px -28px rgba(6, 7, 18, 0.82);
 
 	--content-text-color: rgba(244, 246, 255, 0.92);
@@ -268,6 +270,7 @@ body {
 		display: flex;
 		align-items: flex-start;
 		justify-content: flex-start;
+		flex-direction: column;
 	}
 
 	.contentWithOutInteret {
@@ -275,6 +278,10 @@ body {
 			display: none;
 		}
 	}
+}
+
+.money {
+	word-break: keep-all;
 }
 
 .coefficient-table {
