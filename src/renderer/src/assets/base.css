@@ -292,6 +292,7 @@ body {
 	border-radius: var(--radius-md, 12px);
 	overflow: hidden;
 	box-shadow: var(--shadow-soft);
+	margin-top: 0 !important;
 
 	th,
 	td {
