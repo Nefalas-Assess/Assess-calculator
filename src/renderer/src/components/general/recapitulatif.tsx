@@ -24,85 +24,142 @@ import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
 
 const MINIMAL_PRINT_STYLES = `
-	@page {
-		margin: 14mm 16mm;
-	}
-
 	* {
 		box-sizing: border-box;
 		font-family: "Inter", "Segoe UI", sans-serif;
-		color: #000;
-		font-size: 10px;
+		color: #111;
+		font-size: 10.5px;
 	}
 
 	body {
 		margin: 0;
 		background: #fff;
 		line-height: 1.45;
-	}
-
-	#printable {
-		width: 100%;
-	}
-
-	.print-table {
-		width: 100%;
-		border-collapse: collapse;
-	}
-
-	.print-table thead {
-		display: table-header-group;
-	}
-
-	.print-table tfoot {
-		display: table-footer-group;
-	}
-
-	.print-table tbody {
-		display: table-row-group;
-	}
-
-	.print-table td {
-		padding: 0;
-		border: none;
-	}
-
-	.print-header,
-	.print-footer {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-		padding: 12px 32px;
-		background: #fff;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		font-size: 9px;
-		border: 1px solid #d7dbe6;
-	}
-
-	.print-header {
-		border-width: 0 0 1px;
-		justify-content: flex-start;
-	}
-
-	.print-header img {
-		max-height: 28px;
-		width: auto;
-		object-fit: contain;
-	}
-
-	.print-footer {
-		border-width: 1px 0 0;
-		justify-content: center;
-	}
-
-	.print-footer p {
-		margin: 0;
-		font-weight: 600;
+		color: #111;
 	}
 
 	.print-content {
-		padding: 16px 32px 32px;
+		padding: 18px 28px 36px;
+		background: #fff;
+	}
+
+	.print-content > * {
+		page-break-inside: avoid;
+		break-inside: avoid;
+	}
+
+	.print-content h1,
+	.print-content h2,
+	.print-content h3,
+	.print-content h4 {
+		text-transform: uppercase;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		color: #1b2559;
+		margin: 26px 0 10px;
+		padding-bottom: 6px;
+		border-bottom: 2px solid #a5b4fc;
+	}
+
+	.print-content h1 {
+		font-size: 13px;
+	}
+
+	.print-content h2,
+	.print-content h3,
+	.print-content h4 {
+		font-size: 11.5px;
+		color: #2e3670;
+	}
+
+	.print-content #recap #content {
+		padding-top: 10px;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+	}
+
+	.print-content #recap #content + #content {
+		margin-top: 18px;
+		border-top: 1px solid #dfe3f4;
+		padding-top: 18px;
+	}
+
+	.print-content table {
+		page-break-inside: auto;
+		width: 100%;
+		border-collapse: separate;
+		border-spacing: 0;
+		margin-bottom: 16px;
+		border: 1px solid #cfd4e6;
+		border-radius: 8px;
+		overflow: hidden;
+	}
+
+	.print-content table tr {
+		page-break-inside: avoid;
+	}
+
+	.print-content table th,
+	.print-content table td {
+		page-break-inside: avoid;
+		border: none;
+		padding: 6px 10px;
+		text-align: left;
+		font-size: 9px;
+	}
+
+	.print-content table th {
+		color: #1b2559;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: 0;
+		border-bottom: 1px solid #cfd4e6;
+	}
+
+	.print-content table tr + tr th,
+	.print-content table tr + tr td {
+		border-top: 1px solid #cfd4e6;
+	}
+
+	.print-content table th + th,
+	.print-content table td + td {
+		border-left: 1px solid #cfd4e6;
+	}
+
+	.print-content table tbody tr:nth-child(even) {
+		background: transparent;
+	}
+
+	.print-content .total-box {
+		margin: 14px 0 18px;
+		padding: 12px 16px;
+		border: 1px solid #c4c9e4;
+		border-radius: 10px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.print-content .total-box strong {
+		font-size: 10px;
+		color: #25306d;
+		letter-spacing: 0.08em;
+	}
+
+	.print-content .total-box .money {
+		font-size: 12px;
+		font-weight: 700;
+		color: #111431;
+	}
+
+	.print-content .final-total-boxes {
+		margin-top: 24px;
+		border-top: 2px solid #a5b4fc;
+		padding-top: 20px;
+		display: grid;
+		gap: 14px;
 	}
 
 	.tooltip-box {
@@ -187,7 +244,7 @@ const Recapitulatif = () => {
         {data?.provisions && <Provisions editable={false} />}
 
         <DelayedContent delay={1000}>
-          <div style={{ padding: '0 20px 20px' }}>
+          <div className="final-total-boxes">
             <TotalBoxInterest
               selector="total-interest"
               documentRef={contentRef}
