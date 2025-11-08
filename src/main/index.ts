@@ -134,36 +134,8 @@ function registerIpcHandlers(): void {
         </style>
       </head>
       <body>
-        <div class="print-layout" id="printable">
-          <table class="print-table">
-            <thead>
-              <tr>
-                <td>
-                  <div class="print-header">
-                    <img src="file://${logoPath || ''}" alt="Logo">
-                  </div>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <div class="print-content">
-                    ${doc?.content || ''}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td>
-                  <div class="print-footer">
-                    <p>&copy; 2025 - Evalix</p>
-                  </div>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+        <div class="print-content">
+          ${doc?.content || ''}
         </div>
       </body>
     </html>

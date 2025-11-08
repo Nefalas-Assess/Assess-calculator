@@ -308,7 +308,6 @@ input[type='number']::-webkit-outer-spin-button {
 	width: 100%;
 	padding: 12px 20px;
 	display: flex;
-	justify-content: flex-end;
 	align-items: center;
 	z-index: 10; /* Placer le top-menu au-dessus des autres éléments */
 	backdrop-filter: blur(12px);
