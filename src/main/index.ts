@@ -134,6 +134,12 @@ function registerIpcHandlers(): void {
         </style>
       </head>
       <body>
+        <div class="print-margin">
+          <img src="file://${logoPath || ''}" alt="Logo">
+          <div class="print-margin-bottom">
+            <p>&copy; 2025 - Evalix</p>
+          </div>
+        </div>
         <div class="print-content">
           ${doc?.content || ''}
         </div>
