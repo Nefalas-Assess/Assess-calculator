@@ -24,13 +24,14 @@ async function hasInternetConnection(): Promise<boolean> {
   try {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 2000) // 1 seconde
-    
-    const response = await fetch('https://1.1.1.1', { // DNS Cloudflare - très rapide
+
+    const response = await fetch('https://1.1.1.1', {
+      // DNS Cloudflare - très rapide
       method: 'HEAD',
       signal: controller.signal,
       cache: 'no-cache'
     })
-    
+
     clearTimeout(timeoutId)
     return response.ok
   } catch (error) {
@@ -133,16 +134,14 @@ function registerIpcHandlers(): void {
         </style>
       </head>
       <body>
-        <div class="print-layout" id="printable">
-          <div class="print-header">
-            <img src="file://${logoPath || ''}" alt="Logo">
-          </div>
-          <div class="print-content">
-            ${doc?.content || ''}
-          </div>
-          <div class="print-footer">
+        <div class="print-margin">
+          <img src="file://${logoPath || ''}" alt="Logo">
+          <div class="print-margin-bottom">
             <p>&copy; 2025 - Evalix</p>
           </div>
+        </div>
+        <div class="print-content">
+          ${doc?.content || ''}
         </div>
       </body>
     </html>
@@ -241,7 +240,7 @@ ipcMain.on('restart_app', () => {
 
 ipcMain.handle('get-computer-info', async () => {
   return {
-    machineId,
+    machineId
   }
 })
 
@@ -285,7 +284,7 @@ ipcMain.handle('check-license', async (event, licenseKey) => {
   if (!store) await initStore()
   const cachedLicense = store.get('license')
 
-  const hasInternet = await hasInternetConnection();
+  const hasInternet = await hasInternetConnection()
 
   if (cachedLicense && !hasInternet) {
     const expiration = cachedLicense.expiration
@@ -323,7 +322,7 @@ ipcMain.handle('disable-device', async () => {
 
   const result = await disableDevice(key)
 
-  if(result.success) {
+  if (result.success) {
     store.delete('license')
   }
   return result
