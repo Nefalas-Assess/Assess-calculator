@@ -65,6 +65,8 @@
 	--input-border: rgba(255, 255, 255, 0.16);
 	--input-text: rgba(244, 246, 255, 0.92);
 	--input-placeholder: rgba(244, 246, 255, 0.48);
+	--select-menu-bg: rgba(9, 11, 26, 0.98);
+	--select-menu-text: rgba(244, 246, 255, 0.96);
 
 	--tooltip-bg: rgba(24, 26, 42, 0.96);
 	--tooltip-text: rgba(255, 255, 255, 0.92);
@@ -189,6 +191,8 @@ body {
 		--input-border: rgba(255, 255, 255, 0.16);
 		--input-text: rgba(244, 246, 255, 0.92);
 		--input-placeholder: rgba(244, 246, 255, 0.48);
+		--select-menu-bg: rgba(9, 11, 26, 0.98);
+		--select-menu-text: rgba(244, 246, 255, 0.96);
 		--tooltip-bg: rgba(24, 26, 42, 0.96);
 		--tooltip-text: rgba(255, 255, 255, 0.92);
 		--shadow-soft: 0 18px 38px -28px rgba(6, 7, 20, 0.6);
@@ -233,6 +237,8 @@ body {
 		--input-border: rgba(52, 34, 242, 0.22);
 		--input-text: rgba(25, 27, 76, 0.9);
 		--input-placeholder: rgba(25, 27, 76, 0.5);
+		--select-menu-bg: rgba(255, 255, 255, 0.98);
+		--select-menu-text: rgba(25, 27, 76, 0.9);
 		--tooltip-bg: rgba(37, 41, 91, 0.94);
 		--tooltip-text: rgba(255, 255, 255, 0.96);
 		--shadow-soft: 0 18px 42px -28px rgba(52, 34, 242, 0.2);

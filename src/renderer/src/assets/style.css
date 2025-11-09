@@ -247,6 +247,28 @@ textarea {
 	}
 }
 
+/* Custom dropdown arrow + contrast, but keep native look on macOS */
+html:not(.platform-mac) select {
+	appearance: none;
+	padding-right: 38px;
+	line-height: 1.4;
+	background-image: linear-gradient(45deg, transparent 50%, var(--input-text, currentColor) 50%),
+		linear-gradient(135deg, var(--input-text, currentColor) 50%, transparent 50%);
+	background-position: calc(100% - 18px) calc(50% - 4px), calc(100% - 12px) calc(50% - 4px);
+	background-size: 6px 6px;
+	background-repeat: no-repeat;
+}
+
+html:not(.platform-mac) select::-ms-expand {
+	display: none;
+}
+
+html:not(.platform-mac) select option,
+html:not(.platform-mac) select optgroup {
+	background-color: var(--select-menu-bg, rgba(9, 11, 26, 0.98));
+	color: var(--select-menu-text, var(--content-text-color, #fff));
+}
+
 input[type='number'] {
 	padding: 10px 6px !important;
 	-moz-appearance: textfield;
@@ -260,18 +282,22 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .select-lang {
-	appearance: none;
 	background: var(--input-bg);
 	border: 1px solid var(--input-border);
 	border-radius: var(--radius-md, 12px);
 	color: var(--input-text, inherit);
 	font-weight: 600;
 	padding: 6px 32px 6px 12px;
-	background-image: linear-gradient(45deg, transparent 50%, var(--input-text, currentColor) 50%), linear-gradient(135deg, var(--input-text, currentColor) 50%, transparent 50%);
+	cursor: pointer;
+}
+
+html:not(.platform-mac) .select-lang {
+	appearance: none;
+	background-image: linear-gradient(45deg, transparent 50%, var(--input-text, currentColor) 50%),
+		linear-gradient(135deg, var(--input-text, currentColor) 50%, transparent 50%);
 	background-position: calc(100% - 18px) calc(50% - 2px), calc(100% - 12px) calc(50% - 2px);
 	background-size: 6px 6px, 6px 6px;
 	background-repeat: no-repeat;
-	cursor: pointer;
 }
 
 /* Contenu */
