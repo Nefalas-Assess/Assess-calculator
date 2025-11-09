@@ -23,6 +23,8 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
 
+const PRINT_MARGIN_WIDTH = 30
+
 const MINIMAL_PRINT_STYLES = `
 	* {
 		box-sizing: border-box;
@@ -36,11 +38,48 @@ const MINIMAL_PRINT_STYLES = `
 		background: #fff;
 		line-height: 1.45;
 		color: #111;
+		display: flex;
+	}
+
+	.print-margin {
+		width: ${PRINT_MARGIN_WIDTH - 5}px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.print-margin img {
+		max-width: 100%;
+		height: auto;
+		object-fit: contain;
+	}
+
+	.print-margin-bottom {
+		margin-top: auto;
+		display: flex;
+		justify-content: center;
+	}
+
+	.print-margin-bottom p {
+		writing-mode: vertical-rl;
+		text-orientation: upright;
+		margin: 0;
+		bottom: 0;
+		font-size: 6px;
+		text-transform: uppercase;
 	}
 
 	.print-content {
+		margin-left: ${PRINT_MARGIN_WIDTH}px;
 		padding: 18px 28px 36px;
 		background: #fff;
+		padding-left: 0;
 	}
 
 	.print-content > * {
