@@ -115,7 +115,7 @@ const Field = ({
 
 			return val;
 		},
-		[type],
+		[type, options, style, translate],
 	);
 
 	const renderInput = useCallback(
@@ -152,7 +152,7 @@ const Field = ({
 
 			return children({ ...field, type });
 		},
-		[children, type, noSelect, translate],
+		[children, type, noSelect, options, style, translate],
 	);
 
 	return (
