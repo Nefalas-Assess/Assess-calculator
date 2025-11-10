@@ -1,6 +1,7 @@
 /* Shell & navigation */
 .app {
 	display: flex;
+	flex-direction: column;
 	height: 100%;
 	width: 100%;
 	background: var(--layout-background, var(--color-background));
@@ -768,4 +769,66 @@ th {
 .table-inside-table {
 	border: none;
 	margin: 0 !important;
+}
+
+.settings-page {
+	padding: clamp(16px, 3vw, 32px);
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	color: var(--content-text-color, var(--color-text));
+}
+
+.settings-page h1 {
+	margin-bottom: 8px;
+}
+
+.settings-page section {
+	padding: 20px;
+	border-radius: var(--radius-xl, 24px);
+	background: var(--panel-bg, rgba(255, 255, 255, 0.05));
+	border: 1px solid var(--panel-border, rgba(255, 255, 255, 0.08));
+	box-shadow: var(--shadow-soft);
+}
+
+.settings-form {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 440px;
+}
+
+.settings-form label {
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+	gap: 6px;
+	color: var(--label-color, var(--content-text-color));
+}
+
+.settings-form input,
+.settings-form select {
+	border-radius: var(--radius-md, 12px);
+	border: 1px solid var(--input-border, rgba(0, 0, 0, 0.2));
+	padding: 10px 14px;
+	font-size: 14px;
+	background: var(--input-bg, rgba(255, 255, 255, 0.1));
+	color: inherit;
+}
+
+.settings-page ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.error-message {
+	padding: 12px 16px;
+	border-radius: var(--radius-md, 12px);
+	background: rgba(255, 0, 0, 0.08);
+	border: 1px solid rgba(255, 0, 0, 0.25);
+	color: #ff5d5d;
 }

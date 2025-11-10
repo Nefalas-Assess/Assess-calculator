@@ -5,3 +5,6 @@ out
 *.log*
 .env
 electron-builder.yml
+# Custom data generated per installation
+src/renderer/src/data/custom/**
+!src/renderer/src/data/custom/.gitkeep

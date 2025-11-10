@@ -39,7 +39,12 @@ const api = {
 
   // License
   checkLicense: (licenseKey) => ipcRenderer.invoke('check-license', licenseKey),
-  disableDevice: (licenseKey) => ipcRenderer.invoke('disable-device', licenseKey)
+  disableDevice: (licenseKey) => ipcRenderer.invoke('disable-device', licenseKey),
+
+  // Data management
+  listCustomReferences: () => ipcRenderer.invoke('data:listCustomSets'),
+  listReferenceTemplates: () => ipcRenderer.invoke('data:listReferenceTemplates'),
+  createCustomReference: (payload) => ipcRenderer.invoke('data:createCustomSet', payload)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

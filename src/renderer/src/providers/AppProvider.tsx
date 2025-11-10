@@ -1,6 +1,7 @@
 import { validateData } from '@renderer/helpers/validation'
 import { setDatePaiementIfMissing } from '@renderer/utils/deepKey'
 import { prepareDataForSave } from '@renderer/utils/migrations'
+import constants from '@renderer/constants'
 import { intervalToDuration } from 'date-fns'
 import React, { createContext, useCallback, useEffect, useState } from 'react'
 
@@ -18,6 +19,8 @@ interface AppContextType {
   mode: string
   lg: string
   setLg: (lang: string) => void
+  referenceTypes: { value: string; label: any }[]
+  refreshReferenceTypes: () => Promise<void>
 }
 
 export const AppContext = createContext<AppContextType | undefined>(undefined)
@@ -67,11 +70,33 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [lg, setLg] = useState<string>('fr')
   const [darkMode, setDarkMode] = useState<boolean>(true)
   const [filePath, setFilePath] = useState<string | null>(null)
+  const baseReferenceTypes = constants.reference_type || []
+  const [referenceTypes, setReferenceTypes] = useState(baseReferenceTypes)
 
   // Define initial data structure
   const initialData = {
     version: import.meta.env.VITE_APP_VERSION
   }
+
+  const refreshReferenceTypes = useCallback(async () => {
+    const defaults = baseReferenceTypes
+    try {
+      if (!window?.api?.listCustomReferences) {
+        setReferenceTypes(defaults)
+        return
+      }
+
+      const customEntries = (await window.api.listCustomReferences()) || []
+      const customOptions = customEntries.map((entry) => ({
+        value: `custom_${entry.id}`,
+        label: entry.label
+      }))
+      setReferenceTypes([...defaults, ...customOptions])
+    } catch (error) {
+      console.error('Unable to load custom references', error)
+      setReferenceTypes(defaults)
+    }
+  }, [baseReferenceTypes])
 
   const handleSave = useCallback(async () => {
     try {
@@ -205,6 +230,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     getLang()
   }, [])
 
+  useEffect(() => {
+    refreshReferenceTypes()
+  }, [refreshReferenceTypes])
+
   // the value passed in here will be accessible anywhere in our application
   // you can pass any value, in our case we pass our state and it's update method
   return (
@@ -221,7 +250,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         toggleDarkMode,
         mode: darkMode ? 'dark' : 'light',
         lg,
-        setLg: setLanguage
+        setLg: setLanguage,
+        referenceTypes,
+        refreshReferenceTypes
       }}
     >
       {children}

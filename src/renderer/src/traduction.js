@@ -48,6 +48,11 @@ export default {
       en: 'Home',
       nl: 'Startpagina'
     },
+    settings: {
+      fr: 'Paramètres',
+      en: 'Settings',
+      nl: 'Instellingen'
+    },
     mode: {
       fr: 'Mode',
       en: 'Mode',
@@ -72,6 +77,91 @@ export default {
       fr: 'Annuler',
       en: 'Cancel',
       nl: 'Annuleren'
+    }
+  },
+  settings: {
+    title: {
+      fr: 'Paramètres',
+      en: 'Settings',
+      nl: 'Instellingen'
+    },
+    custom_sets: {
+      title: {
+        fr: 'Jeux personnalisés',
+        en: 'Custom datasets',
+        nl: 'Aangepaste datasets'
+      },
+      empty: {
+        fr: 'Aucun jeu personnalisé pour le moment.',
+        en: 'No custom dataset yet.',
+        nl: 'Nog geen aangepaste dataset.'
+      },
+      from: {
+        fr: 'Basé sur',
+        en: 'Based on',
+        nl: 'Gebaseerd op'
+      },
+      created: {
+        fr: 'Créé le',
+        en: 'Created on',
+        nl: 'Gemaakt op'
+      }
+    },
+    create: {
+      title: {
+        fr: 'Créer un nouveau jeu',
+        en: 'Create a new dataset',
+        nl: 'Nieuwe dataset maken'
+      },
+      id: {
+        fr: 'Identifiant du dossier',
+        en: 'Folder identifier',
+        nl: 'Mapidentificatie'
+      },
+      label: {
+        fr: 'Libellé affiché',
+        en: 'Display label',
+        nl: 'Weergavenaam'
+      },
+      template: {
+        fr: 'Modèle à copier',
+        en: 'Template to copy',
+        nl: 'Sjabloon om te kopiëren'
+      },
+      submit: {
+        fr: 'Créer',
+        en: 'Create',
+        nl: 'Aanmaken'
+      },
+      loading: {
+        fr: 'Création...',
+        en: 'Creating...',
+        nl: 'Bezig met maken...'
+      }
+    },
+    errors: {
+      load: {
+        fr: 'Impossible de charger les données des paramètres.',
+        en: 'Unable to load settings data.',
+        nl: 'Kan de instellingen niet laden.'
+      },
+      invalid_id: {
+        fr: "L'identifiant ne peut contenir que des lettres, chiffres, tirets et underscores.",
+        en: 'Identifier can only contain letters, numbers, dashes and underscores.',
+        nl: 'Identificatie mag alleen letters, cijfers, streepjes en underscores bevatten.'
+      },
+      create: {
+        fr: 'Impossible de créer le dossier personnalisé.',
+        en: 'Unable to create the custom folder.',
+        nl: 'Kan de aangepaste map niet maken.'
+      }
+    },
+    success: {
+      created: {
+        fr: 'Jeu personnalisé créé.',
+        en: 'Custom dataset created.',
+        nl: 'Aangepaste dataset aangemaakt.'
+      }
     }
   },
   nav: {
