@@ -961,6 +961,14 @@ th {
 	width: 100%;
 }
 
+.settings-table-key {
+	display: inline-block;
+	padding: 8px 10px;
+	border-radius: var(--radius-md, 12px);
+	background: color-mix(in srgb, var(--sidebar-link-hover-bg, rgba(255, 255, 255, 0.08)) 60%, transparent);
+	font-weight: 600;
+}
+
 .settings-data-table th input {
 	border: none;
 	background: transparent;

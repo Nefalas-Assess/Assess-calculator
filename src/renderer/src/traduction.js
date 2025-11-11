@@ -195,11 +195,6 @@ export default {
           en: 'Add row',
           nl: 'Rij toevoegen'
         },
-        add_column: {
-          fr: 'Ajouter une colonne',
-          en: 'Add column',
-          nl: 'Kolom toevoegen'
-        },
         reload_file: {
           fr: 'Recharger',
           en: 'Reload',
@@ -244,6 +239,11 @@ export default {
         fr: 'Éditeur de données',
         en: 'Data editor',
         nl: 'Data-editor'
+      },
+      back: {
+        fr: '← Retour aux paramètres',
+        en: '← Back to settings',
+        nl: '← Terug naar instellingen'
       },
       subtitle_no_set: {
         fr: 'Sélectionnez un jeu personnalisé pour commencer.',

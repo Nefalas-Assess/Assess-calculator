@@ -79,7 +79,7 @@ const Main = () => {
             <Route path="provisions" element={<Provisions />} />
             <Route path="recap" element={<Recapitulatif />} />
           </Route>
-          <Route path="settings" element={<SettingsPage />} />
+          <Route path="settings/*" element={<SettingsPage />} />
         </Route>
       </Routes>
     </HashRouter>
