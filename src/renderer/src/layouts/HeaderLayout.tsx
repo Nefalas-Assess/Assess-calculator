@@ -49,7 +49,7 @@ const HeaderLayout = () => {
             <button
               type="button"
               onClick={() => {
-                back()
+                navigate('/')
               }}
             >
               <TextItem path={'layout.home'} />

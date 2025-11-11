@@ -44,7 +44,10 @@ const api = {
   // Data management
   listCustomReferences: () => ipcRenderer.invoke('data:listCustomSets'),
   listReferenceTemplates: () => ipcRenderer.invoke('data:listReferenceTemplates'),
-  createCustomReference: (payload) => ipcRenderer.invoke('data:createCustomSet', payload)
+  createCustomReference: (payload) => ipcRenderer.invoke('data:createCustomSet', payload),
+  listCustomFiles: (datasetId) => ipcRenderer.invoke('data:listCustomFiles', datasetId),
+  readCustomFile: (payload) => ipcRenderer.invoke('data:readCustomFile', payload),
+  writeCustomFile: (payload) => ipcRenderer.invoke('data:writeCustomFile', payload)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

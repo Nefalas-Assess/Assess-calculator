@@ -105,6 +105,11 @@ export default {
         fr: 'Créé le',
         en: 'Created on',
         nl: 'Gemaakt op'
+      },
+      manage: {
+        fr: 'Gérer',
+        en: 'Manage',
+        nl: 'Beheren'
       }
     },
     create: {
@@ -161,6 +166,124 @@ export default {
         fr: 'Jeu personnalisé créé.',
         en: 'Custom dataset created.',
         nl: 'Aangepaste dataset aangemaakt.'
+      }
+    },
+    files: {
+      loading: {
+        fr: 'Chargement des fichiers...',
+        en: 'Loading files...',
+        nl: 'Bestanden laden...'
+      },
+      saved: {
+        fr: 'Fichier enregistré.',
+        en: 'File saved.',
+        nl: 'Bestand opgeslagen.'
+      },
+      select_file_prompt: {
+        fr: 'Sélectionnez un fichier pour commencer.',
+        en: 'Select a file to get started.',
+        nl: 'Selecteer een bestand om te beginnen.'
+      },
+      actions: {
+        refresh: {
+          fr: 'Actualiser',
+          en: 'Refresh',
+          nl: 'Vernieuwen'
+        },
+        add_row: {
+          fr: 'Ajouter une ligne',
+          en: 'Add row',
+          nl: 'Rij toevoegen'
+        },
+        add_column: {
+          fr: 'Ajouter une colonne',
+          en: 'Add column',
+          nl: 'Kolom toevoegen'
+        },
+        reload_file: {
+          fr: 'Recharger',
+          en: 'Reload',
+          nl: 'Opnieuw laden'
+        },
+        save: {
+          fr: 'Enregistrer',
+          en: 'Save',
+          nl: 'Opslaan'
+        },
+        saving: {
+          fr: 'Enregistrement...',
+          en: 'Saving...',
+          nl: 'Opslaan...'
+        },
+        remove_row: {
+          fr: 'Supprimer',
+          en: 'Remove',
+          nl: 'Verwijderen'
+        }
+      },
+      errors: {
+        load: {
+          fr: 'Impossible de lister les fichiers.',
+          en: 'Unable to list files.',
+          nl: 'Kan bestanden niet laden.'
+        },
+        read: {
+          fr: 'Impossible de lire le fichier.',
+          en: 'Unable to read file.',
+          nl: 'Kan bestand niet lezen.'
+        },
+        save: {
+          fr: 'Impossible de sauvegarder le fichier.',
+          en: 'Unable to save file.',
+          nl: 'Kan bestand niet opslaan.'
+        }
+      }
+    },
+    editor: {
+      title: {
+        fr: 'Éditeur de données',
+        en: 'Data editor',
+        nl: 'Data-editor'
+      },
+      subtitle_no_set: {
+        fr: 'Sélectionnez un jeu personnalisé pour commencer.',
+        en: 'Select a custom dataset to get started.',
+        nl: 'Selecteer een aangepaste dataset om te beginnen.'
+      },
+      subtitle_set: {
+        fr: 'Jeu en cours:',
+        en: 'Editing:',
+        nl: 'Bezig met:'
+      },
+      raw_helper: {
+        fr: 'Le format est inconnu. Modifiez directement le contenu.',
+        en: 'Unknown format. Edit the raw content directly.',
+        nl: 'Onbekend formaat. Bewerk de ruwe inhoud rechtstreeks.'
+      },
+      key: {
+        fr: 'Clé',
+        en: 'Key',
+        nl: 'Sleutel'
+      },
+      col: {
+        fr: 'Colonne',
+        en: 'Column',
+        nl: 'Kolom'
+      },
+      no_files: {
+        fr: 'Aucun fichier pour ce jeu pour le moment.',
+        en: 'No files for this dataset yet.',
+        nl: 'Nog geen bestanden voor deze dataset.'
+      },
+      files_title: {
+        fr: 'Fichiers disponibles',
+        en: 'Available files',
+        nl: 'Beschikbare bestanden'
+      },
+      field_placeholder: {
+        fr: 'Nom du champ',
+        en: 'Field name',
+        nl: 'Veldnaam'
       }
     }
   },
