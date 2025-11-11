@@ -34,6 +34,14 @@ const sanitizeModuleContent = (content: string) => {
   return content.replace(/export\s+default/, '').trim().replace(/;?\s*$/, '')
 }
 
+const toJsonCompatible = (content: string) => {
+  return content
+    .replace(/(\r\n|\r)/g, '\n')
+    .replace(/,(\s*[}\]])/g, '$1')
+    .replace(/([{\[,]\s*)([A-Za-z0-9_]+)\s*:/g, '$1"$2":')
+    .replace(/'/g, '"')
+}
+
 const evaluateModuleValue = (content: string) => {
   try {
     const sanitized = sanitizeModuleContent(content)
@@ -41,7 +49,15 @@ const evaluateModuleValue = (content: string) => {
     // eslint-disable-next-line no-new-func
     return new Function(`return (${sanitized});`)()
   } catch (error) {
-    console.error('Unable to evaluate custom file', error)
+    console.warn('Unable to evaluate custom file with Function, fallback to JSON parser.', error)
+  }
+
+  try {
+    const sanitized = sanitizeModuleContent(content)
+    const jsonReady = toJsonCompatible(sanitized)
+    return JSON.parse(jsonReady)
+  } catch (jsonError) {
+    console.error('Unable to parse custom file', jsonError)
     return undefined
   }
 }
