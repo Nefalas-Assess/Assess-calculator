@@ -33,6 +33,11 @@ export default {
       en: 'No recent files match your search',
       nl: 'Geen recente dossiers gevonden'
     },
+    recentFileDeleteConfirm: {
+      fr: 'Supprimer le raccourci pour ce fichier ?',
+      en: 'Remove the shortcut for this file?',
+      nl: 'Verwijder het snelkoppeling voor dit bestand?'
+    },
     maj: {
       fr: 'Recherche de mises à jour',
       en: 'Checking for updates',

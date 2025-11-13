@@ -11,6 +11,7 @@ interface RecentFile {
 
 interface RecentFilesHook {
   addFile: (item: RecentFile) => void
+  removeFile: (filePath: string) => void
   importFile: () => Promise<void>
   createFile: (fileName: string) => Promise<void>
   selectFile: (filePath: string) => Promise<void>
@@ -47,6 +48,12 @@ export const useRecentFiles = (): RecentFilesHook => {
 
   const addFile = (item: RecentFile): void => {
     const updatedFiles = [item, ...(recentFiles || []).filter((e) => e.path !== item.path)]
+    window.api.setStore('recent-files', updatedFiles)
+    setRecentFiles(updatedFiles)
+  }
+
+  const removeFile = (filePath: string): void => {
+    const updatedFiles = (recentFiles || []).filter((file) => file.path !== filePath)
     window.api.setStore('recent-files', updatedFiles)
     setRecentFiles(updatedFiles)
   }
@@ -150,5 +157,5 @@ export const useRecentFiles = (): RecentFilesHook => {
     fetchRecentFiles()
   }, [])
 
-  return { addFile, importFile, createFile, selectFile, recentFiles }
+  return { addFile, removeFile, importFile, createFile, selectFile, recentFiles }
 }

@@ -625,6 +625,9 @@ th {
 }
 
 .recent-file-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	cursor: pointer;
 	background: color-mix(
 		in srgb,
@@ -652,6 +655,22 @@ th {
 		border-color: var(--sidebar-link-indicator, var(--color-primary));
 		color: var(--sidebar-link-active-color, var(--color-primary));
 		transform: translateY(-1px);
+		.recent-file-item-remove {
+			display: flex;
+		}
+	}
+}
+
+.recent-file-item-remove {
+	padding: 4px 8px;
+	margin: -4px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+	display: none;
+	&:hover{
+		border: 1px solid rgba(255, 93, 93, 1);
+		background-color: rgba(255, 93, 93, 0.2);
 	}
 }
 

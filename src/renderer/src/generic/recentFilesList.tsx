@@ -1,11 +1,20 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, type MouseEvent } from 'react'
 import { useRecentFiles } from '@renderer/hooks/recentFiles'
 import TextItem, { useTranslation } from './textItem'
+import { FaRegTrashAlt } from 'react-icons/fa'
 
 export const RecentFilesList = () => {
-  const { recentFiles, selectFile, importFile } = useRecentFiles()
+  const { recentFiles, selectFile, importFile, removeFile } = useRecentFiles()
   const translate = useTranslation()
   const [query, setQuery] = useState('')
+  const confirmDeleteMessage = translate('layout.recentFileDeleteConfirm')
+
+  const handleRemoveRecentFile = (event: MouseEvent<HTMLDivElement>, filePath: string): void => {
+    event.stopPropagation()
+    if (window.confirm(confirmDeleteMessage)) {
+      removeFile(filePath)
+    }
+  }
 
   const filteredFiles = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -35,7 +44,13 @@ export const RecentFilesList = () => {
         </div>
         {filteredFiles?.map((it, key) => (
           <div className="recent-file-item" key={key} onClick={() => selectFile(it?.path)}>
-            {it?.name || it?.path}
+            <div>{it?.name || it?.path}</div>
+            <div
+              className="recent-file-item-remove"
+              onClick={(event) => handleRemoveRecentFile(event, it?.path)}
+            >
+              <FaRegTrashAlt />
+            </div>
           </div>
         ))}
         {query.trim().length > 0 && filteredFiles.length === 0 && (
