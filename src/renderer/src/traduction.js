@@ -48,6 +48,11 @@ export default {
       en: 'Home',
       nl: 'Startpagina'
     },
+    settings: {
+      fr: 'Paramètres',
+      en: 'Settings',
+      nl: 'Instellingen'
+    },
     mode: {
       fr: 'Mode',
       en: 'Mode',
@@ -72,6 +77,214 @@ export default {
       fr: 'Annuler',
       en: 'Cancel',
       nl: 'Annuleren'
+    }
+  },
+  settings: {
+    title: {
+      fr: 'Paramètres',
+      en: 'Settings',
+      nl: 'Instellingen'
+    },
+    custom_sets: {
+      title: {
+        fr: 'Jeux personnalisés',
+        en: 'Custom datasets',
+        nl: 'Aangepaste datasets'
+      },
+      empty: {
+        fr: 'Aucun jeu personnalisé pour le moment.',
+        en: 'No custom dataset yet.',
+        nl: 'Nog geen aangepaste dataset.'
+      },
+      from: {
+        fr: 'Basé sur',
+        en: 'Based on',
+        nl: 'Gebaseerd op'
+      },
+      created: {
+        fr: 'Créé le',
+        en: 'Created on',
+        nl: 'Gemaakt op'
+      },
+      manage: {
+        fr: 'Gérer',
+        en: 'Manage',
+        nl: 'Beheren'
+      }
+    },
+    create: {
+      title: {
+        fr: 'Créer un nouveau jeu',
+        en: 'Create a new dataset',
+        nl: 'Nieuwe dataset maken'
+      },
+      id: {
+        fr: 'Identifiant du dossier',
+        en: 'Folder identifier',
+        nl: 'Mapidentificatie'
+      },
+      label: {
+        fr: 'Libellé affiché',
+        en: 'Display label',
+        nl: 'Weergavenaam'
+      },
+      template: {
+        fr: 'Modèle à copier',
+        en: 'Template to copy',
+        nl: 'Sjabloon om te kopiëren'
+      },
+      submit: {
+        fr: 'Créer',
+        en: 'Create',
+        nl: 'Aanmaken'
+      },
+      loading: {
+        fr: 'Création...',
+        en: 'Creating...',
+        nl: 'Bezig met maken...'
+      }
+    },
+    errors: {
+      load: {
+        fr: 'Impossible de charger les données des paramètres.',
+        en: 'Unable to load settings data.',
+        nl: 'Kan de instellingen niet laden.'
+      },
+      invalid_id: {
+        fr: "L'identifiant ne peut contenir que des lettres, chiffres, tirets et underscores.",
+        en: 'Identifier can only contain letters, numbers, dashes and underscores.',
+        nl: 'Identificatie mag alleen letters, cijfers, streepjes en underscores bevatten.'
+      },
+      create: {
+        fr: 'Impossible de créer le dossier personnalisé.',
+        en: 'Unable to create the custom folder.',
+        nl: 'Kan de aangepaste map niet maken.'
+      }
+    },
+    success: {
+      created: {
+        fr: 'Jeu personnalisé créé.',
+        en: 'Custom dataset created.',
+        nl: 'Aangepaste dataset aangemaakt.'
+      }
+    },
+    files: {
+      loading: {
+        fr: 'Chargement des fichiers...',
+        en: 'Loading files...',
+        nl: 'Bestanden laden...'
+      },
+      saved: {
+        fr: 'Fichier enregistré.',
+        en: 'File saved.',
+        nl: 'Bestand opgeslagen.'
+      },
+      select_file_prompt: {
+        fr: 'Sélectionnez un fichier pour commencer.',
+        en: 'Select a file to get started.',
+        nl: 'Selecteer een bestand om te beginnen.'
+      },
+      actions: {
+        refresh: {
+          fr: 'Actualiser',
+          en: 'Refresh',
+          nl: 'Vernieuwen'
+        },
+        add_row: {
+          fr: 'Ajouter une ligne',
+          en: 'Add row',
+          nl: 'Rij toevoegen'
+        },
+        reload_file: {
+          fr: 'Recharger',
+          en: 'Reload',
+          nl: 'Opnieuw laden'
+        },
+        save: {
+          fr: 'Enregistrer',
+          en: 'Save',
+          nl: 'Opslaan'
+        },
+        saving: {
+          fr: 'Enregistrement...',
+          en: 'Saving...',
+          nl: 'Opslaan...'
+        },
+        remove_row: {
+          fr: 'Supprimer',
+          en: 'Remove',
+          nl: 'Verwijderen'
+        }
+      },
+      errors: {
+        load: {
+          fr: 'Impossible de lister les fichiers.',
+          en: 'Unable to list files.',
+          nl: 'Kan bestanden niet laden.'
+        },
+        read: {
+          fr: 'Impossible de lire le fichier.',
+          en: 'Unable to read file.',
+          nl: 'Kan bestand niet lezen.'
+        },
+        save: {
+          fr: 'Impossible de sauvegarder le fichier.',
+          en: 'Unable to save file.',
+          nl: 'Kan bestand niet opslaan.'
+        }
+      }
+    },
+    editor: {
+      title: {
+        fr: 'Éditeur de données',
+        en: 'Data editor',
+        nl: 'Data-editor'
+      },
+      back: {
+        fr: '← Retour aux paramètres',
+        en: '← Back to settings',
+        nl: '← Terug naar instellingen'
+      },
+      subtitle_no_set: {
+        fr: 'Sélectionnez un jeu personnalisé pour commencer.',
+        en: 'Select a custom dataset to get started.',
+        nl: 'Selecteer een aangepaste dataset om te beginnen.'
+      },
+      subtitle_set: {
+        fr: 'Jeu en cours:',
+        en: 'Editing:',
+        nl: 'Bezig met:'
+      },
+      raw_helper: {
+        fr: 'Le format est inconnu. Modifiez directement le contenu.',
+        en: 'Unknown format. Edit the raw content directly.',
+        nl: 'Onbekend formaat. Bewerk de ruwe inhoud rechtstreeks.'
+      },
+      key: {
+        fr: 'Clé',
+        en: 'Key',
+        nl: 'Sleutel'
+      },
+      col: {
+        fr: 'Colonne',
+        en: 'Column',
+        nl: 'Kolom'
+      },
+      no_files: {
+        fr: 'Aucun fichier pour ce jeu pour le moment.',
+        en: 'No files for this dataset yet.',
+        nl: 'Nog geen bestanden voor deze dataset.'
+      },
+      files_title: {
+        fr: 'Fichiers disponibles',
+        en: 'Available files',
+        nl: 'Beschikbare bestanden'
+      },
+      field_placeholder: {
+        fr: 'Nom du champ',
+        en: 'Field name',
+        nl: 'Veldnaam'
+      }
     }
   },
   nav: {

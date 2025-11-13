@@ -1,10 +1,14 @@
 import constants from "@renderer/constants";
+import { AppContext } from "@renderer/providers/AppProvider";
 import { format, isValid } from "date-fns";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "./textItem";
 
 const ReferenceInput = ({ options, onChange, value }) => {
+	const appContext = useContext(AppContext);
+	const referenceOptions =
+		appContext?.referenceTypes || constants.reference_type || [];
 	const [value1, setValue1] = useState("");
 	const [value2, setValue2] = useState("");
 
@@ -35,7 +39,7 @@ const ReferenceInput = ({ options, onChange, value }) => {
 		<>
 			<select value={value1} onChange={(e) => setValue1(e.target.value)}>
 				<option value={""}>Select</option>
-				{(constants.reference_type || [])?.map((it, key) => (
+				{(referenceOptions || [])?.map((it, key) => (
 					<option key={key} value={it?.value}>
 						{translate(it?.label || it?.value)}
 					</option>
@@ -70,6 +74,9 @@ const Field = ({
 	noSelect,
 }) => {
 	const translate = useTranslation();
+	const appContext = useContext(AppContext);
+	const referenceOptions =
+		appContext?.referenceTypes || constants.reference_type || [];
 
 	const renderValue = useCallback(
 		(val) => {
@@ -94,7 +101,7 @@ const Field = ({
 			}
 
 			if (type === "reference") {
-				const ref = (constants.reference_type || [])?.find((e) =>
+				const ref = (referenceOptions || [])?.find((e) =>
 					val?.includes(e?.value),
 				);
 				const ref2 = (options || [])?.find(

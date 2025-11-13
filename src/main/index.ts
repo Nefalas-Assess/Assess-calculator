@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { autoUpdater } from 'electron-updater'
 import { promises as fs } from 'fs'
+import type { Dirent } from 'fs'
 import supabase from '../renderer/src/utils/supabase'
 import { machineIdSync } from 'node-machine-id'
 
@@ -12,6 +13,175 @@ let ipcHandlersRegistered = false // Variable pour vérifier si les gestionnaire
 
 let Store: any
 let store: any
+
+const workspaceRoot = path.resolve(__dirname, '../../')
+const dataRoot = path.join(workspaceRoot, 'src/renderer/src/data')
+const schryversRoot = path.join(dataRoot, 'schryvers')
+const customRoot = path.join(dataRoot, 'custom')
+const CUSTOM_META_FILE = 'meta.json'
+const CUSTOM_ID_REGEX = /^[a-zA-Z0-9_-]+$/
+const CUSTOM_FILE_REGEX = /^[a-zA-Z0-9._-]+$/
+
+type CustomSetMeta = {
+  label?: string
+  createdAt?: string
+  source?: string
+}
+
+const resolveCustomDatasetPath = async (id: string) => {
+  if (!id || !CUSTOM_ID_REGEX.test(id)) {
+    throw new Error('Identifiant de dossier personnalisé invalide.')
+  }
+  const datasetPath = path.join(customRoot, id)
+  await ensureDirectory(datasetPath)
+  return datasetPath
+}
+
+const resolveCustomFilePath = async (datasetId: string, fileName: string) => {
+  if (!fileName || !CUSTOM_FILE_REGEX.test(fileName) || !fileName.endsWith('.tsx')) {
+    throw new Error('Nom de fichier invalide.')
+  }
+
+  const datasetPath = await resolveCustomDatasetPath(datasetId)
+  const targetPath = path.join(datasetPath, fileName)
+  const normalized = path.normalize(targetPath)
+
+  if (!normalized.startsWith(datasetPath)) {
+    throw new Error('Accès refusé.')
+  }
+
+  return normalized
+}
+
+const ensureDirectory = async (target: string) => {
+  await fs.mkdir(target, { recursive: true })
+}
+
+const copyDirectory = async (source: string, destination: string) => {
+  await ensureDirectory(destination)
+  const entries = (await fs.readdir(source, { withFileTypes: true })) as Dirent[]
+
+  for (const entry of entries) {
+    const sourcePath = path.join(source, entry.name)
+    const destPath = path.join(destination, entry.name)
+
+    if (entry.isDirectory()) {
+      await copyDirectory(sourcePath, destPath)
+    } else {
+      await fs.copyFile(sourcePath, destPath)
+    }
+  }
+}
+
+const listCustomSets = async () => {
+  await ensureDirectory(customRoot)
+  const entries = (await fs.readdir(customRoot, { withFileTypes: true })) as Dirent[]
+
+  const sets = await Promise.all(
+    entries
+      .filter((entry) => entry.isDirectory())
+      .map(async (entry) => {
+        const metaPath = path.join(customRoot, entry.name, CUSTOM_META_FILE)
+        let meta: CustomSetMeta = {}
+        try {
+          const metaContent = await fs.readFile(metaPath, 'utf8')
+          meta = JSON.parse(metaContent)
+        } catch (error) {
+          meta = {}
+        }
+
+        return {
+          id: entry.name,
+          label: meta.label || entry.name,
+          meta
+        }
+      })
+  )
+
+  return sets.sort((a, b) => a.id.localeCompare(b.id))
+}
+
+const listReferenceTemplates = async () => {
+  const entries = (await fs.readdir(schryversRoot, { withFileTypes: true })) as Dirent[]
+
+  return entries
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => ({
+      id: entry.name,
+      label: entry.name === 'Blank' ? 'Modèle vierge' : `Schryvers ${entry.name}`
+    }))
+    .sort((a, b) => a.id.localeCompare(b.id))
+}
+
+const createCustomSet = async ({
+  id,
+  label,
+  source
+}: {
+  id: string
+  label: string
+  source: string
+}) => {
+  if (!id || !CUSTOM_ID_REGEX.test(id)) {
+    throw new Error('Identifiant invalide. Utilisez uniquement des lettres, chiffres, "-" ou "_".')
+  }
+
+  await ensureDirectory(customRoot)
+
+  const destination = path.join(customRoot, id)
+  try {
+    await fs.access(destination)
+    throw new Error('Un dossier existe déjà avec cet identifiant.')
+  } catch (error: any) {
+    if (error?.code !== 'ENOENT') {
+      throw error
+    }
+  }
+
+  const template = source || 'Blank'
+  const templatePath = path.join(schryversRoot, template)
+
+  try {
+    await fs.access(templatePath)
+  } catch (error) {
+    throw new Error("Le modèle sélectionné n'existe pas.")
+  }
+
+  await copyDirectory(templatePath, destination)
+
+  const meta: CustomSetMeta = {
+    label: label || `Custom ${id}`,
+    createdAt: new Date().toISOString(),
+    source: template
+  }
+
+  await fs.writeFile(path.join(destination, CUSTOM_META_FILE), JSON.stringify(meta, null, 2), 'utf8')
+
+  return meta
+}
+
+const listCustomFiles = async (datasetId: string) => {
+  const datasetPath = await resolveCustomDatasetPath(datasetId)
+  const entries = (await fs.readdir(datasetPath, { withFileTypes: true })) as Dirent[]
+
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.tsx'))
+    .map((entry) => ({
+      name: entry.name
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name))
+}
+
+const readCustomFile = async (datasetId: string, fileName: string) => {
+  const filePath = await resolveCustomFilePath(datasetId, fileName)
+  return fs.readFile(filePath, 'utf8')
+}
+
+const writeCustomFile = async (datasetId: string, fileName: string, content: string) => {
+  const filePath = await resolveCustomFilePath(datasetId, fileName)
+  await fs.writeFile(filePath, content, 'utf8')
+  return { success: true }
+}
 
 // Import dynamique de `electron-store`
 async function initStore() {
@@ -179,6 +349,31 @@ function registerIpcHandlers(): void {
     if (!store) await initStore()
     store.clear()
     return { success: true }
+  })
+
+  ipcMain.handle('data:listCustomSets', async () => {
+    return listCustomSets()
+  })
+
+  ipcMain.handle('data:listReferenceTemplates', async () => {
+    return listReferenceTemplates()
+  })
+
+  ipcMain.handle('data:createCustomSet', async (_event, payload) => {
+    await createCustomSet(payload || {})
+    return listCustomSets()
+  })
+
+  ipcMain.handle('data:listCustomFiles', async (_event, datasetId) => {
+    return listCustomFiles(datasetId)
+  })
+
+  ipcMain.handle('data:readCustomFile', async (_event, payload) => {
+    return readCustomFile(payload?.id, payload?.file)
+  })
+
+  ipcMain.handle('data:writeCustomFile', async (_event, payload) => {
+    return writeCustomFile(payload?.id, payload?.file, payload?.content)
   })
 }
 

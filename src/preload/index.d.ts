@@ -22,6 +22,16 @@ interface CustomAPI {
   getComputerInfo: () => Promise<{ machineId: string }>
   checkLicense: (licenseKey: string) => Promise<{ valid: boolean; cached: boolean }>
   disableDevice: (licenseKey: string) => Promise<{ success: boolean }>
+  listCustomReferences: () => Promise<
+    Array<{ id: string; label: string; meta?: { createdAt?: string; source?: string } }>
+  >
+  listReferenceTemplates: () => Promise<Array<{ id: string; label: string }>>
+  createCustomReference: (payload: { id: string; label: string; source: string }) => Promise<
+    Array<{ id: string; label: string; meta?: { createdAt?: string; source?: string } }>
+  >
+  listCustomFiles: (datasetId: string) => Promise<Array<{ name: string }>>
+  readCustomFile: (payload: { id: string; file: string }) => Promise<string>
+  writeCustomFile: (payload: { id: string; file: string; content: string }) => Promise<{ success: boolean }>
 }
 
 declare global {
