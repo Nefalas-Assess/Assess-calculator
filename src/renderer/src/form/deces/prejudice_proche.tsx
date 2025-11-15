@@ -15,6 +15,7 @@ import { addDays, format } from 'date-fns'
 import Interest from '@renderer/generic/interet'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 
 const TotalRevenueAmount = ({ values, data, control, editable }) => {
   const capitalization = useCapitalization({
@@ -198,12 +199,15 @@ const TotalMenageAmount = ({ values, data, start, end, reference, interest }) =>
 const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
+  const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_menagere, 30)
+  const indicativePersonChargeAmount = getIndicativeAmount(generalInfo?.config?.person_charge, 10)
+
   const ref = useRef(null)
 
   const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {
       menage_contribution: generalInfo?.config?.default_contribution,
-      menage_amount: 30,
+      menage_amount: indicativeAmount,
       members: generalInfo?.children?.map((it, key) => ({
         name: it?.name,
         link: 'parent/enfant',
@@ -480,8 +484,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
                     const menage_amount =
                       parseFloat(formValues?.menage_amount || 0) +
-                      10 * unsortedChildren?.length +
-                      10 * (sortedChildren?.length - key)
+                      indicativePersonChargeAmount * unsortedChildren?.length +
+                      indicativePersonChargeAmount * (sortedChildren?.length - key)
 
                     return (
                       <tr key={key}>
@@ -547,7 +551,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     <td>
                       <Money
                         value={
-                          parseFloat(formValues?.menage_amount || 0) + 10 * unsortedChildren?.length
+                          parseFloat(formValues?.menage_amount || 0) +
+                          indicativePersonChargeAmount * unsortedChildren?.length
                         }
                         ignore
                       />
@@ -560,7 +565,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                           ...formValues,
                           menage_amount:
                             parseFloat(formValues?.menage_amount || 0) +
-                            10 * unsortedChildren?.length
+                            indicativePersonChargeAmount * unsortedChildren?.length
                         }}
                         data={generalInfo}
                         end={get25thBirthday(
@@ -585,7 +590,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                           ...formValues,
                           menage_amount:
                             parseFloat(formValues?.menage_amount || 0) +
-                            10 * unsortedChildren?.length
+                            indicativePersonChargeAmount * unsortedChildren?.length
                         }}
                         data={generalInfo}
                         end={get25thBirthday(

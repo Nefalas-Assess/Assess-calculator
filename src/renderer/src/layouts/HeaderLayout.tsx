@@ -7,7 +7,8 @@ import { useToast } from '@renderer/providers/ToastProvider'
 import { FaMoon, FaSun } from 'react-icons/fa6'
 
 const HeaderLayout = () => {
-  const { toggleDarkMode, mode, filePath, back, save, setLg, lg, data } = useContext(AppContext)
+  const { toggleDarkMode, mode, filePath, back, save, setLg, lg, data, setFilePath } =
+    useContext(AppContext)
   const { addToast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()
@@ -49,15 +50,15 @@ const HeaderLayout = () => {
             <button
               type="button"
               onClick={() => {
-                navigate('/')
+                setFilePath(null)
               }}
             >
               <TextItem path={'layout.home'} />
             </button>
           )}
-          <button type="button" onClick={() => navigate('/settings')}>
+          {/* <button type="button" onClick={() => navigate('/settings')}>
             <TextItem path={'layout.settings'} />
-          </button>
+          </button> */}
           <select className="select-lang" value={lg} onChange={(e) => setLg(e?.target?.value)}>
             <option value="fr">FR</option>
             <option value="nl">NL</option>

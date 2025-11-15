@@ -873,6 +873,23 @@ export default {
       en: 'Calculate interests',
       nl: 'Intresten berekenen'
     },
+    indicative_table: {
+      title: {
+        fr: 'Tableau indicatif',
+        en: 'Indicative table',
+        nl: 'Indicatieve tabel'
+      },
+      prejudice_exh_amount: {
+        fr: 'Préjudice EXH - indemnité journalière',
+        en: 'Prejudice EXH - daily allowance',
+        nl: 'Prejudice EXH - dagvergoeding'
+      },
+      incapacite_perso: {
+        fr: 'Incapacité personnelle - indemnité journalière',
+        en: 'Personal disability - daily allowance',
+        nl: 'Persoonlijke ongeschiktheden - dagvergoeding'
+      }
+    },
     incapacite_perma: {
       title: {
         fr: 'Incapacités permanentes',
