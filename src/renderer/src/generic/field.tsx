@@ -111,6 +111,13 @@ const SalaryInput = ({ noSelect, field, salaryType }) => {
     if (salaryType === 'net') {
       return netConsoOptions
     }
+    if (salaryType === 'yearly') {
+      return [...netConsoOptions, ...brutConsoOptions]?.filter(
+        (it) =>
+          it?.value === getIndicativeAmount(generalInfo?.economique?.net?.yearly, 0) ||
+          it?.value === getIndicativeAmount(generalInfo?.economique?.brut?.yearly, 0)
+      )
+    }
     if (salaryType === 'mix') {
       return [...netConsoOptions, ...brutConsoOptions]
     }

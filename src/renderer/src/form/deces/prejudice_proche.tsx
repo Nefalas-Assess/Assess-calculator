@@ -713,9 +713,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           <tbody>
             <tr>
               <td>
-                <Field control={control} type="number" name={`revenue_defunt`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
+                <Field
+                  control={control}
+                  type="salary"
+                  name={`revenue_defunt`}
+                  editable={editable}
+                  salaryType="yearly"
+                ></Field>
               </td>
               <td>
                 <Field control={control} type="number" name={`revenue_total`} editable={editable}>
