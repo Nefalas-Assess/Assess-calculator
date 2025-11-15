@@ -285,7 +285,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
       {(editable || childrenFields?.fields.length > 0) && (
         <>
           <TextItem path="common.children" tag="h3" />
-          <table style={{ maxWidth: 1200 }} style={{ marginBottom: 0 }}>
+          <table style={{ maxWidth: 1200, marginBottom: 0 }}>
             <thead>
               <tr>
                 <TextItem path="common.name" tag="th" />
@@ -420,9 +420,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         </div>
       )}
 
-      {editable && (
-        <EconomiqueSection control={control} editable={editable} setValue={setValue} />
-      )}
+      {editable && <EconomiqueSection control={control} editable={editable} setValue={setValue} />}
 
       {editable && (
         <div>

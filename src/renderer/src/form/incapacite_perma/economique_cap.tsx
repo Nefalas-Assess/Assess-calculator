@@ -73,6 +73,9 @@ const CapAmount = ({ values, type = 'net' }) => {
 export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
+  const yearlyNetSalary = getIndicativeAmount(generalInfo?.economique?.net?.yearly, 0)
+  const yearlyBrutSalary = getIndicativeAmount(generalInfo?.economique?.brut?.yearly, 0)
+
   const { handleSubmit, watch, control } = useForm({
     defaultValues: initialValues || {
       paiement: generalInfo?.config?.date_paiement
@@ -181,48 +184,6 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
     },
     [days, generalInfo]
   )
-
-  const netConsoOptions = useMemo(() => {
-    const netEconomique = generalInfo?.economique?.net || {}
-
-    const options = [
-      {
-        label: 'info_general.economique_table.net.day',
-        value: getIndicativeAmount(netEconomique?.day, 0)
-      },
-      {
-        label: 'info_general.economique_table.net.monthly',
-        value: getIndicativeAmount(netEconomique?.monthly, 0)
-      },
-      {
-        label: 'info_general.economique_table.net.yearly',
-        value: getIndicativeAmount(netEconomique?.yearly, 0)
-      }
-    ]
-
-    return options
-  }, [generalInfo])
-
-  const brutConsoOptions = useMemo(() => {
-    const brutEconomique = generalInfo?.economique?.brut || {}
-
-    const options = [
-      {
-        label: 'info_general.economique_table.net.day',
-        value: getIndicativeAmount(brutEconomique?.day, 0)
-      },
-      {
-        label: 'info_general.economique_table.net.monthly',
-        value: getIndicativeAmount(brutEconomique?.monthly, 0)
-      },
-      {
-        label: 'info_general.economique_table.net.yearly',
-        value: getIndicativeAmount(brutEconomique?.yearly, 0)
-      }
-    ]
-
-    return options
-  }, [generalInfo])
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
@@ -380,13 +341,14 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
             <tr>
               <td>{generalInfo?.ip?.economique?.interet}</td>
               <td>
-                <Field control={control} type="number" name={`brut.amount`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
+                <Money value={yearlyBrutSalary} ignore span />
               </td>
 
               <td>
-                <CapAmount values={formValues} type="brut" />
+                <CapAmount
+                  values={{ ...formValues, brut: { amount: yearlyBrutSalary } }}
+                  type="brut"
+                />
               </td>
             </tr>
           </tbody>
@@ -404,12 +366,13 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
             <tr>
               <td>{generalInfo?.ip?.economique?.interet}</td>
               <td>
-                <Field control={control} type="number" name={`net.amount`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
+                <Money value={yearlyNetSalary} ignore span />
               </td>
               <td>
-                <CapAmount values={formValues} type="net" />
+                <CapAmount
+                  values={{ ...formValues, net: { amount: yearlyNetSalary } }}
+                  type="net"
+                />
               </td>
             </tr>
           </tbody>

@@ -8,6 +8,7 @@ import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import Money from '@renderer/generic/money'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import resolveSalaryInfo from '@renderer/helpers/getSalaryInfo'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const { data } = useContext(AppContext)
@@ -64,13 +65,18 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   }, [formValues, brutValues, netValues, submitForm, handleSubmit])
 
-  const getSalaryTotalAmount = useCallback((item = {}, days) => {
+  const getSalaryTotalAmount = useCallback((item = {}, days, type = 'net') => {
     const { amount = 0, percentage = 0 } = item
+
+    const { amount: resolvedAmount, divisor } = resolveSalaryInfo(
+      amount,
+      generalInfo?.economique?.[type || 'brut']
+    )
 
     return {
       value: (
         (parseInt(days) || 0) *
-        ((parseFloat(amount) || 0) / 365) *
+        ((parseFloat(resolvedAmount) || 0) / divisor) *
         ((parseFloat(percentage) || 0) / 100)
       ).toFixed(2),
       tooltip: (
@@ -78,8 +84,8 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
           <mn>{parseInt(days) || 0}</mn>
           <mo>x</mo>
           <mfrac>
-            <mn>{parseFloat(amount) || 0}</mn>
-            <mn>365</mn>
+            <mn>{parseFloat(resolvedAmount) || 0}</mn>
+            <mn>{divisor}</mn>
           </mfrac>
           <mo>x</mo>
           <mfrac>
@@ -113,7 +119,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     { header: 'common.start', key: 'start', type: 'start' },
     { header: 'common.end', key: 'end', type: 'end' },
     { header: 'common.days', key: 'days', type: 'calculated' },
-    { header: `common.salary_yearly_${type}`, key: 'amount', type: 'number' },
+    { header: `common.salary_yearly_${type}`, key: 'amount', type: 'salary', salaryType: type },
     { header: `common.total_${type}`, key: 'total', type: 'calculated' },
     {
       header: 'common.date_paiement',
@@ -159,7 +165,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
         base="incapacite_temp_economique"
         formValues={formValues}
         editable={editable}
-        calculateTotal={getSalaryTotalAmount}
+        calculateTotal={(item, days) => getSalaryTotalAmount(item, days, 'net')}
         customActions={customActions('net')}
         addRowDefaults={
           formValues?.net?.[0]
@@ -179,7 +185,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
         base="incapacite_temp_economique"
         formValues={formValues}
         editable={editable}
-        calculateTotal={getSalaryTotalAmount}
+        calculateTotal={(item, days) => getSalaryTotalAmount(item, days, 'brut')}
         customActions={customActions('brut')}
         addRowDefaults={
           formValues?.brut?.[0]
