@@ -480,6 +480,16 @@ export default {
       en: 'Add a row',
       nl: 'Rij toevoegen'
     },
+    edit: {
+      fr: 'Modifier',
+      en: 'Edit',
+      nl: 'Bewerken'
+    },
+    save: {
+      fr: 'Enregistrer',
+      en: 'Save',
+      nl: 'Opslaan'
+    },
     delete: {
       fr: 'Supprimer',
       en: 'Delete',
@@ -888,6 +898,77 @@ export default {
         fr: 'Incapacité personnelle - indemnité journalière',
         en: 'Personal disability - daily allowance',
         nl: 'Persoonlijke ongeschiktheden - dagvergoeding'
+      },
+      hospitalisation: {
+        fr: 'Hospitalisation - indemnité journalière',
+        en: 'Hospitalization - daily allowance',
+        nl: 'Hospitalisatie - dagvergoeding'
+      },
+      incapacite_menagere: {
+        fr: 'Incapacité ménagère - indemnité journalière',
+        en: 'Household disability - daily allowance',
+        nl: 'Huishoudelijke ongeschiktheden - dagvergoeding'
+      },
+      person_charge: {
+        fr: 'Personne à charge - indemnité journalière',
+        en: 'Dependent - daily allowance',
+        nl: 'Afhankelijk - dagvergoeding'
+      },
+      effort_accrus: {
+        fr: 'Efforts accrus - indemnité journalière',
+        en: 'Increased efforts - daily allowance',
+        nl: 'Verhoogde inspanningen - dagvergoeding'
+      },
+      km_vehicule: {
+        fr: 'Véhicule automobile - indemnité par km',
+        en: 'Car - allowance per km',
+        nl: 'Auto - vergoeding per km'
+      },
+      km_other: {
+        fr: 'Autre - indemnité par km',
+        en: 'Other - allowance per km',
+        nl: 'Ander - vergoeding per km'
+      }
+    },
+    economique_table: {
+      title: {
+        fr: 'Tableau économique',
+        en: 'Economic table',
+        nl: 'Economische tabel'
+      },
+      brut: {
+        day: {
+          fr: 'Brut - montant journalier',
+          en: 'Gross - daily amount',
+          nl: 'Bruto - dagbedrag'
+        },
+        monthly: {
+          fr: 'Brut - montant mensuel',
+          en: 'Gross - monthly amount',
+          nl: 'Bruto - maandelijks bedrag'
+        },
+        yearly: {
+          fr: 'Brut - montant annuel',
+          en: 'Gross - yearly amount',
+          nl: 'Bruto - jaarlijks bedrag'
+        }
+      },
+      net: {
+        day: {
+          fr: 'Net - montant journalier',
+          en: 'Net - daily amount',
+          nl: 'Netto - dagbedrag'
+        },
+        monthly: {
+          fr: 'Net - montant mensuel',
+          en: 'Net - monthly amount',
+          nl: 'Netto - maandelijks bedrag'
+        },
+        yearly: {
+          fr: 'Net - montant annuel',
+          en: 'Net - yearly amount',
+          nl: 'Netto - jaarlijks bedrag'
+        }
       }
     },
     incapacite_perma: {

@@ -1,11 +1,11 @@
 import constants from '@renderer/constants'
 import Field from '@renderer/generic/field'
 import TextItem from '@renderer/generic/textItem'
-import { isValid } from 'date-fns'
 import React, { useCallback, useMemo, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { useDebouncedEffect } from '@renderer/hooks/debounce'
-import IncapacitePerma from './incapacite_perma'
+import IncapacitePerma from '../incapacite_perma'
+import EconomiqueSection from './economique'
 
 export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const defaultFormValues = useMemo(() => {
@@ -28,6 +28,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         personnel: { method: 'forfait' },
         menagere: { method: 'forfait' },
         economique: { method: 'forfait' }
+      },
+      economique: {
+        burt: {},
+        net: {}
       }
     }
 
@@ -53,16 +57,15 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           ...baseValues.ip.economique,
           ...(initialValues?.ip?.economique || {})
         }
+      },
+      economique: {
+        ...baseValues.economique,
+        ...(initialValues?.economique || {})
       }
     }
   }, [initialValues])
 
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: defaultFormValues
   })
 
@@ -89,6 +92,11 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     name: 'ip'
   })
 
+  const economiqueValues = useWatch({
+    control,
+    name: 'economique'
+  })
+
   const submitForm = useCallback(
     (data) => {
       onSubmit(data) // Soumettre avec l'onSubmit passé en prop
@@ -104,7 +112,8 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
         JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children) ||
         JSON.stringify(configValues) !== JSON.stringify(previousValuesRef.current?.config) ||
-        JSON.stringify(ipValues) !== JSON.stringify(previousValuesRef.current?.ip)
+        JSON.stringify(ipValues) !== JSON.stringify(previousValuesRef.current?.ip) ||
+        JSON.stringify(economiqueValues) !== JSON.stringify(previousValuesRef.current?.economique)
 
       // Si des valeurs ont changé, soumettre le formulaire
       if (valuesChanged) {
@@ -113,13 +122,22 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           formValues,
           children: childrenValues,
           config: configValues,
-          ip: ipValues
+          ip: ipValues,
+          economique: economiqueValues
         }
 
         handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
       }
     },
-    [formValues, childrenValues, configValues, submitForm, handleSubmit],
+    [
+      formValues,
+      childrenValues,
+      configValues,
+      ipValues,
+      economiqueValues,
+      submitForm,
+      handleSubmit
+    ],
     500
   )
 
@@ -264,98 +282,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         </table>
       </div>
 
-      <div>
-        <TextItem path="info_general.indicative_table.title" tag="h3" />
-        <table style={{ maxWidth: 600 }} className={editable ? 'main-table' : ''}>
-          <tbody>
-            <tr>
-              <TextItem path="info_general.indicative_table.prejudice_exh_amount" tag="td" />
-              <td>
-                <Field control={control} name="config.prejudice_exh" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.incapacite_perso" tag="td" />
-              <td>
-                <Field control={control} name="config.incapacite_perso" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.hospitalisation" tag="td" />
-              <td>
-                <Field control={control} name="config.hospitalisation" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.incapacite_menagere" tag="td" />
-              <td>
-                <Field control={control} name="config.incapacite_menagere" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.person_charge" tag="td" />
-              <td>
-                <Field control={control} name="config.person_charge" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.effort_accrus" tag="td" />
-              <td>
-                <Field control={control} name="config.effort_accrus" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.km_vehicule" tag="td" />
-              <td>
-                <Field control={control} name="config.km_vehicule" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-            <tr>
-              <TextItem path="info_general.indicative_table.km_other" tag="td" />
-              <td>
-                <Field control={control} name="config.km_other" editable={editable}>
-                  {(props) => (
-                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                  )}
-                </Field>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
       {(editable || childrenFields?.fields.length > 0) && (
         <>
           <TextItem path="common.children" tag="h3" />
-          <table style={{ maxWidth: 1200 }}>
+          <table style={{ maxWidth: 1200 }} style={{ marginBottom: 0 }}>
             <thead>
               <tr>
                 <TextItem path="common.name" tag="th" />
@@ -399,6 +329,101 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           <TextItem path="info_general.add_child" />
         </button>
       )}
+
+      {editable && (
+        <div style={{ marginTop: 20 }}>
+          <TextItem path="info_general.indicative_table.title" tag="h3" />
+          <table style={{ maxWidth: 600 }} className={editable ? 'main-table' : ''}>
+            <tbody>
+              <tr>
+                <TextItem path="info_general.indicative_table.prejudice_exh_amount" tag="td" />
+                <td>
+                  <Field control={control} name="config.prejudice_exh" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.incapacite_perso" tag="td" />
+                <td>
+                  <Field control={control} name="config.incapacite_perso" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.hospitalisation" tag="td" />
+                <td>
+                  <Field control={control} name="config.hospitalisation" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.incapacite_menagere" tag="td" />
+                <td>
+                  <Field control={control} name="config.incapacite_menagere" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.person_charge" tag="td" />
+                <td>
+                  <Field control={control} name="config.person_charge" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.effort_accrus" tag="td" />
+                <td>
+                  <Field control={control} name="config.effort_accrus" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.km_vehicule" tag="td" />
+                <td>
+                  <Field control={control} name="config.km_vehicule" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.km_other" tag="td" />
+                <td>
+                  <Field control={control} name="config.km_other" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {editable && (
+        <EconomiqueSection control={control} editable={editable} setValue={setValue} />
+      )}
+
       {editable && (
         <div>
           <TextItem path="common.note" tag="h3" />

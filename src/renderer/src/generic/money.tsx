@@ -18,7 +18,6 @@ const Money = ({ value, ignore, span, className, tooltip }) => {
 
   if (span) return <span>{formatter?.format(value)}</span>
 
-
   return (
     <div
       className={getClassName()}
