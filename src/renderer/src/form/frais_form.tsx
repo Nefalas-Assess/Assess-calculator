@@ -8,9 +8,13 @@ import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const generalInfo = useGeneralInfo()
+
+  const indicativeAmountAuto = getIndicativeAmount(generalInfo?.config?.km_vehicule, 0.42)
+  const indicativeAmountOther = getIndicativeAmount(generalInfo?.config?.km_other, 0.28)
 
   const { control, register, handleSubmit, watch } = useForm({
     defaultValues: initialValues || {
@@ -23,7 +27,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       vestimentaire_value: '400',
       deplacement_value: 0,
       // By default véhicule automobile
-      deplacement_type: 0.42
+      deplacement_type: 'auto'
     }
   })
 
@@ -38,16 +42,21 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const totalDeplacementFrais = useMemo(
     () => ({
-      value: (formValues?.deplacement_value * formValues?.deplacement_type).toFixed(2),
+      value: (
+        formValues?.deplacement_value *
+        (formValues?.deplacement_type === 'auto' ? indicativeAmountAuto : indicativeAmountOther)
+      ).toFixed(2),
       tooltip: (
         <math>
           <mn>{formValues?.deplacement_value}</mn>
           <mo>x</mo>
-          <mn>{formValues?.deplacement_type}</mn>
+          <mn>
+            {formValues?.deplacement_type === 'auto' ? indicativeAmountAuto : indicativeAmountOther}
+          </mn>
         </math>
       )
     }),
-    [formValues]
+    [formValues, indicativeAmountAuto, indicativeAmountOther]
   )
 
   const totalSumRest = useMemo(() => {

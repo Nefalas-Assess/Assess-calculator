@@ -20,7 +20,9 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         hospitalisation: 7,
         incapacite_menagere: 30,
         person_charge: 10,
-        effort_accrus: 30
+        effort_accrus: 30,
+        km_vehicule: 0.42,
+        km_other: 0.28
       },
       ip: {
         personnel: { method: 'forfait' },
@@ -320,6 +322,26 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               <TextItem path="info_general.indicative_table.effort_accrus" tag="td" />
               <td>
                 <Field control={control} name="config.effort_accrus" editable={editable}>
+                  {(props) => (
+                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                  )}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <TextItem path="info_general.indicative_table.km_vehicule" tag="td" />
+              <td>
+                <Field control={control} name="config.km_vehicule" editable={editable}>
+                  {(props) => (
+                    <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                  )}
+                </Field>
+              </td>
+            </tr>
+            <tr>
+              <TextItem path="info_general.indicative_table.km_other" tag="td" />
+              <td>
+                <Field control={control} name="config.km_other" editable={editable}>
                   {(props) => (
                     <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
                   )}
