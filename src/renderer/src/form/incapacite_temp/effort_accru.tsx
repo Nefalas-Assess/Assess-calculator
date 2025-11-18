@@ -98,7 +98,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       header: 'incapacite_temp.effa.coefficient',
       key: 'coefficient',
       type: 'select',
-      width: 50,
+      width: 65,
       options: [
         { value: 1, label: '1' },
         { value: 2, label: '2' },

@@ -4,6 +4,7 @@ import DynamicTable from "@renderer/generic/dynamicTable";
 import useGeneralInfo from "@renderer/hooks/generalInfo";
 
 const coefficients = [
+	{ value: 0.575, label: "0.5/7" },
 	{ value: 1.15, label: "1/7" },
 	{ value: 2.325, label: "1.5/7" },
 	{ value: 3.5, label: "2/7" },
@@ -89,7 +90,7 @@ const PretiumDolorisForm = ({ initialValues, onSubmit, editable = true }) => {
 			key: "coefficient",
 			type: "select",
 			options: coefficients,
-			width: 60,
+			width: 100,
 		},
 		{ header: "common.total", key: "total", type: "calculated" },
 		{
