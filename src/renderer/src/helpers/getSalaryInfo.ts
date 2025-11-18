@@ -31,7 +31,7 @@ export const resolveSalaryInfo = (
 
   if (monthly !== undefined) {
     if (numericValue === monthly) {
-      return { amount: monthly, source: 'monthly', divisor: 12 }
+      return { amount: monthly, source: 'monthly', divisor: 365 / 12 }
     }
   }
 
