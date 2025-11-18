@@ -50,7 +50,7 @@ const HeaderLayout = () => {
             <button
               type="button"
               onClick={() => {
-                setFilePath(null)
+                back()
               }}
             >
               <TextItem path={'layout.home'} />
