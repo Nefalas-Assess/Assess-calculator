@@ -336,16 +336,6 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           <table style={{ maxWidth: 600 }} className={editable ? 'main-table' : ''}>
             <tbody>
               <tr>
-                <TextItem path="info_general.indicative_table.prejudice_exh_amount" tag="td" />
-                <td>
-                  <Field control={control} name="config.prejudice_exh" editable={editable}>
-                    {(props) => (
-                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
-                    )}
-                  </Field>
-                </td>
-              </tr>
-              <tr>
                 <TextItem path="info_general.indicative_table.incapacite_perso" tag="td" />
                 <td>
                   <Field control={control} name="config.incapacite_perso" editable={editable}>
@@ -409,6 +399,16 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 <TextItem path="info_general.indicative_table.km_other" tag="td" />
                 <td>
                   <Field control={control} name="config.km_other" editable={editable}>
+                    {(props) => (
+                      <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
+              <tr>
+                <TextItem path="info_general.indicative_table.prejudice_exh_amount" tag="td" />
+                <td>
+                  <Field control={control} name="config.prejudice_exh" editable={editable}>
                     {(props) => (
                       <input type="number" step="0.01" min="0" style={{ width: 200 }} {...props} />
                     )}
