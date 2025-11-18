@@ -179,19 +179,20 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                     <option value="" disabled>
                       Select
                     </option>
-                    <option value={1}>1/7</option>
-                    <option value={2}>1.5/7</option>
-                    <option value={3}>2/7</option>
-                    <option value={4}>2.5/7</option>
-                    <option value={5}>3/7</option>
-                    <option value={6}>3.5/7</option>
-                    <option value={7}>4/7</option>
-                    <option value={8}>4.5/7</option>
-                    <option value={9}>5/7</option>
-                    <option value={10}>5.5/7</option>
-                    <option value={11}>6/7</option>
-                    <option value={12}>6.5/7</option>
-                    <option value={13}>7/7</option>
+                    <option value={1}>0.5/7</option>
+                    <option value={2}>1/7</option>
+                    <option value={3}>1.5/7</option>
+                    <option value={4}>2/7</option>
+                    <option value={5}>2.5/7</option>
+                    <option value={6}>3/7</option>
+                    <option value={7}>3.5/7</option>
+                    <option value={8}>4/7</option>
+                    <option value={9}>4.5/7</option>
+                    <option value={10}>5/7</option>
+                    <option value={11}>5.5/7</option>
+                    <option value={12}>6/7</option>
+                    <option value={13}>6.5/7</option>
+                    <option value={14}>7/7</option>
                   </select>
                 )}
               </Field>
@@ -245,19 +246,20 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
                     <option value="" disabled>
                       Select
                     </option>
-                    <option value={1}>1/7</option>
-                    <option value={2}>1.5/7</option>
-                    <option value={3}>2/7</option>
-                    <option value={4}>2.5/7</option>
-                    <option value={5}>3/7</option>
-                    <option value={6}>3.5/7</option>
-                    <option value={7}>4/7</option>
-                    <option value={8}>4.5/7</option>
-                    <option value={9}>5/7</option>
-                    <option value={10}>5.5/7</option>
-                    <option value={11}>6/7</option>
-                    <option value={12}>6.5/7</option>
-                    <option value={13}>7/7</option>
+                    <option value={1}>0.5/7</option>
+                    <option value={2}>1/7</option>
+                    <option value={3}>1.5/7</option>
+                    <option value={4}>2/7</option>
+                    <option value={5}>2.5/7</option>
+                    <option value={6}>3/7</option>
+                    <option value={7}>3.5/7</option>
+                    <option value={8}>4/7</option>
+                    <option value={9}>4.5/7</option>
+                    <option value={10}>5/7</option>
+                    <option value={11}>5.5/7</option>
+                    <option value={12}>6/7</option>
+                    <option value={13}>6.5/7</option>
+                    <option value={14}>7/7</option>
                   </select>
                 )}
               </Field>

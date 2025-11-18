@@ -1,4 +1,5 @@
-import  migration030  from './migration/0.3.0'
+import migration030 from './migration/0.3.0'
+import migration110 from './migration/1.1.0'
 
 interface MigrationFunction {
   (data: any): any
@@ -16,6 +17,10 @@ const migrations: Migration[] = [
     version: '0.3.0',
     migrate: migration030
   },
+  {
+    version: '1.1.0',
+    migrate: migration110
+  }
   // Add more migrations here as your app evolves
 ]
 
@@ -27,15 +32,14 @@ const compareVersions = (v1: string, v2: string): number => {
   const parts1 = v1.split('.').map(Number)
   const parts2 = v2.split('.').map(Number)
 
-  
   for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
     const part1 = parts1[i] || 0
     const part2 = parts2[i] || 0
-    
+
     if (part1 < part2) return -1
     if (part1 > part2) return 1
   }
-  
+
   return 0
 }
 
@@ -48,22 +52,24 @@ const compareVersions = (v1: string, v2: string): number => {
 export const migrateData = (data: any, currentVersion: string): any => {
   // If no version in data, assume it's from before versioning was implemented
   const dataVersion = data.version || '1.0.0'
-  
+
   console.log(`Migrating data from version ${dataVersion} to ${currentVersion}`)
-  
+
   // If data is already at current version or newer, no migration needed
   if (compareVersions(dataVersion, currentVersion) >= 0) {
     console.log('No migration needed')
     return data
   }
-  
+
   let migratedData = { ...data }
-  
+
   // Apply all migrations that are newer than the data version
   // and older than or equal to the current version
   for (const migration of migrations) {
-    if (compareVersions(dataVersion, migration.version) < 0 && 
-        compareVersions(migration.version, currentVersion) <= 0) {
+    if (
+      compareVersions(dataVersion, migration.version) < 0 &&
+      compareVersions(migration.version, currentVersion) <= 0
+    ) {
       console.log(`Applying migration to version ${migration.version}`)
       try {
         migratedData = migration.migrate(migratedData)
@@ -73,10 +79,10 @@ export const migrateData = (data: any, currentVersion: string): any => {
       }
     }
   }
-  
+
   // Update the version to the current version
   migratedData.version = currentVersion
-  
+
   console.log('Migration completed successfully')
   return migratedData
 }
@@ -102,4 +108,4 @@ export const prepareDataForSave = (data: any, currentVersion: string): any => {
 export const isValidVersion = (version: string): boolean => {
   const semverRegex = /^\d+\.\d+\.\d+$/
   return semverRegex.test(version)
-} 
+}
