@@ -1323,6 +1323,16 @@ export default {
       fr: "L'une des méthodes doit être forfaitaire",
       en: 'One of the methods must be lump sum',
       nl: 'Eén van de methoden moet forfaitair zijn'
+    },
+    economique_net_required: {
+      fr: "Aucun montant net n'a été saisie dans la partie information générale",
+      en: "No net amount has been entered in the general information part",
+      nl: "Geen netto bedrag is ingevoerd in de algemene informatie deel"
+    },
+    economique_brut_required: {
+      fr: "Aucun montant brut n'a été saisie dans la partie information générale",
+      en: "No gross amount has been entered in the general information part",
+      nl: "Geen bruto bedrag is ingevoerd in de algemene informatie deel"
     }
   }
 }

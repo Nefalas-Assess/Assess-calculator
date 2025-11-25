@@ -243,6 +243,12 @@ const Recapitulatif = () => {
     }
   }
 
+  console.log(
+    data?.incapacite_temp_economique,
+    data?.incapacite_temp_economique?.brut?.length > 0 ||
+      data?.incapacite_temp_economique?.net?.length > 0
+  )
+
   return (
     <>
       <div id="top-menu">
@@ -253,12 +259,24 @@ const Recapitulatif = () => {
       <div ref={contentRef} id="recap">
         {data?.general_info && <InfoG editable={false} />}
         {data?.frais && <Frais editable={false} />}
-        {data?.incapacite_temp_personnel && <Personnel editable={false} />}
-        {data?.incapacite_temp_menagere && <Menagere editable={false} />}
-        {data?.incapacite_temp_economique && <Economique editable={false} />}
-        {data?.efforts_accrus && <Effa editable={false} />}
-        {data?.hospitalisation && <Hospitalisation editable={false} />}
-        {data?.pretium_doloris && <PretiumDoloris editable={false} />}
+        {data?.incapacite_temp_personnel &&
+          data?.incapacite_temp_personnel?.periods?.length > 0 && <Personnel editable={false} />}
+        {data?.incapacite_temp_menagere && data?.incapacite_temp_menagere?.periods?.length > 0 && (
+          <Menagere editable={false} />
+        )}
+        {data?.incapacite_temp_economique &&
+          (data?.incapacite_temp_economique?.brut?.length > 0 ||
+            data?.incapacite_temp_economique?.net?.length > 0 ||
+            (data?.estimate && data?.estimate !== '')) && <Economique editable={false} />}
+        {data?.efforts_accrus && data?.efforts_accrus?.efforts?.length > 0 && (
+          <Effa editable={false} />
+        )}
+        {data?.hospitalisation && data?.hospitalisation?.periods?.length > 0 && (
+          <Hospitalisation editable={false} />
+        )}
+        {data?.pretium_doloris && data?.pretium_doloris?.periods?.length > 0 && (
+          <PretiumDoloris editable={false} />
+        )}
         {data?.forfait_ip &&
           Object.values(data?.general_info?.ip)?.filter((it) => it?.method === 'forfait')
             ?.length !== 0 && <Forfait editable={false} />}
