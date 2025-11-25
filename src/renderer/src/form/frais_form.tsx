@@ -295,27 +295,33 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         <TextItem path="frais.total_frais" tag="strong" /> <Money value={totalSumRest} />
       </div>
 
-      <TextItem path="frais.aides_non_qualifies" tag="h1" />
-      <table id="hospTable" style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <TextItem path="frais.number_hours" tag="th" />
-            <TextItem path="common.total" tag="th" />
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Field control={control} type="number" name={`aides`} editable={editable}>
-                {(props) => <input min={0} {...props} />}
-              </Field>
-            </td>
-            <td>
-              <Money value={totalAides?.value} tooltip={totalAides?.tooltip} />
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {!editable && (!formValues?.aides || formValues?.aides === 0) ? (
+        <></>
+      ) : (
+        <>
+          <TextItem path="frais.aides_non_qualifies" tag="h1" />
+          <table id="hospTable" style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="frais.number_hours" tag="th" />
+                <TextItem path="common.total" tag="th" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <Field control={control} type="number" name={`aides`} editable={editable}>
+                    {(props) => <input min={0} {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Money value={totalAides?.value} tooltip={totalAides?.tooltip} />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      )}
     </form>
   )
 }

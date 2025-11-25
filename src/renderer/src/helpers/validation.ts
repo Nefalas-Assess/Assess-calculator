@@ -76,20 +76,5 @@ export const validateData = (data) => {
     }
   }
 
-  if (data?.incapacite_temp_economique?.net?.length > 0) {
-    if (!data?.general_info?.economique?.net?.day) {
-      for (let i = 0; i < data?.incapacite_temp_economique?.net?.length; i++) {
-        errors[`incapacite_temp_economique.net.${i}.amount`] = 'errors.economique_net_required'
-      }
-    }
-  }
-  if (data?.incapacite_temp_economique?.brut?.length > 0) {
-    if (!data?.general_info?.economique?.brut?.day) {
-      for (let i = 0; i < data?.incapacite_temp_economique?.brut?.length; i++) {
-        errors[`incapacite_temp_economique.brut.${i}.amount`] = 'errors.economique_brut_required'
-      }
-    }
-  }
-
   return errors
 }

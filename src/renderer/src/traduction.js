@@ -1324,15 +1324,10 @@ export default {
       en: 'One of the methods must be lump sum',
       nl: 'Eén van de methoden moet forfaitair zijn'
     },
-    economique_net_required: {
-      fr: "Aucun montant net n'a été saisie dans la partie information générale",
-      en: "No net amount has been entered in the general information part",
-      nl: "Geen netto bedrag is ingevoerd in de algemene informatie deel"
-    },
-    economique_brut_required: {
-      fr: "Aucun montant brut n'a été saisie dans la partie information générale",
-      en: "No gross amount has been entered in the general information part",
-      nl: "Geen bruto bedrag is ingevoerd in de algemene informatie deel"
+    salary_options_zero: {
+      fr: 'Aucune valeur de salaire disponible. Vérifiez les informations générales.',
+      en: 'No salary value available. Check the general information.',
+      nl: 'Geen salariswaarde beschikbaar. Controleer de algemene gegevens.'
     }
   }
 }

@@ -243,12 +243,6 @@ const Recapitulatif = () => {
     }
   }
 
-  console.log(
-    data?.incapacite_temp_economique,
-    data?.incapacite_temp_economique?.brut?.length > 0 ||
-      data?.incapacite_temp_economique?.net?.length > 0
-  )
-
   return (
     <>
       <div id="top-menu">
@@ -267,7 +261,10 @@ const Recapitulatif = () => {
         {data?.incapacite_temp_economique &&
           (data?.incapacite_temp_economique?.brut?.length > 0 ||
             data?.incapacite_temp_economique?.net?.length > 0 ||
-            (data?.estimate && data?.estimate !== '')) && <Economique editable={false} />}
+            (data?.incapacite_temp_economique?.estimate &&
+              data?.incapacite_temp_economique?.estimate !== '')) && (
+            <Economique editable={false} />
+          )}
         {data?.efforts_accrus && data?.efforts_accrus?.efforts?.length > 0 && (
           <Effa editable={false} />
         )}

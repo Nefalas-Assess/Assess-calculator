@@ -124,15 +124,28 @@ const SalaryInput = ({ noSelect, field, salaryType }) => {
     return brutConsoOptions
   }, [salaryType, netConsoOptions, brutConsoOptions])
 
+  const allOptionsZero = useMemo(() => {
+    const values = (options || []).map((option) => parseFloat(option?.value as any) || 0)
+    return values.length > 0 && values.every((value) => value === 0)
+  }, [options])
+
   return (
-    <select {...field} style={{ maxWidth: '100%' }}>
-      {!noSelect && <option value={''}>Select</option>}
-      {(options || [])?.map((it, key) => (
-        <option key={key} value={it?.value}>
-          {translate(it?.label || it?.value)}
-        </option>
-      ))}
-    </select>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      {allOptionsZero ? (
+        <span style={{ color: '#ff5d5d', fontSize: 12 }}>
+          {translate('errors.salary_options_zero')}
+        </span>
+      ) : (
+        <select {...field} style={{ maxWidth: '100%' }}>
+          {!noSelect && <option value={''}>Select</option>}
+          {(options || [])?.map((it, key) => (
+            <option key={key} value={it?.value}>
+              {translate(it?.label || it?.value)}
+            </option>
+          ))}
+        </select>
+      )}
+    </div>
   )
 }
 
