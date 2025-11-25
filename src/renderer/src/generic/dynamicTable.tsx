@@ -156,6 +156,15 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     name
   })
 
+  const tableValues = Array.isArray(formValues[name] as Record<string, unknown>[])
+    ? (formValues[name] as Record<string, unknown>[])
+    : []
+
+  const hasSingleUndefinedRow =
+    !editable &&
+    tableValues.length === 1 &&
+    columns.every((column) => tableValues[0]?.[column.key] === undefined)
+
   const addNext = useCallback(
     (append, initial = {}) => {
       const rows = formValues?.[name] || []
@@ -182,6 +191,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     }
   }, [append, addNext, onAddRow, addRowDefaults])
 
+  if (!editable && fields.length === 0) return null
+  if (!editable && hasSingleUndefinedRow) return null
+
   return (
     <div>
       {title && <TextItem tag="h1" path={title} />}
@@ -199,7 +211,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
         </thead>
         <tbody>
           {fields.map((field, rowIndex) => {
-            const rowData = formValues?.[name]?.[rowIndex] || {}
+            const rowData = tableValues?.[rowIndex] || {}
             const daysVar1 = columns.find((c) => c.type === 'start')?.key
             const daysVar2 = columns.find((c) => c.type === 'end')?.key
             const days = getDays(rowData, [daysVar1, daysVar2])
