@@ -109,13 +109,11 @@ const DetectMissingData = ({ children, data, required }) => {
     <Tooltip
       tooltipContent={renderToolTipContent()}
       contentStyle={{ backgroundColor: 'red' }}
-      style={{ width: '100%' }}
+      style={{ width: '100%', display: 'block' }}
     >
       <div
         style={{
           position: 'relative',
-          marginTop: -5,
-          marginBottom: -5,
           opacity: 0.6
         }}
       >
