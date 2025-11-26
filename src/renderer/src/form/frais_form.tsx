@@ -165,9 +165,12 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         }}
         calculateTotal={(e) => e.amount}
       />
-      <div className="total-box">
-        <TextItem path="frais.total_frais_medicaux" tag="strong" /> <Money value={totalSumFrais} />
-      </div>
+      {!editable && parseFloat(totalSumFrais || 0) === 0 ? null : (
+        <div className="total-box">
+          <TextItem path="frais.total_frais_medicaux" tag="strong" />
+          <Money value={totalSumFrais} />
+        </div>
+      )}
 
       <table id="ipTable" style={{ maxWidth: 1200 }}>
         <thead>
@@ -228,66 +231,75 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               </Field>
             </td>
           </tr>
-          <tr>
-            <TextItem path="frais.deplacement_value" tag="td" />
-            <td>
-              <Field control={control} type="number" name={`deplacement_value`} editable={editable}>
-                {(props) => (
-                  <>
-                    <input {...props} /> KM
-                  </>
-                )}
-              </Field>
-            </td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.deplacement_type}
-                name={`deplacement_type`}
-                editable={editable}
-              ></Field>
-            </td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.boolean}
-                name={`deplacement_paid`}
-                editable={editable}
-              ></Field>
-            </td>
-            <td>
-              <Money
-                value={totalDeplacementFrais?.value}
-                tooltip={totalDeplacementFrais?.tooltip}
-                ignore
-              />
-            </td>
-          </tr>
-          <tr>
-            <TextItem path="frais.package_value" tag="td" />
-            <td></td>
-            <td></td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.boolean}
-                name={`package_paid`}
-                editable={editable}
-              ></Field>
-            </td>
-            <td>
-              <Field control={control} type="number" name={`package_value`} editable={editable}>
-                {(props) => (
-                  <>
-                    <input {...props} />
-                  </>
-                )}
-              </Field>
-            </td>
-          </tr>
+          {!editable && formValues?.deplacement_value === 0 ? null : (
+            <tr>
+              <TextItem path="frais.deplacement_value" tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="number"
+                  name={`deplacement_value`}
+                  editable={editable}
+                >
+                  {(props) => (
+                    <>
+                      <input {...props} /> KM
+                    </>
+                  )}
+                </Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.deplacement_type}
+                  name={`deplacement_type`}
+                  editable={editable}
+                ></Field>
+              </td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.boolean}
+                  name={`deplacement_paid`}
+                  editable={editable}
+                ></Field>
+              </td>
+              <td>
+                <Money
+                  value={totalDeplacementFrais?.value}
+                  tooltip={totalDeplacementFrais?.tooltip}
+                  ignore
+                />
+              </td>
+            </tr>
+          )}
+          {!editable && parseFloat(formValues?.package_value || 0) === 0 ? null : (
+            <tr>
+              <TextItem path="frais.package_value" tag="td" />
+              <td></td>
+              <td></td>
+              <td>
+                <Field
+                  control={control}
+                  type="select"
+                  options={constants.boolean}
+                  name={`package_paid`}
+                  editable={editable}
+                ></Field>
+              </td>
+              <td>
+                <Field control={control} type="number" name={`package_value`} editable={editable}>
+                  {(props) => (
+                    <>
+                      <input {...props} />
+                    </>
+                  )}
+                </Field>
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
 

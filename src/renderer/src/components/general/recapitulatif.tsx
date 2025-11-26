@@ -303,15 +303,15 @@ const Recapitulatif = () => {
         {data?.forfait_ip &&
           Object.values(data?.general_info?.ip)?.filter((it) => it?.method === 'forfait')
             ?.length !== 0 && <Forfait editable={false} />}
-        {data?.incapacite_perma_personnel_cap &&
+        {data?.incapacite_perma_personnel_cap?.reference &&
           data?.general_info?.ip?.personnel?.method === 'capitalized' && (
             <PersonnelCap editable={false} />
           )}
-        {data?.incapacite_perma_menage_cap &&
+        {data?.incapacite_perma_menage_cap?.reference &&
           data?.general_info?.ip?.menagere?.method === 'capitalized' && (
             <MenageCap editable={false} />
           )}
-        {data?.incapacite_perma_economique_cap &&
+        {data?.incapacite_perma_economique_cap?.reference &&
           data?.general_info?.ip?.economique?.method === 'capitalized' && (
             <EconomiqueCap editable={false} />
           )}
@@ -320,11 +320,13 @@ const Recapitulatif = () => {
           <Particuliers editable={false} />
         )}
 
-        {data?.frais_funeraire && <FraisFun editable={false} />}
+        {data?.frais_funeraire?.ref && <FraisFun editable={false} />}
         {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
           <PrejudiceEXH editable={false} />
         )}
-        {data?.prejudice_proche && <PrejudiceProche editable={false} />}
+        {(data?.prejudice_proche?.menage_ref || data?.prejudice_proche?.reference) && (
+          <PrejudiceProche editable={false} />
+        )}
         {data?.provisions &&
           Array.isArray(data?.provisions?.provisions) &&
           hasDefinedValues(data?.provisions?.provisions) && <Provisions editable={false} />}

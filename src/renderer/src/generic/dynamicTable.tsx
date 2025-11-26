@@ -163,7 +163,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   const hasSingleUndefinedRow =
     !editable &&
     tableValues.length === 1 &&
-    columns.every((column) => tableValues[0]?.[column.key] === undefined)
+    columns.every(
+      (column) => tableValues[0]?.[column.key] === undefined || tableValues[0]?.[column.key] === ''
+    )
 
   const addNext = useCallback(
     (append, initial = {}) => {

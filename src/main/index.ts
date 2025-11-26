@@ -155,7 +155,11 @@ const createCustomSet = async ({
     source: template
   }
 
-  await fs.writeFile(path.join(destination, CUSTOM_META_FILE), JSON.stringify(meta, null, 2), 'utf8')
+  await fs.writeFile(
+    path.join(destination, CUSTOM_META_FILE),
+    JSON.stringify(meta, null, 2),
+    'utf8'
+  )
 
   return meta
 }
@@ -307,7 +311,7 @@ function registerIpcHandlers(): void {
         <div class="print-margin">
           <img src="file://${logoPath || ''}" alt="Logo">
           <div class="print-margin-bottom">
-            <p>&copy; 2025 - Evalix</p>
+            <p>&copy; 2025 - Evalix.be</p>
           </div>
         </div>
         <div class="print-content">
