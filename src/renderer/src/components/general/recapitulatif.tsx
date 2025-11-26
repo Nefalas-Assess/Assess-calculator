@@ -22,6 +22,7 @@ import DelayedContent from '@renderer/generic/delayContent'
 import { AppContext } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
+import hasDefinedValues from '@renderer/utils/hasDefinedValues'
 
 const PRINT_MARGIN_WIDTH = 30
 
@@ -295,7 +296,9 @@ const Recapitulatif = () => {
         {data?.frais_funeraire && <FraisFun editable={false} />}
         {data?.prejudice_exh && <PrejudiceEXH editable={false} />}
         {data?.prejudice_proche && <PrejudiceProche editable={false} />}
-        {data?.provisions && <Provisions editable={false} />}
+        {data?.provisions &&
+          Array.isArray(data?.provisions?.provisions) &&
+          hasDefinedValues(data?.provisions?.provisions) && <Provisions editable={false} />}
 
         <DelayedContent delay={1000}>
           <div className="final-total-boxes">
