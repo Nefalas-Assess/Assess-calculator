@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useMemo, useRef } from 'react'
 import InfoG from './infog'
 import Frais from './frais'
 import Personnel from '../incapacite_temporaire/personnel'
@@ -244,6 +244,31 @@ const Recapitulatif = () => {
     }
   }
 
+  const showPrejudiceParticulier = useMemo(() => {
+    if (
+      data?.prejudice_particulier?.coefficient_prejudice_esthétique !== '' ||
+      data?.prejudice_particulier?.coefficient_quantum_doloris !== ''
+    )
+      return true
+
+    if (data?.prejudice_particulier?.prejudice_sexuels?.length > 0) {
+      return true
+    }
+
+    if (data?.prejudice_particulier?.prejudice_agrements?.length > 0) {
+      return true
+    }
+
+    return false
+  }, [data?.prejudice_particulier])
+
+  const showFraisCap = useMemo(() => {
+    if (hasDefinedValues(data?.incapacite_perma_charges?.charges)) return true
+    if (hasDefinedValues(data?.incapacite_perma_charges?.paid)) return true
+    if (hasDefinedValues(data?.incapacite_perma_charges?.package)) return true
+    return false
+  }, [data?.incapacite_perma_charges])
+
   return (
     <>
       <div id="top-menu">
@@ -290,11 +315,15 @@ const Recapitulatif = () => {
           data?.general_info?.ip?.economique?.method === 'capitalized' && (
             <EconomiqueCap editable={false} />
           )}
-        {data?.incapacite_perma_charges && <FraisCap editable={false} />}
-        {data?.prejudice_particulier && <Particuliers editable={false} />}
+        {data?.incapacite_perma_charges && showFraisCap && <FraisCap editable={false} />}
+        {data?.prejudice_particulier && showPrejudiceParticulier && (
+          <Particuliers editable={false} />
+        )}
 
         {data?.frais_funeraire && <FraisFun editable={false} />}
-        {data?.prejudice_exh && <PrejudiceEXH editable={false} />}
+        {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
+          <PrejudiceEXH editable={false} />
+        )}
         {data?.prejudice_proche && <PrejudiceProche editable={false} />}
         {data?.provisions &&
           Array.isArray(data?.provisions?.provisions) &&
