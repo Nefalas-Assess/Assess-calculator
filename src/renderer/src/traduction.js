@@ -1360,6 +1360,51 @@ export default {
       fr: 'Nombre de jours cours/sem.',
       en: 'Class days/week',
       nl: 'Cursusdagen/week'
+    },
+    periods: {
+      fr: 'Efforts accrus',
+      en: 'Increased efforts',
+      nl: 'Verhoogde inspanningen'
+    },
+    lost_year: {
+      fr: "Perte d'une année scolaire" ,
+      en: 'Lost school year',
+      nl: 'Verloren schooljaar'
+    },
+    location: {
+      fr: 'Frais de location d\'un "kot"',
+      en: 'Location of a student housing',
+      nl: 'Huur van een "kot"'
+    },
+    moral_damage: {
+      fr: 'Dommage moral',
+      en: 'Moral damage',
+      nl: 'Moral schade'
+    },
+    job_loss: {
+      fr: 'Retard dans la carrière professionnelle',
+      en: 'Delay in professional career',
+      nl: 'Vertraging in de beroepscarrière'
+    },
+    job_loss_days: {
+      fr: 'Nombre de jours de retard',
+      en: 'Number of days of delay',
+      nl: 'Aantal dagen van vertraging'
+    },
+    job_loss_amount: {
+      fr: 'Salaire annuel net',
+      en: 'Annual net salary',
+      nl: 'Jaarlijks netto salaris'
+    },
+    job_loss_total: {
+      fr: 'Total',
+      en: 'Total',
+      nl: 'Totaal'
+    },
+    total: {
+      fr: 'Total général :',
+      en: 'Total general :',
+      nl: 'Algemeen totaal :'
     }
   },
 }
