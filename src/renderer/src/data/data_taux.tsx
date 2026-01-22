@@ -1,4 +1,5 @@
 export default [
+  { start: '2026', end: '2026', amount: '4.5' },
   { start: '2025', end: '2025', amount: '4.5' },
   { start: '2024', end: '2024', amount: '5.75' },
   { start: '2023', end: '2023', amount: '5.25' },
