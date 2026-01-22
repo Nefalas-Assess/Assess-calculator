@@ -72,7 +72,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
     return {
       value: (
         parseInt(days || 0) *
-        parseFloat(values?.amount || 0) *
+        IndemniteJournaliere?.[values?.type || 'elementary'] *
         parseFloat((values?.pourcentage || 0) / 100) *
         (parseInt(values?.coefficient || 0) / 7)
       ).toFixed(2),
@@ -80,7 +80,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
         <math>
           <mn>{parseInt(days || 0)}</mn>
           <mo>x</mo>
-          <mn>{parseFloat(values?.amount || 0)}</mn>
+          <mn>{IndemniteJournaliere?.[values?.type || 'elementary']}</mn>
           <mo>x</mo>
           <mfrac>
             <mn>{parseFloat(values?.pourcentage || 0)}</mn>
