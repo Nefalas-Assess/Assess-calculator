@@ -6,6 +6,7 @@ import { Controller } from 'react-hook-form'
 import { useTranslation } from './textItem'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 import { useGeneralInfo } from '@renderer/hooks/generalInfo'
+import { FaCheck, FaTimes } from 'react-icons/fa'
 
 const ReferenceInput = ({ options, onChange, value }) => {
   const appContext = useContext(AppContext)
@@ -193,6 +194,14 @@ const Field = ({
         if (!ref) return '-'
 
         return `${translate(ref?.label || ref?.value)} ${translate(ref2?.label || ref2?.value || '')}`
+      }
+
+      if (type === 'checkbox') {
+        return (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {val ? <FaCheck /> : <FaTimes />}
+          </div>
+        )
       }
 
       return val

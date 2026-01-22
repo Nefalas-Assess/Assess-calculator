@@ -23,6 +23,7 @@ import { AppContext } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
 import hasDefinedValues from '@renderer/utils/hasDefinedValues'
+import PrejudiceScolaire from './prejudice_scolaire'
 
 const PRINT_MARGIN_WIDTH = 30
 
@@ -319,6 +320,7 @@ const Recapitulatif = () => {
         {data?.prejudice_particulier && showPrejudiceParticulier && (
           <Particuliers editable={false} />
         )}
+        {data?.prejudice_scolaire && <PrejudiceScolaire editable={false} />}
 
         {data?.frais_funeraire?.ref && <FraisFun editable={false} />}
         {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
