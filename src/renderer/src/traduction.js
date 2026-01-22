@@ -463,17 +463,17 @@ export default {
     elementary: {
       fr: 'Primaire',
       en: 'Elementary',
-      nl: 'Elementair'
+      nl: 'Basisschool'
     },
     secondary: {
       fr: 'Secondaire',
       en: 'Secondary',
-      nl: 'Secundair'
+      nl: 'Middelbaar'
     },
     superior: {
       fr: 'Supérieur',
       en: 'Superior',
-      nl: 'Superior'
+      nl: 'Hoger'
     },
     variables: {
       fr: 'Variables',
@@ -1359,7 +1359,7 @@ export default {
     coefficient: {
       fr: 'Nombre de jours cours/sem.',
       en: 'Class days/week',
-      nl: 'Coursdagen/week'
+      nl: 'Cursusdagen/week'
     }
   },
 }
