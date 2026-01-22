@@ -185,6 +185,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
+        subtitle="prejudice_scolaire.periods"
         columns={periodsColumns}
         control={control}
         name="periods"
@@ -196,7 +197,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
       />
 
       <DynamicTable
-        title="prejudice_scolaire.lost_year"
+        subtitle="prejudice_scolaire.lost_year"
         columns={lostYearColumns}
         control={control}
         name="lost_year"
@@ -217,6 +218,8 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
             </div>
           </td>
         </tr>
+      </table>
+      <table style={{ maxWidth: 1200 }}>
         <tr>
           <TextItem path="prejudice_scolaire.moral_damage" tag="td" />
           <td>
@@ -229,6 +232,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
           </td>
         </tr>
       </table>
+
       <TextItem path="prejudice_scolaire.job_loss" tag="h3" />
       <table style={{ maxWidth: 1200 }}>
         <tr>
