@@ -164,7 +164,12 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
     {
       header: 'common.amount',
       key: 'amount',
-      type: 'number'
+      type: 'number',
+      additionalContent: (e) => (
+        <div className="money" style={{ display: 'none' }}>
+          {e?.amount}
+        </div>
+      )
     }
   ]
 
