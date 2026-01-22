@@ -27,6 +27,7 @@ import ToastProvider from './providers/ToastProvider'
 import SideProvider from './providers/SideProvider'
 import License from './License'
 import SettingsPage from '@renderer/components/settings/SettingsPage'
+import PrejudiceScolaire from './components/general/prejudice_scolaire'
 
 const IncapaciteTemp = () => {
   return (
@@ -78,6 +79,7 @@ const Main = () => {
             <Route path="frais" element={<Frais />} />
             <Route path="provisions" element={<Provisions />} />
             <Route path="recap" element={<Recapitulatif />} />
+            <Route path="prejudice_scolaire" element={<PrejudiceScolaire />} />
           </Route>
           <Route path="settings/*" element={<SettingsPage />} />
         </Route>

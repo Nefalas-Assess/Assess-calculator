@@ -398,6 +398,11 @@ export default {
         nl: 'Schade geleden door de naastbestaanden'
       }
     },
+    prejudice_scolaire: {
+      fr: 'Préjudice scolaire',
+      en: 'School damage',
+      nl: 'Schoolschade'
+    },
     provisions: {
       fr: 'Provisions',
       en: 'Provisions',
@@ -454,6 +459,21 @@ export default {
       fr: 'Frais',
       en: 'Fees',
       nl: 'Kosten'
+    },
+    elementary: {
+      fr: 'Primaire',
+      en: 'Elementary',
+      nl: 'Elementair'
+    },
+    secondary: {
+      fr: 'Secondaire',
+      en: 'Secondary',
+      nl: 'Secundair'
+    },
+    superior: {
+      fr: 'Supérieur',
+      en: 'Superior',
+      nl: 'Superior'
     },
     variables: {
       fr: 'Variables',
@@ -1329,5 +1349,17 @@ export default {
       en: 'No salary value available. Check the general information.',
       nl: 'Geen salariswaarde beschikbaar. Controleer de algemene gegevens.'
     }
-  }
+  },
+  prejudice_scolaire: {
+    type: {
+      fr: 'Enseignement',
+      en: 'Education',
+      nl: 'Onderwijs'
+    },
+    coefficient: {
+      fr: 'Nombre de jours cours/sem.',
+      en: 'Class days/week',
+      nl: 'Coursdagen/week'
+    }
+  },
 }

@@ -85,6 +85,11 @@ export default {
     { label: { fr: 'Véhicule automobile', en: 'Car', nl: 'Auto' }, value: 'auto' },
     { label: { fr: 'Autre', en: 'Other', nl: 'Ander' }, value: 'other' }
   ],
+  prejudice_scolaire_indemnite_journaliere: [
+    { value: 'elementary', label: 'common.elementary' },
+    { value: 'secondary', label: 'common.secondary' },
+    { value: 'superior', label: 'common.superior' }
+  ],
   reference_type: [
     { value: 'schryvers_2024', label: 'Schryvers 2024' },
     { value: 'schryvers_2025', label: 'Schryvers 2025' }

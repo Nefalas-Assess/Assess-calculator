@@ -40,6 +40,7 @@ type ColumnType = {
   additionalContent?: (values: Record<string, unknown>) => React.ReactNode
   minDate?: Date
   maxDate?: Date
+  onChange?: (value: any, rowIndex: number, rowData: Record<string, unknown>) => void
 }
 
 type DynamicTableProps = {
@@ -334,6 +335,14 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                 {...props}
                                 style={{ width: column.width || '100%' }}
                                 {...column.props}
+                                onChange={(e) => {
+                                  // Call the original onChange from react-hook-form
+                                  props.onChange(e)
+                                  // Call the custom onChange if provided
+                                  if (column.onChange) {
+                                    column.onChange(e.target.value, rowIndex, rowData)
+                                  }
+                                }}
                               >
                                 <option>Select</option>
                                 {column.options?.map((option) => (

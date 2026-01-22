@@ -354,6 +354,11 @@ export const AppLayout = () => {
                   )}
                 </DetectMissingData>
               </div>
+              <div>
+                <LinkItem to="/prejudice_scolaire">
+                  <TextItem path={'nav.prejudice_scolaire'} />
+                </LinkItem>
+              </div>
               <div className="sub-nav">
                 <DetectMissingData
                   data={data}
