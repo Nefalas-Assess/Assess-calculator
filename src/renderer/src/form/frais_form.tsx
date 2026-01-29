@@ -122,7 +122,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       key: 'paid',
       type: 'select',
       options: constants.boolean,
-      width: 50
+      width: 80
     },
     {
       header: 'common.amount',
