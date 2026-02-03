@@ -1,15 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import { getIndicativeAmount } from '@renderer/helpers/getIndicativeAmount'
+import get from 'lodash/get'
+import { AppContext } from '@renderer/providers/AppProvider'
+import cloneDeep from 'lodash/cloneDeep'
 
 const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
+  const { data } = useContext(AppContext)
   const generalInfo = useGeneralInfo()
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.effort_accrus, 30)
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {}
   })
 
@@ -30,6 +34,48 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
     },
     [onSubmit]
   )
+
+  const copyDate = useCallback(
+    (name) => {
+      const initial = get(data, name)
+      console.log(initial, data, name)
+      let filteredData = initial.map(({ start, end, percentage }) => ({
+        start,
+        end,
+        percentage,
+        amount: indicativeAmount,
+        coefficient: 5
+      }))
+      const currentData = cloneDeep(formValues?.periods)
+      if (formValues?.periods) {
+        filteredData = currentData.concat(filteredData)
+      }
+      setValue('efforts', filteredData)
+    },
+    [formValues, data, indicativeAmount, setValue]
+  )
+
+  const customActions = {
+    label: 'common.import_date',
+    actions: [
+      {
+        label: 'common.personnel',
+        action: () => copyDate('incapacite_temp_personnel.periods')
+      },
+      {
+        label: 'common.menagère',
+        action: () => copyDate('incapacite_temp_menagere.periods')
+      },
+      {
+        label: 'common.economique.net',
+        action: () => copyDate('incapacite_temp_economique.net')
+      },
+      {
+        label: 'common.economique.brut',
+        action: () => copyDate('incapacite_temp_economique.brut')
+      }
+    ]
+  }
 
   useEffect(() => {
     const valuesChanged =
@@ -53,7 +99,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       value: (
         parseInt(days || 0) *
         parseFloat(values?.amount || 0) *
-        parseFloat((values?.pourcentage || 0) / 100) *
+        parseFloat((values?.percentage || 0) / 100) *
         (parseInt(values?.coefficient || 0) / 7)
       ).toFixed(2),
       tooltip: (
@@ -63,7 +109,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
           <mn>{parseFloat(values?.amount || 0)}</mn>
           <mo>x</mo>
           <mfrac>
-            <mn>{parseFloat(values?.pourcentage || 0)}</mn>
+            <mn>{parseFloat(values?.percentage || 0)}</mn>
             <mn>100</mn>
           </mfrac>
           <mo>x</mo>
@@ -79,7 +125,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   const columns = [
     {
       header: '%',
-      key: 'pourcentage',
+      key: 'percentage',
       type: 'number',
       width: 50,
       props: { style: { width: 50 } }
@@ -150,6 +196,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
         formValues={formValues}
         editable={editable}
         calculateTotal={getTotalAmount}
+        customActions={customActions}
         addRowDefaults={addRowDefaults}
       />
     </form>
