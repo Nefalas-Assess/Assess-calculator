@@ -38,21 +38,21 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
   const copyDate = useCallback(
     (name) => {
       const initial = get(data, name)
-      console.log(initial, data, name)
-      let filteredData = initial.map(({ start, end, percentage }) => ({
+      let filteredData = initial.map(({ start, end, percentage, date_paiement }) => ({
         start,
         end,
         percentage,
         amount: indicativeAmount,
-        coefficient: 5
+        coefficient: 5,
+        date_paiement: date_paiement || generalInfo?.config?.date_paiement
       }))
-      const currentData = cloneDeep(formValues?.periods)
-      if (formValues?.periods) {
+      const currentData = cloneDeep(formValues?.efforts)
+      if (formValues?.efforts) {
         filteredData = currentData.concat(filteredData)
       }
       setValue('efforts', filteredData)
     },
-    [formValues, data, indicativeAmount, setValue]
+    [formValues, data, indicativeAmount, setValue, generalInfo]
   )
 
   const customActions = {
@@ -73,6 +73,10 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
       {
         label: 'common.economique.brut',
         action: () => copyDate('incapacite_temp_economique.brut')
+      },
+      {
+        label: 'common.hospitalisation',
+        action: () => copyDate('hospitalisation.periods')
       }
     ]
   }

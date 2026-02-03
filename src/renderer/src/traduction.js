@@ -656,6 +656,16 @@ export default {
         en: 'Economic gross',
         nl: 'Economische brutto'
       }
+    },
+    effort_accrus: {
+      fr: 'Efforts accrus',
+      en: 'Increased efforts',
+      nl: 'Verhoogde inspanningen'
+    },
+    hospitalisation: {
+      fr: 'Hospitalisation',
+      en: 'Hospitalization',
+      nl: 'Hospitalisatie'
     }
   },
   errorsdn: {

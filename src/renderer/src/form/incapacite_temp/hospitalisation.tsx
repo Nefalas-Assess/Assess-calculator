@@ -1,12 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import get from 'lodash/get'
+import { AppContext } from '@renderer/providers/AppProvider'
+import cloneDeep from 'lodash/cloneDeep'
 
 const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
-  const { control, handleSubmit, watch } = useForm({
+  const { data } = useContext(AppContext)
+  const { control, handleSubmit, watch, setValue } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
@@ -102,6 +106,50 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
     return defaultRow
   }, [formValues, generalInfo, indicativeAmount])
 
+  const copyDate = useCallback(
+    (name) => {
+      const initial = get(data, name)
+      let filteredData = initial.map(({ start, end, date_paiement }) => ({
+        start,
+        end,
+        amount: indicativeAmount,
+        date_paiement: date_paiement || generalInfo?.config?.date_paiement
+      }))
+      const currentData = cloneDeep(formValues?.periods)
+      if (formValues?.periods) {
+        filteredData = currentData.concat(filteredData)
+      }
+      setValue('periods', filteredData)
+    },
+    [formValues, data, indicativeAmount, setValue, generalInfo]
+  )
+
+  const customActions = {
+    label: 'common.import_date',
+    actions: [
+      {
+        label: 'common.personnel',
+        action: () => copyDate('incapacite_temp_personnel.periods')
+      },
+      {
+        label: 'common.menagère',
+        action: () => copyDate('incapacite_temp_menagere.periods')
+      },
+      {
+        label: 'common.economique.net',
+        action: () => copyDate('incapacite_temp_economique.net')
+      },
+      {
+        label: 'common.economique.brut',
+        action: () => copyDate('incapacite_temp_economique.brut')
+      },
+      {
+        label: 'common.effort_accrus',
+        action: () => copyDate('efforts_accrus.efforts')
+      }
+    ]
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
@@ -114,6 +162,7 @@ const HospitalisationForm = ({ initialValues, onSubmit, editable = true }) => {
         editable={editable}
         addRowDefaults={addRowDefaults}
         calculateTotal={getTotalAmount}
+        customActions={customActions}
       />
     </form>
   )
