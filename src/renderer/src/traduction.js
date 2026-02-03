@@ -460,21 +460,6 @@ export default {
       en: 'Fees',
       nl: 'Kosten'
     },
-    elementary: {
-      fr: 'Primaire',
-      en: 'Elementary',
-      nl: 'Basisschool'
-    },
-    secondary: {
-      fr: 'Secondaire',
-      en: 'Secondary',
-      nl: 'Middelbaar'
-    },
-    superior: {
-      fr: 'Supérieur',
-      en: 'Superior',
-      nl: 'Hoger'
-    },
     variables: {
       fr: 'Variables',
       en: 'Variables',

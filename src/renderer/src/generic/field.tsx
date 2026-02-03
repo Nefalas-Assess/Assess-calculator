@@ -206,7 +206,7 @@ const Field = ({
 
       return val
     },
-    [type, options, style, translate]
+    [type, options, style, translate, referenceOptions]
   )
 
   const renderInput = useCallback(
@@ -247,7 +247,7 @@ const Field = ({
 
       return children({ ...field, type })
     },
-    [children, type, noSelect, options, style, translate]
+    [children, type, noSelect, options, style, translate, salaryType]
   )
 
   return (

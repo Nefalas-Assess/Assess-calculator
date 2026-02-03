@@ -327,6 +327,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                         minDate={column.minDate}
                         maxDate={column.maxDate}
                         salaryType={column.salaryType}
+                        options={column?.options}
                       >
                         {(props) => {
                           if (typeInput === 'select') {
