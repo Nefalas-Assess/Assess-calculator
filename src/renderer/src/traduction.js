@@ -460,21 +460,6 @@ export default {
       en: 'Fees',
       nl: 'Kosten'
     },
-    elementary: {
-      fr: 'Primaire',
-      en: 'Elementary',
-      nl: 'Basisschool'
-    },
-    secondary: {
-      fr: 'Secondaire',
-      en: 'Secondary',
-      nl: 'Middelbaar'
-    },
-    superior: {
-      fr: 'Supérieur',
-      en: 'Superior',
-      nl: 'Hoger'
-    },
     variables: {
       fr: 'Variables',
       en: 'Variables',
@@ -671,6 +656,16 @@ export default {
         en: 'Economic gross',
         nl: 'Economische brutto'
       }
+    },
+    effort_accrus: {
+      fr: 'Efforts accrus',
+      en: 'Increased efforts',
+      nl: 'Verhoogde inspanningen'
+    },
+    hospitalisation: {
+      fr: 'Hospitalisation',
+      en: 'Hospitalization',
+      nl: 'Hospitalisatie'
     }
   },
   errorsdn: {
