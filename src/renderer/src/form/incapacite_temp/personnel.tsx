@@ -82,11 +82,12 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
   const copyDate = useCallback(
     (name) => {
       const initial = get(data, name)
-      let filteredData = initial.map(({ start, end, percentage }) => ({
+      let filteredData = initial.map(({ start, end, percentage, date_paiement }) => ({
         start,
         end,
         percentage,
-        amount: indicativeAmount
+        amount: indicativeAmount,
+        date_paiement: date_paiement || generalInfo?.config?.date_paiement
       }))
       const currentData = cloneDeep(formValues?.periods)
       if (formValues?.periods) {
@@ -94,7 +95,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
       }
       setValue('periods', filteredData)
     },
-    [formValues, indicativeAmount, data, setValue]
+    [formValues, indicativeAmount, data, setValue, generalInfo]
   )
 
   const customActions = {
@@ -111,6 +112,14 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
       {
         label: 'common.economique.brut',
         action: () => copyDate('incapacite_temp_economique.brut')
+      },
+      {
+        label: 'common.effort_accrus',
+        action: () => copyDate('efforts_accrus.efforts')
+      },
+      {
+        label: 'common.hospitalisation',
+        action: () => copyDate('hospitalisation.periods')
       }
     ]
   }

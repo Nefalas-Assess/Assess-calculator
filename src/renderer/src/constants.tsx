@@ -86,9 +86,9 @@ export default {
     { label: { fr: 'Autre', en: 'Other', nl: 'Ander' }, value: 'other' }
   ],
   prejudice_scolaire_indemnite_journaliere: [
-    { value: 'elementary', label: 'common.elementary' },
-    { value: 'secondary', label: 'common.secondary' },
-    { value: 'superior', label: 'common.superior' }
+    { value: 'elementary', label: { fr: 'Primaire', en: 'Elementary', nl: 'Basisschool' } },
+    { value: 'secondary', label: { fr: 'Secondaire', en: 'Secondary', nl: 'Middelbaar' } },
+    { value: 'superior', label: { fr: 'Supérieur', en: 'Superior', nl: 'Hoger' } }
   ],
   reference_type: [
     { value: 'schryvers_2024', label: 'Schryvers 2024' },

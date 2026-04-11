@@ -100,10 +100,11 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
   const copyDate = useCallback(
     (name, fieldName) => {
       const initial = typeof name === 'string' ? get(data, name) : name
-      let filteredData = initial.map(({ start, end, percentage }) => ({
+      let filteredData = initial.map(({ start, end, percentage, date_paiement }) => ({
         start,
         end,
-        percentage
+        percentage,
+        date_paiement: date_paiement || generalInfo?.config?.date_paiement
       }))
       const currentData = cloneDeep(formValues?.[fieldName])
       if (currentData) {
@@ -111,7 +112,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       }
       setValue(fieldName, filteredData)
     },
-    [formValues]
+    [formValues, generalInfo, data, setValue]
   )
 
   const columns = (type) => [
@@ -150,6 +151,14 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
       {
         label: `common.economique.${name === 'net' ? 'brut' : 'net'}`,
         action: () => copyDate(name === 'net' ? formValues?.brut : formValues?.net, name)
+      },
+      {
+        label: 'common.effort_accrus',
+        action: () => copyDate('efforts_accrus.efforts', name)
+      },
+      {
+        label: 'common.hospitalisation',
+        action: () => copyDate('hospitalisation.periods', name)
       }
     ]
   })
