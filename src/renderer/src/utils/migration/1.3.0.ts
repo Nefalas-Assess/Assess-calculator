@@ -19,6 +19,13 @@ export default (data: any) => {
     return data
   }
 
+  if (Array.isArray(data.general_info.children)) {
+    data.general_info.children = data.general_info.children.map((child) => ({
+      ...child,
+      leaveHomeAge: child?.leaveHomeAge ?? 25
+    }))
+  }
+
   data.general_info.student = {
     lives_with_parents: false,
     leave_home_age: 25,

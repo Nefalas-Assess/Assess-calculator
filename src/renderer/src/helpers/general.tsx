@@ -1,5 +1,24 @@
 import { addDays, differenceInDays, isSameDay } from 'date-fns'
 
+export const getTheoreticalLeaveHomeDate = (birthDate, leaveHomeAge, addOneDay = false) => {
+  if (!birthDate || leaveHomeAge === 'never') return null
+
+  const birth = new Date(birthDate)
+  if (Number.isNaN(birth.getTime())) return null
+
+  const numericAge = Number.parseInt(`${leaveHomeAge ?? 25}`, 10)
+  if (!Number.isFinite(numericAge)) return null
+
+  const leaveDate = new Date(birth)
+  leaveDate.setFullYear(birth.getFullYear() + numericAge)
+
+  if (addOneDay) {
+    leaveDate.setDate(leaveDate.getDate() + 1)
+  }
+
+  return leaveDate
+}
+
 export const getChildrenUnder25 = (children) => {
   const now = new Date()
   return children?.filter((child) => {
@@ -69,8 +88,8 @@ export const getMedDate = (item, varName) => {
 
   return addDays(start, diffInDays / 2)
 }
-// Calculate the number of days before and after 25 years old for a given period
-export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
+// Calculate the number of days before and after the theoretical leave-home age for a given period
+export const calculateDaysBeforeAfter25 = (birthDate, dates, leaveHomeAge = 25) => {
   const parseDate = (date) => new Date(date)
 
   // Convertir les dates en objets Date
@@ -87,9 +106,6 @@ export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
     return 'La date de début doit être avant la date de fin.'
   }
 
-  // Calcul de la date des 25 ans
-  const twentyFifthBirthday = new Date(birth.getFullYear() + 25, birth.getMonth(), birth.getDate())
-
   // Calcul des jours entre deux dates
   const calculateDaysBetween = (date1, date2) => {
     const diffTime = Math.abs(date2 - date1)
@@ -99,16 +115,39 @@ export const calculateDaysBeforeAfter25 = (birthDate, dates) => {
   let before25 = 0
   let after25 = 0
 
+  const leaveHomeDate = getTheoreticalLeaveHomeDate(birthDate, leaveHomeAge)
+
+  if (!leaveHomeDate) {
+    if (birth > end) {
+      before25 = 0
+      after25 = 0
+    } else {
+      const effectiveStart = birth > start ? birth : start
+      before25 = calculateDaysBetween(effectiveStart, end)
+      after25 = 0
+    }
+
+    const total = calculateDaysBetween(start, end)
+    const percentageBefore25 = total > 0 ? before25 / total : 0
+
+    return {
+      percentageBefore25,
+      before25,
+      after25,
+      total
+    }
+  }
+
   // Cas où la date de début est avant les 25 ans
-  if (start <= twentyFifthBirthday) {
+  if (start <= leaveHomeDate) {
     // Calcul des jours avant les 25 ans
-    const actualEndBefore25 = end <= twentyFifthBirthday ? end : twentyFifthBirthday
+    const actualEndBefore25 = end <= leaveHomeDate ? end : leaveHomeDate
 
     before25 = calculateDaysBetween(start, actualEndBefore25)
 
     // Calcul des jours après les 25 ans
-    if (end > twentyFifthBirthday) {
-      after25 = calculateDaysBetween(twentyFifthBirthday, end)
+    if (end > leaveHomeDate) {
+      after25 = calculateDaysBetween(leaveHomeDate, end)
     }
 
     // Cas où la date de naissance est après la date de début

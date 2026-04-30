@@ -42,6 +42,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     return {
       ...baseValues,
       ...initialValues,
+      children: (initialValues?.children || []).map((child) => ({
+        ...child,
+        leaveHomeAge: child?.leaveHomeAge ?? 25
+      })),
       config: {
         ...baseValues.config,
         ...(initialValues?.config || {})
@@ -158,7 +162,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   )
 
   const addChild = () => {
-    childrenFields.append({ name: '', birthDate: '' }) // Nouveau champ enfant
+    childrenFields.append({ name: '', birthDate: '', leaveHomeAge: 25 }) // Nouveau champ enfant
   }
 
   return (
@@ -340,6 +344,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               <tr>
                 <TextItem path="common.name" tag="th" />
                 <TextItem path="common.date_naissance" tag="th" />
+                <TextItem path="common.leave_home_age" tag="th" />
                 {editable && <th></th>}
               </tr>
             </thead>
@@ -360,6 +365,15 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                     >
                       {(props) => <input {...props} />}
                     </Field>
+                  </td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.child_leave_home_age}
+                      name={`children.${index}.leaveHomeAge`}
+                      editable={editable}
+                    ></Field>
                   </td>
                   {editable && (
                     <td>

@@ -10,7 +10,10 @@ import TotalBox from '@renderer/generic/totalBox'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
-import { calculateDaysBeforeAfter25 } from '@renderer/helpers/general'
+import {
+  calculateDaysBeforeAfter25,
+  getTheoreticalLeaveHomeDate
+} from '@renderer/helpers/general'
 import { addDays, format } from 'date-fns'
 import Interest from '@renderer/generic/interet'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
@@ -243,10 +246,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       if (!item?.birthDate) {
         res.push({ days: { percentageBefore25: 1 } })
       } else {
-        const result = calculateDaysBeforeAfter25(item?.birthDate, [
-          generalInfo?.date_death,
-          formValues?.paiement
-        ])
+        const result = calculateDaysBeforeAfter25(
+          item?.birthDate,
+          [generalInfo?.date_death, formValues?.paiement],
+          item?.leaveHomeAge
+        )
 
         if (result?.before25 !== 0) {
           res.push({ days: result, ...item })
@@ -257,49 +261,40 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     return res
   }, [formValues, generalInfo])
 
-  const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
-    // Return null if no birth date provided
-    if (!birthDate) return null
-
-    // Create date object from birth date
-    const birth = new Date(birthDate)
-
-    // Add 25 years to birth date
-    const date25 = new Date(birth)
-    date25.setFullYear(birth.getFullYear() + 25)
-
-    // Add one day if requested
-    if (addOneDay) {
-      date25.setDate(date25.getDate() + 1)
-    }
-
-    return date25
-  }, [])
-
   const sortedChildren = useMemo(() => {
     return childrenOnPeriod
       ?.filter((e) => {
-        // Filter out children without birthdate
         if (!e?.birthDate) return false
-        // Get the 25th birthday
-        const date25 = get25thBirthday(e?.birthDate)
-        // Get consolidation date from general info
+        const leaveHomeDate = getTheoreticalLeaveHomeDate(e?.birthDate, e?.leaveHomeAge)
+        if (!leaveHomeDate) return false
         const deathDate = new Date(generalInfo?.date_death)
-        // Keep child only if their 25th birthday is after consolidation date
-        return date25 > deathDate
+        return leaveHomeDate > deathDate
       })
       ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
   }, [childrenOnPeriod, generalInfo])
 
   // Children without birthdate
   const unsortedChildren = useMemo(() => {
-    return childrenOnPeriod?.filter((e) => !e?.birthDate)
+    return childrenOnPeriod?.filter((e) => !e?.birthDate || e?.leaveHomeAge === 'never')
   }, [childrenOnPeriod])
 
   useEffect(() => {
     const valuesChanged =
       JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
       JSON.stringify(membersValues) !== JSON.stringify(previousValuesRef.current?.members)
+
+    if (
+      sortedChildren?.length === 0 &&
+      unsortedChildren?.length > 0 &&
+      (formValues?.menage_amount === undefined ||
+        formValues?.menage_amount === '' ||
+        parseFloat(formValues?.menage_amount || 0) === indicativeAmount)
+    ) {
+      setValue(
+        'menage_amount',
+        indicativeAmount + indicativePersonChargeAmount * unsortedChildren.length
+      )
+    }
 
     if (
       formValues?.reference &&
@@ -338,8 +333,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     submitForm,
     handleSubmit,
     generalInfo?.config?.date_paiement,
+    indicativeAmount,
+    indicativePersonChargeAmount,
     setValue,
-    sortedChildren
+    sortedChildren,
+    unsortedChildren
   ])
 
   const columns = [
@@ -478,9 +476,13 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     const start =
                       key === 0
                         ? addDays(generalInfo?.date_death, 1)
-                        : get25thBirthday(sortedChildren[key - 1]?.birthDate, true)
+                        : getTheoreticalLeaveHomeDate(
+                            sortedChildren[key - 1]?.birthDate,
+                            sortedChildren[key - 1]?.leaveHomeAge,
+                            true
+                          )
 
-                    const end = get25thBirthday(item?.birthDate)
+                    const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
 
                     const menage_amount =
                       parseFloat(formValues?.menage_amount || 0) +
@@ -541,8 +543,9 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                   <tr>
                     <td>
                       {format(
-                        get25thBirthday(
+                        getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         ),
                         'dd/MM/yyyy'
@@ -568,8 +571,9 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                             indicativePersonChargeAmount * unsortedChildren?.length
                         }}
                         data={generalInfo}
-                        end={get25thBirthday(
+                        end={getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
                       />
@@ -593,8 +597,9 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                             indicativePersonChargeAmount * unsortedChildren?.length
                         }}
                         data={generalInfo}
-                        end={get25thBirthday(
+                        end={getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
                         interest={{

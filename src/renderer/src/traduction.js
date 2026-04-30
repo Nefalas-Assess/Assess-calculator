@@ -600,6 +600,11 @@ export default {
       en: 'Children',
       nl: 'Kinderen'
     },
+    leave_home_age: {
+      fr: 'Âge départ foyer',
+      en: 'Leave-home age',
+      nl: 'Leeftijd vertrek thuis'
+    },
     ref: {
       fr: 'Référence',
       en: 'Reference',
@@ -677,9 +682,9 @@ export default {
   },
   tooltip: {
     number_days_before_25: {
-      fr: "Nombre de jours avant l'age de 25 ou la date du paiement",
-      en: 'Number of days before the age of 25 or the payment date',
-      nl: 'Aantal dagen voor de leeftijd van 25 of de betalingsdatum'
+      fr: "Nombre de jours avant l'âge théorique du départ du foyer ou la date de paiement",
+      en: 'Number of days before the theoretical leave-home age or the payment date',
+      nl: 'Aantal dagen voor de theoretische leeftijd van vertrek uit het ouderlijk huis of de betaaldatum'
     },
     born_at: {
       fr: 'né le',

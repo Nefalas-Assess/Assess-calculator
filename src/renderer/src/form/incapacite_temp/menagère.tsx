@@ -178,7 +178,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
         if (!item?.birthDate) {
           res.push({ days: { percentageBefore25: 1 } })
         } else {
-          const result = calculateDaysBeforeAfter25(item?.birthDate, [values?.start, values?.end])
+          const result = calculateDaysBeforeAfter25(item?.birthDate, [values?.start, values?.end], item?.leaveHomeAge)
           res.push({ days: result, ...item })
         }
       }

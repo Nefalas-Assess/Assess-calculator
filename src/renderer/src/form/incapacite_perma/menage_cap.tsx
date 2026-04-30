@@ -1,4 +1,9 @@
-import { calculateDaysBeforeAfter25, getDays, getMedDate } from '@renderer/helpers/general'
+import {
+  calculateDaysBeforeAfter25,
+  getDays,
+  getMedDate,
+  getTheoreticalLeaveHomeDate
+} from '@renderer/helpers/general'
 import { format, addDays } from 'date-fns'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -186,10 +191,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       if (!item?.birthDate) {
         res.push({ days: { percentageBefore25: 1 } })
       } else {
-        const result = calculateDaysBeforeAfter25(item?.birthDate, [
-          generalInfo?.date_consolidation,
-          formValues?.paiement
-        ])
+        const result = calculateDaysBeforeAfter25(
+          item?.birthDate,
+          [generalInfo?.date_consolidation, formValues?.paiement],
+          item?.leaveHomeAge
+        )
 
         if (result?.before25 !== 0) {
           res.push({ days: result, ...item })
@@ -245,25 +251,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     [days, childrenOnPeriod, generalInfo, indicativePersonChargeAmount]
   )
 
-  const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
-    // Return null if no birth date provided
-    if (!birthDate) return null
-
-    // Create date object from birth date
-    const birth = new Date(birthDate)
-
-    // Add 25 years to birth date
-    const date25 = new Date(birth)
-    date25.setFullYear(birth.getFullYear() + 25)
-
-    // Add one day if requested
-    if (addOneDay) {
-      date25.setDate(date25.getDate() + 1)
-    }
-
-    return date25
-  }, [])
-
   const getBirthdayAtAge = useCallback((birthDate, age, addOneDay = false) => {
     if (!birthDate || age === undefined || age === null || age === '') return null
 
@@ -284,29 +271,36 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   const sortedChildren = useMemo(() => {
     return childrenOnPeriod
       ?.filter((e) => {
-        // Filter out children without birthdate
         if (!e?.birthDate) return false
-        // Get the 25th birthday
-        const date25 = get25thBirthday(e?.birthDate)
-        // Get consolidation date from general info
+        const leaveHomeDate = getTheoreticalLeaveHomeDate(e?.birthDate, e?.leaveHomeAge)
+        if (!leaveHomeDate) return false
         const consolidationDate = new Date(formValues?.paiement)
-        // Keep child only if their 25th birthday is after consolidation date
-        return date25 > consolidationDate
+        return leaveHomeDate > consolidationDate
       })
       ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
-  }, [childrenOnPeriod])
+  }, [childrenOnPeriod, formValues?.paiement])
 
-  // Children without birthdate
   const unsortedChildren = useMemo(() => {
-    return childrenOnPeriod?.filter((e) => !e?.birthDate)
+    return childrenOnPeriod?.filter((e) => !e?.birthDate || e?.leaveHomeAge === 'never')
   }, [childrenOnPeriod])
 
   useEffect(() => {
-    if (!sortedChildren?.length) return
-
     const baseContribution = formValues?.perso_contribution ?? defaultContribution
 
-    sortedChildren.forEach((_, key) => {
+    if (
+      sortedChildren?.length === 0 &&
+      unsortedChildren?.length > 0 &&
+      (formValues?.perso_amount === undefined ||
+        formValues?.perso_amount === '' ||
+        parseFloat(formValues?.perso_amount || 0) === indicativeAmount)
+    ) {
+      setValue(
+        'perso_amount',
+        indicativeAmount + indicativePersonChargeAmount * unsortedChildren.length
+      )
+    }
+
+    sortedChildren?.forEach((_, key) => {
       const amountField = `perso_child_amount_${key}`
       const contributionField = `perso_child_contribution_${key}`
 
@@ -349,6 +343,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     unsortedChildren,
     formValues,
     defaultContribution,
+    indicativeAmount,
     indicativePersonChargeAmount,
     setValue
   ])
@@ -531,9 +526,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     const start =
                       key === 0
                         ? addDays(formValues?.paiement || new Date(), 1)
-                        : get25thBirthday(sortedChildren[key - 1]?.birthDate, true)
+                        : getTheoreticalLeaveHomeDate(
+                            sortedChildren[key - 1]?.birthDate,
+                            sortedChildren[key - 1]?.leaveHomeAge,
+                            true
+                          )
 
-                    const end = get25thBirthday(item?.birthDate)
+                    const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
                     const amountField = `perso_child_amount_${key}`
                     const contributionField = `perso_child_contribution_${key}`
                     return (
@@ -575,8 +574,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   <tr>
                     <td>
                       {format(
-                        get25thBirthday(
+                        getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         ),
                         'dd/MM/yyyy'
@@ -610,8 +610,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                           perso_contribution: formValues?.perso_child_contribution_final,
                           perso_pourcentage: generalInfo?.ip?.menagere?.interet
                         }}
-                        end={get25thBirthday(
+                        end={getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
                         startIndex={0}
