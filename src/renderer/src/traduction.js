@@ -878,6 +878,16 @@ export default {
       en: 'Professional status',
       nl: 'Beroepsstatus'
     },
+    student_lives_with_parents: {
+      fr: 'La victime réside chez ses parents',
+      en: 'The victim lives with their parents',
+      nl: 'Het slachtoffer woont bij de ouders'
+    },
+    student_leave_home_age: {
+      fr: 'Âge supposé du départ du foyer',
+      en: 'Expected age of leaving the family home',
+      nl: 'Veronderstelde leeftijd van vertrek uit het ouderlijk huis'
+    },
     configuration: {
       fr: 'Configuration',
       en: 'Setup',

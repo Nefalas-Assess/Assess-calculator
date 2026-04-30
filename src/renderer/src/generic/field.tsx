@@ -245,6 +245,18 @@ const Field = ({
         return <textarea style={style} {...field} />
       }
 
+      if (type === 'checkbox') {
+        const { value, onChange, ...rest } = field
+        return (
+          <input
+            {...rest}
+            type="checkbox"
+            checked={!!value}
+            onChange={(event) => onChange(event.target.checked)}
+          />
+        )
+      }
+
       return children({ ...field, type })
     },
     [children, type, noSelect, options, style, translate, salaryType]
