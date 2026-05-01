@@ -249,6 +249,59 @@ textarea {
 	}
 }
 
+input[type='checkbox'] {
+	appearance: none;
+	-webkit-appearance: none;
+	width: 22px;
+	height: 22px;
+	margin: 0;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+	background: var(--input-bg);
+	border: 1px solid var(--input-border);
+	border-radius: 8px;
+	box-shadow: var(--shadow-soft);
+	transition:
+		border-color 180ms ease,
+		box-shadow 220ms ease,
+		background 180ms ease,
+		transform 160ms ease;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 12px 12px;
+
+	&:hover {
+		border-color: color-mix(in srgb, var(--sidebar-link-indicator, var(--color-primary)) 50%, var(--input-border));
+	}
+
+	&:focus,
+	&:focus-visible {
+		border-color: var(--sidebar-link-indicator, var(--color-primary));
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--sidebar-link-indicator, var(--color-primary)) 25%, transparent);
+		outline: none;
+	}
+
+	&:checked {
+		background-color: color-mix(
+			in srgb,
+			var(--sidebar-link-indicator, var(--color-primary)) 90%,
+			white 10%
+		);
+		border-color: color-mix(
+			in srgb,
+			var(--sidebar-link-indicator, var(--color-primary)) 70%,
+			transparent
+		);
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.2 8.3l3 3.1 6.6-6.8' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	}
+
+	&:active {
+		transform: scale(0.96);
+	}
+}
+
 /* Custom dropdown arrow + contrast, but keep native look on macOS */
 html:not(.platform-mac) select {
 	appearance: none;

@@ -29,6 +29,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         menagere: { method: 'forfait' },
         economique: { method: 'forfait' }
       },
+      student: {
+        lives_with_parents: false,
+        leave_home_age: 25
+      },
       economique: {
         burt: {},
         net: {}
@@ -38,6 +42,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     return {
       ...baseValues,
       ...initialValues,
+      children: (initialValues?.children || []).map((child) => ({
+        ...child,
+        leaveHomeAge: child?.leaveHomeAge ?? 25
+      })),
       config: {
         ...baseValues.config,
         ...(initialValues?.config || {})
@@ -57,6 +65,10 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           ...baseValues.ip.economique,
           ...(initialValues?.ip?.economique || {})
         }
+      },
+      student: {
+        ...baseValues.student,
+        ...(initialValues?.student || {})
       },
       economique: {
         ...baseValues.economique,
@@ -92,6 +104,11 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     name: 'ip'
   })
 
+  const studentValues = useWatch({
+    control,
+    name: 'student'
+  })
+
   const economiqueValues = useWatch({
     control,
     name: 'economique'
@@ -113,6 +130,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children) ||
         JSON.stringify(configValues) !== JSON.stringify(previousValuesRef.current?.config) ||
         JSON.stringify(ipValues) !== JSON.stringify(previousValuesRef.current?.ip) ||
+        JSON.stringify(studentValues) !== JSON.stringify(previousValuesRef.current?.student) ||
         JSON.stringify(economiqueValues) !== JSON.stringify(previousValuesRef.current?.economique)
 
       // Si des valeurs ont changé, soumettre le formulaire
@@ -123,6 +141,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
           children: childrenValues,
           config: configValues,
           ip: ipValues,
+          student: studentValues,
           economique: economiqueValues
         }
 
@@ -134,6 +153,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
       childrenValues,
       configValues,
       ipValues,
+      studentValues,
       economiqueValues,
       submitForm,
       handleSubmit
@@ -142,7 +162,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   )
 
   const addChild = () => {
-    childrenFields.append({ name: '', birthDate: '' }) // Nouveau champ enfant
+    childrenFields.append({ name: '', birthDate: '', leaveHomeAge: 25 }) // Nouveau champ enfant
   }
 
   return (
@@ -226,6 +246,40 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 ></Field>
               </td>
             </tr>
+            {formValues?.profession === 'étudiant' && (
+              <>
+                <tr>
+                  <TextItem path="info_general.student_lives_with_parents" tag="td" />
+                  <td>
+                    <Field
+                      control={control}
+                      type="checkbox"
+                      name="student.lives_with_parents"
+                      editable={editable}
+                    >
+                      {() => null}
+                    </Field>
+                  </td>
+                </tr>
+                {formValues?.student?.lives_with_parents && (
+                  <tr>
+                    <TextItem path="info_general.student_leave_home_age" tag="td" />
+                    <td>
+                      <Field
+                        control={control}
+                        type="number"
+                        name="student.leave_home_age"
+                        editable={editable}
+                      >
+                        {(props) => (
+                          <input type="number" min="0" step="1" style={{ width: 80 }} {...props} />
+                        )}
+                      </Field>
+                    </td>
+                  </tr>
+                )}
+              </>
+            )}
             {editable && (
               <>
                 <tr>
@@ -290,6 +344,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
               <tr>
                 <TextItem path="common.name" tag="th" />
                 <TextItem path="common.date_naissance" tag="th" />
+                <TextItem path="common.leave_home_age" tag="th" />
                 {editable && <th></th>}
               </tr>
             </thead>
@@ -310,6 +365,15 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                     >
                       {(props) => <input {...props} />}
                     </Field>
+                  </td>
+                  <td>
+                    <Field
+                      control={control}
+                      type="select"
+                      options={constants.child_leave_home_age}
+                      name={`children.${index}.leaveHomeAge`}
+                      editable={editable}
+                    ></Field>
                   </td>
                   {editable && (
                     <td>

@@ -1,3 +1,17 @@
+const childLeaveHomeAge = [
+  ...Array.from({ length: 33 }, (_, index) => {
+    const age = index + 18
+    return {
+      value: age,
+      label: `${age}`
+    }
+  }),
+  {
+    value: 'never',
+    label: { fr: 'Jamais', en: 'Never', nl: 'Nooit' }
+  }
+]
+
 export default {
   sexe: [
     { label: { fr: 'Homme', en: 'Man', nl: 'Man' }, value: 'homme' },
@@ -81,6 +95,7 @@ export default {
     { label: { fr: 'Oui', en: 'Yes', nl: 'Ja' }, value: true },
     { label: { fr: 'Non', en: 'No', nl: 'Nee' }, value: false }
   ],
+  child_leave_home_age: childLeaveHomeAge,
   deplacement_type: [
     { label: { fr: 'Véhicule automobile', en: 'Car', nl: 'Auto' }, value: 'auto' },
     { label: { fr: 'Autre', en: 'Other', nl: 'Ander' }, value: 'other' }

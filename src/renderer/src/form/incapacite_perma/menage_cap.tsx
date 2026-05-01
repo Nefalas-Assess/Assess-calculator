@@ -1,4 +1,9 @@
-import { calculateDaysBeforeAfter25, getDays, getMedDate } from '@renderer/helpers/general'
+import {
+  calculateDaysBeforeAfter25,
+  getDays,
+  getMedDate,
+  getTheoreticalLeaveHomeDate
+} from '@renderer/helpers/general'
 import { format, addDays } from 'date-fns'
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -78,13 +83,25 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_menagere, 30)
   const indicativePersonChargeAmount = getIndicativeAmount(generalInfo?.config?.person_charge, 10)
 
-  const { handleSubmit, watch, control } = useForm({
-    defaultValues: initialValues || {
+  const defaultContribution = generalInfo?.config?.default_contribution
+
+  const { handleSubmit, watch, control, setValue } = useForm({
+    defaultValues: {
       conso_amount: indicativeAmount,
       perso_amount: indicativeAmount,
-      perso_contribution: generalInfo?.config?.default_contribution,
-      conso_contribution: generalInfo?.config?.default_contribution,
-      paiement: generalInfo?.config?.date_paiement
+      perso_contribution: defaultContribution,
+      conso_contribution: defaultContribution,
+      paiement: generalInfo?.config?.date_paiement,
+      student_home_amount:
+        initialValues?.student_home_amount ?? initialValues?.perso_amount ?? indicativeAmount,
+      student_home_contribution:
+        initialValues?.student_home_contribution ??
+        initialValues?.perso_contribution ??
+        defaultContribution,
+      student_after_home_amount:
+        initialValues?.student_after_home_amount ?? initialValues?.perso_amount ?? indicativeAmount,
+      student_after_home_contribution: initialValues?.student_after_home_contribution ?? 100,
+      ...initialValues
     }
   })
 
@@ -174,10 +191,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       if (!item?.birthDate) {
         res.push({ days: { percentageBefore25: 1 } })
       } else {
-        const result = calculateDaysBeforeAfter25(item?.birthDate, [
-          generalInfo?.date_consolidation,
-          formValues?.paiement
-        ])
+        const result = calculateDaysBeforeAfter25(
+          item?.birthDate,
+          [generalInfo?.date_consolidation, formValues?.paiement],
+          item?.leaveHomeAge
+        )
 
         if (result?.before25 !== 0) {
           res.push({ days: result, ...item })
@@ -233,44 +251,125 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     [days, childrenOnPeriod, generalInfo, indicativePersonChargeAmount]
   )
 
-  const get25thBirthday = useCallback((birthDate, addOneDay = false) => {
-    // Return null if no birth date provided
-    if (!birthDate) return null
+  const getBirthdayAtAge = useCallback((birthDate, age, addOneDay = false) => {
+    if (!birthDate || age === undefined || age === null || age === '') return null
 
-    // Create date object from birth date
+    const numericAge = Number.parseInt(age, 10)
+    if (!Number.isFinite(numericAge)) return null
+
     const birth = new Date(birthDate)
+    const targetDate = new Date(birth)
+    targetDate.setFullYear(birth.getFullYear() + numericAge)
 
-    // Add 25 years to birth date
-    const date25 = new Date(birth)
-    date25.setFullYear(birth.getFullYear() + 25)
-
-    // Add one day if requested
     if (addOneDay) {
-      date25.setDate(date25.getDate() + 1)
+      targetDate.setDate(targetDate.getDate() + 1)
     }
 
-    return date25
+    return targetDate
   }, [])
 
   const sortedChildren = useMemo(() => {
     return childrenOnPeriod
       ?.filter((e) => {
-        // Filter out children without birthdate
         if (!e?.birthDate) return false
-        // Get the 25th birthday
-        const date25 = get25thBirthday(e?.birthDate)
-        // Get consolidation date from general info
+        const leaveHomeDate = getTheoreticalLeaveHomeDate(e?.birthDate, e?.leaveHomeAge)
+        if (!leaveHomeDate) return false
         const consolidationDate = new Date(formValues?.paiement)
-        // Keep child only if their 25th birthday is after consolidation date
-        return date25 > consolidationDate
+        return leaveHomeDate > consolidationDate
       })
       ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
+  }, [childrenOnPeriod, formValues?.paiement])
+
+  const unsortedChildren = useMemo(() => {
+    return childrenOnPeriod?.filter((e) => !e?.birthDate || e?.leaveHomeAge === 'never')
   }, [childrenOnPeriod])
 
-  // Children without birthdate
-  const unsortedChildren = useMemo(() => {
-    return childrenOnPeriod?.filter((e) => !e?.birthDate)
-  }, [childrenOnPeriod])
+  useEffect(() => {
+    const baseContribution = formValues?.perso_contribution ?? defaultContribution
+
+    if (
+      sortedChildren?.length === 0 &&
+      unsortedChildren?.length > 0 &&
+      (formValues?.perso_amount === undefined ||
+        formValues?.perso_amount === '' ||
+        parseFloat(formValues?.perso_amount || 0) === indicativeAmount)
+    ) {
+      setValue(
+        'perso_amount',
+        indicativeAmount + indicativePersonChargeAmount * unsortedChildren.length
+      )
+    }
+
+    sortedChildren?.forEach((_, key) => {
+      const amountField = `perso_child_amount_${key}`
+      const contributionField = `perso_child_contribution_${key}`
+
+      if (formValues?.[amountField] === undefined || formValues?.[amountField] === '') {
+        const defaultAmount =
+          parseFloat(formValues?.perso_amount || 0) +
+          indicativePersonChargeAmount * unsortedChildren?.length +
+          indicativePersonChargeAmount * (sortedChildren.length - key)
+
+        setValue(amountField, defaultAmount)
+      }
+
+      if (
+        formValues?.[contributionField] === undefined ||
+        formValues?.[contributionField] === ''
+      ) {
+        setValue(contributionField, baseContribution)
+      }
+    })
+
+    if (
+      formValues?.perso_child_amount_final === undefined ||
+      formValues?.perso_child_amount_final === ''
+    ) {
+      const finalAmount =
+        parseFloat(formValues?.perso_amount || 0) +
+        indicativePersonChargeAmount * unsortedChildren?.length
+
+      setValue('perso_child_amount_final', finalAmount)
+    }
+
+    if (
+      formValues?.perso_child_contribution_final === undefined ||
+      formValues?.perso_child_contribution_final === ''
+    ) {
+      setValue('perso_child_contribution_final', baseContribution)
+    }
+  }, [
+    sortedChildren,
+    unsortedChildren,
+    formValues,
+    defaultContribution,
+    indicativeAmount,
+    indicativePersonChargeAmount,
+    setValue
+  ])
+
+  const studentSplitEnd = useMemo(() => {
+    if (generalInfo?.profession !== 'étudiant') return null
+    if (!generalInfo?.student?.lives_with_parents) return null
+    if (!formValues?.paiement) return null
+
+    const targetDate = getBirthdayAtAge(
+      generalInfo?.date_naissance,
+      generalInfo?.student?.leave_home_age || 25
+    )
+
+    if (!targetDate) return null
+
+    const paiementDate = new Date(formValues.paiement)
+    return targetDate > paiementDate ? targetDate : null
+  }, [
+    formValues?.paiement,
+    generalInfo?.profession,
+    generalInfo?.student?.lives_with_parents,
+    generalInfo?.student?.leave_home_age,
+    generalInfo?.date_naissance,
+    getBirthdayAtAge
+  ])
 
   return (
     <form onSubmit={handleSubmit(submitForm)}>
@@ -409,35 +508,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     ></Field>
                   </td>
                 </tr>
-                <tr>
-                  <TextItem path="common.indemnite_journaliere" tag="td" />
-                  <td>
-                    <Field
-                      control={control}
-                      name={`perso_amount`}
-                      type="number"
-                      editable={editable}
-                    >
-                      {(props) => <input style={{ width: 50 }} {...props} />}
-                    </Field>
-                  </td>
-                </tr>
-                <tr>
-                  <TextItem path="common.pourcentage" tag="td" />
-                  <td>{generalInfo?.ip?.menagere?.interet}</td>
-                </tr>
-                <tr>
-                  <TextItem path="common.contribution" tag="td" />
-                  <td>
-                    <Field
-                      control={control}
-                      name={`perso_contribution`}
-                      type="select"
-                      options={constants.contribution}
-                      editable={editable}
-                    ></Field>
-                  </td>
-                </tr>
               </tbody>
             </table>
             <FadeIn show={formValues?.perso_reference}>
@@ -456,28 +526,41 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     const start =
                       key === 0
                         ? addDays(formValues?.paiement || new Date(), 1)
-                        : get25thBirthday(sortedChildren[key - 1]?.birthDate, true)
+                        : getTheoreticalLeaveHomeDate(
+                            sortedChildren[key - 1]?.birthDate,
+                            sortedChildren[key - 1]?.leaveHomeAge,
+                            true
+                          )
 
-                    const end = get25thBirthday(item?.birthDate)
-                    const perso_amount =
-                      parseFloat(formValues?.perso_amount || 0) +
-                      indicativePersonChargeAmount * unsortedChildren?.length +
-                      indicativePersonChargeAmount * (sortedChildren?.length - key)
+                    const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
+                    const amountField = `perso_child_amount_${key}`
+                    const contributionField = `perso_child_contribution_${key}`
                     return (
                       <tr key={key}>
                         <td>
                           {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
                         </td>
                         <td>
-                          <Money value={perso_amount} ignore />
+                          <Field control={control} name={amountField} type="number" editable={editable}>
+                            {(props) => <input style={{ width: 80 }} {...props} />}
+                          </Field>
                         </td>
                         <td>{generalInfo?.ip?.menagere?.interet} %</td>
-                        <td>{formValues?.perso_contribution} %</td>
+                        <td>
+                          <Field
+                            control={control}
+                            name={contributionField}
+                            type="select"
+                            options={constants.contribution}
+                            editable={editable}
+                          ></Field>
+                        </td>
                         <td>
                           <CapAmount
                             values={{
                               ...formValues,
-                              perso_amount: perso_amount,
+                              perso_amount: formValues?.[amountField],
+                              perso_contribution: formValues?.[contributionField],
                               perso_pourcentage: generalInfo?.ip?.menagere?.interet
                             }}
                             start={start}
@@ -491,37 +574,155 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                   <tr>
                     <td>
                       {format(
-                        get25thBirthday(
+                        getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         ),
                         'dd/MM/yyyy'
                       )}
                     </td>
                     <td>
-                      <Money
-                        value={
-                          parseFloat(formValues?.perso_amount || 0) +
-                          indicativePersonChargeAmount * unsortedChildren?.length
-                        }
-                        ignore
-                      />
+                      <Field
+                        control={control}
+                        name="perso_child_amount_final"
+                        type="number"
+                        editable={editable}
+                      >
+                        {(props) => <input style={{ width: 80 }} {...props} />}
+                      </Field>
                     </td>
-                    <td>{generalInfo?.ip?.menagere?.interet} %</td>
-                    <td>{formValues?.perso_contribution} %</td>
+                    <td style={{ textWrap: 'nowrap' }}> {generalInfo?.ip?.menagere?.interet} %</td>
+                    <td>
+                      <Field
+                        control={control}
+                        name="perso_child_contribution_final"
+                        type="select"
+                        options={constants.contribution}
+                        editable={editable}
+                      ></Field>
+                    </td>
                     <td>
                       <CapAmount
                         values={{
                           ...formValues,
-                          perso_amount:
-                            parseFloat(formValues?.perso_amount || 0) +
-                            indicativePersonChargeAmount * unsortedChildren?.length,
+                          perso_amount: formValues?.perso_child_amount_final,
+                          perso_contribution: formValues?.perso_child_contribution_final,
                           perso_pourcentage: generalInfo?.ip?.menagere?.interet
                         }}
-                        end={get25thBirthday(
+                        end={getTheoreticalLeaveHomeDate(
                           sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
+                        startIndex={0}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </FadeIn>
+          </>
+        ) : studentSplitEnd ? (
+          <>
+            <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
+              <tbody>
+                <tr>
+                  <TextItem path="common.ref" tag="td" />
+                  <td>
+                    <Field
+                      control={control}
+                      type="reference"
+                      options={constants.reference_menage_children}
+                      name="perso_reference"
+                      editable={editable}
+                    ></Field>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <FadeIn show={formValues?.perso_reference}>
+              <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+                <thead>
+                  <tr>
+                    <TextItem path="common.period" tag="th" />
+                    <TextItem path="common.indemnite_journaliere" tag="th" />
+                    <th style={{ width: 50 }}>%</th>
+                    <TextItem path="common.contribution" tag="th" />
+                    <TextItem path="common.total" tag="th" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {format(addDays(formValues?.paiement || new Date(), 1), 'dd/MM/yyyy')} -{' '}
+                      {format(studentSplitEnd, 'dd/MM/yyyy')}
+                    </td>
+                    <td>
+                      <Field
+                        control={control}
+                        name="student_home_amount"
+                        type="number"
+                        editable={editable}
+                      >
+                        {(props) => <input style={{ width: 80 }} {...props} />}
+                      </Field>
+                    </td>
+                    <td>{generalInfo?.ip?.menagere?.interet} %</td>
+                    <td>
+                      <Field
+                        control={control}
+                        name="student_home_contribution"
+                        type="select"
+                        options={constants.contribution}
+                        editable={editable}
+                      ></Field>
+                    </td>
+                    <td>
+                      <CapAmount
+                        values={{
+                          ...formValues,
+                          perso_amount: formValues?.student_home_amount,
+                          perso_contribution: formValues?.student_home_contribution,
+                          perso_pourcentage: generalInfo?.ip?.menagere?.interet
+                        }}
+                        start={addDays(formValues?.paiement || new Date(), 1)}
+                        end={studentSplitEnd}
+                        usePersoReference={true}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{format(addDays(studentSplitEnd, 1), 'dd/MM/yyyy')}</td>
+                    <td>
+                      <Field
+                        control={control}
+                        name="student_after_home_amount"
+                        type="number"
+                        editable={editable}
+                      >
+                        {(props) => <input style={{ width: 80 }} {...props} />}
+                      </Field>
+                    </td>
+                    <td style={{ textWrap: 'nowrap' }}> {generalInfo?.ip?.menagere?.interet} %</td>
+                    <td>
+                      <Field
+                        control={control}
+                        name="student_after_home_contribution"
+                        type="select"
+                        options={constants.contribution}
+                        editable={editable}
+                      ></Field>
+                    </td>
+                    <td>
+                      <CapAmount
+                        values={{
+                          ...formValues,
+                          perso_amount: formValues?.student_after_home_amount,
+                          perso_contribution: formValues?.student_after_home_contribution,
+                          perso_pourcentage: generalInfo?.ip?.menagere?.interet
+                        }}
+                        end={addDays(studentSplitEnd, 1)}
                         startIndex={0}
                       />
                     </td>
