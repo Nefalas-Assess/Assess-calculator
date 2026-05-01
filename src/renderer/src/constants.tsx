@@ -107,7 +107,8 @@ export default {
   ],
   reference_type: [
     { value: 'schryvers_2024', label: 'Schryvers 2024' },
-    { value: 'schryvers_2025', label: 'Schryvers 2025' }
+    { value: 'schryvers_2025', label: 'Schryvers 2025' },
+    { value: 'schryvers_2026', label: 'Schryvers 2026' },
   ],
   reference_menage_children: [
     {
