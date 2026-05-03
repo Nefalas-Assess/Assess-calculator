@@ -1,23 +1,46 @@
 import { useAppData } from '@renderer/providers/AppProvider'
 import { addYears, differenceInDays, intervalToDuration } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+type CapitalizationTable = Record<string, number[]>
+
+type TableCacheEntry = {
+  promise?: Promise<CapitalizationTable | null>
+  value?: CapitalizationTable | null
+}
+
+const tableCache = new Map<string, TableCacheEntry>()
+
+const getCapitalizationGender = (sexe?: string | null) => {
+  if (!sexe) return ''
+  return sexe === 'homme' ? 'h' : 'f'
+}
+
+const getCapitalizationCacheKey = (ref: string, sexe?: string | null, base = 'data_cap') => {
+  if (!ref) return null
+  return `${base}::${ref}::${getCapitalizationGender(sexe)}`
+}
+
+const getCachedCapitalizationTable = (cacheKey: string | null) => {
+  if (!cacheKey) return undefined
+  return tableCache.get(cacheKey)?.value
+}
 
 export const getCapitalizationTable = async (
   ref: string,
-  sexe: string,
+  sexe: string | null,
   base?: string
-): Promise<Record<string, number[]> | null> => {
+): Promise<CapitalizationTable | null> => {
   // Import dynamique des tables de capitalisation
   const getTableModule = async (
     path: string[],
     gender: string,
     suffix = '',
     base = 'data_cap'
-  ): Promise<Record<string, number[]> | null> => {
+  ): Promise<CapitalizationTable | null> => {
     try {
       let endPath = `${base}_${gender}${suffix}`
       if (!gender && !suffix) endPath = base
-      console.log('Load Table:', `@renderer/data/${path[0]}/${path[1]}/${endPath}.tsx`)
       const module = await import(`@renderer/data/${path[0]}/${path[1]}/${endPath}.tsx`)
       return module.default
     } catch (e) {
@@ -56,6 +79,37 @@ export const getCapitalizationTable = async (
   }
 }
 
+const loadCapitalizationTable = (
+  ref: string,
+  sexe?: string | null,
+  base = 'data_cap'
+): Promise<CapitalizationTable | null> => {
+  const cacheKey = getCapitalizationCacheKey(ref, sexe, base)
+
+  if (!cacheKey) {
+    return Promise.resolve(null)
+  }
+
+  const cachedEntry = tableCache.get(cacheKey)
+
+  if (cachedEntry?.value !== undefined) {
+    return Promise.resolve(cachedEntry.value)
+  }
+
+  if (cachedEntry?.promise) {
+    return cachedEntry.promise
+  }
+
+  const promise = getCapitalizationTable(ref, sexe, base).then((table) => {
+    tableCache.set(cacheKey, { value: table })
+    return table
+  })
+
+  tableCache.set(cacheKey, { promise })
+
+  return promise
+}
+
 const getPerDays = (currentYear: number, nextYear: number) => {
   // Check if difference is negative
   if (currentYear - nextYear < 0) {
@@ -89,6 +143,12 @@ export const useCapitalization = (props = {}) => {
   const data = useAppData()
 
   const sexe = data?.general_info?.sexe
+  const effectiveGender = noGender ? null : sexe
+
+  const cacheKey = useMemo(
+    () => getCapitalizationCacheKey(ref, effectiveGender, base),
+    [base, effectiveGender, ref]
+  )
 
   const startDate = start || new Date(data?.general_info?.date_naissance)
 
@@ -99,15 +159,36 @@ export const useCapitalization = (props = {}) => {
 
   const days = differenceInDays(end, addYears(startDate, age))
 
-  const [table, setTable] = useState(null)
+  const [table, setTable] = useState<CapitalizationTable | null | undefined>(() =>
+    getCachedCapitalizationTable(cacheKey)
+  )
 
   useEffect(() => {
-    const loadTable = async () => {
-      const loadedTable = await getCapitalizationTable(ref, noGender ? null : sexe, base)
-      setTable(loadedTable)
+    if (!cacheKey) {
+      setTable(null)
+      return
     }
-    loadTable()
-  }, [ref, sexe, base, noGender])
+
+    const cachedTable = getCachedCapitalizationTable(cacheKey)
+    if (cachedTable !== undefined) {
+      setTable(cachedTable)
+      return
+    }
+
+    setTable(undefined)
+
+    let active = true
+
+    loadCapitalizationTable(ref, effectiveGender, base).then((loadedTable) => {
+      if (active) {
+        setTable(loadedTable)
+      }
+    })
+
+    return () => {
+      active = false
+    }
+  }, [base, cacheKey, effectiveGender, ref])
 
   if (!table) return null
 
