@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef } from 'react'
+import { useContext, useMemo, useRef } from 'react'
 import InfoG from './infog'
 import Frais from './frais'
 import Personnel from '../incapacite_temporaire/personnel'
@@ -326,7 +326,10 @@ const Recapitulatif = () => {
         {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
           <PrejudiceEXH editable={false} />
         )}
-        {(data?.prejudice_proche?.menage_ref || data?.prejudice_proche?.reference) && (
+        {(data?.prejudice_proche?.menage_ref ||
+          data?.prejudice_proche?.menage_reference ||
+          data?.prejudice_proche?.reference ||
+          data?.prejudice_proche?.revenue_reference_children) && (
           <PrejudiceProche editable={false} />
         )}
         {data?.provisions &&

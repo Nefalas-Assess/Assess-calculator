@@ -3,15 +3,21 @@ const toNumber = (value: unknown, fallback = 0): number => {
   return Number.isFinite(parsed) ? parsed : fallback
 }
 
-const getTwentyFifthBirthday = (birthDate?: string | null): Date | null => {
-  if (!birthDate) return null
+const getTheoreticalLeaveHomeDate = (
+  birthDate?: string | null,
+  leaveHomeAge?: string | number | null
+): Date | null => {
+  if (!birthDate || leaveHomeAge === 'never') return null
 
   const birth = new Date(birthDate)
   if (Number.isNaN(birth.getTime())) return null
 
-  const date25 = new Date(birth)
-  date25.setFullYear(birth.getFullYear() + 25)
-  return date25
+  const numericAge = Number.parseInt(`${leaveHomeAge ?? 25}`, 10)
+  if (!Number.isFinite(numericAge)) return null
+
+  const leaveHomeDate = new Date(birth)
+  leaveHomeDate.setFullYear(birth.getFullYear() + numericAge)
+  return leaveHomeDate
 }
 
 export default (data: any) => {
@@ -64,15 +70,18 @@ export default (data: any) => {
   const sortedChildren = children
     .filter((child) => {
       if (!child?.birthDate) return false
-      const date25 = getTwentyFifthBirthday(child.birthDate)
-      return !!date25 && date25 > paymentDate
+      const leaveHomeDate = getTheoreticalLeaveHomeDate(child.birthDate, child?.leaveHomeAge)
+      return !!leaveHomeDate && leaveHomeDate > paymentDate
     })
-    .sort(
-      (a, b) =>
-        new Date(a?.birthDate || 0).getTime() - new Date(b?.birthDate || 0).getTime()
-    )
+    .sort((a, b) => {
+      const firstDate = getTheoreticalLeaveHomeDate(a?.birthDate, a?.leaveHomeAge)
+      const secondDate = getTheoreticalLeaveHomeDate(b?.birthDate, b?.leaveHomeAge)
+      return firstDate?.getTime() - secondDate?.getTime()
+    })
 
-  const unsortedChildrenCount = children.filter((child) => !child?.birthDate).length
+  const unsortedChildrenCount = children.filter(
+    (child) => !child?.birthDate || child?.leaveHomeAge === 'never'
+  ).length
   const baseAmount = toNumber(menageCap.perso_amount, indicativeAmount)
 
   sortedChildren.forEach((_, key) => {
@@ -92,8 +101,7 @@ export default (data: any) => {
   })
 
   if (menageCap.perso_child_amount_final === undefined) {
-    menageCap.perso_child_amount_final =
-      baseAmount + personChargeAmount * unsortedChildrenCount
+    menageCap.perso_child_amount_final = baseAmount + personChargeAmount * unsortedChildrenCount
   }
 
   if (menageCap.perso_child_contribution_final === undefined) {

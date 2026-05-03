@@ -277,7 +277,11 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         const consolidationDate = new Date(formValues?.paiement)
         return leaveHomeDate > consolidationDate
       })
-      ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
+      ?.sort((a, b) => {
+        const firstDate = getTheoreticalLeaveHomeDate(a?.birthDate, a?.leaveHomeAge)
+        const secondDate = getTheoreticalLeaveHomeDate(b?.birthDate, b?.leaveHomeAge)
+        return firstDate?.getTime() - secondDate?.getTime()
+      })
   }, [childrenOnPeriod, formValues?.paiement])
 
   const unsortedChildren = useMemo(() => {
@@ -313,10 +317,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         setValue(amountField, defaultAmount)
       }
 
-      if (
-        formValues?.[contributionField] === undefined ||
-        formValues?.[contributionField] === ''
-      ) {
+      if (formValues?.[contributionField] === undefined || formValues?.[contributionField] === '') {
         setValue(contributionField, baseContribution)
       }
     })
@@ -541,7 +542,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                           {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
                         </td>
                         <td>
-                          <Field control={control} name={amountField} type="number" editable={editable}>
+                          <Field
+                            control={control}
+                            name={amountField}
+                            type="number"
+                            editable={editable}
+                          >
                             {(props) => <input style={{ width: 80 }} {...props} />}
                           </Field>
                         </td>

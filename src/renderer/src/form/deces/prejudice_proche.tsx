@@ -1,5 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
@@ -10,29 +9,45 @@ import TotalBox from '@renderer/generic/totalBox'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
-import {
-  calculateDaysBeforeAfter25,
-  getTheoreticalLeaveHomeDate
-} from '@renderer/helpers/general'
+import { calculateDaysBeforeAfter25, getTheoreticalLeaveHomeDate } from '@renderer/helpers/general'
 import { addDays, format } from 'date-fns'
 import Interest from '@renderer/generic/interet'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 
-const TotalRevenueAmount = ({ values, data, control, editable }) => {
+const TotalRevenueAmount = ({
+  values,
+  data,
+  start,
+  end,
+  reference,
+  membersAmount,
+  interest,
+  noGender = false,
+  startIndex = 0
+}) => {
   const capitalization = useCapitalization({
-    end: data?.date_death,
+    start: start,
+    end: end || data?.date_death,
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(values?.interet)),
-    ref: values?.reference,
-    asObject: true
+    ref: reference || values?.reference,
+    asObject: true,
+    noGender,
+    startIndex
   })
 
   const getTotalRevenueAmount = useCallback(() => {
-    const revenue = parseFloat(values?.revenue_total)
-    const personnel = revenue / (parseInt(values?.members_amount) + 1)
+    const revenue = parseFloat(values?.revenue_total || 0)
+    const effectiveMembersAmount = parseInt(`${membersAmount ?? values?.members_amount ?? 0}`, 10)
+    const personnel = revenue / (effectiveMembersAmount + 1)
 
-    const variables = { revenue, personnel, coef: capitalization?.value }
+    const variables = {
+      revenue,
+      personnel,
+      coef: capitalization?.value,
+      membersAmount: effectiveMembersAmount
+    }
 
     const totalAmount =
       ((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) * variables.coef
@@ -67,7 +82,7 @@ const TotalRevenueAmount = ({ values, data, control, editable }) => {
                   </mrow>
                   <mrow>
                     <mo>(</mo>
-                    <mn>{values?.members_amount}</mn>
+                    <mn>{variables?.membersAmount}</mn>
                     <mo>+</mo>
                     <mn>1</mn>
                     <mo>)</mo>
@@ -96,31 +111,23 @@ const TotalRevenueAmount = ({ values, data, control, editable }) => {
         </>
       )
     }
-  }, [capitalization, values])
+  }, [capitalization, membersAmount, values])
 
-  return (
-    <>
-      <td>
-        {!data?.date_naissance ? (
-          <TextItem path="errorsdn.missing_date_naissance" />
-        ) : (
-          <Money {...getTotalRevenueAmount()} />
-        )}
-      </td>
-      <td className="int">
-        <Field control={control} type="date" name="revenue_date_paiement" editable={editable}>
-          {(props) => <input {...props} />}
-        </Field>
-      </td>
-      <td className="int">
-        <Interest
-          amount={getTotalRevenueAmount()?.value}
-          start={data?.date_death}
-          end={values?.revenue_date_paiement}
-        />
-      </td>
-    </>
-  )
+  if (!data?.date_naissance) {
+    return <TextItem path="errorsdn.missing_date_naissance" />
+  }
+
+  if (interest) {
+    return (
+      <Interest
+        amount={getTotalRevenueAmount()?.value}
+        start={interest?.start}
+        end={interest?.end}
+      />
+    )
+  }
+
+  return <Money {...getTotalRevenueAmount()} />
 }
 
 const TotalMenageAmount = ({ values, data, start, end, reference, interest }) => {
@@ -211,7 +218,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     defaultValues: initialValues || {
       menage_contribution: generalInfo?.config?.default_contribution,
       menage_amount: indicativeAmount,
-      members: generalInfo?.children?.map((it, key) => ({
+      members: generalInfo?.children?.map((it) => ({
         name: it?.name,
         link: 'parent/enfant',
         date_paiement: generalInfo?.config?.date_paiement
@@ -270,13 +277,44 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         const deathDate = new Date(generalInfo?.date_death)
         return leaveHomeDate > deathDate
       })
-      ?.sort((a, b) => new Date(a?.birthDate) - new Date(b?.birthDate))
+      ?.sort((a, b) => {
+        const firstDate = getTheoreticalLeaveHomeDate(a?.birthDate, a?.leaveHomeAge)
+        const secondDate = getTheoreticalLeaveHomeDate(b?.birthDate, b?.leaveHomeAge)
+        return firstDate?.getTime() - secondDate?.getTime()
+      })
   }, [childrenOnPeriod, generalInfo])
 
   // Children without birthdate
   const unsortedChildren = useMemo(() => {
     return childrenOnPeriod?.filter((e) => !e?.birthDate || e?.leaveHomeAge === 'never')
   }, [childrenOnPeriod])
+
+  const studentSplitEnd = useMemo(() => {
+    if (
+      generalInfo?.profession !== 'étudiant' ||
+      !generalInfo?.student?.lives_with_parents ||
+      !generalInfo?.date_naissance ||
+      !generalInfo?.date_death
+    ) {
+      return null
+    }
+
+    const targetDate = getTheoreticalLeaveHomeDate(
+      generalInfo?.date_naissance,
+      generalInfo?.student?.leave_home_age
+    )
+
+    if (!targetDate) return null
+
+    const deathDate = new Date(generalInfo?.date_death)
+    return targetDate > deathDate ? targetDate : null
+  }, [
+    generalInfo?.profession,
+    generalInfo?.student?.lives_with_parents,
+    generalInfo?.student?.leave_home_age,
+    generalInfo?.date_naissance,
+    generalInfo?.date_death
+  ])
 
   useEffect(() => {
     const valuesChanged =
@@ -296,17 +334,26 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       )
     }
 
+    const hasRevenueReference = studentSplitEnd
+      ? formValues?.revenue_reference_children
+      : sortedChildren?.length > 0
+        ? formValues?.reference && formValues?.revenue_reference_children
+        : formValues?.reference
+
     if (
-      formValues?.reference &&
+      hasRevenueReference &&
       formValues?.interet &&
       !formValues?.revenue_date_paiement &&
       generalInfo?.config?.date_paiement
     ) {
       setValue('revenue_date_paiement', generalInfo?.config?.date_paiement)
+      sortedChildren?.forEach((child, key) => {
+        setValue(`revenue_date_paiement_${key}`, generalInfo?.config?.date_paiement)
+      })
     }
 
     if (
-      formValues?.menage_ref &&
+      (formValues?.menage_ref || formValues?.menage_reference) &&
       formValues?.menage_interet &&
       !formValues?.menage_date_paiement &&
       generalInfo?.config?.date_paiement
@@ -337,6 +384,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     indicativePersonChargeAmount,
     setValue,
     sortedChildren,
+    studentSplitEnd,
     unsortedChildren
   ])
 
@@ -386,18 +434,20 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </h3>
       <table id="IPVariables">
         <tbody>
-          <tr>
-            <TextItem path="common.ref_table" tag="td" />
-            <td>
-              <Field
-                control={control}
-                type="reference"
-                options={constants.reference_light}
-                name="menage_ref"
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
+          {!studentSplitEnd && (
+            <tr>
+              <TextItem path="common.ref_table" tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="reference"
+                  options={constants.reference_light}
+                  name="menage_ref"
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          )}
           <tr>
             <TextItem path="common.taux_interet" tag="td" />
             <td>
@@ -413,7 +463,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
 
-      <FadeIn show={formValues?.menage_ref && formValues?.menage_interet}>
+      <FadeIn
+        show={
+          (studentSplitEnd ? formValues?.menage_reference : formValues?.menage_ref) &&
+          formValues?.menage_interet
+        }
+      >
         <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="h3" />
         {sortedChildren?.length > 0 ? (
           <>
@@ -613,6 +668,98 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
               </table>
             </FadeIn>
           </>
+        ) : studentSplitEnd ? (
+          <>
+            <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
+              <tbody>
+                <tr>
+                  <TextItem path="common.ref" tag="td" />
+                  <td>
+                    <Field
+                      control={control}
+                      type="reference"
+                      options={constants.reference_menage_children}
+                      name="menage_reference"
+                      editable={editable}
+                    ></Field>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <FadeIn show={formValues?.menage_reference}>
+              <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+                <thead>
+                  <tr>
+                    <TextItem path="common.period" tag="th" />
+                    <TextItem path="common.indemnite_journaliere" tag="th" />
+                    <TextItem path="common.contribution" tag="th" />
+                    <TextItem path="common.total" tag="th" />
+                    <TextItem path="common.date_paiement" tag="th" className="int" />
+                    <TextItem path="common.interest" tag="th" className="int" />
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      {format(addDays(generalInfo?.date_death, 1), 'dd/MM/yyyy')} -{' '}
+                      {format(studentSplitEnd, 'dd/MM/yyyy')}
+                    </td>
+                    <td>
+                      <Field
+                        control={control}
+                        name={`menage_amount`}
+                        type="number"
+                        editable={editable}
+                      >
+                        {(props) => <input style={{ width: 50 }} {...props} />}
+                      </Field>
+                    </td>
+                    <td>
+                      <Field
+                        control={control}
+                        type="select"
+                        options={constants.contribution}
+                        name={`menage_contribution`}
+                        editable={editable}
+                      ></Field>
+                    </td>
+                    <td>
+                      <TotalMenageAmount
+                        values={formValues}
+                        data={generalInfo}
+                        start={addDays(generalInfo?.date_death, 1)}
+                        end={studentSplitEnd}
+                        reference={formValues?.menage_reference}
+                      />
+                    </td>
+                    <td className="int">
+                      <Field
+                        control={control}
+                        type="date"
+                        name="menage_date_paiement"
+                        editable={editable}
+                      >
+                        {(props) => <input {...props} />}
+                      </Field>
+                    </td>
+                    <td className="int">
+                      <TotalMenageAmount
+                        values={formValues}
+                        data={generalInfo}
+                        start={addDays(generalInfo?.date_death, 1)}
+                        end={studentSplitEnd}
+                        reference={formValues?.menage_reference}
+                        interest={{
+                          start: generalInfo?.date_death,
+                          end: formValues?.menage_date_paiement
+                        }}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </FadeIn>
+          </>
         ) : (
           <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
             <thead>
@@ -675,18 +822,34 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </h3>
       <table id="IPVariables">
         <tbody>
-          <tr>
-            <TextItem path="common.ref_table" tag="td" />
-            <td>
-              <Field
-                control={control}
-                type="reference"
-                options={constants.reference}
-                name={`reference`}
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
+          {!studentSplitEnd && (
+            <tr>
+              <TextItem path="common.ref_table" tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="reference"
+                  options={constants.reference}
+                  name={`reference`}
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          )}
+          {(sortedChildren?.length > 0 || studentSplitEnd) && (
+            <tr>
+              <TextItem path="common.ref" tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="reference"
+                  options={constants.reference_menage_children}
+                  name="revenue_reference_children"
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          )}
           <tr>
             <TextItem path="common.taux_interet_capitalisation" tag="td" />
             <td>
@@ -702,49 +865,338 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
 
-      <FadeIn show={formValues?.reference && formValues?.interet}>
+      <FadeIn
+        show={
+          (studentSplitEnd
+            ? formValues?.revenue_reference_children
+            : sortedChildren?.length > 0
+              ? formValues?.reference && formValues?.revenue_reference_children
+              : formValues?.reference) && formValues?.interet
+        }
+      >
         <TextItem path="deces.prejudice_proche.perte_contribution_eco" tag="h3" />
-        <table id="itebTable" style={{ maxWidth: 1200 }}>
-          <thead>
-            <tr>
-              <TextItem path="deces.prejudice_proche.revenu_defunt" tag="th" />
-              <TextItem path="deces.prejudice_proche.revenu_total_menage" tag="th" />
-              <TextItem path="deces.prejudice_proche.number_menage" tag="th" />
-              <TextItem path="common.total" tag="th" />
-              <TextItem path="common.date_paiement" tag="th" className="int" />
-              <TextItem path="common.interest" tag="th" className="int" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Field
-                  control={control}
-                  type="salary"
-                  name={`revenue_defunt`}
-                  editable={editable}
-                  salaryType="yearly"
-                ></Field>
-              </td>
-              <td>
-                <Field control={control} type="number" name={`revenue_total`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <td>
-                <Field control={control} type="number" name={`members_amount`} editable={editable}>
-                  {(props) => <input {...props} />}
-                </Field>
-              </td>
-              <TotalRevenueAmount
-                values={formValues}
-                data={generalInfo}
-                control={control}
-                editable={editable}
-              />
-            </tr>
-          </tbody>
-        </table>
+        {sortedChildren?.length > 0 ? (
+          <table id="itebTable" style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="common.period" tag="th" />
+                <TextItem path="deces.prejudice_proche.revenu_defunt" tag="th" />
+                <TextItem path="deces.prejudice_proche.revenu_total_menage" tag="th" />
+                <TextItem path="deces.prejudice_proche.number_menage" tag="th" />
+                <TextItem path="common.total" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
+                <TextItem path="common.interest" tag="th" className="int" />
+              </tr>
+            </thead>
+            <tbody>
+              {sortedChildren?.map((item, key) => {
+                const start =
+                  key === 0
+                    ? addDays(generalInfo?.date_death, 1)
+                    : getTheoreticalLeaveHomeDate(
+                        sortedChildren[key - 1]?.birthDate,
+                        sortedChildren[key - 1]?.leaveHomeAge,
+                        true
+                      )
+                const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
+                const currentMembersAmount = Math.max(
+                  parseInt(`${formValues?.members_amount || 0}`, 10) - key,
+                  0
+                )
+
+                return (
+                  <tr key={key}>
+                    <td>
+                      {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
+                    </td>
+                    <td>
+                      <Field
+                        control={control}
+                        type="salary"
+                        name={`revenue_defunt`}
+                        editable={editable}
+                        salaryType="yearly"
+                      ></Field>
+                    </td>
+                    <td>
+                      <Field
+                        control={control}
+                        type="number"
+                        name={`revenue_total`}
+                        editable={editable}
+                      >
+                        {(props) => <input {...props} />}
+                      </Field>
+                    </td>
+                    <td>{currentMembersAmount}</td>
+                    <td>
+                      <TotalRevenueAmount
+                        values={formValues}
+                        data={generalInfo}
+                        start={start}
+                        end={end}
+                        reference={formValues?.revenue_reference_children}
+                        membersAmount={currentMembersAmount}
+                        noGender={true}
+                        startIndex={1}
+                      />
+                    </td>
+                    <td className="int">
+                      <Field
+                        control={control}
+                        type="date"
+                        name={`revenue_date_paiement_${key}`}
+                        editable={editable}
+                      >
+                        {(props) => <input {...props} />}
+                      </Field>
+                    </td>
+                    <td className="int">
+                      <TotalRevenueAmount
+                        values={formValues}
+                        data={generalInfo}
+                        start={start}
+                        end={end}
+                        reference={formValues?.revenue_reference_children}
+                        membersAmount={currentMembersAmount}
+                        noGender={true}
+                        startIndex={1}
+                        interest={{
+                          start: generalInfo?.date_death,
+                          end: formValues?.[`revenue_date_paiement_${key}`]
+                        }}
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
+              <tr>
+                <td>
+                  {format(
+                    getTheoreticalLeaveHomeDate(
+                      sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                      sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
+                      true
+                    ),
+                    'dd/MM/yyyy'
+                  )}
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="salary"
+                    name={`revenue_defunt`}
+                    editable={editable}
+                    salaryType="yearly"
+                  ></Field>
+                </td>
+                <td>
+                  <Field control={control} type="number" name={`revenue_total`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  {Math.max(
+                    parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
+                    0
+                  )}
+                </td>
+                <td>
+                  <TotalRevenueAmount
+                    values={formValues}
+                    data={generalInfo}
+                    end={getTheoreticalLeaveHomeDate(
+                      sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                      sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
+                      true
+                    )}
+                    reference={formValues?.reference}
+                    membersAmount={Math.max(
+                      parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
+                      0
+                    )}
+                  />
+                </td>
+                <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name="revenue_date_paiement"
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
+                  <TotalRevenueAmount
+                    values={formValues}
+                    data={generalInfo}
+                    end={getTheoreticalLeaveHomeDate(
+                      sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                      sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
+                      true
+                    )}
+                    reference={formValues?.reference}
+                    membersAmount={Math.max(
+                      parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
+                      0
+                    )}
+                    interest={{
+                      start: generalInfo?.date_death,
+                      end: formValues?.revenue_date_paiement
+                    }}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        ) : studentSplitEnd ? (
+          <table id="itebTable" style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="common.period" tag="th" />
+                <TextItem path="deces.prejudice_proche.revenu_defunt" tag="th" />
+                <TextItem path="deces.prejudice_proche.revenu_total_menage" tag="th" />
+                <TextItem path="deces.prejudice_proche.number_menage" tag="th" />
+                <TextItem path="common.total" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
+                <TextItem path="common.interest" tag="th" className="int" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  {format(addDays(generalInfo?.date_death, 1), 'dd/MM/yyyy')} -{' '}
+                  {format(studentSplitEnd, 'dd/MM/yyyy')}
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="salary"
+                    name={`revenue_defunt`}
+                    editable={editable}
+                    salaryType="yearly"
+                  ></Field>
+                </td>
+                <td>
+                  <Field control={control} type="number" name={`revenue_total`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`members_amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <TotalRevenueAmount
+                    values={formValues}
+                    data={generalInfo}
+                    start={addDays(generalInfo?.date_death, 1)}
+                    end={studentSplitEnd}
+                    reference={formValues?.revenue_reference_children}
+                    noGender={true}
+                    startIndex={1}
+                  />
+                </td>
+                <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name="revenue_date_paiement"
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
+                  <TotalRevenueAmount
+                    values={formValues}
+                    data={generalInfo}
+                    start={addDays(generalInfo?.date_death, 1)}
+                    end={studentSplitEnd}
+                    reference={formValues?.revenue_reference_children}
+                    noGender={true}
+                    startIndex={1}
+                    interest={{
+                      start: generalInfo?.date_death,
+                      end: formValues?.revenue_date_paiement
+                    }}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        ) : (
+          <table id="itebTable" style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="deces.prejudice_proche.revenu_defunt" tag="th" />
+                <TextItem path="deces.prejudice_proche.revenu_total_menage" tag="th" />
+                <TextItem path="deces.prejudice_proche.number_menage" tag="th" />
+                <TextItem path="common.total" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
+                <TextItem path="common.interest" tag="th" className="int" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <Field
+                    control={control}
+                    type="salary"
+                    name={`revenue_defunt`}
+                    editable={editable}
+                    salaryType="yearly"
+                  ></Field>
+                </td>
+                <td>
+                  <Field control={control} type="number" name={`revenue_total`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field
+                    control={control}
+                    type="number"
+                    name={`members_amount`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <TotalRevenueAmount values={formValues} data={generalInfo} />
+                </td>
+                <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name="revenue_date_paiement"
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
+                  <TotalRevenueAmount
+                    values={formValues}
+                    data={generalInfo}
+                    interest={{
+                      start: generalInfo?.date_death,
+                      end: formValues?.revenue_date_paiement
+                    }}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        )}
       </FadeIn>
       <TotalBox
         label="deces.prejudice_proche.total"
