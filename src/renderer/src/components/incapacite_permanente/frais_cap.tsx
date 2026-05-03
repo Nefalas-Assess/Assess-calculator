@@ -1,10 +1,11 @@
 import FraisCapForm from '@renderer/form/incapacite_perma/frais_cap'
 import TotalBox from '@renderer/generic/totalBox'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
 
 const FraisCap = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const ref = useRef(null)
 

@@ -3,7 +3,7 @@ import { setDatePaiementIfMissing } from '@renderer/utils/deepKey'
 import { prepareDataForSave } from '@renderer/utils/migrations'
 import constants from '@renderer/constants'
 import { intervalToDuration } from 'date-fns'
-import React, { createContext, useCallback, useEffect, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 
 // Define types for the context
 interface AppContextType {
@@ -23,7 +23,45 @@ interface AppContextType {
   refreshReferenceTypes: () => Promise<void>
 }
 
+interface AppActionsContextType {
+  setData: (data: any, options?: any) => void
+  reset: () => void
+  setFilePath: (path: string | null) => void
+  save: () => Promise<void>
+  back: () => void
+  toggleDarkMode: () => void
+  setLg: (lang: string) => void
+  refreshReferenceTypes: () => Promise<void>
+}
+
+interface AppUiContextType {
+  filePath: string | null
+  mode: string
+  lg: string
+}
+
 export const AppContext = createContext<AppContextType | undefined>(undefined)
+const AppDataContext = createContext<any>(null)
+const AppErrorsContext = createContext<any>(null)
+const AppActionsContext = createContext<AppActionsContextType | undefined>(undefined)
+const AppUiContext = createContext<AppUiContextType | undefined>(undefined)
+const AppReferenceTypesContext = createContext<{ value: string; label: any }[]>(
+  constants.reference_type || []
+)
+
+const useRequiredContext = <T,>(context: React.Context<T | undefined>, label: string): T => {
+  const value = React.useContext(context)
+  if (value === undefined) {
+    throw new Error(`${label} must be used within an AppProvider`)
+  }
+  return value
+}
+
+export const useAppData = () => React.useContext(AppDataContext)
+export const useAppErrors = () => React.useContext(AppErrorsContext)
+export const useAppReferenceTypes = () => React.useContext(AppReferenceTypesContext)
+export const useAppActions = () => useRequiredContext(AppActionsContext, 'useAppActions')
+export const useAppUi = () => useRequiredContext(AppUiContext, 'useAppUi')
 
 const setDefaultValues = (obj: any, defaultValues: any): any => {
   // Create a deep copy to avoid mutating the original object
@@ -234,29 +272,87 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     refreshReferenceTypes()
   }, [refreshReferenceTypes])
 
+  const actionsValue = useMemo(
+    () => ({
+      setData: storeData,
+      reset: resetData,
+      setFilePath,
+      save: handleSave,
+      back: handleBackHome,
+      toggleDarkMode,
+      setLg: setLanguage,
+      refreshReferenceTypes
+    }),
+    [
+      storeData,
+      resetData,
+      setFilePath,
+      handleSave,
+      handleBackHome,
+      toggleDarkMode,
+      setLanguage,
+      refreshReferenceTypes
+    ]
+  )
+
+  const uiValue = useMemo(
+    () => ({
+      filePath,
+      mode: darkMode ? 'dark' : 'light',
+      lg
+    }),
+    [filePath, darkMode, lg]
+  )
+
+  const legacyValue = useMemo(
+    () => ({
+      data,
+      errors,
+      setData: storeData,
+      reset: resetData,
+      filePath,
+      setFilePath,
+      save: handleSave,
+      back: handleBackHome,
+      toggleDarkMode,
+      mode: darkMode ? 'dark' : 'light',
+      lg,
+      setLg: setLanguage,
+      referenceTypes,
+      refreshReferenceTypes
+    }),
+    [
+      data,
+      errors,
+      storeData,
+      resetData,
+      filePath,
+      setFilePath,
+      handleSave,
+      handleBackHome,
+      toggleDarkMode,
+      darkMode,
+      lg,
+      setLanguage,
+      referenceTypes,
+      refreshReferenceTypes
+    ]
+  )
+
   // the value passed in here will be accessible anywhere in our application
   // you can pass any value, in our case we pass our state and it's update method
   return (
-    <AppContext.Provider
-      value={{
-        data,
-        errors,
-        setData: storeData,
-        reset: resetData,
-        filePath,
-        setFilePath,
-        save: handleSave,
-        back: handleBackHome,
-        toggleDarkMode,
-        mode: darkMode ? 'dark' : 'light',
-        lg,
-        setLg: setLanguage,
-        referenceTypes,
-        refreshReferenceTypes
-      }}
-    >
-      {children}
-    </AppContext.Provider>
+    <AppDataContext.Provider value={data}>
+      <AppErrorsContext.Provider value={errors}>
+        <AppActionsContext.Provider value={actionsValue}>
+          <AppUiContext.Provider value={uiValue}>
+            <AppReferenceTypesContext.Provider value={referenceTypes}>
+              <AppContext.Provider value={legacyValue}>{children}</AppContext.Provider>
+            </AppReferenceTypesContext.Provider>
+          </AppUiContext.Provider>
+        </AppActionsContext.Provider>
+      </AppErrorsContext.Provider>
+    </AppDataContext.Provider>
   )
 }
 

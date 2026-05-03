@@ -1,16 +1,17 @@
-import React, { useCallback, useContext } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import InfoForm from '@renderer/form/info_general/form'
 import TextItem from '@renderer/generic/textItem'
 
 const InfoG = ({ editable }) => {
-  const { setData, data } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const saveData = useCallback(
     (values) => {
       setData({ general_info: values }, { setDefault: true })
     },
-    [setData, data]
+    [setData]
   )
 
   return (

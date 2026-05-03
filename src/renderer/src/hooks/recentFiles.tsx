@@ -1,7 +1,7 @@
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppActions } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
 import { migrateData, prepareDataForSave } from '@renderer/utils/migrations'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 interface RecentFile {
@@ -38,11 +38,7 @@ const removeBOM = (str: string): string => {
 export const useRecentFiles = (): RecentFilesHook => {
   const [recentFiles, setRecentFiles] = useState<RecentFile[]>([])
 
-  const context = useContext(AppContext)
-  if (!context) {
-    throw new Error('useRecentFiles must be used within an AppProvider')
-  }
-  const { setFilePath, setData } = context
+  const { setFilePath, setData } = useAppActions()
   const { addToast } = useToast()
   const navigate = useNavigate()
 

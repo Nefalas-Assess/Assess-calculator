@@ -1,7 +1,7 @@
 import constants from '@renderer/constants'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppReferenceTypes } from '@renderer/providers/AppProvider'
 import { format, isValid } from 'date-fns'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from './textItem'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
@@ -9,8 +9,7 @@ import { useGeneralInfo } from '@renderer/hooks/generalInfo'
 import { FaCheck, FaTimes } from 'react-icons/fa'
 
 const ReferenceInput = ({ options, onChange, value }) => {
-  const appContext = useContext(AppContext)
-  const referenceOptions = appContext?.referenceTypes || constants.reference_type || []
+  const referenceOptions = useAppReferenceTypes() || constants.reference_type || []
   const [value1, setValue1] = useState('')
   const [value2, setValue2] = useState('')
 
@@ -162,8 +161,7 @@ const Field = ({
   salaryType
 }) => {
   const translate = useTranslation()
-  const appContext = useContext(AppContext)
-  const referenceOptions = appContext?.referenceTypes || constants.reference_type || []
+  const referenceOptions = useAppReferenceTypes() || constants.reference_type || []
 
   const renderValue = useCallback(
     (val) => {

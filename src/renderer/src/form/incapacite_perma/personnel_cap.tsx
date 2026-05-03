@@ -1,8 +1,7 @@
 import { getDays, getMedDate } from '@renderer/helpers/general'
-import { AppContext } from '@renderer/providers/AppProvider'
-import { format, intervalToDuration, isValid } from 'date-fns'
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { format } from 'date-fns'
+import { useCallback, useMemo } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
@@ -13,6 +12,7 @@ import TextItem from '@renderer/generic/textItem'
 import CoefficientInfo from '@renderer/generic/coefficientInfo'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const CapAmount = ({ values }) => {
   const generalInfo = useGeneralInfo()
@@ -71,7 +71,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_perso, 32)
 
-  const { handleSubmit, watch, control } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: initialValues || {
       conso_amount: indicativeAmount,
       perso_amount: indicativeAmount,
@@ -79,28 +79,13 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
     }
   })
 
-  const formValues = watch()
-
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = (values) => {
     onSubmit(values)
   }
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const days = useMemo(() => {
     return getDays({

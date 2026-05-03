@@ -1,10 +1,11 @@
 import PrejudiceEXHForm from '@renderer/form/deces/prejudice_exh'
 import TotalBox from '@renderer/generic/totalBox'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
 
 const PrejudiceEXH = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const ref = useRef(null)
 

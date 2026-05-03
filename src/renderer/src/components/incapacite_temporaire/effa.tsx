@@ -1,11 +1,12 @@
 import EffortAccruForm from '@renderer/form/incapacite_temp/effort_accru'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
 
 const EFFA = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const ref = useRef(null)
 

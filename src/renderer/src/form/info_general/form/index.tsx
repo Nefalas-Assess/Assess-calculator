@@ -1,9 +1,9 @@
 import constants from '@renderer/constants'
 import Field from '@renderer/generic/field'
 import TextItem from '@renderer/generic/textItem'
-import React, { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
-import { useDebouncedEffect } from '@renderer/hooks/debounce'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 import IncapacitePerma from '../incapacite_perma'
 import EconomiqueSection from './economique'
 
@@ -77,7 +77,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   }, [initialValues])
 
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: defaultFormValues
   })
 
@@ -86,33 +86,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     name: 'children' // Champs dynamiques pour les enfants
   })
 
-  const formValues = watch() // Suivi de l'état de "calcul_interets"
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const childrenValues = useWatch({
-    control,
-    name: 'children'
-  })
-
-  const configValues = useWatch({
-    control,
-    name: 'config'
-  })
-
-  const ipValues = useWatch({
-    control,
-    name: 'ip'
-  })
-
-  const studentValues = useWatch({
-    control,
-    name: 'student'
-  })
-
-  const economiqueValues = useWatch({
-    control,
-    name: 'economique'
-  })
+  const formValues = useWatch({ control }) // Suivi de l'état de "calcul_interets"
 
   const submitForm = useCallback(
     (data) => {
@@ -121,45 +95,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
     [onSubmit]
   )
 
-  const previousValuesRef = useRef({})
-
-  useDebouncedEffect(
-    () => {
-      const valuesChanged =
-        JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-        JSON.stringify(childrenValues) !== JSON.stringify(previousValuesRef.current?.children) ||
-        JSON.stringify(configValues) !== JSON.stringify(previousValuesRef.current?.config) ||
-        JSON.stringify(ipValues) !== JSON.stringify(previousValuesRef.current?.ip) ||
-        JSON.stringify(studentValues) !== JSON.stringify(previousValuesRef.current?.student) ||
-        JSON.stringify(economiqueValues) !== JSON.stringify(previousValuesRef.current?.economique)
-
-      // Si des valeurs ont changé, soumettre le formulaire
-      if (valuesChanged) {
-        // Éviter de soumettre si aucune modification réelle
-        previousValuesRef.current = {
-          formValues,
-          children: childrenValues,
-          config: configValues,
-          ip: ipValues,
-          student: studentValues,
-          economique: economiqueValues
-        }
-
-        handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-      }
-    },
-    [
-      formValues,
-      childrenValues,
-      configValues,
-      ipValues,
-      studentValues,
-      economiqueValues,
-      submitForm,
-      handleSubmit
-    ],
-    500
-  )
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm, delay: 500 })
 
   const addChild = () => {
     childrenFields.append({ name: '', birthDate: '', leaveHomeAge: 25 }) // Nouveau champ enfant

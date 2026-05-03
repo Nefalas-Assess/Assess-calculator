@@ -1,10 +1,11 @@
 import FraisFunForm from '@renderer/form/deces/frais'
 import TotalBox from '@renderer/generic/totalBox'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
 
 const FraisFun = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
   const ref = useRef(null)
 
   const saveData = useCallback(

@@ -1,11 +1,12 @@
-import React, { useCallback, useContext, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import ITPersonnelForm from '@renderer/form/incapacite_temp/personnel'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const Personnel = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const ref = useRef(null)
 

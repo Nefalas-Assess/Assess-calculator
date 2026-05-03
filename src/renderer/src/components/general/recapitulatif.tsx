@@ -1,4 +1,4 @@
-import { useContext, useMemo, useRef } from 'react'
+import { useMemo, useRef } from 'react'
 import InfoG from './infog'
 import Frais from './frais'
 import Personnel from '../incapacite_temporaire/personnel'
@@ -19,7 +19,7 @@ import PrejudiceProche from '../deces/prejudice_proche'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import DelayedContent from '@renderer/generic/delayContent'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppData } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
 import hasDefinedValues from '@renderer/utils/hasDefinedValues'
@@ -221,7 +221,7 @@ const MINIMAL_PRINT_STYLES = `
 `
 
 const Recapitulatif = () => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const contentRef = useRef()
 

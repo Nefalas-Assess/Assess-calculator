@@ -1,15 +1,16 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       provisions: [
         {
@@ -19,13 +20,11 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   })
 
-  const formValues = watch()
+  const formValues = useWatch({ control })
   const provisionsValues = useWatch({
     control,
     name: 'provisions'
   })
-
-  const previousValuesRef = useRef({})
 
   const submitForm = useCallback(
     (data) => {
@@ -34,20 +33,7 @@ const ProvisionsForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(provisionsValues) !== JSON.stringify(previousValuesRef.current?.provisions)
-
-    if (valuesChanged) {
-      previousValuesRef.current = {
-        formValues,
-        provisions: provisionsValues
-      }
-
-      handleSubmit(submitForm)()
-    }
-  }, [formValues, provisionsValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   // Calcul des totaux pour Montant et Intérêts
   const totals = useMemo(() => {

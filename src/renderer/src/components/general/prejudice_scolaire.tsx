@@ -1,12 +1,13 @@
-import React, { useCallback, useContext, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import PrejudiceScolaireForm from '@renderer/form/prejudice_scolaire'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const PrejudiceScolaire = ({ editable }) => {
-  const { setData, data } = useContext(AppContext)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const ref = useRef(null)
 
