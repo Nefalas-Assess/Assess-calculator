@@ -1,13 +1,12 @@
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import ProvisionsForm from '@renderer/form/provisions_form'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 
 export const Provisions = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
-
-  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -17,9 +16,11 @@ export const Provisions = ({ editable }) => {
   )
 
   return (
-    <div id="content" ref={ref}>
-      <ProvisionsForm onSubmit={saveData} editable={editable} initialValues={data?.provisions} />
-      <TotalBoxInterest documentRef={ref} />
+    <div id="content">
+      <MoneyScope>
+        <ProvisionsForm onSubmit={saveData} editable={editable} initialValues={data?.provisions} />
+        <TotalBoxInterest />
+      </MoneyScope>
     </div>
   )
 }

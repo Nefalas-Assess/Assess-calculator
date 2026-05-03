@@ -1,12 +1,11 @@
 import PrejudiceProcheForm from '@renderer/form/deces/prejudice_proche'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 
 const PrejudiceProche = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
-
-  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -16,13 +15,15 @@ const PrejudiceProche = ({ editable }) => {
   )
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <PrejudiceProcheForm
-          onSubmit={saveData}
-          editable={editable}
-          initialValues={data?.prejudice_proche}
-        />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <PrejudiceProcheForm
+            onSubmit={saveData}
+            editable={editable}
+            initialValues={data?.prejudice_proche}
+          />
+        </div>
+      </MoneyScope>
     </div>
   )
 }

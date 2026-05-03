@@ -213,8 +213,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_menagere, 30)
   const indicativePersonChargeAmount = getIndicativeAmount(generalInfo?.config?.person_charge, 10)
 
-  const ref = useRef(null)
-
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: initialValues || {
       menage_contribution: generalInfo?.config?.default_contribution,
@@ -1180,7 +1178,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </FadeIn>
       <TotalBox
         label="deces.prejudice_proche.total"
-        documentRef={ref}
         calc={(res) =>
           res +
           membersValues?.reduce((total, item) => {
@@ -1189,7 +1186,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           }, 0)
         }
       />
-      <TotalBoxInterest label="deces.prejudice_proche.total_interest" documentRef={ref} />
+      <TotalBoxInterest label="deces.prejudice_proche.total_interest" />
     </form>
   )
 }

@@ -16,9 +16,9 @@ import Particuliers from '../incapacite_permanente/particuliers'
 import FraisFun from '../deces/frais_deces'
 import PrejudiceEXH from '../deces/prejudice_exh'
 import PrejudiceProche from '../deces/prejudice_proche'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
-import DelayedContent from '@renderer/generic/delayContent'
 import { useAppData } from '@renderer/providers/AppProvider'
 import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
@@ -278,74 +278,69 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="recap">
-        {data?.general_info && <InfoG editable={false} />}
-        {data?.frais && <Frais editable={false} />}
-        {data?.incapacite_temp_personnel &&
-          data?.incapacite_temp_personnel?.periods?.length > 0 && <Personnel editable={false} />}
-        {data?.incapacite_temp_menagere && data?.incapacite_temp_menagere?.periods?.length > 0 && (
-          <Menagere editable={false} />
-        )}
-        {data?.incapacite_temp_economique &&
-          (data?.incapacite_temp_economique?.brut?.length > 0 ||
-            data?.incapacite_temp_economique?.net?.length > 0 ||
-            (data?.incapacite_temp_economique?.estimate &&
-              data?.incapacite_temp_economique?.estimate !== '')) && (
-            <Economique editable={false} />
+        <MoneyScope>
+          {data?.general_info && <InfoG editable={false} />}
+          {data?.frais && <Frais editable={false} />}
+          {data?.incapacite_temp_personnel &&
+            data?.incapacite_temp_personnel?.periods?.length > 0 && <Personnel editable={false} />}
+          {data?.incapacite_temp_menagere &&
+            data?.incapacite_temp_menagere?.periods?.length > 0 && <Menagere editable={false} />}
+          {data?.incapacite_temp_economique &&
+            (data?.incapacite_temp_economique?.brut?.length > 0 ||
+              data?.incapacite_temp_economique?.net?.length > 0 ||
+              (data?.incapacite_temp_economique?.estimate &&
+                data?.incapacite_temp_economique?.estimate !== '')) && (
+              <Economique editable={false} />
+            )}
+          {data?.efforts_accrus && data?.efforts_accrus?.efforts?.length > 0 && (
+            <Effa editable={false} />
           )}
-        {data?.efforts_accrus && data?.efforts_accrus?.efforts?.length > 0 && (
-          <Effa editable={false} />
-        )}
-        {data?.hospitalisation && data?.hospitalisation?.periods?.length > 0 && (
-          <Hospitalisation editable={false} />
-        )}
-        {data?.pretium_doloris && data?.pretium_doloris?.periods?.length > 0 && (
-          <PretiumDoloris editable={false} />
-        )}
-        {data?.forfait_ip &&
-          Object.values(data?.general_info?.ip)?.filter((it) => it?.method === 'forfait')
-            ?.length !== 0 && <Forfait editable={false} />}
-        {data?.incapacite_perma_personnel_cap?.reference &&
-          data?.general_info?.ip?.personnel?.method === 'capitalized' && (
-            <PersonnelCap editable={false} />
+          {data?.hospitalisation && data?.hospitalisation?.periods?.length > 0 && (
+            <Hospitalisation editable={false} />
           )}
-        {data?.incapacite_perma_menage_cap?.reference &&
-          data?.general_info?.ip?.menagere?.method === 'capitalized' && (
-            <MenageCap editable={false} />
+          {data?.pretium_doloris && data?.pretium_doloris?.periods?.length > 0 && (
+            <PretiumDoloris editable={false} />
           )}
-        {data?.incapacite_perma_economique_cap?.reference &&
-          data?.general_info?.ip?.economique?.method === 'capitalized' && (
-            <EconomiqueCap editable={false} />
+          {data?.forfait_ip &&
+            Object.values(data?.general_info?.ip)?.filter((it) => it?.method === 'forfait')
+              ?.length !== 0 && <Forfait editable={false} />}
+          {data?.incapacite_perma_personnel_cap?.reference &&
+            data?.general_info?.ip?.personnel?.method === 'capitalized' && (
+              <PersonnelCap editable={false} />
+            )}
+          {data?.incapacite_perma_menage_cap?.reference &&
+            data?.general_info?.ip?.menagere?.method === 'capitalized' && (
+              <MenageCap editable={false} />
+            )}
+          {data?.incapacite_perma_economique_cap?.reference &&
+            data?.general_info?.ip?.economique?.method === 'capitalized' && (
+              <EconomiqueCap editable={false} />
+            )}
+          {data?.incapacite_perma_charges && showFraisCap && <FraisCap editable={false} />}
+          {data?.prejudice_particulier && showPrejudiceParticulier && (
+            <Particuliers editable={false} />
           )}
-        {data?.incapacite_perma_charges && showFraisCap && <FraisCap editable={false} />}
-        {data?.prejudice_particulier && showPrejudiceParticulier && (
-          <Particuliers editable={false} />
-        )}
-        {data?.prejudice_scolaire && <PrejudiceScolaire editable={false} />}
+          {data?.prejudice_scolaire && <PrejudiceScolaire editable={false} />}
 
-        {data?.frais_funeraire?.ref && <FraisFun editable={false} />}
-        {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
-          <PrejudiceEXH editable={false} />
-        )}
-        {(data?.prejudice_proche?.menage_ref ||
-          data?.prejudice_proche?.menage_reference ||
-          data?.prejudice_proche?.reference ||
-          data?.prejudice_proche?.revenue_reference_children) && (
-          <PrejudiceProche editable={false} />
-        )}
-        {data?.provisions &&
-          Array.isArray(data?.provisions?.provisions) &&
-          hasDefinedValues(data?.provisions?.provisions) && <Provisions editable={false} />}
+          {data?.frais_funeraire?.ref && <FraisFun editable={false} />}
+          {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
+            <PrejudiceEXH editable={false} />
+          )}
+          {(data?.prejudice_proche?.menage_ref ||
+            data?.prejudice_proche?.menage_reference ||
+            data?.prejudice_proche?.reference ||
+            data?.prejudice_proche?.revenue_reference_children) && (
+            <PrejudiceProche editable={false} />
+          )}
+          {data?.provisions &&
+            Array.isArray(data?.provisions?.provisions) &&
+            hasDefinedValues(data?.provisions?.provisions) && <Provisions editable={false} />}
 
-        <DelayedContent delay={1000}>
           <div className="final-total-boxes">
-            <TotalBoxInterest
-              selector="total-interest"
-              documentRef={contentRef}
-              label="recapitulatif.total_interest"
-            />
-            <TotalBox selector="total" documentRef={contentRef} label="recapitulatif.total" />
+            <TotalBoxInterest selector="total-interest" label="recapitulatif.total_interest" />
+            <TotalBox selector="total" label="recapitulatif.total" />
           </div>
-        </DelayedContent>
+        </MoneyScope>
       </div>
     </>
   )

@@ -1,14 +1,13 @@
 import IPEcoCapForm from '@renderer/form/incapacite_perma/economique_cap'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 
 const EconomiqueCap = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
-
-  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -19,15 +18,17 @@ const EconomiqueCap = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <IPEcoCapForm
-          onSubmit={saveData}
-          editable={editable}
-          initialValues={data?.incapacite_perma_economique_cap}
-        />
-        <TotalBox label={'incapacite_perma.eco_cap.total'} documentRef={ref} />
-        <TotalBoxInterest documentRef={ref} />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <IPEcoCapForm
+            onSubmit={saveData}
+            editable={editable}
+            initialValues={data?.incapacite_perma_economique_cap}
+          />
+          <TotalBox label={'incapacite_perma.eco_cap.total'} />
+          <TotalBoxInterest />
+        </div>
+      </MoneyScope>
     </div>
   )
 }

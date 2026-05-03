@@ -1,14 +1,13 @@
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import ForfaitForm from '@renderer/form/incapacite_perma/forfait'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const Forfait = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
-
-  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -19,11 +18,13 @@ const Forfait = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <ForfaitForm onSubmit={saveData} editable={editable} initialValues={data?.forfait_ip} />
-        <TotalBox label={'incapacite_perma.forfait.total'} documentRef={ref} />
-        <TotalBoxInterest documentRef={ref} />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <ForfaitForm onSubmit={saveData} editable={editable} initialValues={data?.forfait_ip} />
+          <TotalBox label={'incapacite_perma.forfait.total'} />
+          <TotalBoxInterest />
+        </div>
+      </MoneyScope>
     </div>
   )
 }

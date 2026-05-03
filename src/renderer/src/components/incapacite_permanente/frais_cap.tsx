@@ -1,13 +1,12 @@
 import FraisCapForm from '@renderer/form/incapacite_perma/frais_cap'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import TotalBox from '@renderer/generic/totalBox'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
-import { useCallback, useRef } from 'react'
+import { useCallback } from 'react'
 
 const FraisCap = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
-
-  const ref = useRef(null)
 
   const saveData = useCallback(
     (values) => {
@@ -18,14 +17,16 @@ const FraisCap = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <FraisCapForm
-          onSubmit={saveData}
-          editable={editable}
-          initialValues={data?.incapacite_perma_charges}
-        />
-        <TotalBox label={'incapacite_perma.frais_cap.total'} documentRef={ref} />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <FraisCapForm
+            onSubmit={saveData}
+            editable={editable}
+            initialValues={data?.incapacite_perma_charges}
+          />
+          <TotalBox label={'incapacite_perma.frais_cap.total'} />
+        </div>
+      </MoneyScope>
     </div>
   )
 }
