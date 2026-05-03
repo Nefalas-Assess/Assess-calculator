@@ -16,6 +16,11 @@ import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 
+const getSafeMembersAmount = (value) => {
+  const parsed = Number.parseInt(`${value ?? ''}`, 10)
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
 const TotalRevenueAmount = ({
   values,
   data,
@@ -315,6 +320,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     generalInfo?.date_naissance,
     generalInfo?.date_death
   ])
+
+  const membersAmount = useMemo(
+    () => getSafeMembersAmount(formValues?.members_amount),
+    [formValues?.members_amount]
+  )
 
   useEffect(() => {
     const valuesChanged =
@@ -899,10 +909,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         true
                       )
                 const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
-                const currentMembersAmount = Math.max(
-                  parseInt(`${formValues?.members_amount || 0}`, 10) - key,
-                  0
-                )
+                const currentMembersAmount = Math.max(membersAmount - key, 0)
 
                 return (
                   <tr key={key}>
@@ -928,7 +935,20 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         {(props) => <input {...props} />}
                       </Field>
                     </td>
-                    <td>{currentMembersAmount}</td>
+                    <td>
+                      {key === 0 ? (
+                        <Field
+                          control={control}
+                          type="number"
+                          name={`members_amount`}
+                          editable={editable}
+                        >
+                          {(props) => <input {...props} />}
+                        </Field>
+                      ) : (
+                        currentMembersAmount
+                      )}
+                    </td>
                     <td>
                       <TotalRevenueAmount
                         values={formValues}
@@ -995,12 +1015,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     {(props) => <input {...props} />}
                   </Field>
                 </td>
-                <td>
-                  {Math.max(
-                    parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
-                    0
-                  )}
-                </td>
+                <td>{Math.max(membersAmount - sortedChildren.length, 0)}</td>
                 <td>
                   <TotalRevenueAmount
                     values={formValues}
@@ -1011,10 +1026,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       true
                     )}
                     reference={formValues?.reference}
-                    membersAmount={Math.max(
-                      parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
-                      0
-                    )}
+                    membersAmount={Math.max(membersAmount - sortedChildren.length, 0)}
                   />
                 </td>
                 <td className="int">
@@ -1037,10 +1049,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       true
                     )}
                     reference={formValues?.reference}
-                    membersAmount={Math.max(
-                      parseInt(`${formValues?.members_amount || 0}`, 10) - sortedChildren.length,
-                      0
-                    )}
+                    membersAmount={Math.max(membersAmount - sortedChildren.length, 0)}
                     interest={{
                       start: generalInfo?.date_death,
                       end: formValues?.revenue_date_paiement
