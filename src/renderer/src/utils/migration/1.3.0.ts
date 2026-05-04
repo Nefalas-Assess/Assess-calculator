@@ -38,11 +38,34 @@ export default (data: any) => {
     ...(data.general_info.student || {})
   }
 
-  if (data?.prejudice_proche?.menage_ref && !data?.prejudice_proche?.menage_reference) {
-    data.prejudice_proche.menage_reference = data.prejudice_proche.menage_ref
+  if (data?.prejudice_proche?.menage_ref && !data?.prejudice_proche?.menage_reference_final) {
+    data.prejudice_proche.menage_reference_final = data.prejudice_proche.menage_ref
+  }
+  if (data?.prejudice_proche?.menage_reference && !data?.prejudice_proche?.menage_reference_final) {
+    data.prejudice_proche.menage_reference_final = data.prejudice_proche.menage_reference
+  }
+  if (
+    data?.prejudice_proche?.menage_reference_children &&
+    !data?.prejudice_proche?.menage_reference_period
+  ) {
+    data.prejudice_proche.menage_reference_period = data.prejudice_proche.menage_reference_children
+  }
+  if (
+    data?.prejudice_proche?.menage_reference_final &&
+    !data?.prejudice_proche?.menage_reference_period &&
+    Array.isArray(data.general_info.children) &&
+    data.general_info.children.length > 0
+  ) {
+    data.prejudice_proche.menage_reference_period = data.prejudice_proche.menage_reference_final
   }
   if (data?.prejudice_proche?.menage_ref !== undefined) {
     delete data.prejudice_proche.menage_ref
+  }
+  if (data?.prejudice_proche?.menage_reference !== undefined) {
+    delete data.prejudice_proche.menage_reference
+  }
+  if (data?.prejudice_proche?.menage_reference_children !== undefined) {
+    delete data.prejudice_proche.menage_reference_children
   }
 
   if (!data?.incapacite_perma_menage_cap) {

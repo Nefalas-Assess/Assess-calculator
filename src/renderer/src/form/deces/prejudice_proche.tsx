@@ -153,7 +153,7 @@ const TotalMenageAmount = ({ values, data, start, end, reference, interest }) =>
     end: endDate,
     start: startDate,
     index: constants.interet_amount?.findIndex((e) => e?.value === parseFloat(menage_interet)) || 0,
-    ref: reference || values?.menage_reference,
+    ref: reference ?? values?.menage_reference_final,
     asObject: true,
     noGender: !!reference,
     startIndex: reference ? 1 : 0
@@ -364,7 +364,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     }
 
     if (
-      formValues?.menage_reference &&
+      formValues?.menage_reference_final &&
       formValues?.menage_interet &&
       !formValues?.menage_date_paiement &&
       generalInfo?.config?.date_paiement
@@ -445,20 +445,34 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </h3>
       <table id="IPVariables">
         <tbody>
-          <tr>
-            <TextItem path={hasSplitMenage ? 'common.ref' : 'common.ref_table'} tag="td" />
-            <td>
-              <Field
-                control={control}
-                type="reference"
-                options={
-                  hasSplitMenage ? constants.reference_menage_children : constants.reference_light
-                }
-                name="menage_reference"
-                editable={editable}
-              ></Field>
-            </td>
-          </tr>
+          {!studentSplitEnd && (
+            <tr>
+              <TextItem path={'common.ref_table'} tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="reference"
+                  options={constants.reference_light}
+                  name="menage_reference_final"
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          )}
+          {hasSplitMenage && (
+            <tr>
+              <TextItem path={'common.ref_table_children'} tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="reference"
+                  options={constants.reference_menage_children}
+                  name="menage_reference_period"
+                  editable={editable}
+                ></Field>
+              </td>
+            </tr>
+          )}
           <tr>
             <TextItem path="common.taux_interet" tag="td" />
             <td>
@@ -474,7 +488,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         </tbody>
       </table>
 
-      <FadeIn show={formValues?.menage_reference && formValues?.menage_interet}>
+      <FadeIn
+        show={
+          (formValues?.menage_reference_final || formValues?.menage_reference_period) &&
+          formValues?.menage_interet
+        }
+      >
         <TextItem path="deces.prejudice_proche.perte_contribution_menage" tag="h3" />
         {sortedChildren?.length > 0 ? (
           <>
@@ -507,158 +526,162 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 </tr>
               </tbody>
             </table>
-            <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
-              <thead>
-                <tr>
-                  <TextItem path="common.period" tag="th" />
-                  <TextItem path="common.indemnite_journaliere" tag="th" />
-                  <th style={{ width: 50 }}>%</th>
-                  <TextItem path="common.contribution" tag="th" />
-                  <TextItem path="common.total" tag="th" />
-                  <TextItem path="common.date_paiement" tag="th" className="int" />
-                  <TextItem path="common.interest" tag="th" className="int" />
-                </tr>
-              </thead>
-              <tbody>
-                {sortedChildren?.map((item, key) => {
-                  const start =
-                    key === 0
-                      ? addDays(generalInfo?.date_death, 1)
-                      : getTheoreticalLeaveHomeDate(
-                          sortedChildren[key - 1]?.birthDate,
-                          sortedChildren[key - 1]?.leaveHomeAge,
+            <FadeIn
+              show={formValues?.menage_reference_period || formValues?.menage_reference_final}
+            >
+              <table id="IPCAPTable" style={{ maxWidth: 1200 }}>
+                <thead>
+                  <tr>
+                    <TextItem path="common.period" tag="th" />
+                    <TextItem path="common.indemnite_journaliere" tag="th" />
+                    <th style={{ width: 50 }}>%</th>
+                    <TextItem path="common.contribution" tag="th" />
+                    <TextItem path="common.total" tag="th" />
+                    <TextItem path="common.date_paiement" tag="th" className="int" />
+                    <TextItem path="common.interest" tag="th" className="int" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedChildren?.map((item, key) => {
+                    const start =
+                      key === 0
+                        ? addDays(generalInfo?.date_death, 1)
+                        : getTheoreticalLeaveHomeDate(
+                            sortedChildren[key - 1]?.birthDate,
+                            sortedChildren[key - 1]?.leaveHomeAge,
+                            true
+                          )
+
+                    const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
+
+                    const menage_amount =
+                      parseFloat(formValues?.menage_amount || 0) +
+                      indicativePersonChargeAmount * unsortedChildren?.length +
+                      indicativePersonChargeAmount * (sortedChildren?.length - key)
+
+                    return (
+                      <tr key={key}>
+                        <td>
+                          {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
+                        </td>
+                        <td>
+                          <Money value={menage_amount} ignore />
+                        </td>
+                        <td style={{ textWrap: 'nowrap' }}>100 %</td>
+                        <td>{formValues?.menage_contribution} %</td>
+                        <td>
+                          <TotalMenageAmount
+                            values={{
+                              ...formValues,
+                              menage_amount: menage_amount
+                            }}
+                            data={generalInfo}
+                            start={start}
+                            end={end}
+                            reference={formValues?.menage_reference_period}
+                          />
+                        </td>
+                        <td className="int">
+                          <Field
+                            control={control}
+                            type="date"
+                            name={`menage_date_paiement_${key}`}
+                            editable={editable}
+                          >
+                            {(props) => <input {...props} />}
+                          </Field>
+                        </td>
+                        <td className="int">
+                          <TotalMenageAmount
+                            values={{
+                              ...formValues,
+                              menage_amount: menage_amount
+                            }}
+                            data={generalInfo}
+                            start={start}
+                            end={end}
+                            reference={formValues?.menage_reference_period}
+                            interest={{
+                              start: generalInfo?.date_death,
+                              end: formValues?.[`menage_date_paiement_${key}`]
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    )
+                  })}
+                  <tr>
+                    <td>
+                      {format(
+                        getTheoreticalLeaveHomeDate(
+                          sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
-                        )
-
-                  const end = getTheoreticalLeaveHomeDate(item?.birthDate, item?.leaveHomeAge)
-
-                  const menage_amount =
-                    parseFloat(formValues?.menage_amount || 0) +
-                    indicativePersonChargeAmount * unsortedChildren?.length +
-                    indicativePersonChargeAmount * (sortedChildren?.length - key)
-
-                  return (
-                    <tr key={key}>
-                      <td>
-                        {format(start, 'dd/MM/yyyy')} - {format(end, 'dd/MM/yyyy')}
-                      </td>
-                      <td>
-                        <Money value={menage_amount} ignore />
-                      </td>
-                      <td style={{ textWrap: 'nowrap' }}>100 %</td>
-                      <td>{formValues?.menage_contribution} %</td>
-                      <td>
-                        <TotalMenageAmount
-                          values={{
-                            ...formValues,
-                            menage_amount: menage_amount
-                          }}
-                          data={generalInfo}
-                          start={start}
-                          end={end}
-                          reference={formValues?.menage_reference}
-                        />
-                      </td>
-                      <td className="int">
-                        <Field
-                          control={control}
-                          type="date"
-                          name={`menage_date_paiement_${key}`}
-                          editable={editable}
-                        >
-                          {(props) => <input {...props} />}
-                        </Field>
-                      </td>
-                      <td className="int">
-                        <TotalMenageAmount
-                          values={{
-                            ...formValues,
-                            menage_amount: menage_amount
-                          }}
-                          data={generalInfo}
-                          start={start}
-                          end={end}
-                          reference={formValues?.menage_reference}
-                          interest={{
-                            start: generalInfo?.date_death,
-                            end: formValues?.[`menage_date_paiement_${key}`]
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  )
-                })}
-                <tr>
-                  <td>
-                    {format(
-                      getTheoreticalLeaveHomeDate(
-                        sortedChildren[sortedChildren?.length - 1]?.birthDate,
-                        sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
-                        true
-                      ),
-                      'dd/MM/yyyy'
-                    )}
-                  </td>
-                  <td>
-                    <Money
-                      value={
-                        parseFloat(formValues?.menage_amount || 0) +
-                        indicativePersonChargeAmount * unsortedChildren?.length
-                      }
-                      ignore
-                    />
-                  </td>
-                  <td>100 %</td>
-                  <td>{formValues?.menage_contribution} %</td>
-                  <td>
-                    <TotalMenageAmount
-                      values={{
-                        ...formValues,
-                        menage_amount:
+                        ),
+                        'dd/MM/yyyy'
+                      )}
+                    </td>
+                    <td>
+                      <Money
+                        value={
                           parseFloat(formValues?.menage_amount || 0) +
                           indicativePersonChargeAmount * unsortedChildren?.length
-                      }}
-                      data={generalInfo}
-                      end={getTheoreticalLeaveHomeDate(
-                        sortedChildren[sortedChildren?.length - 1]?.birthDate,
-                        sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
-                        true
-                      )}
-                    />
-                  </td>
-                  <td className="int">
-                    <Field
-                      control={control}
-                      type="date"
-                      name="menage_date_paiement"
-                      editable={editable}
-                    >
-                      {(props) => <input {...props} />}
-                    </Field>
-                  </td>
-                  <td className="int">
-                    <TotalMenageAmount
-                      values={{
-                        ...formValues,
-                        menage_amount:
-                          parseFloat(formValues?.menage_amount || 0) +
-                          indicativePersonChargeAmount * unsortedChildren?.length
-                      }}
-                      data={generalInfo}
-                      end={getTheoreticalLeaveHomeDate(
-                        sortedChildren[sortedChildren?.length - 1]?.birthDate,
-                        sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
-                        true
-                      )}
-                      interest={{
-                        start: generalInfo?.date_death,
-                        end: formValues?.menage_date_paiement
-                      }}
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                        }
+                        ignore
+                      />
+                    </td>
+                    <td>100 %</td>
+                    <td>{formValues?.menage_contribution} %</td>
+                    <td>
+                      <TotalMenageAmount
+                        values={{
+                          ...formValues,
+                          menage_amount:
+                            parseFloat(formValues?.menage_amount || 0) +
+                            indicativePersonChargeAmount * unsortedChildren?.length
+                        }}
+                        data={generalInfo}
+                        end={getTheoreticalLeaveHomeDate(
+                          sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
+                          true
+                        )}
+                      />
+                    </td>
+                    <td className="int">
+                      <Field
+                        control={control}
+                        type="date"
+                        name="menage_date_paiement"
+                        editable={editable}
+                      >
+                        {(props) => <input {...props} />}
+                      </Field>
+                    </td>
+                    <td className="int">
+                      <TotalMenageAmount
+                        values={{
+                          ...formValues,
+                          menage_amount:
+                            parseFloat(formValues?.menage_amount || 0) +
+                            indicativePersonChargeAmount * unsortedChildren?.length
+                        }}
+                        data={generalInfo}
+                        end={getTheoreticalLeaveHomeDate(
+                          sortedChildren[sortedChildren?.length - 1]?.birthDate,
+                          sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
+                          true
+                        )}
+                        interest={{
+                          start: generalInfo?.date_death,
+                          end: formValues?.menage_date_paiement
+                        }}
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </FadeIn>
           </>
         ) : studentSplitEnd ? (
           <>
@@ -704,7 +727,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       data={generalInfo}
                       start={addDays(generalInfo?.date_death, 1)}
                       end={studentSplitEnd}
-                      reference={formValues?.menage_reference}
+                      reference={formValues?.menage_reference_period}
                     />
                   </td>
                   <td className="int">
@@ -723,7 +746,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       data={generalInfo}
                       start={addDays(generalInfo?.date_death, 1)}
                       end={studentSplitEnd}
-                      reference={formValues?.menage_reference}
+                      reference={formValues?.menage_reference_period}
                       interest={{
                         start: generalInfo?.date_death,
                         end: formValues?.menage_date_paiement

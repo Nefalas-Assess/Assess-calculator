@@ -1,4 +1,3 @@
-
 export default {
   home: {
     reference: {
@@ -469,6 +468,11 @@ export default {
       fr: 'Tables de référence',
       en: 'Reference tables',
       nl: 'Referentietabellen'
+    },
+    ref_table_children: {
+      fr: 'Tables de références: personnes à charge',
+      en: 'Reference tables: persons to charge',
+      nl: 'Referentietabellen: personen in aanmerking'
     },
     taux_interet: {
       fr: "Taux d'intérêt",
@@ -1028,7 +1032,7 @@ export default {
         nl: 'Methode'
       },
       interet: {
-        fr: 'Taux d\'incapacité',
+        fr: "Taux d'incapacité",
         en: 'Disability rate',
         nl: 'Percentage'
       }
@@ -1335,7 +1339,7 @@ export default {
   },
   errors: {
     before_date_accident: {
-      fr: 'La date de début ne peut pas être avant la date d\'accident',
+      fr: "La date de début ne peut pas être avant la date d'accident",
       en: 'The start date cannot be before the accident date',
       nl: 'De startdatum kan niet voor de ongevalsdatum liggen'
     },
@@ -1377,7 +1381,7 @@ export default {
       nl: 'Verhoogde inspanningen'
     },
     lost_year: {
-      fr: "Perte d'une année scolaire" ,
+      fr: "Perte d'une année scolaire",
       en: 'Lost school year',
       nl: 'Verloren schooljaar'
     },
@@ -1416,5 +1420,5 @@ export default {
       en: 'Total general :',
       nl: 'Algemeen totaal :'
     }
-  },
+  }
 }
