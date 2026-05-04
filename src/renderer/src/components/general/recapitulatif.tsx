@@ -326,8 +326,7 @@ const Recapitulatif = () => {
         {data?.prejudice_exh && data?.prejudice_exh?.periods?.length > 0 && (
           <PrejudiceEXH editable={false} />
         )}
-        {(data?.prejudice_proche?.menage_ref ||
-          data?.prejudice_proche?.menage_reference ||
+        {(data?.prejudice_proche?.menage_reference ||
           data?.prejudice_proche?.reference ||
           data?.prejudice_proche?.revenue_reference_children) && (
           <PrejudiceProche editable={false} />

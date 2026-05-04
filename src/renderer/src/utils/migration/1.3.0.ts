@@ -38,6 +38,13 @@ export default (data: any) => {
     ...(data.general_info.student || {})
   }
 
+  if (data?.prejudice_proche?.menage_ref && !data?.prejudice_proche?.menage_reference) {
+    data.prejudice_proche.menage_reference = data.prejudice_proche.menage_ref
+  }
+  if (data?.prejudice_proche?.menage_ref !== undefined) {
+    delete data.prejudice_proche.menage_ref
+  }
+
   if (!data?.incapacite_perma_menage_cap) {
     return data
   }
