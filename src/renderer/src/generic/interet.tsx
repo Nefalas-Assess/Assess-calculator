@@ -63,7 +63,7 @@ const getAmountForYear = (year) => {
   return found ? parseFloat(found.amount) : parseFloat(rates[0]?.amount)
 }
 
-const Interest = ({ amount, start, end }) => {
+const Interest = ({ amount, start, end, ignore, className }) => {
   const [info, setInfo] = useState([])
 
   const ranges = useMemo(() => getDaysPerYearInRange(start, end), [start, end])
@@ -152,7 +152,9 @@ const Interest = ({ amount, start, end }) => {
         justifyContent: 'center'
       }}
     >
-      <div className="interest">{formatter?.format(total - parseFloat(amount))}</div>
+      <div className={className || (ignore ? undefined : 'interest')}>
+        {formatter?.format(total - parseFloat(amount))}
+      </div>
       <Tooltip tooltipContent={renderToolTipContent()}>
         <FaRegQuestionCircle style={{ marginLeft: 5 }} />
       </Tooltip>

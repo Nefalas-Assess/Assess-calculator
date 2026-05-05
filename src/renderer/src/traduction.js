@@ -1079,6 +1079,16 @@ export default {
         en: 'Permanent economic disabilities',
         nl: 'Blijvende economische ongeschiktheden'
       },
+      salary_basis: {
+        fr: 'Base salariale retenue pour le décompte',
+        en: 'Salary basis retained for the calculation',
+        nl: 'Loonbasis gebruikt voor de berekening'
+      },
+      salary_basis_period: {
+        fr: 'Base salariale retenue pour la période',
+        en: 'Salary basis retained for the period',
+        nl: 'Loonbasis gebruikt voor de periode'
+      },
       total: {
         fr: 'Total général :',
         en: 'Total general :',

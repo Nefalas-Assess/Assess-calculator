@@ -835,7 +835,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           )}
           {(sortedChildren?.length > 0 || studentSplitEnd) && (
             <tr>
-              <TextItem path="common.ref" tag="td" />
+              <TextItem path="common.ref_table_children" tag="td" />
               <td>
                 <Field
                   control={control}

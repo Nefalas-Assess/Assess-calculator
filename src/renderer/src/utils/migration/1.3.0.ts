@@ -68,6 +68,16 @@ export default (data: any) => {
     delete data.prejudice_proche.menage_reference_children
   }
 
+  if (data?.incapacite_perma_economique_cap && !data.incapacite_perma_economique_cap.salary_basis) {
+    data.incapacite_perma_economique_cap.salary_basis = 'brut'
+  }
+  if (
+    data?.incapacite_perma_economique_cap &&
+    !data.incapacite_perma_economique_cap.salary_basis_period
+  ) {
+    data.incapacite_perma_economique_cap.salary_basis_period = 'brut'
+  }
+
   if (!data?.incapacite_perma_menage_cap) {
     return data
   }

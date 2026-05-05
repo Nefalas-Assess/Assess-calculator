@@ -498,7 +498,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
               <tbody>
                 <tr>
-                  <TextItem path="common.ref" tag="td" />
+                  <TextItem path="common.ref_table" tag="td" />
                   <td>
                     <Field
                       control={control}
@@ -634,7 +634,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
               <tbody>
                 <tr>
-                  <TextItem path="common.ref" tag="td" />
+                  <TextItem path="common.ref_table_children" tag="td" />
                   <td>
                     <Field
                       control={control}

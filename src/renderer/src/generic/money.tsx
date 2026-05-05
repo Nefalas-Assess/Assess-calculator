@@ -14,7 +14,7 @@ const Money = ({ value, ignore, span, className, tooltip }) => {
     if (ignore) return
 
     return 'money'
-  }, [className])
+  }, [className, ignore])
 
   if (span) return <span>{formatter?.format(value)}</span>
 

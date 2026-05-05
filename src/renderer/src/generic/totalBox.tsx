@@ -72,9 +72,13 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
           })
         }
         // Check if text content of money elements changed
-        else if (mutation.type === 'characterData' || mutation.type === 'attributes') {
+        else if (mutation.type === 'characterData') {
           const target = mutation.target as Element
           if (target.closest?.('.money')) {
+            shouldRecalc = true
+          }
+        } else if (mutation.type === 'attributes') {
+          if (mutation.attributeName === 'class') {
             shouldRecalc = true
           }
         }
@@ -92,7 +96,8 @@ export const TotalBox = ({ name, label, selector, value, documentRef, negative, 
       childList: true,
       subtree: true,
       characterData: true,
-      attributes: false
+      attributes: true,
+      attributeFilter: ['class']
     })
 
     return () => observer.disconnect()
