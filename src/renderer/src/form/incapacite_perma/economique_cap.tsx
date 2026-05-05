@@ -248,7 +248,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
               <td>
                 <Money value={isBrut ? yearlyBrutSalary : yearlyNetSalary} ignore span />
               </td>
-              <td>
+              <td className="table-ref-other-amount">
                 <CapAmount
                   values={{
                     ...formValues,
@@ -277,8 +277,8 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
       <table id="IPVariables">
         <tbody>
           <tr>
-            <TextItem path={'common.ref_table'} tag="td" />
-            <td>
+            <TextItem path={'common.ref_table'} tag="td" className="table-ref-other" />
+            <td className="table-ref-other">
               <Field
                 control={control}
                 type="reference"

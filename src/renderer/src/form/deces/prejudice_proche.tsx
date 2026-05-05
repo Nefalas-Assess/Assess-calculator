@@ -425,8 +425,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         <tbody>
           {!studentSplitEnd && (
             <tr>
-              <TextItem path={'common.ref_table'} tag="td" />
-              <td>
+              <TextItem path={'common.ref_table'} tag="td" className="table-ref-standard" />
+              <td className="table-ref-standard">
                 <Field
                   control={control}
                   type="reference"
@@ -439,8 +439,12 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           )}
           {hasSplitMenage && (
             <tr>
-              <TextItem path={'common.ref_table_children'} tag="td" />
-              <td>
+              <TextItem
+                path={'common.ref_table_children'}
+                tag="td"
+                className="table-ref-children"
+              />
+              <td className="table-ref-children">
                 <Field
                   control={control}
                   type="reference"
@@ -547,7 +551,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         </td>
                         <td style={{ textWrap: 'nowrap' }}>100 %</td>
                         <td>{formValues?.menage_contribution} %</td>
-                        <td>
+                        <td className="table-ref-children-amount">
                           <TotalMenageAmount
                             values={{
                               ...formValues,
@@ -610,7 +614,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     </td>
                     <td>100 %</td>
                     <td>{formValues?.menage_contribution} %</td>
-                    <td>
+                    <td className="table-ref-standard-amount">
                       <TotalMenageAmount
                         values={{
                           ...formValues,
@@ -699,7 +703,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       editable={editable}
                     ></Field>
                   </td>
-                  <td>
+                  <td className="table-ref-children-amount">
                     <TotalMenageAmount
                       values={formValues}
                       data={generalInfo}
@@ -762,7 +766,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     editable={editable}
                   ></Field>
                 </td>
-                <td>
+                <td className="table-ref-standard-amount">
                   <TotalMenageAmount values={formValues} data={generalInfo} />
                 </td>
                 <td className="int">
@@ -799,8 +803,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         <tbody>
           {!studentSplitEnd && (
             <tr>
-              <TextItem path="common.ref_table" tag="td" />
-              <td>
+              <TextItem path="common.ref_table" tag="td" className="table-ref-other" />
+              <td className="table-ref-other">
                 <Field
                   control={control}
                   type="reference"
@@ -813,8 +817,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           )}
           {(sortedChildren?.length > 0 || studentSplitEnd) && (
             <tr>
-              <TextItem path="common.ref_table_children" tag="td" />
-              <td>
+              <TextItem path="common.ref_table_children" tag="td" className="table-ref-children" />
+              <td className="table-ref-children">
                 <Field
                   control={control}
                   type="reference"
@@ -914,7 +918,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         currentMembersAmount
                       )}
                     </td>
-                    <td>
+                    <td className="table-ref-children-amount">
                       <TotalRevenueAmount
                         values={formValues}
                         data={generalInfo}
@@ -981,7 +985,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                   </Field>
                 </td>
                 <td>{Math.max(membersAmount - sortedChildren.length, 0)}</td>
-                <td>
+                <td className="table-ref-other-amount">
                   <TotalRevenueAmount
                     values={formValues}
                     data={generalInfo}
@@ -1067,7 +1071,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     {(props) => <input {...props} />}
                   </Field>
                 </td>
-                <td>
+                <td className="table-ref-children-amount">
                   <TotalRevenueAmount
                     values={formValues}
                     data={generalInfo}
@@ -1144,7 +1148,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     {(props) => <input {...props} />}
                   </Field>
                 </td>
-                <td>
+                <td className="table-ref-other-amount">
                   <TotalRevenueAmount values={formValues} data={generalInfo} />
                 </td>
                 <td className="int">
