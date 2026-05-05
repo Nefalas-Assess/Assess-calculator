@@ -471,8 +471,8 @@ export default {
     },
     ref_table_children: {
       fr: 'Tables de références: personnes à charge',
-      en: 'Reference tables: persons to charge',
-      nl: 'Referentietabellen: personen in aanmerking'
+      en: 'Reference tables: dependents',
+      nl: 'Referentietabellen: personen ten laste'
     },
     taux_interet: {
       fr: "Taux d'intérêt",
