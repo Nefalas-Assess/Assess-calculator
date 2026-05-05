@@ -1,10 +1,9 @@
-import { AppContext } from "@renderer/providers/AppProvider";
-import { useContext } from "react";
+import { useAppData } from '@renderer/providers/AppProvider'
 
 export const useGeneralInfo = () => {
-	const { data } = useContext(AppContext);
+  const data = useAppData()
 
-	return data?.general_info || {};
-};
+  return data?.general_info || {}
+}
 
-export default useGeneralInfo;
+export default useGeneralInfo

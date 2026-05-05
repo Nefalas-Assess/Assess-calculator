@@ -1,30 +1,22 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.prejudice_exh, 75)
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const periodsValues = useWatch({
-    control,
-    name: 'periods'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -33,22 +25,7 @@ const PrejudiceEXHForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(periodsValues) !== JSON.stringify(previousValuesRef.current?.periods)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        periods: periodsValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, periodsValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getTotalAmount = useCallback((item, days) => {
     const { amount = 0 } = item

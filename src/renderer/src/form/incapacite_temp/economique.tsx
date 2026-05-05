@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback } from 'react'
+import { useAppData } from '@renderer/providers/AppProvider'
 import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import get from 'lodash/get'
@@ -9,35 +9,21 @@ import TextItem from '@renderer/generic/textItem'
 import Money from '@renderer/generic/money'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import resolveSalaryInfo from '@renderer/helpers/getSalaryInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: initialValues || {
       net: [],
       brut: []
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const brutValues = useWatch({
-    control,
-    name: 'brut'
-  })
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const netValues = useWatch({
-    control,
-    name: 'net'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -46,24 +32,7 @@ const ITEconomiqueForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(brutValues) !== JSON.stringify(previousValuesRef.current?.brut) ||
-      JSON.stringify(netValues) !== JSON.stringify(previousValuesRef.current?.net)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        brut: brutValues,
-        net: netValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, brutValues, netValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getSalaryTotalAmount = useCallback((item = {}, days, type = 'net') => {
     const { amount = 0, percentage = 0 } = item

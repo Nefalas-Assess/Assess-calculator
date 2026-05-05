@@ -1,32 +1,24 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import { getIndicativeAmount } from '@renderer/helpers/getIndicativeAmount'
 import get from 'lodash/get'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppData } from '@renderer/providers/AppProvider'
 import cloneDeep from 'lodash/cloneDeep'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
   const generalInfo = useGeneralInfo()
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.effort_accrus, 30)
 
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: initialValues || {}
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const effortsValues = useWatch({
-    control,
-    name: 'efforts'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -81,22 +73,7 @@ const EffortAccruForm = ({ initialValues, onSubmit, editable = true }) => {
     ]
   }
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(effortsValues) !== JSON.stringify(previousValuesRef.current?.efforts)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        efforts: effortsValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, effortsValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getTotalAmount = useCallback((values, days) => {
     return {

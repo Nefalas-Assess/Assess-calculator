@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import TextItem, { useTranslation } from '@renderer/generic/textItem'
 import { useNavigate, useParams, useLocation } from 'react-router'
 import { useToast } from '@renderer/providers/ToastProvider'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppActions } from '@renderer/providers/AppProvider'
 
 type CustomReference = {
   id: string
@@ -23,14 +23,17 @@ type EditorRow = {
 const DEFAULT_COLUMNS = 6
 
 const sanitizeModuleContent = (content: string) => {
-  return content.replace(/export\s+default/, '').trim().replace(/;?\s*$/, '')
+  return content
+    .replace(/export\s+default/, '')
+    .trim()
+    .replace(/;?\s*$/, '')
 }
 
 const toJsonCompatible = (content: string) => {
   return content
     .replace(/(\r\n|\r)/g, '\n')
     .replace(/,(\s*[}\]])/g, '$1')
-    .replace(/([{\[,]\s*)([A-Za-z0-9_]+)\s*:/g, '$1"$2":')
+    .replace(/([{[,]\s*)([A-Za-z0-9_]+)\s*:/g, '$1"$2":')
     .replace(/'/g, '"')
 }
 
@@ -112,7 +115,10 @@ const createEditorState = (value: any, type: EditorType) => {
     const rows: EditorRow[] = rowsArray.map((row: any) => {
       const normalizedRow = Array.isArray(row) ? row : [row]
       return {
-        values: padValues(normalizedRow.map((cell) => toCellValue(cell)), columnCount)
+        values: padValues(
+          normalizedRow.map((cell) => toCellValue(cell)),
+          columnCount
+        )
       }
     })
     return { rows, columnCount }
@@ -221,7 +227,7 @@ const SettingsEditor = () => {
   const { datasetId = '' } = useParams()
   const location = useLocation()
   const { addToast } = useToast()
-  const { refreshReferenceTypes } = useContext(AppContext)
+  const { refreshReferenceTypes } = useAppActions()
   const translate = useTranslation()
   const navigate = useNavigate()
 
@@ -277,17 +283,6 @@ const SettingsEditor = () => {
   useEffect(() => {
     loadFiles()
   }, [loadFiles])
-
-  const resetEditor = useCallback(() => {
-    setSelectedFile(null)
-    setEditorType(null)
-    setEditorRows([])
-    setColumnCount(DEFAULT_COLUMNS)
-    setObjectColumns([])
-    setRawContent('')
-    setHasChanges(false)
-    setFileError(null)
-  }, [])
 
   const handleSelectFile = async (fileName: string) => {
     if (!datasetId) return

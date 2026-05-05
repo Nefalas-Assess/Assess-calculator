@@ -1,12 +1,12 @@
 import FraisFunForm from '@renderer/form/deces/frais'
 import TotalBox from '@renderer/generic/totalBox'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
+import { useCallback } from 'react'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 
 const FraisFun = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
-  const ref = useRef(null)
-
+  const data = useAppData()
+  const { setData } = useAppActions()
   const saveData = useCallback(
     (values) => {
       setData({ frais_funeraire: values })
@@ -16,14 +16,16 @@ const FraisFun = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <FraisFunForm
-          onSubmit={saveData}
-          editable={editable}
-          initialValues={data?.frais_funeraire}
-        />
-        <TotalBox label="deces.frais.total" documentRef={ref} />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <FraisFunForm
+            onSubmit={saveData}
+            editable={editable}
+            initialValues={data?.frais_funeraire}
+          />
+          <TotalBox label="deces.frais.total" />
+        </div>
+      </MoneyScope>
     </div>
   )
 }

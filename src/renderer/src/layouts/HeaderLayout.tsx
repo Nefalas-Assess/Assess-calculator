@@ -1,14 +1,15 @@
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 import logo from '@renderer/assets/icon.png'
 import TextItem from '@renderer/generic/textItem'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppActions, useAppData, useAppUi } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
 import { FaMoon, FaSun } from 'react-icons/fa6'
 
 const HeaderLayout = () => {
-  const { toggleDarkMode, mode, filePath, back, save, setLg, lg, data, setFilePath } =
-    useContext(AppContext)
+  const { toggleDarkMode, back, save, setLg } = useAppActions()
+  const { mode, filePath, lg } = useAppUi()
+  const data = useAppData()
   const { addToast } = useToast()
   const navigate = useNavigate()
   const location = useLocation()

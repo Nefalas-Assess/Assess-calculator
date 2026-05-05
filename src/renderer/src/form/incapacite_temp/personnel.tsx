@@ -1,33 +1,27 @@
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_perso, 32)
 
-  const { control, setValue, handleSubmit, watch } = useForm({
+  const { control, setValue, handleSubmit } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
   })
 
-  const formValues = watch()
-
-  const previousValuesRef = useRef({})
-
-  const periodsValues = useWatch({
-    control,
-    name: 'periods'
-  })
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -36,22 +30,7 @@ const ITPersonnelForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(periodsValues) !== JSON.stringify(previousValuesRef.current?.periods)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        periods: periodsValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, periodsValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getTotalAmount = useCallback((item, days) => {
     const { amount = 0, percentage = 0 } = item

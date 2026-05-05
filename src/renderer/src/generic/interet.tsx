@@ -8,10 +8,13 @@ import {
   isValid
 } from 'date-fns'
 import Tooltip from './tooltip'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import TextItem from './textItem'
+import { useMoneyRegistration } from './moneyScope'
+
+let interestCounter = 0
 
 const getDaysPerYearInRange = (startDate, endDate) => {
   const result = []
@@ -65,6 +68,7 @@ const getAmountForYear = (year) => {
 
 const Interest = ({ amount, start, end, ignore, className }) => {
   const [info, setInfo] = useState([])
+  const interestId = useRef(`interest-${interestCounter++}`)
 
   const ranges = useMemo(() => getDaysPerYearInRange(start, end), [start, end])
 
@@ -92,6 +96,12 @@ const Interest = ({ amount, start, end, ignore, className }) => {
   const formatter = new Intl.NumberFormat('fr-FR', {
     style: 'currency',
     currency: 'EUR'
+  })
+
+  useMoneyRegistration({
+    id: interestId.current,
+    group: start && end && amount ? 'interest' : undefined,
+    value: (parseFloat(`${total || 0}`) || 0) - (parseFloat(`${amount || 0}`) || 0)
   })
 
   const renderToolTipContent = useCallback(() => {

@@ -1,13 +1,13 @@
-import React, { useCallback, useContext, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback } from 'react'
+import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import ITPersonnelForm from '@renderer/form/incapacite_temp/personnel'
+import { MoneyScope } from '@renderer/generic/moneyScope'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 
 const Personnel = ({ editable }) => {
-  const { data, setData } = useContext(AppContext)
-
-  const ref = useRef(null)
+  const data = useAppData()
+  const { setData } = useAppActions()
 
   const saveData = useCallback(
     (values) => {
@@ -18,15 +18,17 @@ const Personnel = ({ editable }) => {
 
   return (
     <div id="content">
-      <div id="main" ref={ref}>
-        <ITPersonnelForm
-          onSubmit={saveData}
-          editable={editable}
-          initialValues={data?.incapacite_temp_personnel}
-        />
-        <TotalBox label="incapacite_temp.personnel.total" documentRef={ref} />
-        <TotalBoxInterest documentRef={ref} />
-      </div>
+      <MoneyScope>
+        <div id="main">
+          <ITPersonnelForm
+            onSubmit={saveData}
+            editable={editable}
+            initialValues={data?.incapacite_temp_personnel}
+          />
+          <TotalBox label="incapacite_temp.personnel.total" />
+          <TotalBoxInterest />
+        </div>
+      </MoneyScope>
     </div>
   )
 }

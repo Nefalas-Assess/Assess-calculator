@@ -1,20 +1,20 @@
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
-import { AppContext } from '@renderer/providers/AppProvider'
-import { isValid } from 'date-fns'
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import { useAppData } from '@renderer/providers/AppProvider'
+import { useCallback, useMemo } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
-  const { handleSubmit, watch, control } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: initialValues || {
       contribution_imp: generalInfo?.config?.default_contribution,
       perso_date_paiement: generalInfo?.config?.date_paiement,
@@ -23,28 +23,13 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   })
 
-  const formValues = watch()
-
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = (values) => {
     onSubmit(values)
   }
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getPoint = useCallback((age) => {
     if (age <= 15) return 3660

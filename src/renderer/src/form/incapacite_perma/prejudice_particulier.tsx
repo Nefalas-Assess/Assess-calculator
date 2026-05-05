@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useEffect, useRef } from 'react'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useCallback } from 'react'
+import { useAppData } from '@renderer/providers/AppProvider'
 import data_pp from '@renderer/data/data_pp'
-import { findClosestIndex, getDays } from '@renderer/helpers/general'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { findClosestIndex } from '@renderer/helpers/general'
+import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
@@ -10,13 +10,14 @@ import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       coefficient_quantum_doloris: '',
       coefficient_prejudice_esthétique: '',
@@ -25,21 +26,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const prejudiceSexuelValues = useWatch({
-    control,
-    name: 'prejudice_sexuels'
-  })
-
-  const prejudiceAgrementValues = useWatch({
-    control,
-    name: 'prejudice_agrements'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -48,26 +35,7 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(prejudiceSexuelValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_sexuels) ||
-      JSON.stringify(prejudiceAgrementValues) !==
-        JSON.stringify(previousValuesRef.current?.prejudice_agrements)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        prejudice_sexuels: prejudiceSexuelValues,
-        prejudice_agrements: prejudiceAgrementValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, prejudiceSexuelValues, prejudiceAgrementValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getTotalWithCoef = useCallback(
     (coefficient) => {

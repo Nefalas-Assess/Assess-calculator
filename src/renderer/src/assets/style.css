@@ -477,7 +477,6 @@ input[type='checkbox'] {
     transform: none;
   }
 }
-
 /* Custom dropdown arrow + contrast, but keep native look on macOS */
 html:not(.platform-mac) select {
   appearance: none;
@@ -1015,10 +1014,7 @@ th {
 
 /* Tooltip box */
 .tooltip-box {
-  position: absolute;
-  top: 0%; /* Aligne le tooltip au niveau de l'élément */
-  transform: translateX(-50%); /* Ajuste pour centrer parfaitement */
-  margin-top: 8px;
+  position: fixed;
   background-color: var(--tooltip-bg, rgba(20, 22, 36, 0.92));
   color: var(--tooltip-text, rgba(255, 255, 255, 0.92));
   padding: 8px 12px;
