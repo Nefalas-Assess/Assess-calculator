@@ -100,7 +100,7 @@ const Interest = ({ amount, start, end, ignore, className }) => {
 
   useMoneyRegistration({
     id: interestId.current,
-    group: start && end && amount ? 'interest' : undefined,
+    group: start && end && amount && !ignore ? 'interest' : undefined,
     value: (parseFloat(`${total || 0}`) || 0) - (parseFloat(`${amount || 0}`) || 0)
   })
 
