@@ -131,8 +131,8 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
       <table id="IPVariables">
         <tbody>
           <tr>
-            <TextItem path="common.ref_table" tag="td" />
-            <td>
+            <TextItem path="common.ref_table" tag="td" className="table-ref-standard" />
+            <td className="table-ref-standard">
               <Field
                 control={control}
                 type="reference"
@@ -233,7 +233,7 @@ export const IPPersonnelCapForm = ({ onSubmit, initialValues, editable = true })
                   {(props) => <input style={{ width: 50 }} {...props} />}
                 </Field>
               </td>
-              <td>
+              <td className="table-ref-standard-amount">
                 <CapAmount values={formValues} />
               </td>
             </tr>

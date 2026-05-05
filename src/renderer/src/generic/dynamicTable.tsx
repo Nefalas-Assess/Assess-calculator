@@ -12,6 +12,7 @@ import CoefficientInfo from './coefficientInfo'
 import TextItem, { useTranslation } from './textItem'
 import { useAppErrors } from '@renderer/providers/AppProvider'
 import { ErrorWrapper } from './errorWrapper'
+import { getReferenceHighlightClass } from '@renderer/utils/referenceHighlight'
 
 // Define column types
 type ColumnType = {
@@ -274,8 +275,14 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   }
 
                   if (column?.type === 'capitalization') {
+                    const referenceValue =
+                      rowData?.[column.props?.ref] || formValues?.[column.props?.ref]
+
                     return (
-                      <td key={colIndex}>
+                      <td
+                        key={colIndex}
+                        className={getReferenceHighlightClass(referenceValue, 'amount')}
+                      >
                         <Capitalization
                           values={rowData}
                           columns={columns}
@@ -287,8 +294,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                   }
 
                   if (column.type === 'reference') {
+                    const referenceValue = rowData?.[column.key]
                     return (
-                      <td key={colIndex}>
+                      <td key={colIndex} className={getReferenceHighlightClass(referenceValue)}>
                         <Field
                           control={control}
                           type={column.type}

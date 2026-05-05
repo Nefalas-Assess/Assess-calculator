@@ -365,8 +365,8 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
       <table id="IPVariables">
         <tbody>
           <tr>
-            <TextItem path="common.ref_table" tag="td" />
-            <td>
+            <TextItem path="common.ref_table" tag="td" className="table-ref-standard" />
+            <td className="table-ref-standard">
               <Field
                 control={control}
                 type="reference"
@@ -484,8 +484,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
               <tbody>
                 <tr>
-                  <TextItem path="common.ref_table_children" tag="td" />
-                  <td>
+                  <TextItem
+                    path="common.ref_table_children"
+                    tag="td"
+                    className="table-ref-children"
+                  />
+                  <td className="table-ref-children">
                     <Field
                       control={control}
                       type="reference"
@@ -547,7 +551,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                             editable={editable}
                           ></Field>
                         </td>
-                        <td>
+                        <td className="table-ref-children-amount">
                           <CapAmount
                             values={{
                               ...formValues,
@@ -594,7 +598,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                         editable={editable}
                       ></Field>
                     </td>
-                    <td>
+                    <td className="table-ref-standard-amount">
                       <CapAmount
                         values={{
                           ...formValues,
@@ -620,8 +624,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
             <table id="IPPCTableInfo" style={{ maxWidth: 1200 }}>
               <tbody>
                 <tr>
-                  <TextItem path="common.ref_table_children" tag="td" />
-                  <td>
+                  <TextItem
+                    path="common.ref_table_children"
+                    tag="td"
+                    className="table-ref-children"
+                  />
+                  <td className="table-ref-children">
                     <Field
                       control={control}
                       type="reference"
@@ -670,7 +678,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                         editable={editable}
                       ></Field>
                     </td>
-                    <td>
+                    <td className="table-ref-children-amount">
                       <CapAmount
                         values={{
                           ...formValues,
@@ -706,7 +714,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                         editable={editable}
                       ></Field>
                     </td>
-                    <td>
+                    <td className="table-ref-standard-amount">
                       <CapAmount
                         values={{
                           ...formValues,
@@ -752,7 +760,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
                     editable={editable}
                   ></Field>
                 </td>
-                <td>
+                <td className="table-ref-standard-amount">
                   <CapAmount
                     values={{
                       ...formValues,

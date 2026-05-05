@@ -446,6 +446,39 @@ input[type='checkbox'] {
   top: 75%;
 }
 
+.table-ref-children {
+  background: color-mix(in srgb, #2f9e44 12%, var(--input-bg, white));
+  color: color-mix(in srgb, #1f6f31 88%, var(--content-text-color, #111));
+  font-weight: 600;
+}
+
+.table-ref-children-amount {
+  background: color-mix(in srgb, #2f9e44 10%, transparent);
+  box-shadow: inset 4px 0 0 color-mix(in srgb, #2f9e44 65%, transparent);
+}
+
+.table-ref-standard {
+  background: color-mix(in srgb, #1c7ed6 12%, var(--input-bg, white));
+  color: color-mix(in srgb, #155a96 88%, var(--content-text-color, #111));
+  font-weight: 600;
+}
+
+.table-ref-standard-amount {
+  background: color-mix(in srgb, #1c7ed6 10%, transparent);
+  box-shadow: inset 4px 0 0 color-mix(in srgb, #1c7ed6 65%, transparent);
+}
+
+.table-ref-other {
+  background: color-mix(in srgb, #f08c00 12%, var(--input-bg, white));
+  color: color-mix(in srgb, #9a5a00 88%, var(--content-text-color, #111));
+  font-weight: 600;
+}
+
+.table-ref-other-amount {
+  background: color-mix(in srgb, #f08c00 10%, transparent);
+  box-shadow: inset 4px 0 0 color-mix(in srgb, #f08c00 65%, transparent);
+}
+
 @media (max-width: 900px) {
   .salary-basis-grid {
     grid-template-columns: 1fr;

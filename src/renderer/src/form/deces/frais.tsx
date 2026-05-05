@@ -64,8 +64,8 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
       <TextItem tag="h3" path="common.variables" />
       <table id="IPVariables">
         <tr>
-          <TextItem tag="td" path="common.ref_table" />
-          <td>
+          <TextItem tag="td" path="common.ref_table" className="table-ref-other" />
+          <td className="table-ref-other">
             <Field control={control} type="reference" name={`ref`} editable={editable}></Field>
           </td>
         </tr>
