@@ -5,8 +5,8 @@ import {
   getTheoreticalLeaveHomeDate
 } from '@renderer/helpers/general'
 import { format, addDays } from 'date-fns'
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useForm } from 'react-hook-form'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import Field from '@renderer/generic/field'
@@ -19,6 +19,7 @@ import { useCapitalization } from '@renderer/hooks/capitalization'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const CapAmount = ({ values, start, end, usePersoReference = false, startIndex = 1 }) => {
   const {
@@ -85,7 +86,7 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   const defaultContribution = generalInfo?.config?.default_contribution
 
-  const { handleSubmit, watch, control, setValue } = useForm({
+  const { handleSubmit, control, setValue } = useForm({
     defaultValues: {
       conso_amount: indicativeAmount,
       perso_amount: indicativeAmount,
@@ -105,28 +106,13 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     }
   })
 
-  const formValues = watch()
-
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = (values) => {
     onSubmit(values)
   }
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const days = useMemo(() => {
     return getDays({

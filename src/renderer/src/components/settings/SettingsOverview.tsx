@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import TextItem from '@renderer/generic/textItem'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppActions } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
 import { useNavigate } from 'react-router'
 
@@ -19,7 +19,7 @@ type TemplateReference = {
 }
 
 const SettingsOverview = () => {
-  const { refreshReferenceTypes } = useContext(AppContext)
+  const { refreshReferenceTypes } = useAppActions()
   const { addToast } = useToast()
   const navigate = useNavigate()
 

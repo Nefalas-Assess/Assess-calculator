@@ -1,14 +1,15 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import Money from '@renderer/generic/money'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       charges: [
         {
@@ -18,27 +19,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const chargesValues = useWatch({
-    control,
-    name: 'charges'
-  })
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const paidValues = useWatch({
-    control,
-    name: 'paid'
-  })
-
-  const packageValues = useWatch({
-    control,
-    name: 'package'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -47,26 +28,7 @@ const FraisCapForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(chargesValues) !== JSON.stringify(previousValuesRef.current?.charges) ||
-      JSON.stringify(paidValues) !== JSON.stringify(previousValuesRef.current?.paid) ||
-      JSON.stringify(packageValues) !== JSON.stringify(previousValuesRef.current?.package)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        charges: chargesValues,
-        paid: paidValues,
-        package: packageValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, chargesValues, paidValues, packageValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const frais_futurs_columns = [
     { header: 'common.frais', key: 'name', type: 'text' },

@@ -1,6 +1,6 @@
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppData, useAppErrors, useAppUi } from '@renderer/providers/AppProvider'
 import { useToast } from '@renderer/providers/ToastProvider'
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import get from 'lodash/get'
 import Tooltip from '@renderer/generic/tooltip'
@@ -133,7 +133,9 @@ const DetectMissingData = ({ children, data, required }) => {
 }
 
 export const AppLayout = () => {
-  const { data, filePath, errors } = useContext(AppContext)
+  const data = useAppData()
+  const errors = useAppErrors()
+  const { filePath } = useAppUi()
 
   const { addToast, removeToast } = useToast()
 

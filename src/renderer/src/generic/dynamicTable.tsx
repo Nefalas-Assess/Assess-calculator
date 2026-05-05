@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { useFieldArray, Control } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
@@ -10,8 +10,7 @@ import { FaRegQuestionCircle } from 'react-icons/fa'
 import { useCapitalization } from '@renderer/hooks/capitalization'
 import CoefficientInfo from './coefficientInfo'
 import TextItem, { useTranslation } from './textItem'
-import { AppContext } from '@renderer/providers/AppProvider'
-import { MdOutlineErrorOutline } from 'react-icons/md'
+import { useAppErrors } from '@renderer/providers/AppProvider'
 import { ErrorWrapper } from './errorWrapper'
 
 // Define column types
@@ -51,7 +50,7 @@ type DynamicTableProps = {
   name: string
   formValues: Record<string, unknown>
   editable?: boolean
-  onAddRow?: (append: Function) => void
+  onAddRow?: (append: (value: Record<string, any> | Record<string, any>[]) => void) => void
   addRowLabel?: string
   addRowDefaults?: Record<string, any>
   calculateTotal?: (values: Record<string, unknown>, days: number) => string
@@ -148,7 +147,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
   customActions,
   base
 }) => {
-  const { errors } = useContext(AppContext)
+  const errors = useAppErrors()
 
   const translate = useTranslation()
 

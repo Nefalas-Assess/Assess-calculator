@@ -1,6 +1,6 @@
 import { getDays, getMedDate } from '@renderer/helpers/general'
 import { format } from 'date-fns'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
@@ -14,6 +14,7 @@ import SalaryBasis from '@renderer/generic/salaryBasis'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import { resolveSalaryInfo } from '@renderer/helpers/getSalaryInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const salaryBasisOptions = [
   { value: 'brut', label: 'common.salary_yearly_brut' },
@@ -81,7 +82,7 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
   const yearlyNetSalary = getIndicativeAmount(generalInfo?.economique?.net?.yearly, 0)
   const yearlyBrutSalary = getIndicativeAmount(generalInfo?.economique?.brut?.yearly, 0)
 
-  const { handleSubmit, watch, control, register, setValue } = useForm({
+  const { handleSubmit, control, register, setValue } = useForm({
     defaultValues: {
       paiement: generalInfo?.config?.date_paiement,
       salary_basis: 'brut',
@@ -90,42 +91,15 @@ export const IPEcoCapForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   })
 
-  const formValues = watch()
+  const formValues = useWatch({ control })
   const selectedSalaryBasis = formValues?.salary_basis || 'brut'
   const selectedPeriodSalaryBasis = formValues?.salary_basis_period || 'brut'
-
-  const brutValues = useWatch({
-    control,
-    name: 'brut'
-  })
-
-  const netValues = useWatch({
-    control,
-    name: 'net'
-  })
-
-  const previousValuesRef = useRef({})
 
   const submitForm = (values) => {
     onSubmit(values)
   }
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(brutValues) !== JSON.stringify(previousValuesRef.current.brut) ||
-      JSON.stringify(netValues) !== JSON.stringify(previousValuesRef.current.net)
-
-    if (valuesChanged) {
-      previousValuesRef.current = {
-        formValues,
-        brut: brutValues,
-        net: netValues
-      }
-
-      handleSubmit(submitForm)()
-    }
-  }, [brutValues, formValues, handleSubmit, netValues])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const days = useMemo(
     () => ({

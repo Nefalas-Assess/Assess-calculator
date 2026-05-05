@@ -1,6 +1,6 @@
 import { calculateDaysBeforeAfter25 } from '@renderer/helpers/general'
-import { AppContext } from '@renderer/providers/AppProvider'
-import React, { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useAppData } from '@renderer/providers/AppProvider'
+import React, { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import get from 'lodash/get'
 import cloneDeep from 'lodash/cloneDeep'
@@ -12,6 +12,7 @@ import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
   const renderToolTipChildren = useCallback((res: any[]): JSX.Element => {
@@ -82,27 +83,20 @@ const ChildrenCell = ({ children }: { children: any[] }): JSX.Element => {
 }
 
 const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_menagere, 30)
   const indicativePersonChargeAmount = getIndicativeAmount(generalInfo?.config?.person_charge, 10)
 
-  const { control, setValue, handleSubmit, watch } = useForm({
+  const { control, setValue, handleSubmit } = useForm({
     defaultValues: initialValues || {
       periods: []
     }
   })
 
-  const formValues = watch()
-
-  const previousValuesRef = useRef({})
-
-  const periodsValues = useWatch({
-    control,
-    name: 'periods'
-  })
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -111,22 +105,7 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(periodsValues) !== JSON.stringify(previousValuesRef.current?.periods)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        periods: periodsValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, periodsValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getTotalAmount = useCallback(
     (item, days, child) => {
@@ -178,7 +157,11 @@ const ITMenagereForm = ({ initialValues, onSubmit, editable = true }) => {
         if (!item?.birthDate) {
           res.push({ days: { percentageBefore25: 1 } })
         } else {
-          const result = calculateDaysBeforeAfter25(item?.birthDate, [values?.start, values?.end], item?.leaveHomeAge)
+          const result = calculateDaysBeforeAfter25(
+            item?.birthDate,
+            [values?.start, values?.end],
+            item?.leaveHomeAge
+          )
           res.push({ days: result, ...item })
         }
       }

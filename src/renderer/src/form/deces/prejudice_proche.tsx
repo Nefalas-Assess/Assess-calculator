@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
 import { useCapitalization } from '@renderer/hooks/capitalization'
@@ -15,6 +15,7 @@ import Interest from '@renderer/generic/interet'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const getSafeMembersAmount = (value) => {
   const parsed = Number.parseInt(`${value ?? ''}`, 10)
@@ -217,9 +218,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const indicativeAmount = getIndicativeAmount(generalInfo?.config?.incapacite_menagere, 30)
   const indicativePersonChargeAmount = getIndicativeAmount(generalInfo?.config?.person_charge, 10)
 
-  const ref = useRef(null)
-
-  const { control, handleSubmit, watch, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: initialValues || {
       menage_contribution: generalInfo?.config?.default_contribution,
       menage_amount: indicativeAmount,
@@ -231,16 +230,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
+  const formValues = useWatch({ control })
   const membersValues = useWatch({
     control,
     name: 'members'
   })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
 
   const submitForm = useCallback(
     (data) => {
@@ -328,10 +322,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   const hasSplitMenage = sortedChildren?.length > 0 || !!studentSplitEnd
 
   useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(membersValues) !== JSON.stringify(previousValuesRef.current?.members)
-
     if (
       sortedChildren?.length === 0 &&
       unsortedChildren?.length > 0 &&
@@ -374,22 +364,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
         setValue(`menage_date_paiement_${key}`, generalInfo?.config?.date_paiement)
       })
     }
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        members: membersValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
   }, [
     formValues,
-    membersValues,
-    submitForm,
-    handleSubmit,
     generalInfo?.config?.date_paiement,
     indicativeAmount,
     indicativePersonChargeAmount,
@@ -398,6 +374,8 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     studentSplitEnd,
     unsortedChildren
   ])
+
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const columns = [
     { header: 'deces.prejudice_proche.name_membre', key: 'name', type: 'text' },
@@ -1196,7 +1174,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
       </FadeIn>
       <TotalBox
         label="deces.prejudice_proche.total"
-        documentRef={ref}
         calc={(res) =>
           res +
           membersValues?.reduce((total, item) => {
@@ -1205,7 +1182,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
           }, 0)
         }
       />
-      <TotalBoxInterest label="deces.prejudice_proche.total_interest" documentRef={ref} />
+      <TotalBoxInterest label="deces.prejudice_proche.total_interest" />
     </form>
   )
 }

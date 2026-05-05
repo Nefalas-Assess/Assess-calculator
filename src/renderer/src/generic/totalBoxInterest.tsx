@@ -1,9 +1,8 @@
-import { useContext } from 'react'
 import TotalBox from './totalBox'
-import { AppContext } from '@renderer/providers/AppProvider'
+import { useAppData } from '@renderer/providers/AppProvider'
 
 export const TotalBoxInterest = (props) => {
-  const { data } = useContext(AppContext)
+  const data = useAppData()
 
   if (data?.general_info?.calcul_interets !== 'true') return
 

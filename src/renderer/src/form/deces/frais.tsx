@@ -1,35 +1,22 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
 
-  const { control, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       charges: [{}]
     }
   })
 
-  const formValues = watch()
-
-  // Utiliser useWatch pour surveiller les FieldArrays
-  const chargesValues = useWatch({
-    control,
-    name: 'charges'
-  })
-
-  const notAnticipatedValues = useWatch({
-    control,
-    name: 'not_anticipated_charges'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
+  const formValues = useWatch({ control })
 
   const submitForm = useCallback(
     (data) => {
@@ -38,25 +25,7 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(chargesValues) !== JSON.stringify(previousValuesRef.current?.charges) ||
-      JSON.stringify(notAnticipatedValues) !==
-        JSON.stringify(previousValuesRef.current?.not_anticipated_charges)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        charges: chargesValues,
-        not_anticipated_charges: notAnticipatedValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, chargesValues, notAnticipatedValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const fraisColumns = [
     { header: 'common.frais', key: 'name', type: 'text' },

@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { useCallback, useMemo } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
-import Interest from '@renderer/generic/interet'
-import TotalBox from '@renderer/generic/totalBox'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
+import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const generalInfo = useGeneralInfo()
@@ -16,7 +15,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const indicativeAmountAuto = getIndicativeAmount(generalInfo?.config?.km_vehicule, 0.42)
   const indicativeAmountOther = getIndicativeAmount(generalInfo?.config?.km_other, 0.28)
 
-  const { control, register, handleSubmit, watch } = useForm({
+  const { control, handleSubmit } = useForm({
     defaultValues: initialValues || {
       frais: [
         {
@@ -31,7 +30,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   })
 
-  const formValues = watch()
+  const formValues = useWatch({ control })
 
   // Fonction pour calculer le total des frais
   const totalSumFrais = useMemo(() => {
@@ -82,14 +81,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     [formValues]
   )
 
-  const fraisValues = useWatch({
-    control,
-    name: 'frais'
-  })
-
-  // Référence pour suivre les anciennes valeurs
-  const previousValuesRef = useRef({})
-
   const submitForm = useCallback(
     (data) => {
       onSubmit(data) // Soumettre avec l'onSubmit passé en prop
@@ -97,22 +88,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     [onSubmit]
   )
 
-  useEffect(() => {
-    const valuesChanged =
-      JSON.stringify(formValues) !== JSON.stringify(previousValuesRef.current.formValues) ||
-      JSON.stringify(fraisValues) !== JSON.stringify(previousValuesRef.current?.frais)
-
-    // Si des valeurs ont changé, soumettre le formulaire
-    if (valuesChanged) {
-      // Éviter de soumettre si aucune modification réelle
-      previousValuesRef.current = {
-        formValues,
-        frais: fraisValues
-      }
-
-      handleSubmit(submitForm)() // Soumet le formulaire uniquement si nécessaire
-    }
-  }, [formValues, fraisValues, submitForm, handleSubmit])
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const columns = [
     { header: 'frais.indemnite_frais', key: 'indemnite', type: 'text' },
