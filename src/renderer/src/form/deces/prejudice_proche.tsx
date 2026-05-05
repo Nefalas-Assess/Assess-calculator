@@ -402,7 +402,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
   ]
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} ref={ref}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <DynamicTable
         title="nav.deces.prejudice_proche"
         subtitle="deces.prejudice_proche.subtitle"
