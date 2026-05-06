@@ -30,6 +30,7 @@ const TotalRevenueAmount = ({
   reference,
   membersAmount,
   interest,
+  canBeNegative = false,
   noGender = false,
   startIndex = 0
 }) => {
@@ -45,7 +46,7 @@ const TotalRevenueAmount = ({
 
   const getTotalRevenueAmount = useCallback(() => {
     const revenue = parseFloat(values?.revenue_total || 0)
-    const effectiveMembersAmount = parseInt(`${membersAmount ?? values?.members_amount ?? 0}`, 10)
+    const effectiveMembersAmount = getSafeMembersAmount(membersAmount ?? values?.members_amount)
     const personnel = revenue / (effectiveMembersAmount + 1)
 
     const variables = {
@@ -55,8 +56,10 @@ const TotalRevenueAmount = ({
       membersAmount: effectiveMembersAmount
     }
 
-    const totalAmount =
+    const rawTotalAmount =
       ((parseFloat(values?.revenue_defunt) || 0) - variables.personnel) * variables.coef
+    const totalAmount = canBeNegative ? rawTotalAmount : Math.max(rawTotalAmount, 0)
+    const isClamped = !canBeNegative && rawTotalAmount < 0
 
     return {
       value: totalAmount,
@@ -111,13 +114,18 @@ const TotalRevenueAmount = ({
                 <mn>{variables?.coef}</mn>
               </CoefficientInfo>
               <mo>=</mo>
-              <mn>{totalAmount}</mn>
+              <mn>{rawTotalAmount}</mn>
             </math>
           </div>
+          {isClamped && (
+            <div>
+              <TextItem path="tooltip.negative_result_clamped_to_zero" tag="span" />
+            </div>
+          )}
         </>
       )
     }
-  }, [capitalization, membersAmount, values])
+  }, [canBeNegative, capitalization, membersAmount, values])
 
   if (!data?.date_naissance) {
     return <TextItem path="errorsdn.missing_date_naissance" />

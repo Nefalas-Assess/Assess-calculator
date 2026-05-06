@@ -704,6 +704,11 @@ export default {
       fr: 'Pour',
       en: 'For',
       nl: 'Voor'
+    },
+    negative_result_clamped_to_zero: {
+      fr: 'Le résultat est négatif et a été ramené à 0.',
+      en: 'The result is negative and has been clamped to 0.',
+      nl: 'Het resultaat is negatief en werd naar 0 teruggebracht.'
     }
   },
   deces: {
