@@ -1420,6 +1420,16 @@ export default {
       en: 'Lost school year',
       nl: 'Verloren schooljaar'
     },
+    other: {
+      fr: 'Autres',
+      en: 'Other',
+      nl: 'Andere'
+    },
+    other_label: {
+      fr: 'Libellé',
+      en: 'Label',
+      nl: 'Benaming'
+    },
     location: {
       fr: 'Frais de location d\'un "kot"',
       en: 'Location of a student housing',

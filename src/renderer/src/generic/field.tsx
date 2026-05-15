@@ -166,6 +166,9 @@ const Field = ({
 }) => {
   const translate = useTranslation()
   const referenceOptions = useAppReferenceTypes() || constants.reference_type || []
+  const preventNumberScroll = useCallback((event) => {
+    event.currentTarget.blur()
+  }, [])
 
   const renderValue = useCallback(
     (val) => {
@@ -217,6 +220,13 @@ const Field = ({
 
   const renderInput = useCallback(
     (field) => {
+      const sharedInputProps =
+        type === 'number'
+          ? {
+              onWheel: preventNumberScroll
+            }
+          : {}
+
       if (type === 'reference') {
         return (
           <>
@@ -302,7 +312,7 @@ const Field = ({
         )
       }
 
-      return children({ ...field, type })
+      return children({ ...field, type, ...sharedInputProps })
     },
     [
       children,
@@ -315,7 +325,8 @@ const Field = ({
       onValueChange,
       customOnChange,
       switchOnLabel,
-      switchOffLabel
+      switchOffLabel,
+      preventNumberScroll
     ]
   )
 

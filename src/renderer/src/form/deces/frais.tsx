@@ -6,6 +6,7 @@ import DynamicTable from '@renderer/generic/dynamicTable'
 import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
+import Money from '@renderer/generic/money'
 
 const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
   const generalInfo = useGeneralInfo()
@@ -51,9 +52,9 @@ const FraisFunForm = ({ initialValues, onSubmit, editable = true }) => {
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
-        <div className="money" style={{ display: 'none' }}>
-          {e?.amount}
-        </div>
+        <td className="hide">
+          <Money value={e?.amount} />
+        </td>
       )
     }
   ]

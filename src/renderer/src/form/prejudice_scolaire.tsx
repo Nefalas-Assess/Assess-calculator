@@ -136,9 +136,27 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
-        <div className="money" style={{ display: 'none' }}>
-          {e?.amount}
-        </div>
+        <td className="hide">
+          <Money value={e?.amount} />
+        </td>
+      )
+    }
+  ]
+
+  const otherColumns = [
+    {
+      header: 'prejudice_scolaire.other_label',
+      key: 'label',
+      type: 'text'
+    },
+    {
+      header: 'common.amount',
+      key: 'amount',
+      type: 'number',
+      additionalContent: (e) => (
+        <td className="hide">
+          <Money value={e?.amount} />
+        </td>
       )
     }
   ]
@@ -171,6 +189,16 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
         columns={lostYearColumns}
         control={control}
         name="lost_year"
+        base="prejudice_scolaire"
+        formValues={formValues}
+        editable={editable}
+      />
+
+      <DynamicTable
+        subtitle="prejudice_scolaire.other"
+        columns={otherColumns}
+        control={control}
+        name="other"
         base="prejudice_scolaire"
         formValues={formValues}
         editable={editable}
