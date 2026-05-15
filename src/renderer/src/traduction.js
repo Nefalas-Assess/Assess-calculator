@@ -549,6 +549,16 @@ export default {
       en: 'Paid',
       nl: 'Betaald'
     },
+    activate: {
+      fr: 'Activer',
+      en: 'Enable',
+      nl: 'Activeren'
+    },
+    deactivate: {
+      fr: 'Désactiver',
+      en: 'Disable',
+      nl: 'Deactiveren'
+    },
     amount: {
       fr: 'Montant (€)',
       en: 'Amount (€)',

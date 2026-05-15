@@ -318,6 +318,114 @@ input[type='checkbox'] {
   }
 }
 
+.section-toggle-header {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.section-toggle-header h3 {
+  margin: 0;
+}
+
+.section-toggle-header__action {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.section-toggle-segmented {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  width: 178px;
+  height: 38px;
+  flex: 0 0 auto;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--input-border) 85%, transparent);
+  background: color-mix(in srgb, var(--input-bg) 97%, black 3%);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.12),
+    var(--shadow-soft);
+  overflow: hidden;
+}
+
+.section-toggle-segmented input[type='checkbox'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: 0;
+  box-shadow: none;
+  background-image: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.section-toggle-segmented input[type='checkbox']:focus-visible {
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--sidebar-link-indicator, var(--color-primary)) 20%, transparent);
+  outline: none;
+}
+
+.section-toggle-segmented__highlight {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  height: calc(100% - 6px);
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--sidebar-link-indicator, var(--color-primary)) 88%,
+    white 12%
+  );
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.22),
+    0 6px 14px -10px rgba(0, 0, 0, 0.5);
+  transition: transform 220ms ease;
+  z-index: 1;
+}
+
+.section-toggle-segmented
+  input[type='checkbox']:not(:checked)
+  ~ .section-toggle-segmented__highlight {
+  transform: translateX(100%);
+}
+
+.section-toggle-segmented__option {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--content-text-color, var(--color-text)) 74%, white 26%);
+  transition: color 180ms ease;
+}
+
+.section-toggle-segmented input[type='checkbox'] ~ .section-toggle-segmented__option--on {
+  color: #fff;
+}
+
+.section-toggle-segmented
+  input[type='checkbox']:not(:checked)
+  ~ .section-toggle-segmented__option--on {
+  color: color-mix(in srgb, var(--content-text-color, var(--color-text)) 74%, white 26%);
+}
+
+.section-toggle-segmented
+  input[type='checkbox']:not(:checked)
+  ~ .section-toggle-segmented__option--off {
+  color: #fff;
+}
+
 .salary-basis-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -12,17 +12,46 @@ import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
 
+const SectionHeader = ({ title, toggleName, control, editable = true, enabled = true }) => {
+  if (!editable && !enabled) return null
+
+  return (
+    <div className="section-toggle-header">
+      <TextItem path={title} tag="h3" />
+      {editable && (
+        <label className="section-toggle-header__action">
+          <span className="section-toggle-segmented">
+            <Field control={control} type="checkbox" name={toggleName} editable={editable} />
+            <span className="section-toggle-segmented__highlight" aria-hidden="true" />
+            <span className="section-toggle-segmented__option section-toggle-segmented__option--on">
+              <TextItem path="common.activate" tag="span" />
+            </span>
+            <span className="section-toggle-segmented__option section-toggle-segmented__option--off">
+              <TextItem path="common.deactivate" tag="span" />
+            </span>
+          </span>
+        </label>
+      )}
+    </div>
+  )
+}
+
 const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true }) => {
   const data = useAppData()
 
   const generalInfo = useGeneralInfo()
 
   const { control, handleSubmit } = useForm({
-    defaultValues: initialValues || {
+    defaultValues: {
       coefficient_quantum_doloris: '',
       coefficient_prejudice_esthétique: '',
+      quantum_doloris_enabled: true,
+      prejudice_esthetique_enabled: true,
+      prejudice_sexuels_enabled: true,
+      prejudice_agrements_enabled: true,
       date_paiement_quantum_doloris: generalInfo?.config?.date_paiement,
-      date_paiement_prejudice_esthétique: generalInfo?.config?.date_paiement
+      date_paiement_prejudice_esthétique: generalInfo?.config?.date_paiement,
+      ...(initialValues || {})
     }
   })
 
@@ -126,169 +155,221 @@ const PrejudiceParticuliersForm = ({ initialValues, onSubmit, editable = true })
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <TextItem path="incapacite_perma.particulier.title" tag="h1" />
-      {!editable && formValues?.coefficient_quantum_doloris === '' ? null : (
+      {!editable &&
+      (!formValues?.quantum_doloris_enabled ||
+        formValues?.coefficient_quantum_doloris === '') ? null : (
         <>
-          <TextItem path="incapacite_perma.particulier.quantum_doloris" tag="h3" />
-          <table id="ipTable" style={{ maxWidth: 1200 }}>
-            <thead>
-              <tr>
-                <TextItem path="common.age_consolidation" tag="th" />
-                <TextItem path="common.coefficient" tag="th" />
-                <TextItem path="common.total" tag="th" />
-                <TextItem path="common.date_paiement" tag="th" className="int" />
-                <TextItem path="common.interest" tag="th" className="int" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{data?.computed_info?.age_consolidation}</td>
-                <td>
-                  <Field control={control} name={`coefficient_quantum_doloris`} editable={editable}>
-                    {(props) => (
-                      <select {...props}>
-                        <option value="" disabled>
-                          Select
-                        </option>
-                        <option value={1}>0.5/7</option>
-                        <option value={2}>1/7</option>
-                        <option value={3}>1.5/7</option>
-                        <option value={4}>2/7</option>
-                        <option value={5}>2.5/7</option>
-                        <option value={6}>3/7</option>
-                        <option value={7}>3.5/7</option>
-                        <option value={8}>4/7</option>
-                        <option value={9}>4.5/7</option>
-                        <option value={10}>5/7</option>
-                        <option value={11}>5.5/7</option>
-                        <option value={12}>6/7</option>
-                        <option value={13}>6.5/7</option>
-                        <option value={14}>7/7</option>
-                      </select>
-                    )}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    type="date"
-                    name={`date_paiement_quantum_doloris`}
-                    editable={editable}
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest
-                    start={generalInfo?.date_consolidation}
-                    end={formValues?.date_paiement_quantum_doloris}
-                    amount={getTotalWithCoef(formValues?.coefficient_quantum_doloris || 0)}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <SectionHeader
+            title="incapacite_perma.particulier.quantum_doloris"
+            toggleName="quantum_doloris_enabled"
+            control={control}
+            editable={editable}
+            enabled={formValues?.quantum_doloris_enabled}
+          />
+          {formValues?.quantum_doloris_enabled && (
+            <table id="ipTable" style={{ maxWidth: 1200 }}>
+              <thead>
+                <tr>
+                  <TextItem path="common.age_consolidation" tag="th" />
+                  <TextItem path="common.coefficient" tag="th" />
+                  <TextItem path="common.total" tag="th" />
+                  <TextItem path="common.date_paiement" tag="th" className="int" />
+                  <TextItem path="common.interest" tag="th" className="int" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{data?.computed_info?.age_consolidation}</td>
+                  <td>
+                    <Field
+                      control={control}
+                      name={`coefficient_quantum_doloris`}
+                      editable={editable}
+                    >
+                      {(props) => (
+                        <select {...props}>
+                          <option value="" disabled>
+                            Select
+                          </option>
+                          <option value={1}>0.5/7</option>
+                          <option value={2}>1/7</option>
+                          <option value={3}>1.5/7</option>
+                          <option value={4}>2/7</option>
+                          <option value={5}>2.5/7</option>
+                          <option value={6}>3/7</option>
+                          <option value={7}>3.5/7</option>
+                          <option value={8}>4/7</option>
+                          <option value={9}>4.5/7</option>
+                          <option value={10}>5/7</option>
+                          <option value={11}>5.5/7</option>
+                          <option value={12}>6/7</option>
+                          <option value={13}>6.5/7</option>
+                          <option value={14}>7/7</option>
+                        </select>
+                      )}
+                    </Field>
+                  </td>
+                  <td>
+                    <Money value={getTotalWithCoef(formValues?.coefficient_quantum_doloris)} />
+                  </td>
+                  <td className="int">
+                    <Field
+                      control={control}
+                      type="date"
+                      name={`date_paiement_quantum_doloris`}
+                      editable={editable}
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  <td className="int">
+                    <Interest
+                      start={generalInfo?.date_consolidation}
+                      end={formValues?.date_paiement_quantum_doloris}
+                      amount={getTotalWithCoef(formValues?.coefficient_quantum_doloris || 0)}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
         </>
       )}
 
-      {!editable && formValues?.coefficient_prejudice_esthétique === '' ? null : (
+      {!editable &&
+      (!formValues?.prejudice_esthetique_enabled ||
+        formValues?.coefficient_prejudice_esthétique === '') ? null : (
         <>
-          <TextItem path="incapacite_perma.particulier.esthetique" tag="h3" />
-          <table id="ipTable" style={{ maxWidth: 1200 }}>
-            <thead>
-              <tr>
-                <TextItem path="common.age_consolidation" tag="th" />
-                <TextItem path="common.coefficient" tag="th" />
-                <TextItem path="common.total" tag="th" />
-                <TextItem path="common.date_paiement" tag="th" className="int" />
-                <TextItem path="common.interest" tag="th" className="int" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{data?.computed_info?.age_consolidation}</td>
-                <td>
-                  <Field
-                    control={control}
-                    name={`coefficient_prejudice_esthétique`}
-                    editable={editable}
-                  >
-                    {(props) => (
-                      <select {...props}>
-                        <option value="" disabled>
-                          Select
-                        </option>
-                        <option value={1}>0.5/7</option>
-                        <option value={2}>1/7</option>
-                        <option value={3}>1.5/7</option>
-                        <option value={4}>2/7</option>
-                        <option value={5}>2.5/7</option>
-                        <option value={6}>3/7</option>
-                        <option value={7}>3.5/7</option>
-                        <option value={8}>4/7</option>
-                        <option value={9}>4.5/7</option>
-                        <option value={10}>5/7</option>
-                        <option value={11}>5.5/7</option>
-                        <option value={12}>6/7</option>
-                        <option value={13}>6.5/7</option>
-                        <option value={14}>7/7</option>
-                      </select>
-                    )}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
-                </td>
-                <td className="int">
-                  <Field
-                    control={control}
-                    name={`date_paiement_prejudice_esthétique`}
-                    editable={editable}
-                    type="date"
-                  >
-                    {(props) => <input {...props} />}
-                  </Field>
-                </td>
-                <td className="int">
-                  <Interest
-                    amount={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique || 0)}
-                    start={generalInfo?.date_consolidation}
-                    end={formValues?.date_paiement_prejudice_esthétique}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <SectionHeader
+            title="incapacite_perma.particulier.esthetique"
+            toggleName="prejudice_esthetique_enabled"
+            control={control}
+            editable={editable}
+            enabled={formValues?.prejudice_esthetique_enabled}
+          />
+          {formValues?.prejudice_esthetique_enabled && (
+            <table id="ipTable" style={{ maxWidth: 1200 }}>
+              <thead>
+                <tr>
+                  <TextItem path="common.age_consolidation" tag="th" />
+                  <TextItem path="common.coefficient" tag="th" />
+                  <TextItem path="common.total" tag="th" />
+                  <TextItem path="common.date_paiement" tag="th" className="int" />
+                  <TextItem path="common.interest" tag="th" className="int" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{data?.computed_info?.age_consolidation}</td>
+                  <td>
+                    <Field
+                      control={control}
+                      name={`coefficient_prejudice_esthétique`}
+                      editable={editable}
+                    >
+                      {(props) => (
+                        <select {...props}>
+                          <option value="" disabled>
+                            Select
+                          </option>
+                          <option value={1}>0.5/7</option>
+                          <option value={2}>1/7</option>
+                          <option value={3}>1.5/7</option>
+                          <option value={4}>2/7</option>
+                          <option value={5}>2.5/7</option>
+                          <option value={6}>3/7</option>
+                          <option value={7}>3.5/7</option>
+                          <option value={8}>4/7</option>
+                          <option value={9}>4.5/7</option>
+                          <option value={10}>5/7</option>
+                          <option value={11}>5.5/7</option>
+                          <option value={12}>6/7</option>
+                          <option value={13}>6.5/7</option>
+                          <option value={14}>7/7</option>
+                        </select>
+                      )}
+                    </Field>
+                  </td>
+                  <td>
+                    <Money value={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique)} />
+                  </td>
+                  <td className="int">
+                    <Field
+                      control={control}
+                      name={`date_paiement_prejudice_esthétique`}
+                      editable={editable}
+                      type="date"
+                    >
+                      {(props) => <input {...props} />}
+                    </Field>
+                  </td>
+                  <td className="int">
+                    <Interest
+                      amount={getTotalWithCoef(formValues?.coefficient_prejudice_esthétique || 0)}
+                      start={generalInfo?.date_consolidation}
+                      end={formValues?.date_paiement_prejudice_esthétique}
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
         </>
       )}
 
-      <DynamicTable
-        subtitle="incapacite_perma.particulier.sexuel"
-        columns={prejudiceSexuelColumns}
-        control={control}
-        name="prejudice_sexuels"
-        formValues={formValues}
-        editable={editable}
-        calculateTotal={(e) => e?.amount}
-        addRowDefaults={{
-          date_paiement: generalInfo?.config?.date_paiement
-        }}
-      />
+      {!editable &&
+      (!formValues?.prejudice_sexuels_enabled ||
+        formValues?.prejudice_sexuels?.length === 0) ? null : (
+        <>
+          <SectionHeader
+            title="incapacite_perma.particulier.sexuel"
+            toggleName="prejudice_sexuels_enabled"
+            control={control}
+            editable={editable}
+            enabled={formValues?.prejudice_sexuels_enabled}
+          />
+          {formValues?.prejudice_sexuels_enabled && (
+            <DynamicTable
+              columns={prejudiceSexuelColumns}
+              control={control}
+              name="prejudice_sexuels"
+              formValues={formValues}
+              editable={editable}
+              calculateTotal={(e) => e?.amount}
+              addRowDefaults={{
+                date_paiement: generalInfo?.config?.date_paiement
+              }}
+            />
+          )}
+        </>
+      )}
 
-      <DynamicTable
-        subtitle="incapacite_perma.particulier.agrement"
-        columns={prejudiceAgrementColumns}
-        control={control}
-        name="prejudice_agrements"
-        formValues={formValues}
-        editable={editable}
-        calculateTotal={(e) => e?.amount}
-        addRowDefaults={{
-          date_paiement: generalInfo?.config?.date_paiement
-        }}
-      />
+      {!editable &&
+      (!formValues?.prejudice_agrements_enabled ||
+        formValues?.prejudice_agrements?.length === 0) ? null : (
+        <>
+          <SectionHeader
+            title="incapacite_perma.particulier.agrement"
+            toggleName="prejudice_agrements_enabled"
+            control={control}
+            editable={editable}
+            enabled={formValues?.prejudice_agrements_enabled}
+          />
+          {formValues?.prejudice_agrements_enabled && (
+            <DynamicTable
+              columns={prejudiceAgrementColumns}
+              control={control}
+              name="prejudice_agrements"
+              formValues={formValues}
+              editable={editable}
+              calculateTotal={(e) => e?.amount}
+              addRowDefaults={{
+                date_paiement: generalInfo?.config?.date_paiement
+              }}
+            />
+          )}
+        </>
+      )}
     </form>
   )
 }

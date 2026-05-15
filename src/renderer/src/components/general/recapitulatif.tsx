@@ -247,16 +247,28 @@ const Recapitulatif = () => {
 
   const showPrejudiceParticulier = useMemo(() => {
     if (
-      data?.prejudice_particulier?.coefficient_prejudice_esthétique !== '' ||
+      data?.prejudice_particulier?.prejudice_esthetique_enabled !== false &&
+      data?.prejudice_particulier?.coefficient_prejudice_esthétique !== ''
+    )
+      return true
+
+    if (
+      data?.prejudice_particulier?.quantum_doloris_enabled !== false &&
       data?.prejudice_particulier?.coefficient_quantum_doloris !== ''
     )
       return true
 
-    if (data?.prejudice_particulier?.prejudice_sexuels?.length > 0) {
+    if (
+      data?.prejudice_particulier?.prejudice_sexuels_enabled !== false &&
+      data?.prejudice_particulier?.prejudice_sexuels?.length > 0
+    ) {
       return true
     }
 
-    if (data?.prejudice_particulier?.prejudice_agrements?.length > 0) {
+    if (
+      data?.prejudice_particulier?.prejudice_agrements_enabled !== false &&
+      data?.prejudice_particulier?.prejudice_agrements?.length > 0
+    ) {
       return true
     }
 
