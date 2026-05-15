@@ -94,13 +94,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
     { header: 'frais.indemnite_frais', key: 'indemnite', type: 'text' },
     { header: 'frais.facture_number', key: 'facture', type: 'text' },
     {
-      header: 'common.paid',
-      key: 'paid',
-      type: 'select',
-      options: constants.boolean,
-      width: 80
-    },
-    {
       header: 'common.amount',
       key: 'amount',
       type: 'number',
@@ -154,7 +147,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <TextItem path="frais.indemnite_frais" tag="th" />
             <th></th>
             <th></th>
-            <TextItem path="common.paid" tag="th" />
             <TextItem path="common.total" tag="th" />
           </tr>
         </thead>
@@ -163,15 +155,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <TextItem path="frais.administratif_value" tag="td" />
             <td></td>
             <td></td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.boolean}
-                name={`administratif_paid`}
-                editable={editable}
-              ></Field>
-            </td>
             <td>
               <Field
                 control={control}
@@ -187,15 +170,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <TextItem path="frais.vestimentaire_value" tag="td" />
             <td></td>
             <td></td>
-            <td>
-              <Field
-                control={control}
-                type="select"
-                options={constants.boolean}
-                name={`vestimentaire_paid`}
-                editable={editable}
-              ></Field>
-            </td>
             <td>
               <Field
                 control={control}
@@ -234,15 +208,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 ></Field>
               </td>
               <td>
-                <Field
-                  control={control}
-                  type="select"
-                  options={constants.boolean}
-                  name={`deplacement_paid`}
-                  editable={editable}
-                ></Field>
-              </td>
-              <td>
                 <Money
                   value={totalDeplacementFrais?.value}
                   tooltip={totalDeplacementFrais?.tooltip}
@@ -256,15 +221,6 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
               <TextItem path="frais.package_value" tag="td" />
               <td></td>
               <td></td>
-              <td>
-                <Field
-                  control={control}
-                  type="select"
-                  options={constants.boolean}
-                  name={`package_paid`}
-                  editable={editable}
-                ></Field>
-              </td>
               <td>
                 <Field control={control} type="number" name={`package_value`} editable={editable}>
                   {(props) => (
