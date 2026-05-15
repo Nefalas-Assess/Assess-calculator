@@ -69,10 +69,12 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const totalAides = useMemo(
     () => ({
-      value: (parseFloat(formValues?.aides || 0) * 11.5).toFixed(2),
+      value: parseFloat(formValues?.aides || 0) * 11.5 + parseFloat(formValues?.aide_forfait || 0),
       tooltip: (
         <math>
-          <mn>{formValues?.aides}</mn>
+          <mn>{formValues?.aide_forfait}</mn>
+          <mo>+</mo>
+          <mn>{formValues?.aides || 0}</mn>
           <mo>x</mo>
           <mn>11.5</mn>
         </math>
@@ -260,6 +262,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             <thead>
               <tr>
                 <TextItem path="frais.number_hours" tag="th" />
+                <TextItem path="common.forfait" tag="th" />
                 <TextItem path="common.total" tag="th" />
               </tr>
             </thead>
@@ -268,6 +271,11 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 <td>
                   <Field control={control} type="number" name={`aides`} editable={editable}>
                     {(props) => <input min={0} {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field control={control} type="number" name={`aide_forfait`} editable={editable}>
+                    {(props) => <input {...props} />}
                   </Field>
                 </td>
                 <td>

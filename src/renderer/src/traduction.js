@@ -459,6 +459,11 @@ export default {
       en: 'Fees',
       nl: 'Kosten'
     },
+    forfait: {
+      fr: 'Forfait (€)',
+      en: 'Lump sum (€)',
+      nl: 'Forfaitair bedrag (€)'
+    },
     variables: {
       fr: 'Variables',
       en: 'Variables',
