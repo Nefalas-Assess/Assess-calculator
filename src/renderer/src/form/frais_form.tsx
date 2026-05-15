@@ -93,6 +93,18 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const columns = [
     { header: 'frais.indemnite_frais', key: 'indemnite', type: 'text' },
     { header: 'frais.facture_number', key: 'facture', type: 'text' },
+    ...(editable
+      ? [
+          {
+            header: 'common.paid',
+            key: 'paid',
+            columnInfo: 'frais.paid_info',
+            type: 'select',
+            options: constants.boolean,
+            width: 80
+          }
+        ]
+      : []),
     {
       header: 'common.amount',
       key: 'amount',

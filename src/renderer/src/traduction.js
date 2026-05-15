@@ -830,6 +830,11 @@ export default {
       en: 'Invoice number',
       nl: 'Factuurnummer'
     },
+    paid_info: {
+      fr: "Indiquez si ce poste de frais a déjà été payé. Ne sert qu'à titre indicatif pour la gestion du dossier et ne sera pas visible dans le récapitulatif.",
+      en: 'Indicate whether this expense item has already been paid. It is only used for document management and will not be visible in the summary.',
+      nl: 'Geef aan of deze kostenpost reeds betaald werd. Dit is alleen bedoeld voor documentbeheer en zal niet zichtbaar zijn in het samenvatting.'
+    },
     date_frais: {
       fr: 'Date frais',
       en: 'Date of costs',

@@ -29,6 +29,7 @@ type ColumnType = {
     | 'reference'
   width?: number
   className?: string
+  columnInfo?: React.ReactNode | string
   options?: { value: string | number; label: string }[]
   render?: (
     value: Record<string, unknown>,
@@ -206,7 +207,22 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
           <tr>
             {columns.map((column, idx) => (
               <th key={idx} className={column.className}>
-                <TextItem path={column.header} />
+                <div className="dynamic-table__header">
+                  <TextItem path={column.header} />
+                  {column.columnInfo && (
+                    <Tooltip
+                      tooltipContent={
+                        typeof column.columnInfo === 'string' ? (
+                          <div style={{ maxWidth: 300 }}>{translate(column.columnInfo)}</div>
+                        ) : (
+                          column.columnInfo
+                        )
+                      }
+                    >
+                      <FaRegQuestionCircle className="dynamic-table__header-info" />
+                    </Tooltip>
+                  )}
+                </div>
               </th>
             ))}
             {editable && <th></th>}
