@@ -600,9 +600,9 @@ export default {
       nl: 'Punten'
     },
     children: {
-      fr: 'Enfants',
-      en: 'Children',
-      nl: 'Kinderen'
+      fr: 'Personnes à charge',
+      en: 'Dependents',
+      nl: 'Personen ten laste'
     },
     leave_home_age: {
       fr: 'Âge départ foyer',
@@ -913,9 +913,9 @@ export default {
       nl: 'Standaard bijdrage'
     },
     add_child: {
-      fr: 'Ajouter un enfant',
-      en: 'Add a child',
-      nl: 'Kind toevoegen'
+      fr: 'Ajouter',
+      en: 'Add',
+      nl: 'Toevoegen'
     },
     calculate_interests: {
       fr: 'Calculer les intérêts',
