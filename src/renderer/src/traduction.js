@@ -1430,6 +1430,11 @@ export default {
       en: 'Moral damage',
       nl: 'Moral schade'
     },
+    moral_damage_amount: {
+      fr: 'Montant du dommage moral',
+      en: 'Moral damage amount',
+      nl: 'Moral schade bedrag'
+    },
     job_loss: {
       fr: 'Retard dans la carrière professionnelle',
       en: 'Delay in professional career',

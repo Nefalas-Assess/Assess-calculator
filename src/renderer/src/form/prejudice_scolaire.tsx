@@ -189,43 +189,62 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
           </td>
         </tr>
       </table>
-      <table style={{ maxWidth: 1200 }}>
-        <tr>
-          <TextItem path="prejudice_scolaire.moral_damage" tag="td" />
-          <td>
-            <Field control={control} type="checkbox" name={`moral_damage`} editable={editable}>
-              {(props) => <input {...props} />}
-            </Field>
-            <div className="hide">
-              <Money value={formValues?.moral_damage ? 3000 : 0} />
-            </div>
-          </td>
-        </tr>
-      </table>
 
-      <TextItem path="prejudice_scolaire.job_loss" tag="h3" />
-      <table style={{ maxWidth: 1200 }}>
-        <tr>
-          <TextItem path="prejudice_scolaire.job_loss_days" tag="td" />
-          <TextItem path="prejudice_scolaire.job_loss_amount" tag="td" />
-          <TextItem path="prejudice_scolaire.job_loss_total" tag="td" />
-        </tr>
-        <tr>
-          <td>
-            <Field control={control} type="number" name={`job_loss_days`} editable={editable}>
-              {(props) => <input {...props} />}
-            </Field>
-          </td>
-          <td>
-            <Field control={control} type="number" name={`job_loss_amount`} editable={editable}>
-              {(props) => <input {...props} />}
-            </Field>
-          </td>
-          <td>
-            <Money value={formValues?.job_loss_days * (formValues?.job_loss_amount / 365)} />
-          </td>
-        </tr>
-      </table>
+      {(editable || formValues?.moral_damage) && (
+        <div className="section-toggle-header">
+          <TextItem path="prejudice_scolaire.moral_damage" tag="h3" />
+          <Field control={control} type="switch" name={`moral_damage`} editable={editable} />
+        </div>
+      )}
+
+      {formValues?.moral_damage && (
+        <table style={{ maxWidth: 1200 }}>
+          <tr>
+            <TextItem path="prejudice_scolaire.moral_damage_amount" tag="td" />
+            <td>
+              <Field
+                control={control}
+                type="number"
+                name={`moral_damage_amount`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
+              <div className="hide">
+                <Money value={formValues?.moral_damage_amount} />
+              </div>
+            </td>
+          </tr>
+        </table>
+      )}
+
+      {(editable || (formValues?.job_loss_days && formValues?.job_loss_amount)) && (
+        <>
+          <TextItem path="prejudice_scolaire.job_loss" tag="h3" />
+          <table style={{ maxWidth: 1200 }}>
+            <tr>
+              <TextItem path="prejudice_scolaire.job_loss_days" tag="td" />
+              <TextItem path="prejudice_scolaire.job_loss_amount" tag="td" />
+              <TextItem path="prejudice_scolaire.job_loss_total" tag="td" />
+            </tr>
+            <tr>
+              <td>
+                <Field control={control} type="number" name={`job_loss_days`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Field control={control} type="number" name={`job_loss_amount`} editable={editable}>
+                  {(props) => <input {...props} />}
+                </Field>
+              </td>
+              <td>
+                <Money value={formValues?.job_loss_days * (formValues?.job_loss_amount / 365)} />
+              </td>
+            </tr>
+          </table>
+        </>
+      )}
     </form>
   )
 }

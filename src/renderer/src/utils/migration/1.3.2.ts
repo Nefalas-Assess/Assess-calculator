@@ -16,5 +16,9 @@ export default (data: any) => {
     data.prejudice_particulier.prejudice_agrements_enabled = true
   }
 
+  if (data?.prejudice_scolaire?.moral_damage) {
+    data.prejudice_scolaire.moral_damage_amount = 3000
+  }
+
   return data
 }

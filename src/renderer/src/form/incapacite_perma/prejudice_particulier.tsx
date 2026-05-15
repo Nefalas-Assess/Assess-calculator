@@ -20,16 +20,7 @@ const SectionHeader = ({ title, toggleName, control, editable = true, enabled = 
       <TextItem path={title} tag="h3" />
       {editable && (
         <label className="section-toggle-header__action">
-          <span className="section-toggle-segmented">
-            <Field control={control} type="checkbox" name={toggleName} editable={editable} />
-            <span className="section-toggle-segmented__highlight" aria-hidden="true" />
-            <span className="section-toggle-segmented__option section-toggle-segmented__option--on">
-              <TextItem path="common.activate" tag="span" />
-            </span>
-            <span className="section-toggle-segmented__option section-toggle-segmented__option--off">
-              <TextItem path="common.deactivate" tag="span" />
-            </span>
-          </span>
+          <Field control={control} type="switch" name={toggleName} editable={editable} />
         </label>
       )}
     </div>

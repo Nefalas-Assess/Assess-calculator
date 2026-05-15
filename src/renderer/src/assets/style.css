@@ -336,7 +336,7 @@ input[type='checkbox'] {
   white-space: nowrap;
 }
 
-.section-toggle-segmented {
+.field-switch {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -354,7 +354,7 @@ input[type='checkbox'] {
   overflow: hidden;
 }
 
-.section-toggle-segmented input[type='checkbox'] {
+.field-switch input[type='checkbox'] {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -367,13 +367,13 @@ input[type='checkbox'] {
   z-index: 3;
 }
 
-.section-toggle-segmented input[type='checkbox']:focus-visible {
+.field-switch input[type='checkbox']:focus-visible {
   box-shadow: 0 0 0 3px
     color-mix(in srgb, var(--sidebar-link-indicator, var(--color-primary)) 20%, transparent);
   outline: none;
 }
 
-.section-toggle-segmented__highlight {
+.field-switch__highlight {
   position: absolute;
   top: 3px;
   left: 3px;
@@ -392,13 +392,11 @@ input[type='checkbox'] {
   z-index: 1;
 }
 
-.section-toggle-segmented
-  input[type='checkbox']:not(:checked)
-  ~ .section-toggle-segmented__highlight {
+.field-switch input[type='checkbox']:not(:checked) ~ .field-switch__highlight {
   transform: translateX(100%);
 }
 
-.section-toggle-segmented__option {
+.field-switch__option {
   position: relative;
   z-index: 2;
   display: flex;
@@ -410,19 +408,15 @@ input[type='checkbox'] {
   transition: color 180ms ease;
 }
 
-.section-toggle-segmented input[type='checkbox'] ~ .section-toggle-segmented__option--on {
+.field-switch input[type='checkbox'] ~ .field-switch__option--on {
   color: #fff;
 }
 
-.section-toggle-segmented
-  input[type='checkbox']:not(:checked)
-  ~ .section-toggle-segmented__option--on {
+.field-switch input[type='checkbox']:not(:checked) ~ .field-switch__option--on {
   color: color-mix(in srgb, var(--content-text-color, var(--color-text)) 74%, white 26%);
 }
 
-.section-toggle-segmented
-  input[type='checkbox']:not(:checked)
-  ~ .section-toggle-segmented__option--off {
+.field-switch input[type='checkbox']:not(:checked) ~ .field-switch__option--off {
   color: #fff;
 }
 

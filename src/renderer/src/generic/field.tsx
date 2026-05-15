@@ -159,7 +159,10 @@ const Field = ({
   style,
   noSelect,
   salaryType,
-  onValueChange
+  onValueChange,
+  onChange: customOnChange,
+  switchOnLabel = 'common.activate',
+  switchOffLabel = 'common.deactivate'
 }) => {
   const translate = useTranslation()
   const referenceOptions = useAppReferenceTypes() || constants.reference_type || []
@@ -203,6 +206,10 @@ const Field = ({
         )
       }
 
+      if (type === 'switch') {
+        return translate(val ? switchOnLabel : switchOffLabel)
+      }
+
       return val
     },
     [type, options, style, translate, referenceOptions]
@@ -234,6 +241,7 @@ const Field = ({
             style={{ maxWidth: '100%' }}
             onChange={(event) => {
               field.onChange(event)
+              customOnChange?.(event.target.value, event)
               onValueChange?.(event.target.value, event)
             }}
           >
@@ -258,14 +266,57 @@ const Field = ({
             {...rest}
             type="checkbox"
             checked={!!value}
-            onChange={(event) => onChange(event.target.checked)}
+            onChange={(event) => {
+              const checked = event.target.checked
+              onChange(checked)
+              customOnChange?.(checked, event)
+              onValueChange?.(checked, event)
+            }}
           />
+        )
+      }
+
+      if (type === 'switch') {
+        const { value, onChange, ...rest } = field
+        return (
+          <span className="field-switch">
+            <input
+              {...rest}
+              type="checkbox"
+              checked={!!value}
+              onChange={(event) => {
+                const checked = event.target.checked
+                onChange(checked)
+                customOnChange?.(checked, event)
+                onValueChange?.(checked, event)
+              }}
+            />
+            <span className="field-switch__highlight" aria-hidden="true" />
+            <span className="field-switch__option field-switch__option--on">
+              {translate(switchOnLabel)}
+            </span>
+            <span className="field-switch__option field-switch__option--off">
+              {translate(switchOffLabel)}
+            </span>
+          </span>
         )
       }
 
       return children({ ...field, type })
     },
-    [children, type, noSelect, options, style, translate, salaryType, onValueChange]
+    [
+      children,
+      type,
+      noSelect,
+      options,
+      style,
+      translate,
+      salaryType,
+      onValueChange,
+      customOnChange,
+      switchOnLabel,
+      switchOffLabel
+    ]
   )
 
   return (
