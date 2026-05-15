@@ -351,6 +351,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                         maxDate={column.maxDate}
                         salaryType={column.salaryType}
                         options={column?.options}
+                        onValueChange={(value, event) => {
+                          if (typeInput === 'select') {
+                            column.onChange?.(value, rowIndex, rowData)
+                          }
+                        }}
                       >
                         {(props) => {
                           if (typeInput === 'select') {
@@ -359,14 +364,6 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                                 {...props}
                                 style={{ width: column.width || '100%' }}
                                 {...column.props}
-                                onChange={(e) => {
-                                  // Call the original onChange from react-hook-form
-                                  props.onChange(e)
-                                  // Call the custom onChange if provided
-                                  if (column.onChange) {
-                                    column.onChange(e.target.value, rowIndex, rowData)
-                                  }
-                                }}
                               >
                                 <option>Select</option>
                                 {column.options?.map((option) => (

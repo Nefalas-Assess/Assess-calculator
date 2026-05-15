@@ -158,7 +158,8 @@ const Field = ({
   options,
   style,
   noSelect,
-  salaryType
+  salaryType,
+  onValueChange
 }) => {
   const translate = useTranslation()
   const referenceOptions = useAppReferenceTypes() || constants.reference_type || []
@@ -228,7 +229,14 @@ const Field = ({
 
       if (type === 'select' && options) {
         return (
-          <select {...field} style={{ maxWidth: '100%' }}>
+          <select
+            {...field}
+            style={{ maxWidth: '100%' }}
+            onChange={(event) => {
+              field.onChange(event)
+              onValueChange?.(event.target.value, event)
+            }}
+          >
             {!noSelect && <option value={''}>Select</option>}
             {(options || [])?.map((it, key) => (
               <option key={key} value={it?.value}>
@@ -257,7 +265,7 @@ const Field = ({
 
       return children({ ...field, type })
     },
-    [children, type, noSelect, options, style, translate, salaryType]
+    [children, type, noSelect, options, style, translate, salaryType, onValueChange]
   )
 
   return (
