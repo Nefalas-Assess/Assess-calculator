@@ -28,6 +28,7 @@ import SideProvider from './providers/SideProvider'
 import License from './License'
 import SettingsPage from '@renderer/components/settings/SettingsPage'
 import PrejudiceScolaire from './components/general/prejudice_scolaire'
+import DamageMat from './components/general/damage_mat'
 
 const IncapaciteTemp = () => {
   return (
@@ -77,6 +78,7 @@ const Main = () => {
             <Route path="it/*" element={<IncapaciteTemp />} />
             <Route path="deces/*" element={<Deces />} />
             <Route path="frais" element={<Frais />} />
+            <Route path="damage_mat" element={<DamageMat />} />
             <Route path="provisions" element={<Provisions />} />
             <Route path="recap" element={<Recapitulatif />} />
             <Route path="prejudice_scolaire" element={<PrejudiceScolaire />} />

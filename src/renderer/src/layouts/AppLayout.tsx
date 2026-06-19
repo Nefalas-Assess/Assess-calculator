@@ -210,6 +210,11 @@ export const AppLayout = () => {
                   <TextItem path={'nav.frais'} />
                 </LinkItem>
               </DetectMissingData>
+              <DetectMissingData data={data} required={[]}>
+                <LinkItem to="/damage_mat">
+                  <TextItem path={'nav.damage_mat'} />
+                </LinkItem>
+              </DetectMissingData>
               <div className="sub-nav">
                 <DetectMissingData
                   data={data}

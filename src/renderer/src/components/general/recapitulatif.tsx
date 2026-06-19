@@ -24,6 +24,7 @@ import TextItem from '@renderer/generic/textItem'
 import Provisions from './provisions'
 import hasDefinedValues from '@renderer/utils/hasDefinedValues'
 import PrejudiceScolaire from './prejudice_scolaire'
+import DamageMat from './damage_mat'
 
 const PRINT_MARGIN_WIDTH = 30
 
@@ -293,6 +294,7 @@ const Recapitulatif = () => {
         <MoneyScope>
           {data?.general_info && <InfoG editable={false} />}
           {data?.frais && <Frais editable={false} />}
+          {data?.damage_mat && <DamageMat editable={false} />}
           {data?.incapacite_temp_personnel &&
             data?.incapacite_temp_personnel?.periods?.length > 0 && <Personnel editable={false} />}
           {data?.incapacite_temp_menagere &&
