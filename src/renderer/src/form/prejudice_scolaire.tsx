@@ -136,9 +136,9 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
-        <td className="hide">
+        <div className="hide">
           <Money value={e?.amount} />
-        </td>
+        </div>
       )
     }
   ]
@@ -154,9 +154,9 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
       key: 'amount',
       type: 'number',
       additionalContent: (e) => (
-        <td className="hide">
+        <div className="hide">
           <Money value={e?.amount} />
-        </td>
+        </div>
       )
     }
   ]

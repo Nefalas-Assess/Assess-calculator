@@ -22,6 +22,7 @@ type ColumnType = {
     | 'date'
     | 'number'
     | 'select'
+    | 'checkbox'
     | 'text'
     | 'calculated'
     | 'interest'
@@ -30,7 +31,7 @@ type ColumnType = {
   width?: number
   className?: string
   columnInfo?: React.ReactNode | string
-  options?: { value: string | number; label: string }[]
+  options?: { value: string | number | boolean; label: string | { [key: string]: string } }[]
   render?: (
     value: Record<string, unknown>,
     rowData: Record<string, unknown>,
@@ -351,7 +352,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                         maxDate={column.maxDate}
                         salaryType={column.salaryType}
                         options={column?.options}
-                        onValueChange={(value, event) => {
+                        onValueChange={(value) => {
                           if (typeInput === 'select') {
                             column.onChange?.(value, rowIndex, rowData)
                           }

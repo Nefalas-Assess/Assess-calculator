@@ -6,6 +6,7 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
 import IncapacitePerma from '../incapacite_perma'
 import EconomiqueSection from './economique'
+import { DAMAGE_MAT_VEHICLES, getDamageMatVehicleConfigDefaults } from '@renderer/data/damage_mat'
 
 export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
   const defaultFormValues = useMemo(() => {
@@ -22,7 +23,8 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
         person_charge: 10,
         effort_accrus: 30,
         km_vehicule: 0.42,
-        km_other: 0.28
+        km_other: 0.28,
+        ...getDamageMatVehicleConfigDefaults()
       },
       ip: {
         personnel: { method: 'forfait' },
@@ -415,6 +417,64 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                   </Field>
                 </td>
               </tr>
+              {DAMAGE_MAT_VEHICLES.map((vehicle) => (
+                <tr key={vehicle.value}>
+                  <TextItem
+                    path={{
+                      fr: `Dommages matériels - ${vehicle.label.fr}`,
+                      en: `Material damage - ${vehicle.label.en}`,
+                      nl: `Materiële schade - ${vehicle.label.nl}`
+                    }}
+                    tag="td"
+                  />
+                  <td>
+                    <Field
+                      control={control}
+                      name={`config.${vehicle.configKey}`}
+                      editable={editable}
+                    >
+                      {(props) => (
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          style={{ width: 200 }}
+                          {...props}
+                        />
+                      )}
+                    </Field>
+                  </td>
+                </tr>
+              ))}
+              {DAMAGE_MAT_VEHICLES.filter((vehicle) => vehicle.perUnitKey).map((vehicle) => (
+                <tr key={vehicle.perUnitKey}>
+                  <TextItem
+                    path={{
+                      fr: `Dommages matériels - supplément ${vehicle.unitLabel?.fr?.toLowerCase?.() || 'unité'}`,
+                      en: `Material damage - supplement ${vehicle.unitLabel?.en?.toLowerCase?.() || 'unit'}`,
+                      nl: `Materiële schade - toeslag ${vehicle.unitLabel?.nl?.toLowerCase?.() || 'eenheid'}`
+                    }}
+                    tag="td"
+                  />
+                  <td>
+                    <Field
+                      control={control}
+                      name={`config.${vehicle.perUnitKey}`}
+                      editable={editable}
+                    >
+                      {(props) => (
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          style={{ width: 200 }}
+                          {...props}
+                        />
+                      )}
+                    </Field>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

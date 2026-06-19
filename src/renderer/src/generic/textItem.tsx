@@ -34,7 +34,7 @@ export const useTranslation = () => {
 }
 
 interface TextItemProps extends React.HTMLAttributes<HTMLElement> {
-  path: string
+  path: string | { [key: string]: string }
   tag?: keyof JSX.IntrinsicElements // Allows using any HTML tag (div, span, p, etc.)
 }
 

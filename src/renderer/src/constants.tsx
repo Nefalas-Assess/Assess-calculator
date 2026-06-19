@@ -1,3 +1,5 @@
+import { DAMAGE_MAT_VEHICLES } from './data/damage_mat'
+
 const childLeaveHomeAge = [
   ...Array.from({ length: 33 }, (_, index) => {
     const age = index + 18
@@ -105,10 +107,11 @@ export default {
     { value: 'secondary', label: { fr: 'Secondaire', en: 'Secondary', nl: 'Middelbaar' } },
     { value: 'superior', label: { fr: 'Supérieur', en: 'Superior', nl: 'Hoger' } }
   ],
+  damage_mat_vehicle_type: DAMAGE_MAT_VEHICLES.map(({ value, label }) => ({ value, label })),
   reference_type: [
     { value: 'schryvers_2024', label: 'Schryvers 2024' },
     { value: 'schryvers_2025', label: 'Schryvers 2025' },
-    { value: 'schryvers_2026', label: 'Schryvers 2026' },
+    { value: 'schryvers_2026', label: 'Schryvers 2026' }
   ],
   reference_menage_children: [
     {

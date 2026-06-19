@@ -307,6 +307,11 @@ export default {
       en: 'Costs',
       nl: 'Kosten'
     },
+    damage_mat: {
+      fr: 'Dommages matériels',
+      en: 'Material damage',
+      nl: 'Materiële schade'
+    },
     incapacite_temp: {
       fr: 'Incapacités Temporaires',
       en: 'Temporary Disabilities',
@@ -1469,6 +1474,131 @@ export default {
       fr: 'Total général :',
       en: 'Total general :',
       nl: 'Algemeen totaal :'
+    }
+  },
+  damage_mat: {
+    title: {
+      fr: 'Dommages matériels',
+      en: 'Material damage',
+      nl: 'Materiële schade'
+    },
+    total: {
+      fr: 'Total général dommages matériels :',
+      en: 'Total material damage :',
+      nl: 'Totaal materiële schade :'
+    },
+    tva_rate: {
+      fr: 'Taux de TVA (%)',
+      en: 'VAT rate (%)',
+      nl: 'Btw-tarief (%)'
+    },
+    damage_type: {
+      fr: 'Type de dommage',
+      en: 'Damage type',
+      nl: 'Type schade'
+    },
+    immobilized: {
+      fr: 'Immobilisation du véhicule',
+      en: 'Vehicle immobilized',
+      nl: 'Voertuig geïmmobiliseerd'
+    },
+    vehicle_type: {
+      fr: 'Type de véhicule',
+      en: 'Vehicle type',
+      nl: 'Voertuigtype'
+    },
+    vehicle_tonnage: {
+      fr: 'Tonnage net',
+      en: 'Net tonnage',
+      nl: 'Netto tonnage'
+    },
+    daily_rate: {
+      fr: 'Indemnité journalière',
+      en: 'Daily allowance',
+      nl: 'Dagvergoeding'
+    },
+    vat_amount: {
+      fr: 'Montant TVA (€)',
+      en: 'VAT amount (€)',
+      nl: 'Btw-bedrag (€)'
+    },
+    wreck: {
+      fr: 'Épave (€)',
+      en: 'Wreck (€)',
+      nl: 'Wrak (€)'
+    },
+    daily_amount: {
+      fr: 'Montant journalier (€)',
+      en: 'Daily amount (€)',
+      nl: 'Dagbedrag (€)'
+    },
+    deduct_ten_percent: {
+      fr: 'Déduction 10%',
+      en: '10% deduction',
+      nl: '10% aftrek'
+    },
+    repair: {
+      title: {
+        fr: 'Réparation',
+        en: 'Repair',
+        nl: 'Herstelling'
+      }
+    },
+    total_loss: {
+      title: {
+        fr: 'Perte totale',
+        en: 'Total loss',
+        nl: 'Totaal verlies'
+      }
+    },
+    waiting: {
+      title: {
+        fr: "Chômage d'attente",
+        en: 'Loss of use (waiting)',
+        nl: 'Wachttijd'
+      }
+    },
+    transfer: {
+      title: {
+        fr: 'Chômage de mutation',
+        en: 'Loss of use (transfer)',
+        nl: 'Derving'
+      }
+    },
+    repair_loss: {
+      title: {
+        fr: 'Chômage de réparation',
+        en: 'Loss of use (repair)',
+        nl: 'Hersteltijd'
+      }
+    },
+    storage: {
+      title: {
+        fr: 'Gardiennage',
+        en: 'Storage',
+        nl: 'Stalling'
+      }
+    },
+    breakdown: {
+      title: {
+        fr: 'Dépannage',
+        en: 'Breakdown service',
+        nl: 'Takeling'
+      }
+    },
+    rental: {
+      title: {
+        fr: 'Véhicule de location',
+        en: 'Rental vehicle',
+        nl: 'Huurvoertuig'
+      }
+    },
+    circulation_tax: {
+      title: {
+        fr: 'Taxe de mise en circulation',
+        en: 'Registration tax',
+        nl: 'Belasting op inverkeerstelling'
+      }
     }
   }
 }
