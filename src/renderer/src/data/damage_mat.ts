@@ -249,5 +249,7 @@ export const getDamageMatVehicleRate = (
 
   const perUnit = Number(config?.[vehicle.perUnitKey] ?? vehicle.perUnitDefault) || 0
   const numericMultiplier = Number(multiplier) || 0
-  return base + perUnit * numericMultiplier
+  const billableUnits = Math.max(0, numericMultiplier - 3.5)
+
+  return base + perUnit * billableUnits
 }

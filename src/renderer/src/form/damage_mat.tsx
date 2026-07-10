@@ -2,11 +2,12 @@ import constants from '@renderer/constants'
 import { getDamageMatVehicleRate } from '@renderer/data/damage_mat'
 import DynamicTable from '@renderer/generic/dynamicTable'
 import Field from '@renderer/generic/field'
+import Interest from '@renderer/generic/interet'
 import Money from '@renderer/generic/money'
 import TextItem from '@renderer/generic/textItem'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
-import { getDays } from '@renderer/helpers/general'
+import { getDays, getMedDate } from '@renderer/helpers/general'
 import { useCallback, useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 
@@ -23,7 +24,18 @@ const getLossOfUseTotal = (days, dailyRate): number => {
   return toNumber(days) * toNumber(dailyRate)
 }
 
-const getStorageRowValues = (row, tvaRate): { days: number; vatPerDay: number; total: number } => {
+const getSafeMedianDate = (period) => {
+  if (!period?.start || !period?.end) {
+    return undefined
+  }
+
+  return getMedDate(period)
+}
+
+const getStorageRowValues = (
+  row,
+  tvaRate
+): { days: number; vatPerDay: number; totalVat: number; total: number } => {
   const days = toNumber(getDays(row), 0)
   const dailyAmount = toNumber(row?.daily_amount)
   const vatPerDay = getVatAmount(dailyAmount, tvaRate)
@@ -31,6 +43,7 @@ const getStorageRowValues = (row, tvaRate): { days: number; vatPerDay: number; t
   return {
     days,
     vatPerDay,
+    totalVat: vatPerDay * days,
     total: days * (dailyAmount + vatPerDay)
   }
 }
@@ -129,6 +142,8 @@ export const DamageMatForm = ({
   const tvaRate = toNumber(formValues?.tva_rate, 0)
   const isImmobilized =
     formValues?.immobilized === true || formValues?.immobilized?.toString?.() === 'true'
+  const paymentDate = generalInfo?.config?.date_paiement
+  const accidentDate = generalInfo?.date_accident
   const vehicleDailyRate = useMemo(
     () =>
       getDamageMatVehicleRate(
@@ -148,39 +163,59 @@ export const DamageMatForm = ({
     totalLossVatAmount -
     toNumber(formValues?.total_loss?.wreck)
 
+  const damageSectionKey = formValues?.damage_type === 'total_loss' ? 'total_loss' : 'repair'
+  const damageSectionTitle =
+    damageSectionKey === 'total_loss' ? 'damage_mat.total_loss.title' : 'damage_mat.repair.title'
+  const damageVatAmount = damageSectionKey === 'total_loss' ? totalLossVatAmount : repairVatAmount
+  const damageTotal = damageSectionKey === 'total_loss' ? totalLossTotal : repairTotal
+
   const waitingDays = toNumber(getDays(formValues?.waiting), 0)
   const waitingTotal = getLossOfUseTotal(waitingDays, vehicleDailyRate)
 
-  const transferDays = toNumber(getDays(formValues?.transfer), 0)
-  const transferTotal = getLossOfUseTotal(transferDays, vehicleDailyRate)
-
-  const repairDays = toNumber(getDays(formValues?.repair_loss), 0)
-  const repairLossTotal = getLossOfUseTotal(repairDays, vehicleDailyRate)
+  const lossOfUseSectionKey = formValues?.damage_type === 'total_loss' ? 'transfer' : 'repair_loss'
+  const lossOfUseSection = formValues?.[lossOfUseSectionKey]
+  const lossOfUseDays = toNumber(getDays(lossOfUseSection), 0)
+  const lossOfUseTotal = getLossOfUseTotal(lossOfUseDays, vehicleDailyRate)
 
   const storageColumns = useMemo(
     () => [
-      { header: 'common.start', key: 'start', type: 'date' },
-      { header: 'common.end', key: 'end', type: 'date' },
+      { header: 'common.start', key: 'start', type: 'start' },
+      { header: 'common.end', key: 'end', type: 'end' },
       { header: 'common.days', key: 'days', type: 'calculated' },
       { header: 'damage_mat.daily_amount', key: 'daily_amount', type: 'number' },
       {
         header: 'damage_mat.vat_amount',
         key: 'vat_amount',
         render: (_, rowData) => (
-          <Money value={getStorageRowValues(rowData, tvaRate).vatPerDay} ignore />
+          <Money value={getStorageRowValues(rowData, tvaRate).totalVat} ignore />
         )
       },
       {
         header: 'common.total',
         key: 'total',
         type: 'calculated'
+      },
+      {
+        header: 'common.interest',
+        key: 'interest',
+        type: 'interest',
+        className: 'int',
+        median: true,
+        props: {
+          end: paymentDate
+        }
       }
     ],
-    [tvaRate]
+    [paymentDate, tvaRate]
   )
 
   const breakdownColumns = useMemo(
     () => [
+      {
+        header: 'damage_mat.fee_date',
+        key: 'start',
+        type: 'start'
+      },
       {
         header: 'common.amount',
         key: 'amount',
@@ -190,15 +225,24 @@ export const DamageMatForm = ({
             <Money value={rowData?.amount} />
           </div>
         )
+      },
+      {
+        header: 'common.interest',
+        key: 'interest',
+        type: 'interest',
+        className: 'int',
+        props: {
+          end: paymentDate
+        }
       }
     ],
-    []
+    [paymentDate]
   )
 
   const rentalColumns = useMemo(
     () => [
-      { header: 'common.start', key: 'start', type: 'date' },
-      { header: 'common.end', key: 'end', type: 'date' },
+      { header: 'common.start', key: 'start', type: 'start' },
+      { header: 'common.end', key: 'end', type: 'end' },
       { header: 'common.days', key: 'days', type: 'calculated' },
       { header: 'damage_mat.daily_amount', key: 'daily_amount', type: 'number' },
       {
@@ -217,9 +261,19 @@ export const DamageMatForm = ({
         header: 'common.total',
         key: 'total',
         type: 'calculated'
+      },
+      {
+        header: 'common.interest',
+        key: 'interest',
+        type: 'interest',
+        className: 'int',
+        median: true,
+        props: {
+          end: paymentDate
+        }
       }
     ],
-    [tvaRate]
+    [paymentDate, tvaRate]
   )
 
   const shouldShowTopSection =
@@ -300,79 +354,48 @@ export const DamageMatForm = ({
         </table>
       )}
 
-      {formValues?.damage_type === 'repair' ? (
-        <>
-          <TextItem path="damage_mat.repair.title" tag="h3" />
-          <table style={{ maxWidth: 1200 }}>
-            <thead>
-              <tr>
-                <TextItem path="common.amount" tag="th" />
-                <TextItem path="damage_mat.vat_amount" tag="th" />
-                <TextItem path="common.total" tag="th" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <Field control={control} type="number" name="repair.amount" editable={editable}>
-                    {(props) => <input min={0} step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={repairVatAmount} ignore />
-                </td>
-                <td>
-                  <Money value={repairTotal} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </>
-      ) : (
-        <>
-          <TextItem path="damage_mat.total_loss.title" tag="h3" />
-          <table style={{ maxWidth: 1200 }}>
-            <thead>
-              <tr>
-                <TextItem path="common.amount" tag="th" />
-                <TextItem path="damage_mat.vat_amount" tag="th" />
-                <TextItem path="damage_mat.wreck" tag="th" />
-                <TextItem path="common.total" tag="th" />
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name="total_loss.amount"
-                    editable={editable}
-                  >
-                    {(props) => <input min={0} step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={totalLossVatAmount} ignore />
-                </td>
-                <td>
-                  <Field
-                    control={control}
-                    type="number"
-                    name="total_loss.wreck"
-                    editable={editable}
-                  >
-                    {(props) => <input min={0} step="0.01" {...props} />}
-                  </Field>
-                </td>
-                <td>
-                  <Money value={totalLossTotal} />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </>
-      )}
+      <TextItem path={damageSectionTitle} tag="h3" />
+      <table key={damageSectionKey} style={{ maxWidth: 1200 }}>
+        <thead>
+          <tr>
+            <TextItem path="common.amount" tag="th" />
+            <TextItem path="damage_mat.vat_amount" tag="th" />
+            {damageSectionKey === 'total_loss' && <TextItem path="damage_mat.wreck" tag="th" />}
+            <TextItem path="common.total" tag="th" />
+            <TextItem path="common.interest" tag="th" className="int" />
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <Field
+                control={control}
+                type="number"
+                name={`${damageSectionKey}.amount`}
+                editable={editable}
+              >
+                {(props) => <input min={0} step="0.01" {...props} />}
+              </Field>
+            </td>
+            <td>
+              <Money value={damageVatAmount} ignore />
+            </td>
+            {damageSectionKey === 'total_loss' && (
+              <td>
+                <Field control={control} type="number" name="total_loss.wreck" editable={editable}>
+                  {(props) => <input min={0} step="0.01" {...props} />}
+                </Field>
+              </td>
+            )}
+            <td>
+              <Money value={damageTotal} />
+            </td>
+            <td className="int">
+              <Interest amount={damageTotal} start={accidentDate} end={paymentDate} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       {(editable || isImmobilized) && isImmobilized && (
         <>
@@ -384,6 +407,7 @@ export const DamageMatForm = ({
                 <TextItem path="common.end" tag="th" />
                 <TextItem path="common.days" tag="th" />
                 <TextItem path="common.total" tag="th" />
+                <TextItem path="common.interest" tag="th" className="int" />
               </tr>
             </thead>
             <tbody>
@@ -402,6 +426,13 @@ export const DamageMatForm = ({
                 <td>
                   <Money value={waitingTotal} />
                 </td>
+                <td className="int">
+                  <Interest
+                    amount={waitingTotal}
+                    start={getSafeMedianDate(formValues?.waiting)}
+                    end={paymentDate}
+                  />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -416,13 +447,14 @@ export const DamageMatForm = ({
         }
         tag="h3"
       />
-      <table style={{ maxWidth: 1200 }}>
+      <table key={lossOfUseSectionKey} style={{ maxWidth: 1200 }}>
         <thead>
           <tr>
             <TextItem path="common.start" tag="th" />
             <TextItem path="common.end" tag="th" />
             <TextItem path="common.days" tag="th" />
             <TextItem path="common.total" tag="th" />
+            <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
@@ -431,9 +463,7 @@ export const DamageMatForm = ({
               <Field
                 control={control}
                 type="date"
-                name={
-                  formValues?.damage_type === 'total_loss' ? 'transfer.start' : 'repair_loss.start'
-                }
+                name={`${lossOfUseSectionKey}.start`}
                 editable={editable}
               >
                 {(props) => <input {...props} />}
@@ -443,31 +473,66 @@ export const DamageMatForm = ({
               <Field
                 control={control}
                 type="date"
-                name={formValues?.damage_type === 'total_loss' ? 'transfer.end' : 'repair_loss.end'}
+                name={`${lossOfUseSectionKey}.end`}
                 editable={editable}
               >
                 {(props) => <input {...props} />}
               </Field>
             </td>
-            <td>{formValues?.damage_type === 'total_loss' ? transferDays : repairDays}</td>
+            <td>{lossOfUseDays}</td>
             <td>
-              <Money
-                value={formValues?.damage_type === 'total_loss' ? transferTotal : repairLossTotal}
+              <Money value={lossOfUseTotal} />
+            </td>
+            <td className="int">
+              <Interest
+                amount={lossOfUseTotal}
+                start={getSafeMedianDate(lossOfUseSection)}
+                end={paymentDate}
               />
             </td>
           </tr>
         </tbody>
       </table>
 
-      <DynamicTable
-        subtitle="damage_mat.storage.title"
-        columns={storageColumns}
-        control={control}
-        name="storage"
-        formValues={formValues}
-        editable={editable}
-        calculateTotal={(rowData) => getStorageRowValues(rowData, tvaRate).total.toFixed(2)}
-      />
+      {isImmobilized && (
+        <>
+          <TextItem path="damage_mat.storage.title" tag="h3" />
+          {(editable || formValues?.storage_direct_amount) && (
+            <table style={{ width: 'auto', minWidth: 'auto' }}>
+              <thead>
+                <tr>
+                  <TextItem path="damage_mat.direct_amount" tag="th" />
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <Field
+                      control={control}
+                      type="number"
+                      name="storage_direct_amount"
+                      editable={editable}
+                    >
+                      {(props) => <input min={0} step="0.01" {...props} />}
+                    </Field>
+                    <div className="hide">
+                      <Money value={formValues?.storage_direct_amount} />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          )}
+          <DynamicTable
+            columns={storageColumns}
+            control={control}
+            name="storage"
+            formValues={formValues}
+            editable={editable}
+            calculateTotal={(rowData) => getStorageRowValues(rowData, tvaRate).total.toFixed(2)}
+          />
+        </>
+      )}
 
       <DynamicTable
         subtitle="damage_mat.breakdown.title"
@@ -476,6 +541,7 @@ export const DamageMatForm = ({
         name="breakdown"
         formValues={formValues}
         editable={editable}
+        calculateTotal={(rowData) => toNumber(rowData?.amount).toFixed(2)}
       />
 
       <DynamicTable
@@ -488,27 +554,38 @@ export const DamageMatForm = ({
         addRowDefaults={{ deduct_ten_percent: true }}
         calculateTotal={(rowData) => getRentalRowValues(rowData, tvaRate).total.toFixed(2)}
       />
-
-      <TextItem path="damage_mat.circulation_tax.title" tag="h3" />
-      <table style={{ maxWidth: 1200 }}>
-        <thead>
-          <tr>
-            <TextItem path="common.amount" tag="th" />
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Field control={control} type="number" name="circulation_tax" editable={editable}>
-                {(props) => <input min={0} step="0.01" {...props} />}
-              </Field>
-              <div className="hide">
-                <Money value={formValues?.circulation_tax} />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      {formValues?.damage_type !== 'repair' && (
+        <>
+          <TextItem path="damage_mat.circulation_tax.title" tag="h3" />
+          <table style={{ maxWidth: 1200 }}>
+            <thead>
+              <tr>
+                <TextItem path="common.amount" tag="th" />
+                <TextItem path="common.interest" tag="th" className="int" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <Field control={control} type="number" name="circulation_tax" editable={editable}>
+                    {(props) => <input min={0} step="0.01" {...props} />}
+                  </Field>
+                  <div className="hide">
+                    <Money value={formValues?.circulation_tax} />
+                  </div>
+                </td>
+                <td className="int">
+                  <Interest
+                    amount={formValues?.circulation_tax}
+                    start={accidentDate}
+                    end={paymentDate}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </>
+      )}
     </form>
   )
 }

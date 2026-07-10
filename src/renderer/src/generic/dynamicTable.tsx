@@ -19,6 +19,8 @@ type ColumnType = {
   header: string
   key: string
   type?:
+    | 'start'
+    | 'end'
     | 'date'
     | 'number'
     | 'select'
@@ -279,14 +281,11 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                     if (column.props?.start) {
                       start = column.props?.start
                     }
+                    const end = column.props?.end || rowData?.date_paiement
 
                     return (
                       <td key={colIndex} className={column.className}>
-                        <Interest
-                          amount={total?.value || total}
-                          start={start}
-                          end={rowData?.date_paiement}
-                        />
+                        <Interest amount={total?.value || total} start={start} end={end} />
                       </td>
                     )
                   }

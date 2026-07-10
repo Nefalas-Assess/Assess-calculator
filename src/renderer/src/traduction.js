@@ -1512,6 +1512,11 @@ export default {
       en: 'Net tonnage',
       nl: 'Netto tonnage'
     },
+    fee_date: {
+      fr: 'Date du frais',
+      en: 'Expense date',
+      nl: 'Datum van de kost'
+    },
     daily_rate: {
       fr: 'Indemnité journalière',
       en: 'Daily allowance',
@@ -1531,6 +1536,11 @@ export default {
       fr: 'Montant journalier (€)',
       en: 'Daily amount (€)',
       nl: 'Dagbedrag (€)'
+    },
+    direct_amount: {
+      fr: 'Montant libre (€)',
+      en: 'Direct amount (€)',
+      nl: 'Vrij bedrag (€)'
     },
     deduct_ten_percent: {
       fr: 'Déduction 10%',
