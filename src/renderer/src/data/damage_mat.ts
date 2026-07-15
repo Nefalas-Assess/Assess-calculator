@@ -175,9 +175,9 @@ export const DAMAGE_MAT_VEHICLES: DamageMatVehicle[] = [
   {
     value: 'bus_under_31',
     label: {
-      fr: 'Autobus / autocar < 31 places',
-      en: 'Bus / coach < 31 seats',
-      nl: 'Autobus / autocar < 31 zitplaatsen'
+      fr: 'Autobus < 50 places / autocar < 31 places',
+      en: 'Bus < 50 seats / coach < 31 seats',
+      nl: 'Autobus < 50 plaatsen / autocar < 31 plaatsen'
     },
     configKey: 'damage_mat_bus_under_31',
     defaultRate: 58
@@ -185,9 +185,9 @@ export const DAMAGE_MAT_VEHICLES: DamageMatVehicle[] = [
   {
     value: 'bus_31_38',
     label: {
-      fr: 'Autobus / autocar 31 à 37 places',
-      en: 'Bus / coach 31 to 37 seats',
-      nl: 'Autobus / autocar 31 tot 37 zitplaatsen'
+      fr: 'Autobus 50 à 60 places / autocar 31 à 37 places',
+      en: 'Bus 50 to 60 seats / coach 31 to 37 seats',
+      nl: 'Autobus 50 tot 60 plaatsen / autocar 31 tot 37 plaatsen'
     },
     configKey: 'damage_mat_bus_31_38',
     defaultRate: 103
@@ -195,9 +195,9 @@ export const DAMAGE_MAT_VEHICLES: DamageMatVehicle[] = [
   {
     value: 'bus_38_44',
     label: {
-      fr: 'Autobus / autocar 38 à 43 places',
-      en: 'Bus / coach 38 to 43 seats',
-      nl: 'Autobus / autocar 38 tot 43 zitplaatsen'
+      fr: 'Autobus 60 à 70 places / autocar 38 à 43 places',
+      en: 'Bus 60 to 70 seats / coach 38 to 43 seats',
+      nl: 'Autobus 60 tot 70 plaatsen / autocar 38 tot 43 plaatsen'
     },
     configKey: 'damage_mat_bus_38_44',
     defaultRate: 132
@@ -205,9 +205,9 @@ export const DAMAGE_MAT_VEHICLES: DamageMatVehicle[] = [
   {
     value: 'bus_44_50',
     label: {
-      fr: 'Autobus / autocar 44 à 49 places',
-      en: 'Bus / coach 44 to 49 seats',
-      nl: 'Autobus / autocar 44 tot 49 zitplaatsen'
+      fr: 'Autobus 70 à 80 places / autocar 44 à 49 places',
+      en: 'Bus 70 to 80 seats / coach 44 to 49 seats',
+      nl: 'Autobus 70 tot 80 plaatsen / autocar 44 tot 49 plaatsen'
     },
     configKey: 'damage_mat_bus_44_50',
     defaultRate: 161
@@ -215,9 +215,9 @@ export const DAMAGE_MAT_VEHICLES: DamageMatVehicle[] = [
   {
     value: 'bus_over_50',
     label: {
-      fr: 'Autobus / autocar ≥ 50 places',
-      en: 'Bus / coach ≥ 50 seats',
-      nl: 'Autobus / autocar ≥ 50 zitplaatsen'
+      fr: 'Autobus ≥ 80 places / autocar ≥ 50 places',
+      en: 'Bus ≥ 80 seats / coach ≥ 50 seats',
+      nl: 'Autobus ≥ 80 plaatsen / autocar ≥ 50 plaatsen'
     },
     configKey: 'damage_mat_bus_over_50',
     defaultRate: 207
