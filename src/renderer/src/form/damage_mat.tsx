@@ -109,16 +109,19 @@ export const DamageMatForm = ({
       },
       repair: {
         amount: '',
-        wreck: ''
+        wreck: '',
+        date_paiement: ''
       },
       total_loss: {
         amount: '',
-        wreck: ''
+        wreck: '',
+        date_paiement: ''
       },
       storage: [],
       breakdown: [],
       rental: [],
       circulation_tax: '',
+      circulation_tax_date_paiement: '',
       ...(initialValues || {})
     }),
     [generalInfo?.date_accident, initialValues]
@@ -142,7 +145,6 @@ export const DamageMatForm = ({
   const tvaRate = toNumber(formValues?.tva_rate, 0)
   const isImmobilized =
     formValues?.immobilized === true || formValues?.immobilized?.toString?.() === 'true'
-  const paymentDate = generalInfo?.config?.date_paiement
   const accidentDate = generalInfo?.date_accident
   const vehicleDailyRate = useMemo(
     () =>
@@ -196,17 +198,20 @@ export const DamageMatForm = ({
         type: 'calculated'
       },
       {
+        header: 'common.date_paiement',
+        key: 'date_paiement',
+        type: 'date',
+        className: 'int'
+      },
+      {
         header: 'common.interest',
         key: 'interest',
         type: 'interest',
         className: 'int',
-        median: true,
-        props: {
-          end: paymentDate
-        }
+        median: true
       }
     ],
-    [paymentDate, tvaRate]
+    [tvaRate]
   )
 
   const breakdownColumns = useMemo(
@@ -227,16 +232,19 @@ export const DamageMatForm = ({
         )
       },
       {
+        header: 'common.date_paiement',
+        key: 'date_paiement',
+        type: 'date',
+        className: 'int'
+      },
+      {
         header: 'common.interest',
         key: 'interest',
         type: 'interest',
-        className: 'int',
-        props: {
-          end: paymentDate
-        }
+        className: 'int'
       }
     ],
-    [paymentDate]
+    []
   )
 
   const rentalColumns = useMemo(
@@ -263,17 +271,20 @@ export const DamageMatForm = ({
         type: 'calculated'
       },
       {
+        header: 'common.date_paiement',
+        key: 'date_paiement',
+        type: 'date',
+        className: 'int'
+      },
+      {
         header: 'common.interest',
         key: 'interest',
         type: 'interest',
         className: 'int',
-        median: true,
-        props: {
-          end: paymentDate
-        }
+        median: true
       }
     ],
-    [paymentDate, tvaRate]
+    [tvaRate]
   )
 
   const shouldShowTopSection =
@@ -362,6 +373,7 @@ export const DamageMatForm = ({
             <TextItem path="damage_mat.vat_amount" tag="th" />
             {damageSectionKey === 'total_loss' && <TextItem path="damage_mat.wreck" tag="th" />}
             <TextItem path="common.total" tag="th" />
+            <TextItem path="common.date_paiement" tag="th" className="int" />
             <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
@@ -391,7 +403,21 @@ export const DamageMatForm = ({
               <Money value={damageTotal} />
             </td>
             <td className="int">
-              <Interest amount={damageTotal} start={accidentDate} end={paymentDate} />
+              <Field
+                control={control}
+                type="date"
+                name={`${damageSectionKey}.date_paiement`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
+            </td>
+            <td className="int">
+              <Interest
+                amount={damageTotal}
+                start={accidentDate}
+                end={formValues?.[damageSectionKey]?.date_paiement}
+              />
             </td>
           </tr>
         </tbody>
@@ -407,6 +433,7 @@ export const DamageMatForm = ({
                 <TextItem path="common.end" tag="th" />
                 <TextItem path="common.days" tag="th" />
                 <TextItem path="common.total" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
                 <TextItem path="common.interest" tag="th" className="int" />
               </tr>
             </thead>
@@ -427,10 +454,20 @@ export const DamageMatForm = ({
                   <Money value={waitingTotal} />
                 </td>
                 <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name="waiting.date_paiement"
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
                   <Interest
                     amount={waitingTotal}
                     start={getSafeMedianDate(formValues?.waiting)}
-                    end={paymentDate}
+                    end={formValues?.waiting?.date_paiement}
                   />
                 </td>
               </tr>
@@ -454,6 +491,7 @@ export const DamageMatForm = ({
             <TextItem path="common.end" tag="th" />
             <TextItem path="common.days" tag="th" />
             <TextItem path="common.total" tag="th" />
+            <TextItem path="common.date_paiement" tag="th" className="int" />
             <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
@@ -484,10 +522,20 @@ export const DamageMatForm = ({
               <Money value={lossOfUseTotal} />
             </td>
             <td className="int">
+              <Field
+                control={control}
+                type="date"
+                name={`${lossOfUseSectionKey}.date_paiement`}
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
+            </td>
+            <td className="int">
               <Interest
                 amount={lossOfUseTotal}
                 start={getSafeMedianDate(lossOfUseSection)}
-                end={paymentDate}
+                end={lossOfUseSection?.date_paiement}
               />
             </td>
           </tr>
@@ -561,6 +609,7 @@ export const DamageMatForm = ({
             <thead>
               <tr>
                 <TextItem path="common.amount" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
                 <TextItem path="common.interest" tag="th" className="int" />
               </tr>
             </thead>
@@ -575,10 +624,20 @@ export const DamageMatForm = ({
                   </div>
                 </td>
                 <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name="circulation_tax_date_paiement"
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
                   <Interest
                     amount={formValues?.circulation_tax}
                     start={accidentDate}
-                    end={paymentDate}
+                    end={formValues?.circulation_tax_date_paiement}
                   />
                 </td>
               </tr>

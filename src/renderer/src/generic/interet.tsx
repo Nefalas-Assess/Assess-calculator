@@ -151,7 +151,7 @@ const Interest = ({ amount, start, end, ignore, className }) => {
   }, [info, start, end, amount])
 
   if (!start) return 'Missing start date'
-  if (!end) return 'Missing end date'
+  if (!end) return 'Missing payment/end date'
   if (!amount) return 'Missing amount'
 
   return (
