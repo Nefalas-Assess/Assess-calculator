@@ -20,11 +20,8 @@ export default {
     { label: { fr: 'Femme', en: 'Woman', nl: 'Vrouw' }, value: 'femme' }
   ],
   marital_status: [
-    { label: { fr: 'Marié(e)', en: 'Married', nl: 'Gehuwd' }, value: 'marié' },
-    {
-      label: { fr: 'Célibataire', en: 'Single', nl: 'Ongehuwd' },
-      value: 'célibataire'
-    }
+    { label: { fr: 'En couple', en: 'In a relationship', nl: 'Samenwonend' }, value: 'en_couple' },
+    { label: { fr: 'Célibataire', en: 'Single', nl: 'Vrijgezel' }, value: 'célibataire' }
   ],
   profession: [
     {

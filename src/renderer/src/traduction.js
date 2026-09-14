@@ -826,13 +826,13 @@ export default {
   },
   frais: {
     frais_medicaux: {
-      fr: 'Frais médicaux',
-      en: 'Medical fees',
-      nl: 'Medische kosten'
+      fr: 'Frais (médicaux & autres)',
+      en: 'Costs (medical & others)',
+      nl: 'Kosten (medisch & andere)'
     },
     indemnite_frais: {
       fr: 'Indemnité/Frais',
-      en: 'Indemnity/Fees',
+      en: 'Indemnity/Costs',
       nl: 'Vergoeding/Kosten'
     },
     facture_number: {
