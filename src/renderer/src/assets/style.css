@@ -219,6 +219,67 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.confirm-modal {
+  width: min(620px, 100%);
+  border: 1px solid var(--sidebar-border);
+  border-radius: var(--radius-lg, 16px);
+  padding: 24px;
+  background: var(--surface-bg, var(--color-background));
+  color: var(--content-text-color, var(--color-text));
+  box-shadow: var(--shadow-medium);
+}
+
+.confirm-modal h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  line-height: 1.25;
+}
+
+.confirm-modal p {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--muted-text-color, var(--content-text-color, var(--color-text)));
+}
+
+.confirm-modal-help {
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: var(--muted-text-color, var(--content-text-color, var(--color-text)));
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.confirm-modal-help li + li {
+  margin-top: 6px;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.confirm-modal-actions button {
+  margin: 0;
+}
+
+.confirm-modal-secondary {
+  background: transparent;
+}
+
 .header-icon-button {
   width: 42px;
   height: 42px;

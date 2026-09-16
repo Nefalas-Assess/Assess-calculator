@@ -902,10 +902,45 @@ export default {
       en: 'Default payment date',
       nl: 'Standaard betalingsdatum'
     },
+    default_payment_date_update_title: {
+      fr: 'Appliquer la nouvelle date ?',
+      en: 'Apply the new date?',
+      nl: 'Nieuwe datum toepassen?'
+    },
     default_payment_date_update_confirm: {
-      fr: 'Voulez-vous appliquer cette nouvelle date aux endroits où la date de paiement par défaut a été utilisée ?',
-      en: 'Do you want to apply this new date where the default payment date was used?',
-      nl: 'Wilt u deze nieuwe datum toepassen op plaatsen waar de standaard betalingsdatum werd gebruikt?'
+      fr: 'Comment voulez-vous appliquer cette nouvelle date aux dates de paiement existantes ?',
+      en: 'How do you want to apply this new date to existing payment dates?',
+      nl: 'Hoe wilt u deze nieuwe datum toepassen op bestaande betalingsdatums?'
+    },
+    default_payment_date_update_apply: {
+      fr: 'Dates identiques',
+      en: 'Matching dates',
+      nl: 'Identieke datums'
+    },
+    default_payment_date_update_apply_all: {
+      fr: 'Toutes les dates',
+      en: 'All dates',
+      nl: 'Alle datums'
+    },
+    default_payment_date_update_skip: {
+      fr: 'Ne pas appliquer',
+      en: 'Do not apply',
+      nl: 'Niet toepassen'
+    },
+    default_payment_date_update_skip_help: {
+      fr: 'Ne pas appliquer : seule la date de paiement par défaut est modifiée.',
+      en: 'Do not apply: only the default payment date is changed.',
+      nl: 'Niet toepassen: alleen de standaard betalingsdatum wordt gewijzigd.'
+    },
+    default_payment_date_update_apply_help: {
+      fr: "Dates identiques : remplace uniquement les dates de paiement qui correspondent encore à l'ancienne date par défaut ({date}).",
+      en: 'Matching dates: only replaces payment dates that still match the previous default date ({date}).',
+      nl: 'Identieke datums: vervangt alleen betalingsdatums die nog overeenkomen met de vorige standaarddatum ({date}).'
+    },
+    default_payment_date_update_apply_all_help: {
+      fr: 'Toutes les dates : remplace toutes les dates de paiement existantes par la nouvelle date.',
+      en: 'All dates: replaces every existing payment date with the new date.',
+      nl: 'Alle datums: vervangt alle bestaande betalingsdatums door de nieuwe datum.'
     },
     name_victime: {
       fr: 'Nom de la victime',

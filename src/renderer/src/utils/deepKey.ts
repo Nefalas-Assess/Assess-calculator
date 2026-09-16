@@ -124,15 +124,40 @@ export const createMissingKeySetter =
 export const setDatePaiementIfMissing = createMissingKeySetter('date_paiement')
 
 const isPaymentDateKey = (key: string): boolean => {
-  return key === 'paiement' || key === 'date_paiement' || key.endsWith('_date_paiement')
+  return key === 'paiement' || key.includes('date_paiement')
 }
+
+const normalizeDateValue = (value: unknown): string | null => {
+  if (!value) {
+    return null
+  }
+
+  if (value instanceof Date) {
+    const year = value.getFullYear()
+    const month = String(value.getMonth() + 1).padStart(2, '0')
+    const day = String(value.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  }
+
+  if (typeof value === 'string') {
+    return value.slice(0, 10)
+  }
+
+  return null
+}
+
+export type ReplaceDefaultPaymentDateMode = 'matching-default' | 'all-payment-dates'
 
 export const replaceDefaultPaymentDates = <T>(
   target: T,
   previousDefault: unknown,
-  nextDefault: unknown
+  nextDefault: unknown,
+  mode: ReplaceDefaultPaymentDateMode = 'matching-default'
 ): T => {
-  if (!previousDefault || previousDefault === nextDefault) {
+  const previousDate = normalizeDateValue(previousDefault)
+  const nextDate = normalizeDateValue(nextDefault)
+
+  if (!nextDate || (mode === 'matching-default' && (!previousDate || previousDate === nextDate))) {
     return target
   }
 
@@ -148,7 +173,11 @@ export const replaceDefaultPaymentDates = <T>(
 
     const currentObject = value as Record<string, unknown>
     Object.entries(currentObject).forEach(([key, val]) => {
-      if (isPaymentDateKey(key) && val === previousDefault) {
+      const shouldReplace =
+        isPaymentDateKey(key) &&
+        (mode === 'all-payment-dates' || normalizeDateValue(val) === previousDate)
+
+      if (shouldReplace) {
         currentObject[key] = nextDefault
         return
       }

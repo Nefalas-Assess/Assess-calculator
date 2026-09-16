@@ -175,7 +175,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
           replaceDefaultPaymentDates(
             res,
             options.replaceDefaultPaymentDate.from,
-            options.replaceDefaultPaymentDate.to
+            options.replaceDefaultPaymentDate.to,
+            options.replaceDefaultPaymentDate.mode
           )
         }
 
