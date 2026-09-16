@@ -8,6 +8,9 @@ import TextItem from '@renderer/generic/textItem'
 import useGeneralInfo from '@renderer/hooks/generalInfo'
 import getIndicativeAmount from '@renderer/helpers/getIndicativeAmount'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
+import Interest from '@renderer/generic/interet'
+import Tooltip from '@renderer/generic/tooltip'
+import { FaRegQuestionCircle } from 'react-icons/fa'
 
 export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   const generalInfo = useGeneralInfo()
@@ -23,10 +26,9 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         }
       ],
       administratif_value: '100',
+      administratif_date_paiement: generalInfo?.config?.date_paiement,
       vestimentaire_value: '400',
-      deplacement_value: 0,
-      // By default véhicule automobile
-      deplacement_type: 'auto'
+      vestimentaire_date_paiement: generalInfo?.config?.date_paiement
     }
   })
 
@@ -39,28 +41,27 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       .toFixed(2)
   }, [formValues])
 
-  const totalDeplacementFrais = useMemo(
-    () => ({
-      value: (
-        formValues?.deplacement_value *
-        (formValues?.deplacement_type === 'auto' ? indicativeAmountAuto : indicativeAmountOther)
-      ).toFixed(2),
-      tooltip: (
-        <math>
-          <mn>{formValues?.deplacement_value}</mn>
-          <mo>x</mo>
-          <mn>
-            {formValues?.deplacement_type === 'auto' ? indicativeAmountAuto : indicativeAmountOther}
-          </mn>
-        </math>
-      )
-    }),
-    [formValues, indicativeAmountAuto, indicativeAmountOther]
+  const getDeplacementRowTotal = useCallback(
+    (val) => {
+      return (
+        parseInt(val?.distance, 10) *
+        (val?.type === 'auto' ? indicativeAmountAuto : indicativeAmountOther)
+      ).toFixed(2)
+    },
+    [indicativeAmountAuto, indicativeAmountOther]
   )
+
+  const totalDeplacementFrais = useMemo(() => {
+    const totalDistance = formValues?.travel.reduce((total, deplacement) => {
+      return parseFloat(total) + parseFloat(getDeplacementRowTotal(deplacement))
+    }, 0)
+
+    return totalDistance
+  }, [formValues, getDeplacementRowTotal])
 
   const totalSumRest = useMemo(() => {
     return (
-      parseFloat(totalDeplacementFrais?.value || 0) +
+      parseFloat(totalDeplacementFrais || 0) +
       parseFloat(formValues?.administratif_value || 0) +
       parseFloat(formValues?.vestimentaire_value || 0) +
       parseFloat(formValues?.package_value || 0)
@@ -81,6 +82,87 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       )
     }),
     [formValues]
+  )
+
+  const accidentDate = generalInfo?.date_accident
+  const defaultPaymentDate = generalInfo?.config?.date_paiement
+  const administratifPaymentDate = formValues?.administratif_date_paiement || defaultPaymentDate
+  const vestimentairePaymentDate = formValues?.vestimentaire_date_paiement || defaultPaymentDate
+
+  const packageColumns = useMemo(
+    () => [
+      {
+        header: 'common.amount',
+        key: 'amount',
+        type: 'number',
+        additionalContent: (rowData) => (
+          <div className="hide">
+            <Money value={rowData?.amount} />
+          </div>
+        )
+      },
+      {
+        header: 'common.label',
+        key: 'label',
+        type: 'text'
+      }
+    ],
+    []
+  )
+
+  const deplacementColumns = useMemo(
+    () => [
+      {
+        header: 'common.date',
+        key: 'date',
+        type: 'date'
+      },
+      {
+        header: 'frais.deplacement_distance',
+        key: 'distance',
+        type: 'number',
+        additionalContent: () => <span>KM</span>
+      },
+      {
+        header: 'frais.deplacement_type',
+        key: 'type',
+        type: 'select',
+        options: constants.deplacement_type
+      },
+      {
+        header: 'common.total',
+        key: 'total',
+        type: 'calculated',
+        tooltipContent: (rowData) => (
+          <math>
+            <mn>{rowData?.distance}</mn>
+            <mo>x</mo>
+            <mn>{rowData?.type === 'auto' ? indicativeAmountAuto : indicativeAmountOther}</mn>
+          </math>
+        ),
+        additionalContent: (rowData) => (
+          <div className="hide">
+            <Money value={getDeplacementRowTotal(rowData)} />
+          </div>
+        )
+      },
+      {
+        header: 'common.date_paiement',
+        key: 'date_paiement',
+        type: 'date',
+        className: 'int'
+      },
+      {
+        header: 'common.interest',
+        key: 'interest',
+        type: 'interest',
+        className: 'int',
+        props: {
+          startKey: 'date'
+        }
+      }
+    ],
+    [getDeplacementRowTotal, indicativeAmountAuto, indicativeAmountOther]
   )
 
   const submitForm = useCallback(
@@ -155,20 +237,33 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         </div>
       )}
 
-      <table id="ipTable" style={{ maxWidth: 1200 }}>
+      <table id="ipTable" style={{ maxWidth: 900 }}>
         <thead>
           <tr>
             <TextItem path="frais.indemnite_frais" tag="th" />
-            <th></th>
-            <th></th>
-            <TextItem path="common.total" tag="th" />
+            <TextItem path="common.date_paiement" tag="th" />
+            <TextItem path="common.total" tag="th" className="int" />
+            <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
         <tbody>
           <tr>
-            <TextItem path="frais.administratif_value" tag="td" />
-            <td></td>
-            <td></td>
+            <td>
+              <TextItem path="frais.administratif_value" />
+              <Tooltip tooltipContent={<span>[€ 50 - € 150]</span>}>
+                <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
+              </Tooltip>
+            </td>
+            <td>
+              <Field
+                control={control}
+                type="date"
+                name="administratif_date_paiement"
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
+            </td>
             <td>
               <Field
                 control={control}
@@ -179,11 +274,31 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 {(props) => <input {...props} />}
               </Field>
             </td>
+            <td className="int">
+              <Interest
+                amount={formValues?.administratif_value}
+                start={accidentDate}
+                end={administratifPaymentDate}
+              />
+            </td>
           </tr>
           <tr>
-            <TextItem path="frais.vestimentaire_value" tag="td" />
-            <td></td>
-            <td></td>
+            <td>
+              <TextItem path="frais.vestimentaire_value" />
+              <Tooltip tooltipContent={<span>[€ 400]</span>}>
+                <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
+              </Tooltip>
+            </td>
+            <td>
+              <Field
+                control={control}
+                type="date"
+                name="vestimentaire_date_paiement"
+                editable={editable}
+              >
+                {(props) => <input {...props} />}
+              </Field>
+            </td>
             <td>
               <Field
                 control={control}
@@ -194,60 +309,41 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 {(props) => <input {...props} />}
               </Field>
             </td>
+            <td className="int">
+              <Interest
+                amount={formValues?.vestimentaire_value}
+                start={accidentDate}
+                end={vestimentairePaymentDate}
+              />
+            </td>
           </tr>
-          {!editable && formValues?.deplacement_value === 0 ? null : (
-            <tr>
-              <TextItem path="frais.deplacement_value" tag="td" />
-              <td>
-                <Field
-                  control={control}
-                  type="number"
-                  name={`deplacement_value`}
-                  editable={editable}
-                >
-                  {(props) => (
-                    <>
-                      <input {...props} /> KM
-                    </>
-                  )}
-                </Field>
-              </td>
-              <td>
-                <Field
-                  control={control}
-                  type="select"
-                  options={constants.deplacement_type}
-                  name={`deplacement_type`}
-                  editable={editable}
-                ></Field>
-              </td>
-              <td>
-                <Money
-                  value={totalDeplacementFrais?.value}
-                  tooltip={totalDeplacementFrais?.tooltip}
-                  ignore
-                />
-              </td>
-            </tr>
-          )}
-          {!editable && parseFloat(formValues?.package_value || 0) === 0 ? null : (
-            <tr>
-              <TextItem path="frais.package_value" tag="td" />
-              <td></td>
-              <td></td>
-              <td>
-                <Field control={control} type="number" name={`package_value`} editable={editable}>
-                  {(props) => (
-                    <>
-                      <input {...props} />
-                    </>
-                  )}
-                </Field>
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
+
+      <DynamicTable
+        subtitle="frais.deplacement_value"
+        columns={deplacementColumns}
+        control={control}
+        name="travel"
+        formValues={formValues}
+        editable={editable}
+        calculateTotal={(rowData) => getDeplacementRowTotal(rowData)}
+        addRowDefaults={{
+          date_paiement: generalInfo?.config?.date_paiement,
+          type: 'auto',
+          distance: 0
+        }}
+      />
+
+      <DynamicTable
+        subtitle="frais.package_value"
+        columns={packageColumns}
+        control={control}
+        name="package"
+        formValues={formValues}
+        editable={editable}
+        calculateTotal={(rowData) => rowData?.amount}
+      />
 
       <div className="total-box">
         <TextItem path="frais.total_frais" tag="strong" /> <Money value={totalSumRest} />

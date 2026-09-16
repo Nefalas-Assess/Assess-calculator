@@ -205,7 +205,7 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
     <div>
       {title && <TextItem tag="h1" path={title} />}
       {subtitle && <TextItem tag="h3" path={subtitle} />}
-      <table style={{ maxWidth: 1200 }}>
+      <table style={{ maxWidth: 1200, marginBottom: !editable ? 30 : 0 }}>
         <thead>
           <tr>
             {columns.map((column, idx) => (
@@ -280,6 +280,9 @@ const DynamicTable: React.FC<DynamicTableProps> = ({
                     let start = column.median && rowData ? getMedDate(rowData) : rowData[daysVar1]
                     if (column.props?.start) {
                       start = column.props?.start
+                    }
+                    if (column.props?.startKey && rowData) {
+                      start = rowData[column.props.startKey]
                     }
                     const end = column.props?.end || rowData?.date_paiement
 

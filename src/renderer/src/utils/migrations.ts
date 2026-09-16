@@ -5,6 +5,7 @@ import migration130 from './migration/1.3.0'
 import migration131 from './migration/1.3.1'
 import migration132 from './migration/1.3.2'
 import migration140 from './migration/1.4.0'
+import migration142 from './migration/1.4.2'
 
 interface MigrationFunction {
   (data: any): any
@@ -45,6 +46,10 @@ const migrations: Migration[] = [
   {
     version: '1.4.0',
     migrate: migration140
+  },
+  {
+    version: '1.4.2',
+    migrate: migration142
   }
   // Add more migrations here as your app evolves
 ]

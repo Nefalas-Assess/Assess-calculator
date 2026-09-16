@@ -419,6 +419,16 @@ export default {
     }
   },
   common: {
+    date: {
+      fr: 'Date',
+      en: 'Date',
+      nl: 'Datum'
+    },
+    label: {
+      fr: 'Libellé',
+      en: 'Label',
+      nl: 'Benaming'
+    },
     note: {
       fr: 'Note',
       en: 'Note',
@@ -856,20 +866,22 @@ export default {
       nl: 'Totaal medische kosten :'
     },
     administratif_value: {
-      fr: 'Administratif [€ 50 - € 150]',
-      en: 'Administrative [€ 50 - € 150]',
-      nl: 'Administratief [€ 50 - € 150]'
+      fr: 'Administratif',
+      en: 'Administrative',
+      nl: 'Administratief'
     },
     vestimentaire_value: {
-      fr: 'Vestimentaires [€ 400]',
-      en: 'Clothing [€ 400]',
-      nl: 'Kleding [€ 400]'
+      fr: 'Vestimentaires',
+      en: 'Clothing',
+      nl: 'Kleding'
     },
     deplacement_value: {
       fr: 'Déplacement',
       en: 'Travel',
       nl: 'Verplaatsing'
     },
+    deplacement_type: { fr: 'Type de véhicule', en: 'Vehicule type', nl: 'Type auto' },
+    deplacement_distance: { fr: 'Distance', en: 'Distance', nl: 'Afstand' },
     package_value: {
       fr: 'Forfait',
       en: 'Lump sum',
