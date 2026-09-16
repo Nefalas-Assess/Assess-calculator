@@ -37,7 +37,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   // Fonction pour calculer le total des frais
   const totalSumFrais = useMemo(() => {
     return formValues?.frais
-      ?.reduce((sum, row) => sum + (parseFloat(row.amount) || 0), 0)
+      ?.reduce((sum, row) => sum + (parseFloat(row?.amount) || 0), 0)
       .toFixed(2)
   }, [formValues])
 
@@ -52,7 +52,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
   )
 
   const totalDeplacementFrais = useMemo(() => {
-    const totalDistance = formValues?.travel.reduce((total, deplacement) => {
+    const totalDistance = formValues?.travel?.reduce((total, deplacement) => {
       return parseFloat(total) + parseFloat(getDeplacementRowTotal(deplacement))
     }, 0)
 
@@ -64,7 +64,8 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
       parseFloat(totalDeplacementFrais || 0) +
       parseFloat(formValues?.administratif_value || 0) +
       parseFloat(formValues?.vestimentaire_value || 0) +
-      parseFloat(formValues?.package_value || 0)
+      parseFloat(formValues?.package_value || 0) +
+      parseFloat(formValues?.procedure_indemnities || 0)
     ).toFixed(2)
   }, [formValues, totalDeplacementFrais])
 
@@ -344,6 +345,26 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         editable={editable}
         calculateTotal={(rowData) => rowData?.amount}
       />
+
+      <table id="ipTable" style={{ maxWidth: 900 }}>
+        <tbody>
+          <tr>
+            <td>
+              <TextItem path="frais.procedure_indemnities" />
+            </td>
+            <td>
+              <Field
+                control={control}
+                type="number"
+                name={`procedure_indemnities`}
+                editable={editable}
+              >
+                {(props) => <input min={0} {...props} />}
+              </Field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <div className="total-box">
         <TextItem path="frais.total_frais" tag="strong" /> <Money value={totalSumRest} />

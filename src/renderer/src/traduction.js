@@ -840,6 +840,7 @@ export default {
       en: 'Costs (medical & others)',
       nl: 'Kosten (medisch & andere)'
     },
+    procedure_indemnities: { fr: 'Indemnités de procédure', en: 'Procedural indemnities', nl: 'Procedurevergoedingen' },
     indemnite_frais: {
       fr: 'Indemnité/Frais',
       en: 'Indemnity/Costs',
