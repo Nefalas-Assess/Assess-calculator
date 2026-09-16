@@ -902,6 +902,11 @@ export default {
       en: 'Default payment date',
       nl: 'Standaard betalingsdatum'
     },
+    default_payment_date_update_confirm: {
+      fr: 'Voulez-vous appliquer cette nouvelle date aux endroits où la date de paiement par défaut a été utilisée ?',
+      en: 'Do you want to apply this new date where the default payment date was used?',
+      nl: 'Wilt u deze nieuwe datum toepassen op plaatsen waar de standaard betalingsdatum werd gebruikt?'
+    },
     name_victime: {
       fr: 'Nom de la victime',
       en: 'Name of the victim',

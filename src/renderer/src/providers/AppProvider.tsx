@@ -1,5 +1,5 @@
 import { validateData } from '@renderer/helpers/validation'
-import { setDatePaiementIfMissing } from '@renderer/utils/deepKey'
+import { replaceDefaultPaymentDates, setDatePaiementIfMissing } from '@renderer/utils/deepKey'
 import { prepareDataForSave } from '@renderer/utils/migrations'
 import constants from '@renderer/constants'
 import { intervalToDuration } from 'date-fns'
@@ -171,6 +171,14 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       if (options?.setDefault) {
+        if (options?.replaceDefaultPaymentDate) {
+          replaceDefaultPaymentDates(
+            res,
+            options.replaceDefaultPaymentDate.from,
+            options.replaceDefaultPaymentDate.to
+          )
+        }
+
         if (res?.general_info?.config?.default_contribution) {
           res.prejudice_proche = setDefaultValues(res?.prejudice_proche, {
             menage_contribution: res?.general_info?.config?.default_contribution

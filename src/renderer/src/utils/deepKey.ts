@@ -122,3 +122,41 @@ export const createMissingKeySetter =
     setMissingKeyDeep(target, keyName, fallback, options)
 
 export const setDatePaiementIfMissing = createMissingKeySetter('date_paiement')
+
+const isPaymentDateKey = (key: string): boolean => {
+  return key === 'paiement' || key === 'date_paiement' || key.endsWith('_date_paiement')
+}
+
+export const replaceDefaultPaymentDates = <T>(
+  target: T,
+  previousDefault: unknown,
+  nextDefault: unknown
+): T => {
+  if (!previousDefault || previousDefault === nextDefault) {
+    return target
+  }
+
+  const replaceMatchingDates = (value: unknown): void => {
+    if (value === null || typeof value !== 'object') {
+      return
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach(replaceMatchingDates)
+      return
+    }
+
+    const currentObject = value as Record<string, unknown>
+    Object.entries(currentObject).forEach(([key, val]) => {
+      if (isPaymentDateKey(key) && val === previousDefault) {
+        currentObject[key] = nextDefault
+        return
+      }
+
+      replaceMatchingDates(val)
+    })
+  }
+
+  replaceMatchingDates(target)
+  return target
+}

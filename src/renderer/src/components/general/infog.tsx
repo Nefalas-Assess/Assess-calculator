@@ -1,17 +1,40 @@
 import { useCallback } from 'react'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
 import InfoForm from '@renderer/form/info_general/form'
-import TextItem from '@renderer/generic/textItem'
+import TextItem, { useTranslation } from '@renderer/generic/textItem'
 
 const InfoG = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
+  const translate = useTranslation()
 
   const saveData = useCallback(
     (values) => {
-      setData({ general_info: values }, { setDefault: true })
+      const previousPaymentDate = data?.general_info?.config?.date_paiement
+      const nextPaymentDate = values?.config?.date_paiement
+      const paymentDateChanged =
+        previousPaymentDate && previousPaymentDate !== nextPaymentDate
+
+      const replaceDefaultPaymentDate = paymentDateChanged
+        ? window.confirm(translate('info_general.default_payment_date_update_confirm'))
+        : false
+
+      setData(
+        { general_info: values },
+        {
+          setDefault: true,
+          ...(replaceDefaultPaymentDate
+            ? {
+                replaceDefaultPaymentDate: {
+                  from: previousPaymentDate,
+                  to: nextPaymentDate
+                }
+              }
+            : {})
+        }
+      )
     },
-    [setData]
+    [data?.general_info?.config?.date_paiement, setData, translate]
   )
 
   return (
