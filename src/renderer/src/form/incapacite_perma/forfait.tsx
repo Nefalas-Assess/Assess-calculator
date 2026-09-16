@@ -14,23 +14,6 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
 
   const generalInfo = useGeneralInfo()
 
-  const { handleSubmit, control } = useForm({
-    defaultValues: initialValues || {
-      contribution_imp: generalInfo?.config?.default_contribution,
-      perso_date_paiement: generalInfo?.config?.date_paiement,
-      menage_date_paiement: generalInfo?.config?.date_paiement,
-      eco_date_paiement: generalInfo?.config?.date_paiement
-    }
-  })
-
-  const formValues = useWatch({ control })
-
-  const submitForm = (values) => {
-    onSubmit(values)
-  }
-
-  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
-
   const getPoint = useCallback((age) => {
     if (age <= 15) return 3660
     else if (age >= 85) return 495
@@ -42,7 +25,37 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
     }
   }, [])
 
-  const point = useMemo(() => getPoint(data?.computed_info?.age_consolidation), [getPoint, data])
+  const defaultPoint = useMemo(
+    () => getPoint(data?.computed_info?.age_consolidation),
+    [getPoint, data?.computed_info?.age_consolidation]
+  )
+
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      ...initialValues,
+      perso_point: initialValues?.perso_point ?? initialValues?.point ?? defaultPoint,
+      menage_point: initialValues?.menage_point ?? initialValues?.point ?? defaultPoint,
+      eco_point: initialValues?.eco_point ?? initialValues?.point ?? defaultPoint,
+      contribution_imp:
+        initialValues?.contribution_imp ?? generalInfo?.config?.default_contribution,
+      perso_date_paiement: initialValues?.perso_date_paiement ?? generalInfo?.config?.date_paiement,
+      menage_date_paiement:
+        initialValues?.menage_date_paiement ?? generalInfo?.config?.date_paiement,
+      eco_date_paiement: initialValues?.eco_date_paiement ?? generalInfo?.config?.date_paiement
+    }
+  })
+
+  const formValues = useWatch({ control })
+
+  const persoPoint = formValues?.perso_point ?? defaultPoint
+  const menagePoint = formValues?.menage_point ?? defaultPoint
+  const ecoPoint = formValues?.eco_point ?? defaultPoint
+
+  const submitForm = (values) => {
+    onSubmit(values)
+  }
+
+  useAutosaveForm({ values: formValues, handleSubmit, onSubmit: submitForm })
 
   const getAmount = useCallback((point, pourcentage, pourcentage2) => {
     return {
@@ -95,12 +108,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <tbody>
               <tr>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{point}</td>
+                <td>
+                  <Field control={control} type="number" name="perso_point" editable={editable}>
+                    {(props) => <input {...props} min="0" step="1" />}
+                  </Field>
+                </td>
                 <td>{generalInfo?.ip?.personnel?.interet}</td>
                 <td>
                   <Money
-                    value={getAmount(point, generalInfo?.ip?.personnel?.interet)?.value}
-                    tooltip={getAmount(point, generalInfo?.ip?.personnel?.interet)?.tooltip}
+                    value={getAmount(persoPoint, generalInfo?.ip?.personnel?.interet)?.value}
+                    tooltip={getAmount(persoPoint, generalInfo?.ip?.personnel?.interet)?.tooltip}
                   />
                 </td>
                 <td className="int">
@@ -115,7 +132,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
                 </td>
                 <td className="int">
                   <Interest
-                    amount={getAmount(point, generalInfo?.ip?.personnel?.interet)?.value}
+                    amount={getAmount(persoPoint, generalInfo?.ip?.personnel?.interet)?.value}
                     start={generalInfo?.date_consolidation}
                     end={formValues?.perso_date_paiement}
                   />
@@ -145,7 +162,11 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <tbody>
               <tr>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{point}</td>
+                <td>
+                  <Field control={control} type="number" name="menage_point" editable={editable}>
+                    {(props) => <input {...props} min="0" step="1" />}
+                  </Field>
+                </td>
                 <td>{generalInfo?.ip?.menagere?.interet}</td>
                 <td>
                   <Field
@@ -161,14 +182,14 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
                   <Money
                     value={
                       getAmount(
-                        point,
+                        menagePoint,
                         generalInfo?.ip?.menagere?.interet,
                         formValues?.contribution_imp
                       )?.value
                     }
                     tooltip={
                       getAmount(
-                        point,
+                        menagePoint,
                         generalInfo?.ip?.menagere?.interet,
                         formValues?.contribution_imp
                       )?.tooltip
@@ -189,7 +210,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
                   <Interest
                     amount={
                       getAmount(
-                        point,
+                        menagePoint,
                         generalInfo?.ip?.menagere?.interet,
                         formValues?.contribution_imp
                       )?.value
@@ -222,12 +243,16 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
             <tbody>
               <tr>
                 <td>{data?.computed_info?.age_consolidation}</td>
-                <td>{point}</td>
+                <td>
+                  <Field control={control} type="number" name="eco_point" editable={editable}>
+                    {(props) => <input {...props} min="0" step="1" />}
+                  </Field>
+                </td>
                 <td>{generalInfo?.ip?.economique?.interet}</td>
                 <td>
                   <Money
-                    value={getAmount(point, generalInfo?.ip?.economique?.interet)?.value}
-                    tooltip={getAmount(point, generalInfo?.ip?.economique?.interet)?.tooltip}
+                    value={getAmount(ecoPoint, generalInfo?.ip?.economique?.interet)?.value}
+                    tooltip={getAmount(ecoPoint, generalInfo?.ip?.economique?.interet)?.tooltip}
                   />
                 </td>
                 <td className="int">
@@ -242,7 +267,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
                 </td>
                 <td className="int">
                   <Interest
-                    amount={getAmount(point, generalInfo?.ip?.economique?.interet)?.value}
+                    amount={getAmount(ecoPoint, generalInfo?.ip?.economique?.interet)?.value}
                     start={generalInfo?.date_consolidation}
                     end={formValues?.eco_date_paiement}
                   />

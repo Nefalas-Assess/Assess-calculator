@@ -1,13 +1,16 @@
 import { useCallback } from 'react'
 import { useAppActions, useAppData } from '@renderer/providers/AppProvider'
-import DamageMatForm from '@renderer/form/damage_mat'
+import DamageMatForm, { computeDamageMatTotal } from '@renderer/form/damage_mat'
 import TotalBox from '@renderer/generic/totalBox'
 import TotalBoxInterest from '@renderer/generic/totalBoxInterest'
 import { MoneyScope } from '@renderer/generic/moneyScope'
+import useGeneralInfo from '@renderer/hooks/generalInfo'
 
 const DamageMat = ({ editable }) => {
   const data = useAppData()
   const { setData } = useAppActions()
+  const generalInfo = useGeneralInfo()
+  const total = computeDamageMatTotal(data?.damage_mat, generalInfo?.config)
 
   const saveData = useCallback(
     (values) => {
@@ -15,6 +18,8 @@ const DamageMat = ({ editable }) => {
     },
     [setData]
   )
+
+  if (editable === false && total === 0) return null
 
   return (
     <div id="content">

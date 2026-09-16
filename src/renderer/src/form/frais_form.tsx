@@ -242,8 +242,8 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         <thead>
           <tr>
             <TextItem path="frais.indemnite_frais" tag="th" />
-            <TextItem path="common.date_paiement" tag="th" />
-            <TextItem path="common.total" tag="th" className="int" />
+            <TextItem path="common.date_paiement" tag="th" className="int" />
+            <TextItem path="common.total" tag="th" />
             <TextItem path="common.interest" tag="th" className="int" />
           </tr>
         </thead>
@@ -255,7 +255,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
               </Tooltip>
             </td>
-            <td>
+            <td className="int">
               <Field
                 control={control}
                 type="date"
@@ -290,7 +290,7 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
               </Tooltip>
             </td>
-            <td>
+            <td className="int">
               <Field
                 control={control}
                 type="date"

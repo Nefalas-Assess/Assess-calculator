@@ -291,6 +291,7 @@ const Recapitulatif = () => {
         </button>
       </div>
       <div ref={contentRef} id="recap">
+        {console.log(data?.damage_mat)}
         <MoneyScope>
           {data?.general_info && <InfoG editable={false} />}
           {data?.frais && <Frais editable={false} />}
