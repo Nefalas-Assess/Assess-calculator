@@ -251,9 +251,11 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
           <tr>
             <td>
               <TextItem path="frais.administratif_value" />
-              <Tooltip tooltipContent={<span>[€ 50 - € 150]</span>}>
-                <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
-              </Tooltip>
+              {editable && (
+                <Tooltip tooltipContent={<span>[€ 50 - € 150]</span>}>
+                  <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
+                </Tooltip>
+              )}
             </td>
             <td className="int">
               <Field
@@ -286,9 +288,11 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
           <tr>
             <td>
               <TextItem path="frais.vestimentaire_value" />
-              <Tooltip tooltipContent={<span>[€ 400]</span>}>
-                <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
-              </Tooltip>
+              {editable && (
+                <Tooltip tooltipContent={<span>[€ 400]</span>}>
+                  <FaRegQuestionCircle style={{ marginLeft: '5px' }} />
+                </Tooltip>
+              )}
             </td>
             <td className="int">
               <Field
@@ -366,8 +370,9 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
         </tbody>
       </table>
 
-      <div className="total-box">
-        <TextItem path="frais.total_frais" tag="strong" /> <Money value={totalSumRest} />
+      {/* Ne pas remove, utilisé pour le calcul du total, donc en caché */}
+      <div style={{ display: 'none' }}>
+        <Money value={totalSumRest} />
       </div>
 
       {!editable && (!formValues?.aides || formValues?.aides === 0) ? (
@@ -378,13 +383,27 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
           <table id="hospTable" style={{ maxWidth: 1200 }}>
             <thead>
               <tr>
+                <TextItem path="common.start" tag="th" className="int" />
+                <TextItem path="common.end" tag="th" className="int" />
                 <TextItem path="frais.number_hours" tag="th" />
                 <TextItem path="common.forfait" tag="th" />
                 <TextItem path="common.total" tag="th" />
+                <TextItem path="common.date_paiement" tag="th" className="int" />
+                <TextItem path="common.interest" tag="th" className="int" />
               </tr>
             </thead>
             <tbody>
               <tr>
+                <td>
+                  <Field control={control} type="date" name={`aide_date_start`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td>
+                  <Field control={control} type="date" name={`aide_date_end`} editable={editable}>
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
                 <td>
                   <Field control={control} type="number" name={`aides`} editable={editable}>
                     {(props) => <input min={0} {...props} />}
@@ -397,6 +416,23 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
                 </td>
                 <td>
                   <Money value={totalAides?.value} tooltip={totalAides?.tooltip} />
+                </td>
+                <td className="int">
+                  <Field
+                    control={control}
+                    type="date"
+                    name={`aide_date_paiement`}
+                    editable={editable}
+                  >
+                    {(props) => <input {...props} />}
+                  </Field>
+                </td>
+                <td className="int">
+                  <Interest
+                    amount={totalAides?.value}
+                    start={formValues?.aide_date_start}
+                    end={formValues?.aide_date_end}
+                  />
                 </td>
               </tr>
             </tbody>

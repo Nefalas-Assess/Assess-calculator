@@ -22,7 +22,9 @@ const InfoG = ({ editable }) => {
   const translate = useTranslation()
   const [pendingPaymentDateUpdate, setPendingPaymentDateUpdate] =
     useState<PendingPaymentDateUpdate | null>(null)
+  const [isPaymentDateModalOpen, setPaymentDateModalOpen] = useState(false)
   const currentDefaultPaymentDateRef = useRef(data?.general_info?.config?.date_paiement)
+  const currentBirthDateRef = useRef(data?.general_info?.date_naissance)
 
   useEffect(() => {
     if (!pendingPaymentDateUpdate) {
@@ -32,8 +34,24 @@ const InfoG = ({ editable }) => {
 
   const persistGeneralInfo = useCallback(
     (values: any, replaceDefaultPaymentDate: ReplaceDefaultPaymentDate | null = null) => {
+      const birthDateChanged =
+        currentBirthDateRef.current &&
+        values?.date_naissance &&
+        currentBirthDateRef.current !== values.date_naissance
+      const nextForfait = birthDateChanged ? { ...data?.forfait_ip } : undefined
+
+      if (nextForfait) {
+        delete nextForfait.point
+        delete nextForfait.perso_point
+        delete nextForfait.menage_point
+        delete nextForfait.eco_point
+      }
+
       setData(
-        { general_info: values },
+        {
+          general_info: values,
+          ...(nextForfait ? { forfait_ip: nextForfait } : {})
+        },
         {
           setDefault: true,
           ...(replaceDefaultPaymentDate
@@ -43,15 +61,17 @@ const InfoG = ({ editable }) => {
             : {})
         }
       )
+      currentBirthDateRef.current = values?.date_naissance
     },
-    [setData]
+    [data?.forfait_ip, setData]
   )
 
   const saveData = useCallback(
     (values: any) => {
       const previousPaymentDate = currentDefaultPaymentDateRef.current
       const nextPaymentDate = values?.config?.date_paiement
-      const paymentDateChanged = previousPaymentDate && previousPaymentDate !== nextPaymentDate
+      const paymentDateChanged =
+        previousPaymentDate && nextPaymentDate && previousPaymentDate !== nextPaymentDate
 
       if (paymentDateChanged) {
         setPendingPaymentDateUpdate({
@@ -60,8 +80,9 @@ const InfoG = ({ editable }) => {
             from: previousPaymentDate,
             to: nextPaymentDate,
             mode: 'matching-default'
-          }
+            }
         })
+        setPaymentDateModalOpen(false)
         return
       }
 
@@ -80,6 +101,7 @@ const InfoG = ({ editable }) => {
     )
     currentDefaultPaymentDateRef.current = pendingPaymentDateUpdate.replaceDefaultPaymentDate.to
     setPendingPaymentDateUpdate(null)
+    setPaymentDateModalOpen(false)
   }, [pendingPaymentDateUpdate, persistGeneralInfo])
 
   const applyAllPaymentDateUpdate = useCallback(() => {
@@ -91,6 +113,7 @@ const InfoG = ({ editable }) => {
     })
     currentDefaultPaymentDateRef.current = pendingPaymentDateUpdate.replaceDefaultPaymentDate.to
     setPendingPaymentDateUpdate(null)
+    setPaymentDateModalOpen(false)
   }, [pendingPaymentDateUpdate, persistGeneralInfo])
 
   const skipDefaultPaymentDateUpdate = useCallback(() => {
@@ -99,6 +122,7 @@ const InfoG = ({ editable }) => {
     persistGeneralInfo(pendingPaymentDateUpdate.values)
     currentDefaultPaymentDateRef.current = pendingPaymentDateUpdate.replaceDefaultPaymentDate.to
     setPendingPaymentDateUpdate(null)
+    setPaymentDateModalOpen(false)
   }, [pendingPaymentDateUpdate, persistGeneralInfo])
 
   const previousDefaultPaymentDateLabel = (() => {
@@ -117,10 +141,25 @@ const InfoG = ({ editable }) => {
     <div id="content">
       <div id="main">
         <TextItem path="nav.info_general" tag="h1" />
-        <InfoForm onSubmit={saveData} editable={editable} initialValues={data?.general_info} />
+        <InfoForm
+          onSubmit={saveData}
+          editable={editable}
+          initialValues={data?.general_info}
+          defaultPaymentDateAction={
+            pendingPaymentDateUpdate ? (
+              <button
+                type="button"
+                onClick={() => setPaymentDateModalOpen(true)}
+                className="default-payment-date-action"
+              >
+                <TextItem path="info_general.default_payment_date_update_open" />
+              </button>
+            ) : null
+          }
+        />
       </div>
       <ConfirmModal
-        isOpen={!!pendingPaymentDateUpdate}
+        isOpen={!!pendingPaymentDateUpdate && isPaymentDateModalOpen}
         title={<TextItem path="info_general.default_payment_date_update_title" />}
         confirmLabel={<TextItem path="info_general.default_payment_date_update_apply" />}
         secondaryConfirmLabel={

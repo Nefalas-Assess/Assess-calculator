@@ -8,7 +8,12 @@ import IncapacitePerma from '../incapacite_perma'
 import EconomiqueSection from './economique'
 import { DAMAGE_MAT_VEHICLES, getDamageMatVehicleConfigDefaults } from '@renderer/data/damage_mat'
 
-export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
+export const InfoForm = ({
+  onSubmit,
+  initialValues,
+  editable = true,
+  defaultPaymentDateAction
+}) => {
   const defaultFormValues = useMemo(() => {
     const baseValues = {
       statut: 'marié',
@@ -254,7 +259,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                 </tr>
                 <tr>
                   <TextItem path="info_general.default_payment_date" tag="td" />
-                  <td>
+                  <td className="default-payment-date-cell">
                     <Field
                       control={control}
                       type="date"
@@ -263,6 +268,7 @@ export const InfoForm = ({ onSubmit, initialValues, editable = true }) => {
                     >
                       {(props) => <input {...props} />}
                     </Field>
+                    {defaultPaymentDateAction}
                   </td>
                 </tr>
                 <tr>

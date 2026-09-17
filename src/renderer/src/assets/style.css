@@ -280,6 +280,25 @@ button:focus-visible {
   background: transparent;
 }
 
+.default-payment-date-cell {
+  position: relative;
+  input {
+    margin-right: 10px;
+  }
+}
+
+.default-payment-date-action {
+  position: absolute;
+  top: 50%;
+  margin: 0;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+.default-payment-date-action:hover {
+  transform: translateY(-50%);
+}
+
 .header-icon-button {
   width: 42px;
   height: 42px;

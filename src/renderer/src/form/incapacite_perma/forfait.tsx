@@ -1,7 +1,7 @@
 import Money from '@renderer/generic/money'
 import Interest from '@renderer/generic/interet'
 import { useAppData } from '@renderer/providers/AppProvider'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import Field from '@renderer/generic/field'
 import constants from '@renderer/constants'
@@ -30,7 +30,7 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
     [getPoint, data?.computed_info?.age_consolidation]
   )
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, setValue } = useForm({
     defaultValues: {
       ...initialValues,
       perso_point: initialValues?.perso_point ?? initialValues?.point ?? defaultPoint,
@@ -50,6 +50,18 @@ export const ForfaitForm = ({ onSubmit, initialValues, editable = true }) => {
   const persoPoint = formValues?.perso_point ?? defaultPoint
   const menagePoint = formValues?.menage_point ?? defaultPoint
   const ecoPoint = formValues?.eco_point ?? defaultPoint
+  const currentBirthDateRef = useRef(generalInfo?.date_naissance)
+
+  useEffect(() => {
+    const birthDate = generalInfo?.date_naissance
+    if (!birthDate || currentBirthDateRef.current === birthDate) return
+
+    setValue('perso_point', defaultPoint)
+    setValue('menage_point', defaultPoint)
+    setValue('eco_point', defaultPoint)
+    setValue('point', undefined)
+    currentBirthDateRef.current = birthDate
+  }, [defaultPoint, generalInfo?.date_naissance, setValue])
 
   const submitForm = (values) => {
     onSubmit(values)

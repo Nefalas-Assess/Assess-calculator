@@ -920,6 +920,11 @@ export default {
       en: 'Apply the new date?',
       nl: 'Nieuwe datum toepassen?'
     },
+    default_payment_date_update_open: {
+      fr: 'Appliquer la date',
+      en: 'Apply date',
+      nl: 'Datum toepassen'
+    },
     default_payment_date_update_confirm: {
       fr: 'Comment voulez-vous appliquer cette nouvelle date aux dates de paiement existantes ?',
       en: 'How do you want to apply this new date to existing payment dates?',
