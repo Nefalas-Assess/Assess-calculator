@@ -862,9 +862,9 @@ export default {
       nl: 'Datum van kosten'
     },
     total_frais_medicaux: {
-      fr: 'Total frais médicaux :',
-      en: 'Total medical fees :',
-      nl: 'Totaal medische kosten :'
+      fr: 'Total des frais :',
+      en: 'Total of costs :',
+      nl: 'Totaal van kosten :'
     },
     administratif_value: {
       fr: 'Administratif',
@@ -889,9 +889,9 @@ export default {
       nl: 'Forfaitair bedrag'
     },
     total_frais: {
-      fr: 'Total frais :',
-      en: 'Total costs :',
-      nl: 'Totale kosten :'
+      fr: 'Total des frais :',
+      en: 'Total of costs :',
+      nl: 'Totale van kosten :'
     },
     aides_non_qualifies: {
       fr: 'Aide de tiers (non-qualifiés)',
