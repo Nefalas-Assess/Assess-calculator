@@ -170,7 +170,7 @@ export const DamageMatForm = ({
       circulation_tax_date_paiement: generalInfo?.config?.date_paiement || '',
       ...(initialValues || {})
     }),
-    [generalInfo?.date_accident, initialValues]
+    [generalInfo?.date_accident, generalInfo?.config?.date_paiement, initialValues]
   )
 
   const { control, handleSubmit } = useForm({

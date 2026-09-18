@@ -234,7 +234,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
   const storeData = useCallback(
     (res, options) => {
-      const computedData = computeData({ ...(data || {}), ...res }, options)
+      const computedData = computeData(
+        options?.replaceData ? { ...res } : { ...(data || {}), ...res },
+        options
+      )
       const errors = validateData(computedData)
       setData(computedData)
       setErrors(errors)

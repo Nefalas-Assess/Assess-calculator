@@ -35,6 +35,23 @@ const removeBOM = (str: string): string => {
   return str
 }
 
+const parseAndMigrateFile = (fileData: string, currentVersion: string): any => {
+  const cleanData = removeBOM(fileData)
+  const parsedData = JSON.parse(cleanData)
+
+  if (!parsedData || typeof parsedData !== 'object' || Array.isArray(parsedData)) {
+    throw new Error('Le fichier doit contenir un objet JSON valide.')
+  }
+
+  const migratedData = migrateData(parsedData, currentVersion)
+
+  if (!migratedData || typeof migratedData !== 'object' || Array.isArray(migratedData)) {
+    throw new Error('Les données du fichier sont invalides.')
+  }
+
+  return migratedData
+}
+
 export const useRecentFiles = (): RecentFilesHook => {
   const [recentFiles, setRecentFiles] = useState<RecentFile[]>([])
 
@@ -58,23 +75,19 @@ export const useRecentFiles = (): RecentFilesHook => {
     try {
       if (filePath) {
         const fileData = await window.api.readFile(filePath)
+        const currentVersion = import.meta.env.VITE_APP_VERSION
+        const migratedData = parseAndMigrateFile(fileData, currentVersion)
+
+        setData(migratedData, { replaceData: true })
         setFilePath(filePath)
         navigate('/infog')
-        const cleanData = removeBOM(fileData)
-        const parsedData = JSON.parse(cleanData)
-
-        // Apply migration if needed
-        const currentVersion = import.meta.env.VITE_APP_VERSION
-        const migratedData = migrateData(parsedData, currentVersion)
-
-        setData(migratedData)
         const res = getFileNameWithoutExtension(filePath)
         addFile({ path: filePath, name: res })
         addToast('toast.file_imported')
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
-      addToast(errorMessage)
+      addToast(errorMessage, false, undefined, undefined, 'error')
     }
   }
 
@@ -89,17 +102,12 @@ export const useRecentFiles = (): RecentFilesHook => {
       if (!canceled && filePaths.length > 0) {
         const filePath = filePaths[0]
         const fileData = await window.api.readFile(filePath)
+        const currentVersion = import.meta.env.VITE_APP_VERSION
+        const migratedData = parseAndMigrateFile(fileData, currentVersion)
+
+        setData(migratedData, { replaceData: true })
         setFilePath(filePath)
         navigate('/infog')
-
-        const cleanData = removeBOM(fileData)
-        const parsedData = JSON.parse(cleanData)
-
-        // Apply migration if needed
-        const currentVersion = import.meta.env.VITE_APP_VERSION
-        const migratedData = migrateData(parsedData, currentVersion)
-
-        setData(migratedData)
 
         const res = getFileNameWithoutExtension(filePath)
         addFile({ path: filePath, name: res })
@@ -109,7 +117,7 @@ export const useRecentFiles = (): RecentFilesHook => {
     } catch (err: unknown) {
       console.log(err)
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred'
-      addToast(errorMessage)
+      addToast(errorMessage, false, undefined, undefined, 'error')
     }
   }
 
@@ -139,7 +147,7 @@ export const useRecentFiles = (): RecentFilesHook => {
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'File creation failed'
-      addToast('toast.file_creation_error')
+      addToast('toast.file_creation_error', false, undefined, undefined, 'error')
       console.error(errorMessage)
     }
   }
