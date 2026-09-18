@@ -394,12 +394,12 @@ export const FraisForm = ({ onSubmit, initialValues, editable = true }) => {
             </thead>
             <tbody>
               <tr>
-                <td>
+                <td className="int">
                   <Field control={control} type="date" name={`aide_date_start`} editable={editable}>
                     {(props) => <input {...props} />}
                   </Field>
                 </td>
-                <td>
+                <td className="int">
                   <Field control={control} type="date" name={`aide_date_end`} editable={editable}>
                     {(props) => <input {...props} />}
                   </Field>

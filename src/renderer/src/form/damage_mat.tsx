@@ -153,20 +153,21 @@ export const DamageMatForm = ({
       },
       repair_loss: {
         start: '',
-        end: ''
+        end: '',
+        date_paiement: generalInfo?.config?.date_paiement || ''
       },
       repair: {
         amount: '',
         wreck: '',
-        date_paiement: ''
+        date_paiement: generalInfo?.config?.date_paiement || ''
       },
       total_loss: {
         amount: '',
         wreck: '',
-        date_paiement: ''
+        date_paiement: generalInfo?.config?.date_paiement || ''
       },
       circulation_tax: '',
-      circulation_tax_date_paiement: '',
+      circulation_tax_date_paiement: generalInfo?.config?.date_paiement || '',
       ...(initialValues || {})
     }),
     [generalInfo?.date_accident, initialValues]
