@@ -210,7 +210,11 @@ const Field = ({
       }
 
       if (type === 'switch') {
-        return translate(val ? switchOnLabel : switchOffLabel)
+        const selectedOption = options?.find(
+          (option) => option?.value === val || option?.value?.toString() === val?.toString()
+        )
+
+        return translate(selectedOption?.label || (val ? switchOnLabel : switchOffLabel))
       }
 
       return val
@@ -288,25 +292,35 @@ const Field = ({
 
       if (type === 'switch') {
         const { value, onChange, ...rest } = field
+        const onOption = options?.[0]
+        const offOption = options?.[1]
+        const usesOptionValues = options?.length === 2
+        const optionValue = (option) =>
+          typeof option?.value === 'boolean' ? option.value.toString() : option?.value
+        const onValue = optionValue(onOption)
+        const offValue = optionValue(offOption)
+        const checked = usesOptionValues ? value?.toString() === onValue?.toString() : !!value
+
         return (
           <span className="field-switch">
             <input
               {...rest}
               type="checkbox"
-              checked={!!value}
+              checked={checked}
               onChange={(event) => {
                 const checked = event.target.checked
-                onChange(checked)
-                customOnChange?.(checked, event)
-                onValueChange?.(checked, event)
+                const nextValue = usesOptionValues ? (checked ? onValue : offValue) : checked
+                onChange(nextValue)
+                customOnChange?.(nextValue, event)
+                onValueChange?.(nextValue, event)
               }}
             />
             <span className="field-switch__highlight" aria-hidden="true" />
             <span className="field-switch__option field-switch__option--on">
-              {translate(switchOnLabel)}
+              {translate(onOption?.label || switchOnLabel)}
             </span>
             <span className="field-switch__option field-switch__option--off">
-              {translate(switchOffLabel)}
+              {translate(offOption?.label || switchOffLabel)}
             </span>
           </span>
         )
