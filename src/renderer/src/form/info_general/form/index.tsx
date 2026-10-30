@@ -6,6 +6,7 @@ import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import useAutosaveForm from '@renderer/hooks/autosaveForm'
 import IncapacitePerma from '../incapacite_perma'
 import EconomiqueSection from './economique'
+import CollapsibleSection from './collapsibleSection'
 import { DAMAGE_MAT_VEHICLES, getDamageMatVehicleConfigDefaults } from '@renderer/data/damage_mat'
 
 export const InfoForm = ({
@@ -16,9 +17,10 @@ export const InfoForm = ({
 }) => {
   const defaultFormValues = useMemo(() => {
     const baseValues = {
+      sexe: 'homme',
       statut: 'marié',
       profession: 'employe',
-      calcul_interets: 'non',
+      calcul_interets: 'false',
       children: [],
       config: {
         prejudice_exh: 75,
@@ -49,6 +51,10 @@ export const InfoForm = ({
     return {
       ...baseValues,
       ...initialValues,
+      calcul_interets:
+        initialValues?.calcul_interets === 'non'
+          ? 'false'
+          : (initialValues?.calcul_interets ?? baseValues.calcul_interets),
       children: (initialValues?.children || []).map((child) => ({
         ...child,
         leaveHomeAge: child?.leaveHomeAge ?? 25
@@ -126,7 +132,7 @@ export const InfoForm = ({
               <td>
                 <Field
                   control={control}
-                  type="select"
+                  type="switch"
                   options={constants.sexe}
                   name="sexe"
                   editable={editable}
@@ -250,7 +256,7 @@ export const InfoForm = ({
                   <td>
                     <Field
                       control={control}
-                      type="select"
+                      type="switch"
                       options={constants.boolean}
                       name="calcul_interets"
                       editable={editable}
@@ -339,8 +345,7 @@ export const InfoForm = ({
       )}
 
       {editable && (
-        <div style={{ marginTop: 20 }}>
-          <TextItem path="info_general.indicative_table.title" tag="h3" />
+        <CollapsibleSection title="info_general.indicative_table.title">
           <table style={{ maxWidth: 600 }} className={editable ? 'main-table' : ''}>
             <tbody>
               <tr>
@@ -483,13 +488,13 @@ export const InfoForm = ({
               ))}
             </tbody>
           </table>
-        </div>
+        </CollapsibleSection>
       )}
 
       {editable && <EconomiqueSection control={control} editable={editable} setValue={setValue} />}
 
       {editable && (
-        <div>
+        <div style={{ marginTop: 20 }}>
           <TextItem path="common.note" tag="h3" />
           <Field
             control={control}

@@ -3,6 +3,7 @@ import Field from '@renderer/generic/field'
 import TextItem from '@renderer/generic/textItem'
 import { useWatch } from 'react-hook-form'
 import Money from '@renderer/generic/money'
+import CollapsibleSection from './collapsibleSection'
 
 type EconomiqueSectionProps = {
   control: any
@@ -128,8 +129,7 @@ const EconomiqueSection: React.FC<EconomiqueSectionProps> = ({ control, editable
   }
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <TextItem path="info_general.economique_table.title" tag="h3" />
+    <CollapsibleSection title="info_general.economique_table.title">
       <table style={{ maxWidth: 600 }} className={editable ? 'main-table' : ''}>
         <tbody>
           <tr>
@@ -254,7 +254,7 @@ const EconomiqueSection: React.FC<EconomiqueSectionProps> = ({ control, editable
           </tr>
         </tbody>
       </table>
-    </div>
+    </CollapsibleSection>
   )
 }
 

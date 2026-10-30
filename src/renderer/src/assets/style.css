@@ -416,6 +416,72 @@ input[type='checkbox'] {
   white-space: nowrap;
 }
 
+.info-collapsible-section {
+  margin-top: 20px;
+  border: 1px solid color-mix(in srgb, var(--divider-color) 70%, transparent);
+  border-radius: var(--radius-lg, 18px);
+  background: color-mix(
+    in srgb,
+    var(--content-card-bg, #1c1f30) 85%,
+    var(--layout-background, #090a13)
+  );
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.info-collapsible-section__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 18px;
+  color: var(--sidebar-link-active-color, var(--color-primary));
+  font-weight: 700;
+  font-style: italic;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.info-collapsible-section__summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-collapsible-section__summary:hover {
+  background: color-mix(
+    in srgb,
+    var(--sidebar-link-hover-bg, rgba(255, 255, 255, 0.06)) 60%,
+    transparent
+  );
+}
+
+.info-collapsible-section__summary:focus-visible {
+  outline: 2px solid var(--sidebar-link-active-color, var(--color-primary));
+  outline-offset: -3px;
+}
+
+.info-collapsible-section__chevron {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform 160ms ease;
+}
+
+.info-collapsible-section[open] .info-collapsible-section__chevron {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.info-collapsible-section__content {
+  padding: 0 18px 18px;
+}
+
+.info-collapsible-section__content table {
+  margin-bottom: 0;
+}
+
 .field-switch {
   position: relative;
   display: grid;
@@ -761,7 +827,6 @@ html:not(.platform-mac) .select-lang {
   gap: var(--surface-gap);
   width: 100%;
   min-width: 0;
-  max-width: min(1180px, 100%);
   margin: 0;
   background: var(--content-card-bg);
   border-radius: var(--radius-lg, 18px);
