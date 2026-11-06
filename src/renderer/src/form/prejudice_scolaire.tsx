@@ -218,7 +218,7 @@ const PrejudiceScolaireForm = ({ initialValues, onSubmit, editable = true }) => 
         </tr>
       </table>
 
-      {(editable || formValues?.moral_damage) && (
+      {editable && (
         <div className="section-toggle-header">
           <TextItem path="prejudice_scolaire.moral_damage" tag="h3" />
           <Field control={control} type="switch" name={`moral_damage`} editable={editable} />

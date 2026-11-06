@@ -276,6 +276,8 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
 
   useEffect(() => {
     const baseContribution = formValues?.perso_contribution ?? defaultContribution
+    const hasBaseContribution =
+      baseContribution !== undefined && baseContribution !== null && baseContribution !== ''
 
     if (
       sortedChildren?.length === 0 &&
@@ -284,10 +286,12 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         formValues?.perso_amount === '' ||
         parseFloat(formValues?.perso_amount || 0) === indicativeAmount)
     ) {
-      setValue(
-        'perso_amount',
+      const defaultAmount =
         indicativeAmount + indicativePersonChargeAmount * unsortedChildren.length
-      )
+
+      if (parseFloat(formValues?.perso_amount || 0) !== defaultAmount) {
+        setValue('perso_amount', defaultAmount)
+      }
     }
 
     sortedChildren?.forEach((_, key) => {
@@ -303,7 +307,10 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
         setValue(amountField, defaultAmount)
       }
 
-      if (formValues?.[contributionField] === undefined || formValues?.[contributionField] === '') {
+      if (
+        hasBaseContribution &&
+        (formValues?.[contributionField] === undefined || formValues?.[contributionField] === '')
+      ) {
         setValue(contributionField, baseContribution)
       }
     })
@@ -320,8 +327,9 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     }
 
     if (
-      formValues?.perso_child_contribution_final === undefined ||
-      formValues?.perso_child_contribution_final === ''
+      hasBaseContribution &&
+      (formValues?.perso_child_contribution_final === undefined ||
+        formValues?.perso_child_contribution_final === '')
     ) {
       setValue('perso_child_contribution_final', baseContribution)
     }

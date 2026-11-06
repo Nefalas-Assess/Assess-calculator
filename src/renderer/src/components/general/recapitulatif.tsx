@@ -90,6 +90,10 @@ const MINIMAL_PRINT_STYLES = `
 		break-inside: avoid;
 	}
 
+	.hide {
+		display: none !important;
+	}
+
 	.print-content h1,
 	.print-content h2,
 	.print-content h3,
