@@ -22,6 +22,14 @@ const getSafeMembersAmount = (value) => {
   return Number.isFinite(parsed) ? parsed : 0
 }
 
+const isInCouple = (statut) => Boolean(statut) && statut !== 'célibataire'
+
+const getPersonalSharePercent = ({ statut, hasDependents = false, hasHome = false }) => {
+  if (hasDependents) return 15
+  if (isInCouple(statut) || !hasHome) return 20
+  return 0
+}
+
 const TotalRevenueAmount = ({
   values,
   data,
@@ -144,15 +152,16 @@ const TotalRevenueAmount = ({
   return <Money {...getTotalRevenueAmount()} />
 }
 
-const TotalMenageAmount = ({ values, data, start, end, reference, interest }) => {
-  const {
-    menage_interet = 0,
-    menage_amount = 0,
-    menage_pourcentage = 100,
-    menage_contribution = 0
-  } = values
-
-  // Vérification des dates
+const TotalMenageAmount = ({
+  values,
+  data,
+  start,
+  end,
+  reference,
+  interest,
+  personalSharePercent = 0
+}) => {
+  const { menage_interet = 0, menage_amount = 0, menage_contribution = 0 } = values
 
   const startDate = start || (data?.date_naissance ? new Date(data.date_naissance) : null)
 
@@ -169,43 +178,79 @@ const TotalMenageAmount = ({ values, data, start, end, reference, interest }) =>
   })
 
   const getTotalMenageAmount = useCallback(() => {
-    // Calcul du montant total avec useMemo
-    const totalAmount = (
-      parseFloat(menage_amount) *
-      (parseFloat(menage_pourcentage) / 100) *
-      (parseFloat(menage_contribution) / 100) *
-      365 *
-      parseFloat(coef?.value)
-    ).toFixed(2)
+    const amount = parseFloat(menage_amount) || 0
+    const contributionRate = (parseFloat(menage_contribution) || 0) / 100
+    const personalShareRate = (parseFloat(personalSharePercent) || 0) / 100
+    const contributionPart = amount * contributionRate
+    const personalPart = amount * personalShareRate
+    const rawTotalAmount = (contributionPart - personalPart) * 365 * parseFloat(coef?.value || 0)
+    const totalAmount = Math.max(rawTotalAmount, 0).toFixed(2)
+    const isClamped = rawTotalAmount < 0
+    const hasPersonalShare = personalShareRate > 0
 
     return {
       value: totalAmount,
       tooltip: (
         <div>
-          <math>
-            <mn>{menage_amount}</mn>
-            <mo>x</mo>
-            <mo>(</mo>
-            <mfrac>
-              <mn>{menage_contribution}</mn>
-              <mn>100</mn>
-            </mfrac>
-            <mo>)</mo>
-            <mo>x</mo>
-            <mn>1</mn>
-            <mo>x</mo>
-            <mn>365</mn>
-            <mo>x</mo>
-            <CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
-              <mn>{coef?.value}</mn>
-            </CoefficientInfo>
-            <mo>=</mo>
-            <mn>{totalAmount}</mn>
-          </math>
+          {hasPersonalShare ? (
+            <math>
+              <mo>(</mo>
+              <mo>(</mo>
+              <mn>{amount}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{menage_contribution}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>)</mo>
+              <mo>-</mo>
+              <mo>(</mo>
+              <mn>{amount}</mn>
+              <mo>x</mo>
+              <mfrac>
+                <mn>{personalSharePercent}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>)</mo>
+              <mo>)</mo>
+              <mo>x</mo>
+              <mn>365</mn>
+              <mo>x</mo>
+              <CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
+                <mn>{coef?.value}</mn>
+              </CoefficientInfo>
+              <mo>=</mo>
+              <mn>{rawTotalAmount}</mn>
+            </math>
+          ) : (
+            <math>
+              <mn>{amount}</mn>
+              <mo>x</mo>
+              <mo>(</mo>
+              <mfrac>
+                <mn>{menage_contribution}</mn>
+                <mn>100</mn>
+              </mfrac>
+              <mo>)</mo>
+              <mo>x</mo>
+              <mn>365</mn>
+              <mo>x</mo>
+              <CoefficientInfo headers={constants.interet_amount} {...coef?.info}>
+                <mn>{coef?.value}</mn>
+              </CoefficientInfo>
+              <mo>=</mo>
+              <mn>{totalAmount}</mn>
+            </math>
+          )}
+          {isClamped && (
+            <div>
+              <TextItem path="tooltip.negative_result_clamped_to_zero" tag="span" />
+            </div>
+          )}
         </div>
       )
     }
-  }, [coef, menage_amount, menage_contribution, menage_pourcentage])
+  }, [coef, menage_amount, menage_contribution, personalSharePercent])
 
   if (interest) {
     return (
@@ -298,7 +343,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
 
   const studentSplitEnd = useMemo(() => {
     if (
-      generalInfo?.profession !== 'étudiant' ||
       !generalInfo?.student?.lives_with_parents ||
       !generalInfo?.date_naissance ||
       !generalInfo?.date_death
@@ -316,7 +360,6 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     const deathDate = new Date(generalInfo?.date_death)
     return targetDate > deathDate ? targetDate : null
   }, [
-    generalInfo?.profession,
     generalInfo?.student?.lives_with_parents,
     generalInfo?.student?.leave_home_age,
     generalInfo?.date_naissance,
@@ -328,6 +371,17 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
     [formValues?.members_amount]
   )
   const hasSplitMenage = sortedChildren?.length > 0 || !!studentSplitEnd
+
+  const dependentPersonalShare = getPersonalSharePercent({
+    statut: generalInfo?.statut,
+    hasHome: !generalInfo?.student?.lives_with_parents,
+    hasDependents: true
+  })
+  const afterDependentsPersonalShare = getPersonalSharePercent({
+    statut: generalInfo?.statut,
+    hasHome: !generalInfo?.student?.lives_with_parents,
+    hasDependents: unsortedChildren?.length > 0
+  })
 
   useEffect(() => {
     if (
@@ -524,7 +578,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                   <tr>
                     <TextItem path="common.period" tag="th" />
                     <TextItem path="common.indemnite_journaliere" tag="th" />
-                    <th style={{ width: 50 }}>%</th>
+                    <TextItem path="common.part_personnelle" tag="th" />
                     <TextItem path="common.contribution" tag="th" />
                     <TextItem path="common.total" tag="th" />
                     <TextItem path="common.date_paiement" tag="th" className="int" />
@@ -557,7 +611,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         <td>
                           <Money value={menage_amount} ignore />
                         </td>
-                        <td style={{ textWrap: 'nowrap' }}>100 %</td>
+                        <td style={{ textWrap: 'nowrap' }}>{dependentPersonalShare} %</td>
                         <td>{formValues?.menage_contribution} %</td>
                         <td className="table-ref-children-amount">
                           <TotalMenageAmount
@@ -569,6 +623,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                             start={start}
                             end={end}
                             reference={formValues?.menage_reference_period}
+                            personalSharePercent={dependentPersonalShare}
                           />
                         </td>
                         <td className="int">
@@ -591,6 +646,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                             start={start}
                             end={end}
                             reference={formValues?.menage_reference_period}
+                            personalSharePercent={dependentPersonalShare}
                             interest={{
                               start: generalInfo?.date_death,
                               end: formValues?.[`menage_date_paiement_${key}`]
@@ -620,7 +676,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                         ignore
                       />
                     </td>
-                    <td>100 %</td>
+                    <td>{afterDependentsPersonalShare} %</td>
                     <td>{formValues?.menage_contribution} %</td>
                     <td className="table-ref-standard-amount">
                       <TotalMenageAmount
@@ -636,6 +692,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                           sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
+                        personalSharePercent={afterDependentsPersonalShare}
                       />
                     </td>
                     <td className="int">
@@ -662,6 +719,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                           sortedChildren[sortedChildren?.length - 1]?.leaveHomeAge,
                           true
                         )}
+                        personalSharePercent={afterDependentsPersonalShare}
                         interest={{
                           start: generalInfo?.date_death,
                           end: formValues?.menage_date_paiement
@@ -680,6 +738,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                 <tr>
                   <TextItem path="common.period" tag="th" />
                   <TextItem path="common.indemnite_journaliere" tag="th" />
+                  <TextItem path="common.part_personnelle" tag="th" />
                   <TextItem path="common.contribution" tag="th" />
                   <TextItem path="common.total" tag="th" />
                   <TextItem path="common.date_paiement" tag="th" className="int" />
@@ -702,6 +761,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       {(props) => <input style={{ width: 50 }} {...props} />}
                     </Field>
                   </td>
+                  <td>{dependentPersonalShare} %</td>
                   <td>
                     <Field
                       control={control}
@@ -718,6 +778,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       start={addDays(generalInfo?.date_death, 1)}
                       end={studentSplitEnd}
                       reference={formValues?.menage_reference_period}
+                      personalSharePercent={dependentPersonalShare}
                     />
                   </td>
                   <td className="int">
@@ -737,6 +798,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                       start={addDays(generalInfo?.date_death, 1)}
                       end={studentSplitEnd}
                       reference={formValues?.menage_reference_period}
+                      personalSharePercent={dependentPersonalShare}
                       interest={{
                         start: generalInfo?.date_death,
                         end: formValues?.menage_date_paiement
@@ -752,6 +814,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
             <thead>
               <tr>
                 <TextItem path="common.indemnite_journaliere" tag="th" />
+                <TextItem path="common.part_personnelle" tag="th" />
                 <TextItem path="common.contribution" tag="th" />
                 <TextItem path="common.total" tag="th" />
                 <TextItem path="common.date_paiement" tag="th" className="int" />
@@ -765,6 +828,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                     {(props) => <input style={{ width: 50 }} {...props} />}
                   </Field>
                 </td>
+                <td>{afterDependentsPersonalShare} %</td>
                 <td>
                   <Field
                     control={control}
@@ -775,7 +839,11 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                   ></Field>
                 </td>
                 <td className="table-ref-standard-amount">
-                  <TotalMenageAmount values={formValues} data={generalInfo} />
+                  <TotalMenageAmount
+                    values={formValues}
+                    data={generalInfo}
+                    personalSharePercent={afterDependentsPersonalShare}
+                  />
                 </td>
                 <td className="int">
                   <Field
@@ -791,6 +859,7 @@ const PrejudiceProcheForm = ({ initialValues, onSubmit, editable = true }) => {
                   <TotalMenageAmount
                     values={formValues}
                     data={generalInfo}
+                    personalSharePercent={afterDependentsPersonalShare}
                     interest={{
                       start: generalInfo?.date_death,
                       end: formValues?.menage_date_paiement

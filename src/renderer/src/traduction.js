@@ -559,6 +559,11 @@ export default {
       en: 'Contribution (%)',
       nl: 'Bijdrage (%)'
     },
+    part_personnelle: {
+      fr: 'Part personnelle (%)',
+      en: 'Personal share (%)',
+      nl: 'Persoonlijk aandeel (%)'
+    },
     total_interets: {
       fr: 'Total intérêts :',
       en: 'Total interests :',

@@ -344,7 +344,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
   ])
 
   const studentSplitEnd = useMemo(() => {
-    if (generalInfo?.profession !== 'étudiant') return null
     if (!generalInfo?.student?.lives_with_parents) return null
     if (!formValues?.paiement) return null
 
@@ -359,7 +358,6 @@ export const IPMenageCapForm = ({ onSubmit, initialValues, editable = true }) =>
     return targetDate > paiementDate ? targetDate : null
   }, [
     formValues?.paiement,
-    generalInfo?.profession,
     generalInfo?.student?.lives_with_parents,
     generalInfo?.student?.leave_home_age,
     generalInfo?.date_naissance,

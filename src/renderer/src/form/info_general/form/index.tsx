@@ -195,39 +195,35 @@ export const InfoForm = ({
                 ></Field>
               </td>
             </tr>
-            {formValues?.profession === 'étudiant' && (
-              <>
-                <tr>
-                  <TextItem path="info_general.student_lives_with_parents" tag="td" />
-                  <td>
-                    <Field
-                      control={control}
-                      type="checkbox"
-                      name="student.lives_with_parents"
-                      editable={editable}
-                    >
-                      {() => null}
-                    </Field>
-                  </td>
-                </tr>
-                {formValues?.student?.lives_with_parents && (
-                  <tr>
-                    <TextItem path="info_general.student_leave_home_age" tag="td" />
-                    <td>
-                      <Field
-                        control={control}
-                        type="number"
-                        name="student.leave_home_age"
-                        editable={editable}
-                      >
-                        {(props) => (
-                          <input type="number" min="0" step="1" style={{ width: 80 }} {...props} />
-                        )}
-                      </Field>
-                    </td>
-                  </tr>
-                )}
-              </>
+            <tr>
+              <TextItem path="info_general.student_lives_with_parents" tag="td" />
+              <td>
+                <Field
+                  control={control}
+                  type="checkbox"
+                  name="student.lives_with_parents"
+                  editable={editable}
+                >
+                  {() => null}
+                </Field>
+              </td>
+            </tr>
+            {formValues?.student?.lives_with_parents && (
+              <tr>
+                <TextItem path="info_general.student_leave_home_age" tag="td" />
+                <td>
+                  <Field
+                    control={control}
+                    type="number"
+                    name="student.leave_home_age"
+                    editable={editable}
+                  >
+                    {(props) => (
+                      <input type="number" min="0" step="1" style={{ width: 80 }} {...props} />
+                    )}
+                  </Field>
+                </td>
+              </tr>
             )}
             {editable && (
               <>
