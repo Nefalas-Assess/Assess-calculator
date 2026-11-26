@@ -18,7 +18,7 @@ export const InfoForm = ({
   const defaultFormValues = useMemo(() => {
     const baseValues = {
       sexe: 'homme',
-      statut: 'marié',
+      statut: 'en_couple',
       profession: 'employe',
       calcul_interets: 'false',
       children: [],
@@ -176,7 +176,7 @@ export const InfoForm = ({
               <td>
                 <Field
                   control={control}
-                  type="select"
+                  type="switch"
                   options={constants.marital_status}
                   name="statut"
                   editable={editable}
